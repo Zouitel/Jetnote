@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "866712879346",
+    "project_id": "jetnote-cloud-service",
+    "storage_bucket": "jetnote-cloud-service.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866712879346:android:d13e8ffefca0676148506b",
+        "android_client_info": {
+          "package_name": "zouitel.neighborhood.jetnote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "866712879346-lsqit4thufnkc8ldn6tur5fqlnphlqc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClLjfnNrfzyt8i6TXmpbHxz3LfGAxomw8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "866712879346-lsqit4thufnkc8ldn6tur5fqlnphlqc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
