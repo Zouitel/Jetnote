@@ -95,7 +95,6 @@ ucrop = "2.2.11-native"
 espressoCore = "3.7.0"
 uiautomator = "2.3.0"
 benchmarkMacroJunit4 = "1.4.1"
-baselineprofile = "1.4.1"
 profileinstaller = "1.4.1"
 material = "1.13.0"
 
@@ -254,4 +253,3 @@ stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", ve
 chaquo-python = { id = "com.chaquo.python", version.ref = "chaquo-python" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
 android-test = { id = "com.android.test", version.ref = "agp" }
-baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
