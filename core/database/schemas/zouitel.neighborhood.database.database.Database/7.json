@@ -1,0 +1,750 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 7,
+    "identityHash": "b3ce8282431120f18adbd9ec51ca426d",
+    "entities": [
+      {
+        "tableName": "note_data_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`universally_unique_identifier` TEXT NOT NULL, `user_unique_identifier` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `priority` INTEGER NOT NULL, `color` INTEGER, `text_color` INTEGER, `date` TEXT NOT NULL, `archived` INTEGER NOT NULL, `tasks` TEXT NOT NULL DEFAULT '[]', `medias` TEXT NOT NULL DEFAULT '[]', `audios` TEXT NOT NULL DEFAULT '[]', `reminders` TEXT NOT NULL DEFAULT '[]', PRIMARY KEY(`universally_unique_identifier`))",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "universally_unique_identifier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userUid",
+            "columnName": "user_unique_identifier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priority",
+            "columnName": "priority",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "background",
+            "columnName": "color",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "textColor",
+            "columnName": "text_color",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "archived",
+            "columnName": "archived",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tasks",
+            "columnName": "tasks",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "medias",
+            "columnName": "medias",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "audios",
+            "columnName": "audios",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "reminders",
+            "columnName": "reminders",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "universally_unique_identifier"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_note_data_table_universally_unique_identifier",
+            "unique": false,
+            "columnNames": [
+              "universally_unique_identifier"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_note_data_table_universally_unique_identifier` ON `${TABLE_NAME}` (`universally_unique_identifier`)"
+          },
+          {
+            "name": "index_note_data_table_user_unique_identifier",
+            "unique": false,
+            "columnNames": [
+              "user_unique_identifier"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_note_data_table_user_unique_identifier` ON `${TABLE_NAME}` (`user_unique_identifier`)"
+          }
+        ]
+      },
+      {
+        "tableName": "tags_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`identifier` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL DEFAULT 0, `label` TEXT NOT NULL DEFAULT '', `color` INTEGER DEFAULT null)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "identifier",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "INTEGER",
+            "defaultValue": "null"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "identifier"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_tags_table_identifier",
+            "unique": false,
+            "columnNames": [
+              "identifier"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tags_table_identifier` ON `${TABLE_NAME}` (`identifier`)"
+          }
+        ]
+      },
+      {
+        "tableName": "note_and_label",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `id` INTEGER NOT NULL, PRIMARY KEY(`uid`, `id`))",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uid",
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "links_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uniform_resource_locator` TEXT NOT NULL DEFAULT '', `universally_unique_identifier` TEXT NOT NULL DEFAULT '', `title` TEXT NOT NULL DEFAULT '', `description` TEXT NOT NULL DEFAULT '', `imageLink` TEXT NOT NULL DEFAULT '', `link_icon` TEXT NOT NULL DEFAULT '', `domain` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`uniform_resource_locator`))",
+        "fields": [
+          {
+            "fieldPath": "url",
+            "columnName": "uniform_resource_locator",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "uid",
+            "columnName": "universally_unique_identifier",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "imageLink",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "icon",
+            "columnName": "link_icon",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "domain",
+            "columnName": "domain",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uniform_resource_locator"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_links_table_uniform_resource_locator",
+            "unique": false,
+            "columnNames": [
+              "uniform_resource_locator"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_links_table_uniform_resource_locator` ON `${TABLE_NAME}` (`uniform_resource_locator`)"
+          }
+        ]
+      },
+      {
+        "tableName": "assistant_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL DEFAULT 1, `currentModelUid` TEXT DEFAULT null, `name` TEXT NOT NULL DEFAULT 'assistant', `useAssistantAvatar` INTEGER NOT NULL DEFAULT 0, `systemPrompt` TEXT NOT NULL DEFAULT '{{char}}', `temperature` REAL DEFAULT null, `topP` REAL DEFAULT null, `contextMessageSize` INTEGER NOT NULL DEFAULT 64, `streamOutput` INTEGER NOT NULL DEFAULT 1, `enableMemory` INTEGER NOT NULL DEFAULT 0, `enableRecentChatsReference` INTEGER NOT NULL DEFAULT 0, `messageTemplate` TEXT NOT NULL DEFAULT '{{ message }}', `presetMessages` TEXT NOT NULL DEFAULT '[]', `quickMessages` TEXT NOT NULL DEFAULT '[]', `regexes` TEXT NOT NULL DEFAULT '[]', `thinkingBudget` INTEGER DEFAULT null, `maxTokens` INTEGER DEFAULT null, `customHeaders` TEXT NOT NULL DEFAULT '[]', `customBodies` TEXT NOT NULL DEFAULT '[]', `mcpServers` TEXT NOT NULL DEFAULT '[]', `localTools` TEXT NOT NULL DEFAULT '[]', `background` TEXT DEFAULT null, `learningMode` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "currentModelUid",
+            "columnName": "currentModelUid",
+            "affinity": "TEXT",
+            "defaultValue": "null"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'assistant'"
+          },
+          {
+            "fieldPath": "useAssistantAvatar",
+            "columnName": "useAssistantAvatar",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "systemPrompt",
+            "columnName": "systemPrompt",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'{{char}}'"
+          },
+          {
+            "fieldPath": "temperature",
+            "columnName": "temperature",
+            "affinity": "REAL",
+            "defaultValue": "null"
+          },
+          {
+            "fieldPath": "topP",
+            "columnName": "topP",
+            "affinity": "REAL",
+            "defaultValue": "null"
+          },
+          {
+            "fieldPath": "contextMessageSize",
+            "columnName": "contextMessageSize",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "64"
+          },
+          {
+            "fieldPath": "streamOutput",
+            "columnName": "streamOutput",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "enableMemory",
+            "columnName": "enableMemory",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "enableRecentChatsReference",
+            "columnName": "enableRecentChatsReference",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "messageTemplate",
+            "columnName": "messageTemplate",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'{{ message }}'"
+          },
+          {
+            "fieldPath": "presetMessages",
+            "columnName": "presetMessages",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "quickMessages",
+            "columnName": "quickMessages",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "regexes",
+            "columnName": "regexes",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "thinkingBudget",
+            "columnName": "thinkingBudget",
+            "affinity": "INTEGER",
+            "defaultValue": "null"
+          },
+          {
+            "fieldPath": "maxTokens",
+            "columnName": "maxTokens",
+            "affinity": "INTEGER",
+            "defaultValue": "null"
+          },
+          {
+            "fieldPath": "customHeaders",
+            "columnName": "customHeaders",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "customBodies",
+            "columnName": "customBodies",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "mcpServers",
+            "columnName": "mcpServers",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "localTools",
+            "columnName": "localTools",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "background",
+            "columnName": "background",
+            "affinity": "TEXT",
+            "defaultValue": "null"
+          },
+          {
+            "fieldPath": "learningMode",
+            "columnName": "learningMode",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_assistant_table_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_assistant_table_id` ON `${TABLE_NAME}` (`id`)"
+          },
+          {
+            "name": "index_assistant_table_currentModelUid",
+            "unique": false,
+            "columnNames": [
+              "currentModelUid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_assistant_table_currentModelUid` ON `${TABLE_NAME}` (`currentModelUid`)"
+          }
+        ]
+      },
+      {
+        "tableName": "conversation_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `title` TEXT NOT NULL, `nodes` TEXT NOT NULL, `truncateIndex` INTEGER NOT NULL DEFAULT -1, `suggestions` TEXT NOT NULL DEFAULT '[]', `isPinned` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`uid`))",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nodes",
+            "columnName": "nodes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "truncateIndex",
+            "columnName": "truncateIndex",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          },
+          {
+            "fieldPath": "suggestions",
+            "columnName": "suggestions",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "isPinned",
+            "columnName": "isPinned",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_conversation_table_uid",
+            "unique": false,
+            "columnNames": [
+              "uid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_conversation_table_uid` ON `${TABLE_NAME}` (`uid`)"
+          }
+        ]
+      },
+      {
+        "tableName": "models_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `modelId` TEXT NOT NULL, `providerId` INTEGER NOT NULL, `name` TEXT NOT NULL, `type` INTEGER NOT NULL DEFAULT 1, `customHeaders` TEXT NOT NULL DEFAULT '[]', `logoUrl` TEXT, `customBodies` TEXT NOT NULL DEFAULT '[]', `inputModalities` TEXT NOT NULL DEFAULT '[]', `outputModalities` TEXT NOT NULL DEFAULT '[]', `abilities` TEXT NOT NULL DEFAULT '[]', `tools` TEXT NOT NULL DEFAULT '[]', `providerOverwrite` TEXT DEFAULT null, PRIMARY KEY(`uid`))",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modelId",
+            "columnName": "modelId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "providerId",
+            "columnName": "providerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "customHeaders",
+            "columnName": "customHeaders",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "logoUrl",
+            "columnName": "logoUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customBodies",
+            "columnName": "customBodies",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "inputModalities",
+            "columnName": "inputModalities",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "outputModalities",
+            "columnName": "outputModalities",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "abilities",
+            "columnName": "abilities",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "tools",
+            "columnName": "tools",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          },
+          {
+            "fieldPath": "providerOverwrite",
+            "columnName": "providerOverwrite",
+            "affinity": "TEXT",
+            "defaultValue": "null"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_models_table_uid",
+            "unique": true,
+            "columnNames": [
+              "uid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_models_table_uid` ON `${TABLE_NAME}` (`uid`)"
+          }
+        ]
+      },
+      {
+        "tableName": "provider_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` INTEGER NOT NULL, `logo_url` TEXT, `name` TEXT NOT NULL, `api_key` TEXT NOT NULL, `api_link` TEXT NOT NULL, `proxy` TEXT NOT NULL, `balance_option` TEXT NOT NULL, `built_in` INTEGER NOT NULL, `description` TEXT NOT NULL, `base_url` TEXT NOT NULL, `vertex_ai` INTEGER NOT NULL, `private_key` TEXT NOT NULL, `service_account_email` TEXT NOT NULL, `location` TEXT NOT NULL, `project_id` TEXT NOT NULL, `chat_completions_path` TEXT, `use_response_api` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logoUrl",
+            "columnName": "logo_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apiKey",
+            "columnName": "api_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apiLink",
+            "columnName": "api_link",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "proxy",
+            "columnName": "proxy",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "balanceOption",
+            "columnName": "balance_option",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "builtIn",
+            "columnName": "built_in",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "baseUrl",
+            "columnName": "base_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vertexAI",
+            "columnName": "vertex_ai",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privateKey",
+            "columnName": "private_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "serviceAccountEmail",
+            "columnName": "service_account_email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "projectId",
+            "columnName": "project_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chatCompletionsPath",
+            "columnName": "chat_completions_path",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "useResponseApi",
+            "columnName": "use_response_api",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_provider_table_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_provider_table_id` ON `${TABLE_NAME}` (`id`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b3ce8282431120f18adbd9ec51ca426d')"
+    ]
+  }
+}

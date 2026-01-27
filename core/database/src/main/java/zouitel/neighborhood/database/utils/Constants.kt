@@ -1,0 +1,38 @@
+package zouitel.neighborhood.database.utils
+
+object Constants {
+    const val DATABASE = "jetnote_database"
+    const val BACKUP_DATABASE = "backup_database"
+
+    const val ID = "identifier"
+    const val TITLE = "title"
+    const val DESCRIPTION = "description"
+    const val COLOR = "color"
+    const val TXT_COLOR = "text_color"
+    const val PRIORITY = "priority"
+    const val DATE = "date"
+    const val UUID = "universally_unique_identifier"
+    const val ARCHIVED = "archived"
+    const val USER_UID = "user_unique_identifier"
+    const val URL = "uniform_resource_locator"
+    const val URI = "uniform_resource_identifier"
+    const val PATH = "audio_path"
+    const val IS_RECORDED = "is_audio_recorded"
+    const val SIZE = "audio_size"
+    const val HOST = "host"
+    const val ICON = "link_icon"
+    const val DURATION = "audio_duration"
+    const val AMPLITUDES = "audio_amplitudes"
+    const val IMG_LINK = "imageLink"
+    const val LABEL = "label"
+    const val DONE = "is_task_done"
+    const val TIME = "exact_time_to_remind"
+    const val PASSED = "is_reminder_passed"
+    const val VIDEO = "is_this_media-a_video"
+
+    const val DEFAULT_NUM = "0"
+    const val DEFAULT_BOOLEAN = "false"
+    const val DEFAULT_TXT = ""
+    const val NUL = "null"
+    const val PASS = "crypticpass.bin"
+}

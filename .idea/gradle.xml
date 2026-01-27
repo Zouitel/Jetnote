@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/build-logic" name="build-logic">
+                <projects>
+                  <project path="$PROJECT_DIR$/build-logic" />
+                  <project path="$PROJECT_DIR$/build-logic/convention" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ai" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/bin" />
+            <option value="$PROJECT_DIR$/build-logic" />
+            <option value="$PROJECT_DIR$/build-logic/convention" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common/logic" />
+            <option value="$PROJECT_DIR$/common/permissions" />
+            <option value="$PROJECT_DIR$/common/ui" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/database" />
+            <option value="$PROJECT_DIR$/core/datastore" />
+            <option value="$PROJECT_DIR$/core/repository" />
+            <option value="$PROJECT_DIR$/core/root" />
+            <option value="$PROJECT_DIR$/document" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/feedback" />
+            <option value="$PROJECT_DIR$/presentation" />
+            <option value="$PROJECT_DIR$/presentation/account" />
+            <option value="$PROJECT_DIR$/presentation/assistant" />
+            <option value="$PROJECT_DIR$/presentation/audio" />
+            <option value="$PROJECT_DIR$/presentation/jotting" />
+            <option value="$PROJECT_DIR$/presentation/link" />
+            <option value="$PROJECT_DIR$/presentation/navigator" />
+            <option value="$PROJECT_DIR$/presentation/recorder" />
+            <option value="$PROJECT_DIR$/presentation/search" />
+            <option value="$PROJECT_DIR$/presentation/tag" />
+            <option value="$PROJECT_DIR$/presentation/video" />
+            <option value="$PROJECT_DIR$/presentation/waveform" />
+            <option value="$PROJECT_DIR$/presentation/widget" />
+            <option value="$PROJECT_DIR$/presentation/workspace" />
+            <option value="$PROJECT_DIR$/security" />
+            <option value="$PROJECT_DIR$/services" />
+            <option value="$PROJECT_DIR$/services/playback" />
+            <option value="$PROJECT_DIR$/services/print" />
+            <option value="$PROJECT_DIR$/services/shortcut" />
+            <option value="$PROJECT_DIR$/services/tile" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
