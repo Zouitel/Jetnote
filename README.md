@@ -1,17 +1,14 @@
-# JetNote
-JetNote is modern note android application written by kotlin language and [jetpack-compose](https://github.com/JetBrains/compose-jb) toolkit. The app dealing with Room for Database, Koin dependency injection, Coroutine the non-blocking programming, Navigation-Compose, DataStore, ExoPlayer to play the recorded media in the app, CameraX to take and save picture, And more to make it good app that inspired by google app **keep Notes**.
+# Jetnote
+Jetnote is modern note android application written by kotlin language and [jetpack-compose](https://github.com/JetBrains/compose-jb) toolkit. The app dealing with Room for Database, Koin dependency injection, Coroutine the non-blocking programming, Navigation-Compose, DataStore, ExoPlayer to play the recorded media in the app, CameraX to take and save picture, And more to make it good app that inspired by google app **keep Notes**.
 
-[![Android Platform](https://img.shields.io/badge/Android-26+-34A853?logo=android)](https://www.android.com/)
+[![Android Platform](https://img.shields.io/badge/Android-27+-34A853?logo=android)](https://www.android.com/)
 [![Kotlin Version](https://img.shields.io/badge/Kotlin-2.1.0-7F52FF?logo=kotlin)](https://kotlinlang.org)
 [![Kotlin Version](https://img.shields.io/badge/coroutines-1.9.0-7F52FF?logo=kotlin)](https://kotlinlang.org/docs/coroutines-overview.html)
 [![Jetpack Compose](https://img.shields.io/badge/Compose-1.5.14-4285F4?logo=jetpackcompose)](https://developer.android.com/jetpack/androidx/releases/compose)
 [![Gradle](https://img.shields.io/badge/Gradle-8.5.2-02303A?logo=gradle)](https://gradle.org)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://github.com/City-Zouitel/JetNote/edit/main/LICENSE)
-[![Android CI](https://github.com/City-Zouitel/JetNote/actions/workflows/android.yml/badge.svg)](https://github.com/City-Zouitel/JetNote/actions/workflows/android.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/77dad54167db49a7bb7c3d9c43f312c2)](https://app.codacy.com/gh/City-Zouitel/JetNote/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![codebeat badge](https://codebeat.co/badges/4532d221-861e-440f-a9fe-c19b65ff56ac)](https://codebeat.co/projects/github-com-city-zouitel-jetnote-main)
-[![Total](https://shields.io/github/downloads/City-Zouitel/JetNote/total?logo=Bookmeter&label=Counts&logoColor=yellow&color=yellow)](https://github.com/City-Zouitel/JetNote/releases)
-[![Wakatime](https://wakatime.com/badge/user/218fee08-512f-4a26-b56d-104925a888b1/project/a2f2f997-6877-4090-9458-3ac93895d372.svg)](https://wakatime.com/badge/user/218fee08-512f-4a26-b56d-104925a888b1/project/a2f2f997-6877-4090-9458-3ac93895d372)
+[![Android CI](https://github.com/City-Zouitel/JetNote/actions/workflows/android.yml/badge.svg)](https://github.com/City-Zouitel/Jetnote/actions/workflows/gradle.yml)
+[![wakatime](https://wakatime.com/badge/user/218fee08-512f-4a26-b56d-104925a888b1/project/69a8b8aa-bef4-403e-9f71-8ca21ac8ed73.svg)](https://wakatime.com/badge/user/218fee08-512f-4a26-b56d-104925a888b1/project/69a8b8aa-bef4-403e-9f71-8ca21ac8ed73)
 
 ## Screenshots
 
@@ -20,14 +17,6 @@ JetNote is modern note android application written by kotlin language and [jetpa
   <img src="screenshots/Screenshot_20221206-134218_JetNote.png" width="32%" />
   <img src="screenshots/Screenshot_20221206-134300_JetNote.png" width="32%" />
 </p>
-
-
-## Download
-   <a href="https://apt.izzysoft.de/fdroid/index/apk/city.zouitel.jetnote">
-    <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Logo" width="200" height="80">
-  </a>
-  
- [<img src="https://user-images.githubusercontent.com/663460/26973090-f8fdc986-4d14-11e7-995a-e7c5e79ed925.png" alt="Download APK from GitHub" height="80">](https://github.com/City-Zouitel/JetNote/releases/latest)
 
 
 ## Libraries
@@ -48,21 +37,6 @@ Koin is a pragmatic lightweight dependency injection framework for Kotlin develo
 
 ### [Sketchbook](https://github.com/GetStream/sketchbook-compose) 
 Jetpack Compose canvas library that helps you draw paths, images on canvas with color pickers and palettes.
-
-### [accompanist](https://github.com/google/accompanist) 
-Accompanist is a group of libraries that aim to supplement Jetpack Compose with features that are commonly required by developers but not yet available.
-<details>
-
-1. **Permissions:** A library that provides Android runtime permissions support for Jetpack Compose.
-
-2. **Pager:** A library that provides utilities for building paginated layouts in Jetpack Compose, similar to Android's ViewPager.
-
-3. **Navigation-Animation:** A library which provides Compose Animation support for Jetpack Navigation Compose.
-
-4. **SwipeRefresh:** A library that provides a layout implementing the swipe-to-refresh UX pattern, similar to Android's SwipeRefreshLayout.
-
-5. **Flow Layouts:** A library that adds Flexbox-like layout components to Jetpack Compose.
-</details>
 
 ### [ExoPlayer](https://exoplayer.dev/)
 ExoPlayer is an application level media player for Android. It provides an alternative to Android’s MediaPlayer API for playing audio and video both locally and over the Internet.
@@ -105,8 +79,6 @@ WorkManager is the recommended solution for persistent work. Work is persistent 
           |            Room           |      |        ...........        |
           *****************************      *****************************
 ```
-
-### Check it out [Project manager](https://github.com/orgs/City-Zouitel/projects/1/views/1) to see what's going on and what's coming in this project.
 
 ## License
 ```text
