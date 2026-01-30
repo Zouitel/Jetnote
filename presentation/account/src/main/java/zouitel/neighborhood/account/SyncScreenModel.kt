@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import com.google.api.services.drive.model.File as DriveFile
 
@@ -52,9 +54,12 @@ class SyncScreenModel(
     private val _syncDataState = MutableStateFlow(false)
     val syncDataState = _syncDataState.asStateFlow()
 
-    // 🔥 NEW: Track if initial sync is needed
     private val _needsInitialSync = MutableStateFlow(false)
     val needsInitialSync = _needsInitialSync.asStateFlow()
+
+    // ✅ Use Mutex to prevent concurrent folder creation
+    private val folderCreationMutex = Mutex()
+    private var foldersCreatedThisSession = false
 
     init {
         setupAuthStateListener()
@@ -82,7 +87,6 @@ class SyncScreenModel(
         }
     }
 
-    // 🔥 NEW: Setup Firebase Auth state listener with auto-sync
     private fun setupAuthStateListener() {
         screenModelScope.launch {
             callbackFlow {
@@ -104,70 +108,49 @@ class SyncScreenModel(
 
                 Log.d("SyncScreenModel", "User state updated: ${user?.email ?: "null"}")
 
-                // 🔥 NEW: Auto-download when user signs in
                 if (user != null && previousUser == null) {
                     Log.d("SyncScreenModel", "User just signed in, starting auto-sync")
                     autoSyncOnSignIn()
+                } else if (user == null && previousUser != null) {
+                    Log.d("SyncScreenModel", "User signed out, resetting folder flag")
+                    foldersCreatedThisSession = false
                 }
             }
         }
     }
 
-    // 🔥 NEW: Auto sync when user signs in
-    // REMOVE auto-worker triggering from autoSyncOnSignIn
+    // ✅ CRITICAL FIX: Use Mutex to guarantee only ONE folder creation happens
     private fun autoSyncOnSignIn() {
         screenModelScope.launch {
-            try {
-                Log.d("SyncScreenModel", "=== Starting Auto-Sync ===")
+            folderCreationMutex.withLock {
+                try {
+                    // Double-check inside the mutex
+                    if (foldersCreatedThisSession) {
+                        Log.d("SyncScreenModel", "Folders already created in this session, skipping")
+                        return@launch
+                    }
 
-                val driveService = initializeDriveService()
+                    Log.d("SyncScreenModel", "=== Starting Auto-Sync (mutex locked) ===")
 
-                if (driveService != null) {
-                    // Only create folders, don't start workers yet
-                    createDriveFolders(driveService)
+                    val driveService = initializeDriveService()
+                    if (driveService != null) {
+                        createDriveFolders(driveService)
+                        foldersCreatedThisSession = true
 
-                    // 🔥 NOW start workers after folders are created
-                    Log.d("SyncScreenModel", "Folders ready, starting workers...")
-                    enqueueDownloadsProcessing()
-                    enqueueSyncProcessing()
+                        Log.d("SyncScreenModel", "Folders ready, starting workers...")
+                        enqueueDownloadsProcessing()
+                        enqueueSyncProcessing()
 
-                    _needsInitialSync.value = true
-                } else {
-                    Log.e("SyncScreenModel", "Failed to initialize Drive service")
+                        _needsInitialSync.value = true
+                    } else {
+                        Log.e("SyncScreenModel", "Failed to initialize Drive service")
+                    }
+                } catch (e: Exception) {
+                    Log.e("SyncScreenModel", "Error during auto-sync", e)
                 }
-            } catch (e: Exception) {
-                Log.e("SyncScreenModel", "Error during auto-sync", e)
             }
         }
     }
-//    private fun autoSyncOnSignIn() {
-//        screenModelScope.launch {
-//            try {
-//                Log.d("SyncScreenModel", "=== Starting Auto-Sync ===")
-//
-//                // Initialize Drive service
-//                val driveService = initializeDriveService()
-//
-//                if (driveService != null) {
-//                    // Create folders if they don't exist
-//                    createDriveFolders(driveService)
-//
-//                    // Start download process
-//                    Log.d("SyncScreenModel", "Starting downloads...")
-//                    enqueueDownloadsProcessing()
-//
-//                    // Also sync to ensure everything is up to date
-//                    enqueueSyncProcessing()
-//
-//                    _needsInitialSync.value = true
-//                } else {
-//                    Log.e("SyncScreenModel", "Failed to initialize Drive service")
-//                }
-//            } catch (e: Exception) {
-//                Log.e("SyncScreenModel", "Error during auto-sync", e)
-//            }
-//        }
-//    }
 
     suspend fun initializeDriveService(): Drive? = withContext(Dispatchers.IO) {
         try {
@@ -177,128 +160,156 @@ class SyncScreenModel(
             )
 
             val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
-            credential.selectedAccount = lastAccount?.account
-
-            credential?.run {
-                Drive.Builder(
-                    NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    credential
-                ).setApplicationName("Drive File Manager").build()
+            if (lastAccount?.account == null) {
+                Log.e("SyncScreenModel", "No Google account found")
+                return@withContext null
             }
+
+            credential.selectedAccount = lastAccount.account
+
+            Drive.Builder(
+                NetHttpTransport(),
+                GsonFactory.getDefaultInstance(),
+                credential
+            ).setApplicationName("Drive File Manager").build()
         } catch (e: Exception) {
             Log.e("SyncScreenModel", "Error initializing Drive service", e)
             null
         }
     }
+
     fun resetInitialSyncFlag() {
         _needsInitialSync.value = false
     }
+
+    // ✅ IMPROVED: Better search with pageSize limit and better query
     private suspend fun findFolderId(
         driveService: Drive,
         folderName: String,
         parentFolderId: String = "root"
-    ): String? =
-        withContext(Dispatchers.IO) {
-            try {
-                val query =
-                    "mimeType='application/vnd.google-apps.folder' and name='$folderName' and '$parentFolderId' in parents and trashed=false"
-                val files = driveService.files().list().setQ(query).setFields("files(id)").execute()
-                files.files?.firstOrNull()?.id
-            } catch (e: Exception) {
-                Log.e("SyncScreenModel", "Error finding folder $folderName: ${e.message}")
-                null
+    ): String? = withContext(Dispatchers.IO) {
+        try {
+            val query = "mimeType='application/vnd.google-apps.folder' and name='$folderName' and '$parentFolderId' in parents and trashed=false"
+
+            Log.d("SyncScreenModel", "Searching for folder: $folderName in parent: $parentFolderId")
+
+            val result = driveService.files().list()
+                .setQ(query)
+                .setSpaces("drive")
+                .setFields("files(id, name, createdTime)")
+                .setPageSize(10)  // ✅ Limit results
+                .setOrderBy("createdTime")  // ✅ Get oldest first
+                .execute()
+
+            val folders = result.files
+
+            when {
+                folders == null || folders.isEmpty() -> {
+                    Log.d("SyncScreenModel", "No folder found named '$folderName'")
+                    null
+                }
+                folders.size == 1 -> {
+                    Log.d("SyncScreenModel", "Found folder '$folderName': ${folders[0].id}")
+                    folders[0].id
+                }
+                else -> {
+                    // ⚠️ Multiple folders found - use the FIRST one (oldest)
+                    Log.w("SyncScreenModel", "Found ${folders.size} folders named '$folderName'! Using oldest: ${folders[0].id}")
+                    folders[0].id
+                }
             }
-        }
-
-    suspend fun createDriveFolders(driveService: Drive?) = withContext(Dispatchers.IO) {
-        if (driveService == null) return@withContext
-
-        var dataFolderId = findFolderId(driveService, "jetnote_data")
-        if (dataFolderId == null) {
-            dataFolderId = createRootFolder(driveService, "jetnote_data", "root")
-        }
-
-        var mediasFolderId = findFolderId(driveService, "jetnote_medias")
-        if (mediasFolderId == null) {
-            mediasFolderId = createRootFolder(driveService, "jetnote_medias", "root")
-        }
-
-        val picturesFolder = "pictures"
-        if (mediasFolderId != null) {
-            findFolderId(driveService, picturesFolder, mediasFolderId) ?: createMediaFolder(
-                driveService,
-                picturesFolder,
-                mediasFolderId
-            )
-        }
-        val moviesFolder = "movies"
-        if (mediasFolderId != null) {
-            findFolderId(driveService, moviesFolder, mediasFolderId) ?: createMediaFolder(
-                driveService,
-                moviesFolder,
-                mediasFolderId
-            )
-        }
-        val downloadsFolder = "downloads"
-        if (mediasFolderId != null) {
-            findFolderId(driveService, downloadsFolder, mediasFolderId) ?: createMediaFolder(
-                driveService,
-                downloadsFolder,
-                mediasFolderId
-            )
-        }
-        val audiosFolder = "audios"
-        if (mediasFolderId != null) {
-            findFolderId(driveService, audiosFolder, mediasFolderId) ?: createMediaFolder(
-                driveService,
-                audiosFolder,
-                mediasFolderId
-            )
+        } catch (e: Exception) {
+            Log.e("SyncScreenModel", "Error finding folder $folderName", e)
+            null
         }
     }
 
-    private suspend fun createRootFolder(
-        driveService: Drive,
-        folderName: String,
-        parentFolderId: String
-    ): String? =
-        withContext(Dispatchers.IO) {
-            val folderMetadata = DriveFile().apply {
-                name = folderName
-                mimeType = "application/vnd.google-apps.folder"
-                parents = listOf(parentFolderId)
-            }
-            try {
-                val createdFolder =
-                    driveService.files().create(folderMetadata).setFields("id").execute()
-                createdFolder?.id
-            } catch (e: Exception) {
-                Log.e("SyncScreenModel", "Error creating folder $folderName: ${e.message}")
-                null
-            }
+    // ✅ IMPROVED: More defensive folder creation
+    suspend fun createDriveFolders(driveService: Drive?) = withContext(Dispatchers.IO) {
+        if (driveService == null) {
+            Log.e("SyncScreenModel", "Drive service is null")
+            return@withContext
         }
 
-    private suspend fun createMediaFolder(
+        Log.d("SyncScreenModel", "Starting folder creation/verification...")
+
+        try {
+            // Create root folders
+            val dataFolderId = getOrCreateFolder(driveService, "jetnote_data", "root")
+            val mediasFolderId = getOrCreateFolder(driveService, "jetnote_medias", "root")
+            val feedbackFolderId = getOrCreateFolder(driveService, "jetnote_feedback", "root")
+
+            // Create media subfolders
+            if (mediasFolderId != null) {
+                getOrCreateFolder(driveService, "pictures", mediasFolderId)
+                getOrCreateFolder(driveService, "movies", mediasFolderId)
+                getOrCreateFolder(driveService, "downloads", mediasFolderId)
+                getOrCreateFolder(driveService, "audios", mediasFolderId)
+            }
+
+            Log.d("SyncScreenModel", "✅ Folder structure verified/created successfully")
+        } catch (e: Exception) {
+            Log.e("SyncScreenModel", "Error during folder creation", e)
+            throw e
+        }
+    }
+
+    // ✅ NEW: Atomic get-or-create operation
+    private suspend fun getOrCreateFolder(
         driveService: Drive,
         folderName: String,
         parentFolderId: String
-    ): String? =
-        withContext(Dispatchers.IO) {
+    ): String? = withContext(Dispatchers.IO) {
+        try {
+            // First, try to find existing folder
+            var folderId = findFolderId(driveService, folderName, parentFolderId)
+
+            if (folderId != null) {
+                Log.d("SyncScreenModel", "✓ Folder '$folderName' exists: $folderId")
+                return@withContext folderId
+            }
+
+            // Not found, create it
+            Log.d("SyncScreenModel", "Creating folder: $folderName")
+            folderId = createFolder(driveService, folderName, parentFolderId)
+
+            if (folderId != null) {
+                Log.d("SyncScreenModel", "✓ Created folder '$folderName': $folderId")
+            } else {
+                Log.e("SyncScreenModel", "✗ Failed to create folder '$folderName'")
+            }
+
+            return@withContext folderId
+        } catch (e: Exception) {
+            Log.e("SyncScreenModel", "Error in getOrCreateFolder for '$folderName'", e)
+            null
+        }
+    }
+
+    // ✅ RENAMED for clarity (was createRootFolder and createMediaFolder)
+    private suspend fun createFolder(
+        driveService: Drive,
+        folderName: String,
+        parentFolderId: String
+    ): String? = withContext(Dispatchers.IO) {
+        try {
             val folderMetadata = DriveFile().apply {
                 name = folderName
                 mimeType = "application/vnd.google-apps.folder"
                 parents = listOf(parentFolderId)
             }
-            try {
-                val createdFolder =
-                    driveService.files().create(folderMetadata).setFields("id").execute()
-                createdFolder?.id
-            } catch (e: Exception) {
-                Log.e("SyncScreenModel", "Error creating folder $folderName: ${e.message}")
-                null
-            }
+
+            val createdFolder = driveService.files()
+                .create(folderMetadata)
+                .setFields("id, name")
+                .execute()
+
+            createdFolder?.id
+        } catch (e: Exception) {
+            Log.e("SyncScreenModel", "Failed to create folder '$folderName'", e)
+            null
         }
+    }
 
     fun enqueueUploadsProcessing() {
         val constraints = Constraints.Builder()

@@ -34,12 +34,12 @@ import zouitel.neighborhood.ai.provider.Model
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.assistant.ui.configurations.ModelConfigurationScreen
 import zouitel.neighborhood.assistant.ui.provider.ProvidersScreen
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.feedback.reportable
 
 class ModelsScreen: Screen {
     @Composable
@@ -91,7 +91,7 @@ class ModelsScreen: Screen {
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure
+                        actionColor = CommonColors.prime
                     )
                 }
             }

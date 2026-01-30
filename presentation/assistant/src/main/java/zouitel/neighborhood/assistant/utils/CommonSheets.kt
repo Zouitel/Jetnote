@@ -134,7 +134,7 @@ fun MessageRegexSheet(
                     currentRegex = currentRegex.copy(enabled = it)
                 },
                 colors = SwitchDefaults.colors(
-                    checkedTrackColor = CommonColors.azure,
+                    checkedTrackColor = CommonColors.prime,
                     checkedThumbColor = Color.White
                 )
             )
@@ -180,7 +180,7 @@ fun MessageRegexSheet(
                     },
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor =
-                            if (AssistantAffectScope.ASSISTANT in currentRegex.affectingScope) CommonColors.azure else MaterialTheme.colorScheme.surfaceContainer,
+                            if (AssistantAffectScope.ASSISTANT in currentRegex.affectingScope) CommonColors.prime else MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = if (AssistantAffectScope.ASSISTANT in currentRegex.affectingScope) Color.White else MaterialTheme.colorScheme.onSurface
                     )
                 ) {
@@ -213,7 +213,7 @@ fun MessageRegexSheet(
                 },
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor =
-                            if (AssistantAffectScope.USER in currentRegex.affectingScope) CommonColors.azure else MaterialTheme.colorScheme.surfaceContainer,
+                            if (AssistantAffectScope.USER in currentRegex.affectingScope) CommonColors.prime else MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = if (AssistantAffectScope.USER in currentRegex.affectingScope) Color.White else MaterialTheme.colorScheme.onSurface
                     )
                 ) {
@@ -236,7 +236,7 @@ fun MessageRegexSheet(
             },
                 colors = ButtonDefaults.filledTonalButtonColors(
                     containerColor =
-                        if (currentRegex.visualOnly) CommonColors.azure else MaterialTheme.colorScheme.surfaceContainer,
+                        if (currentRegex.visualOnly) CommonColors.prime else MaterialTheme.colorScheme.surfaceContainer,
                     contentColor = if (currentRegex.visualOnly) Color.White else MaterialTheme.colorScheme.onSurface
                 )
             ) {
@@ -426,7 +426,7 @@ internal fun SaveSheet(
                     },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = CommonColors.azure,
+                        containerColor = CommonColors.prime,
                         contentColor = Color.White
                     )
                 ) {

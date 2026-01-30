@@ -25,6 +25,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
@@ -37,10 +38,14 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -62,6 +67,7 @@ import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonTextField
 import coil.compose.AsyncImage
+import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -83,15 +89,103 @@ class FeedbackScreen : Screen {
         val bodyState = rememberTextFieldState()
         val scope = rememberCoroutineScope()
         val systemLogs = remember { mutableStateOf(false) }
-        val isSendEnabled = titleState.text.isNotBlank()
         val imageUri = remember { mutableStateOf<Uri?>(null) }
         val toolTipState = rememberTooltipState(isPersistent = true)
         val labels = remember { mutableStateListOf<Label>() }
+
+        // Submission state tracking
+        var isSubmitting by remember { mutableStateOf(false) }
+        var submissionStage by remember { mutableStateOf("") }
+
+        // Check if user is authenticated
+        val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+        val isAuthenticated = currentUser != null
+
+        // ✅ Observe both upload and submission status
+        val uploadStatus by feedbackModel.uploadStatus.collectAsState()
+        val submissionStatus by feedbackModel.submissionStatus.collectAsState()
+
+        // ✅ NEW: Handle upload completion during submission
+        LaunchedEffect(uploadStatus) {
+            if (isSubmitting) {
+                when (uploadStatus) {
+                    is FeedbackScreenModel.UploadStatus.Uploading -> {
+                        submissionStage = "Uploading screenshot..."
+                    }
+                    is FeedbackScreenModel.UploadStatus.Success -> {
+                        submissionStage = "Creating GitHub issue..."
+                        val driveLink = (uploadStatus as FeedbackScreenModel.UploadStatus.Success).driveLink
+
+                        // Submit the feedback with Drive link
+                        feedbackModel.enqueueIssueProcessing(
+                            title = titleState.text.toString(),
+                            body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
+                            else bodyState.text.toString(),
+                            labels = labels.map { it.name }.toTypedArray(),
+                            imageUri = imageUri.value,
+                            driveLink = driveLink
+                        )
+                    }
+                    is FeedbackScreenModel.UploadStatus.Failed -> {
+                        submissionStage = "Upload failed, creating issue..."
+
+                        // Submit without Drive link if upload failed
+                        feedbackModel.enqueueIssueProcessing(
+                            title = titleState.text.toString(),
+                            body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
+                            else bodyState.text.toString(),
+                            labels = labels.map { it.name }.toTypedArray(),
+                            imageUri = imageUri.value,
+                            driveLink = null
+                        )
+                    }
+                    else -> { /* Idle state */ }
+                }
+            }
+        }
+
+        // ✅ NEW: Handle submission completion
+        LaunchedEffect(submissionStatus) {
+            when (submissionStatus) {
+                is FeedbackScreenModel.SubmissionStatus.Submitting -> {
+                    submissionStage = "Creating GitHub issue..."
+                }
+                is FeedbackScreenModel.SubmissionStatus.Success -> {
+                    val success = submissionStatus as FeedbackScreenModel.SubmissionStatus.Success
+                    submissionStage = "Issue created!"
+
+                    // Wait briefly to show success message
+                    delay(1000)
+
+                    // Reset and close
+                    isSubmitting = false
+                    feedbackModel.resetSubmissionState()
+                    bottomNav.pop()
+                }
+                is FeedbackScreenModel.SubmissionStatus.Failed -> {
+                    val failed = submissionStatus as FeedbackScreenModel.SubmissionStatus.Failed
+                    submissionStage = "Failed: ${failed.reason}"
+
+                    // Wait to show error
+                    delay(3000)
+
+                    // Reset state but don't close (let user retry)
+                    isSubmitting = false
+                    feedbackModel.resetSubmissionState()
+                }
+                else -> { /* Idle */ }
+            }
+        }
+
+        // Gallery picker (just selects image, doesn't upload)
         val galleryLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) { uri ->
             imageUri.value = uri
         }
+
+        // Calculate if submit is enabled
+        val isSendEnabled = titleState.text.isNotBlank() && !isSubmitting
 
         Scaffold(
             modifier = Modifier.fillMaxSize().cloudy(enabled = toolTipState.isVisible),
@@ -104,26 +198,52 @@ class FeedbackScreen : Screen {
                         onClick = {
                             scope.launch {
                                 if (isSendEnabled) {
-                                    feedbackModel.enqueueIssueProcessing(
-                                        title = titleState.text.toString(),
-                                        body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
-                                        else bodyState.text.toString(),
-                                        labels = labels.map { it.name }.toTypedArray(),
-                                        imageUri = imageUri.value
-                                    )
-                                    delay(3000)
-                                    bottomNav.pop()
+                                    isSubmitting = true
+
+                                    // Check if there's an image to upload
+                                    if (imageUri.value != null && isAuthenticated) {
+                                        // Start upload first
+                                        submissionStage = "Uploading screenshot..."
+                                        feedbackModel.uploadScreenshotToDrive(imageUri.value!!)
+                                        // LaunchedEffect will handle the rest
+                                    } else {
+                                        // No image or not authenticated, submit directly
+                                        submissionStage = "Creating GitHub issue..."
+                                        feedbackModel.enqueueIssueProcessing(
+                                            title = titleState.text.toString(),
+                                            body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
+                                            else bodyState.text.toString(),
+                                            labels = labels.map { it.name }.toTypedArray(),
+                                            imageUri = imageUri.value,
+                                            driveLink = null
+                                        )
+                                        // LaunchedEffect will handle completion
+                                    }
                                 }
                             }
                         },
                         enabled = isSendEnabled,
-                        modifier = Modifier.fillMaxWidth().height(50.dp).navigationBarsPadding().padding(horizontal = 10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .navigationBarsPadding()
+                            .padding(horizontal = 10.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = CommonColors.darkAzure,
-                            contentColor = Color.White
+                            containerColor = CommonColors.prime,
+                            contentColor = MaterialTheme.colorScheme.surface
                         )
                     ) {
-                        Text("Submit Feedback!", style = MaterialTheme.typography.titleMedium)
+                        if (isSubmitting) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = Color.White,
+                                strokeWidth = 2.dp
+                            )
+                            Spacer(modifier = Modifier.size(8.dp))
+                            Text(submissionStage, style = MaterialTheme.typography.titleMedium)
+                        } else {
+                            Text("Submit Feedback!", style = MaterialTheme.typography.titleMedium)
+                        }
                     }
                 }
             }
@@ -197,41 +317,88 @@ class FeedbackScreen : Screen {
                 item {
                     ElevatedCard(
                         onClick = {
-                            galleryLauncher.launch(
-                                PickVisualMediaRequest(
-                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                            if (!isSubmitting) {
+                                galleryLauncher.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
                                 )
-                            )
+                            }
                         },
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
                     ) {
                         Column(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.fillMaxSize().padding(16.dp),
                             verticalArrangement = Arrangement.SpaceEvenly,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            imageUri.value?.let { uri ->
-                                AsyncImage(
-                                    model = uri,
-                                    contentDescription = "screenshot",
-                                    contentScale = ContentScale.Crop
-                                )
-                            } ?: let {
-                                Icon(
-                                    painter = painterResource(CommonIcons.PHOTO_CAPTURE),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(80.dp)
-                                        .alpha(.5f)
-                                        .padding(10.dp)
-                                )
+                            when {
+                                imageUri.value != null -> {
+                                    AsyncImage(
+                                        model = imageUri.value,
+                                        contentDescription = "screenshot",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
 
-                                Spacer(modifier = Modifier.height(40.dp))
+                                    if (isAuthenticated) {
+                                        Text(
+                                            text = "✓ Screenshot selected",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = Color(0xFF4CAF50)
+                                        )
+                                        Text(
+                                            text = "Will upload to Drive on submit",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier.alpha(.6f)
+                                        )
+                                    } else {
+                                        Text(
+                                            text = "✓ Screenshot selected",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = Color(0xFF4CAF50)
+                                        )
+                                        Text(
+                                            text = "Will upload to GitHub on submit",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier.alpha(.6f)
+                                        )
+                                    }
+                                }
+                                else -> {
+                                    Icon(
+                                        painter = painterResource(CommonIcons.PHOTO_CAPTURE),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .alpha(.5f)
+                                            .padding(10.dp)
+                                    )
 
-                                Text(
-                                    text = "Select a screenshot",
-                                    modifier = Modifier.alpha(.5f)
-                                )
+                                    Spacer(modifier = Modifier.height(16.dp))
+
+                                    Text(
+                                        text = "Select a screenshot",
+                                        modifier = Modifier.alpha(.5f)
+                                    )
+
+                                    if (isAuthenticated) {
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "Will upload to Drive on submit",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier.alpha(.4f)
+                                        )
+                                    } else {
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "Will upload to GitHub on submit",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier.alpha(.4f)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

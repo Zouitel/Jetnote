@@ -176,7 +176,7 @@ val DEFAULT_PROVIDERS = listOf(
 //    ProviderSetting.GlobalAI(
 //        id = 5,
 //        name = "Microsoft (Azure OpenAI)",
-//        baseUrl = "https://{resource-name}.openai.azure.com/openai/deployments/{deployment-id}/",
+//        baseUrl = "https://{resource-name}.openai.prime.com/openai/deployments/{deployment-id}/",
 //        description = """
 //            Provides enterprise-grade access to OpenAI models (like GPT) and other services via the Azure cloud, focusing on security, scalability, and integration into business workflows.
 //        """.trimIndent()

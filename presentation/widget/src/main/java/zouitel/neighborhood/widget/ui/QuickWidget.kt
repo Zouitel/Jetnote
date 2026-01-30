@@ -49,7 +49,7 @@ class QuickWidget: GlanceAppWidget(), Screen {
             modifier = GlanceModifier
                 .height(70.dp)
                 .clickable(actionStartActivity(intent_workplace))
-                .background(ColorProvider(CommonColors.azure))
+                .background(ColorProvider(CommonColors.prime))
                 .padding(end = 20.dp)
         ){
             SquareIconButton(
@@ -57,7 +57,7 @@ class QuickWidget: GlanceAppWidget(), Screen {
                 null,
                 {},
                 GlanceModifier,
-                backgroundColor = ColorProvider(CommonColors.azure),
+                backgroundColor = ColorProvider(CommonColors.prime),
                 contentColor = ColorProvider(Color.White)
             )
 

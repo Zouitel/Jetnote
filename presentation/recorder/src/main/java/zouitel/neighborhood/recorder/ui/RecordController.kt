@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.ui.CommonIcons.MIC_36
 import zouitel.neighborhood.ui.CommonIcons.PAUSE
+import zouitel.neighborhood.ui.CommonIcons.PAUSE_36
 import zouitel.neighborhood.ui.CommonIcons.PLAY_36
 import zouitel.neighborhood.ui.CommonIcons.STOP_36
 import zouitel.neighborhood.ui.CommonRow
@@ -78,7 +79,7 @@ fun RecordController(
                         modifier = Modifier.sizeIn(50.dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = PAUSE),
+                            painter = painterResource(id = PAUSE_36),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurface,
                         )

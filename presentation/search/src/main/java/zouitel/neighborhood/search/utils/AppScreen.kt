@@ -7,6 +7,6 @@ enum class AppScreen(val screen: String) {
     SETTINGS_SCREEN("Settings"),
     WIDGETS_SCREEN("Widgets"),
     ARCHIVE_SCREEN("Archive"),
-    FEEDBACK_AND_HELP("Feedback & Help"),
+    FEEDBACK_AND_HELP("Feedback"),
     ABOUT_SCREEN("About")
 }

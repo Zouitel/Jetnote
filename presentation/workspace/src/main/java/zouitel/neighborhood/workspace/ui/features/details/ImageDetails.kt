@@ -330,10 +330,10 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
                                 },
                                 shape = MaterialTheme.shapes.large,
                                 colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = if (showKey) CommonColors.azure else MaterialTheme.colorScheme.surface,
+                                    containerColor = if (showKey) CommonColors.prime else MaterialTheme.colorScheme.surface,
                                     labelColor = Color.LightGray,
                                 ),
-                                border = BorderStroke(1.dp, CommonColors.azure)
+                                border = BorderStroke(1.dp, CommonColors.prime)
                             )
                         }
                     }

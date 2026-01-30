@@ -1,8 +1,6 @@
 package zouitel.neighborhood.workspace.di
 
 import cafe.adriel.voyager.core.registry.screenModule
-import zouitel.neighborhood.feedback.FeedbackScreen
-import zouitel.neighborhood.feedback.FeedbackSheetScreen
 import zouitel.neighborhood.tag.ui.TagsScreen
 import zouitel.neighborhood.workspace.mapper.DataMapper
 import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
@@ -17,6 +15,8 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.worker
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
+import zouitel.neighborhood.feedback.FeedbackScreen
+import zouitel.neighborhood.feedback.FeedbackSheetScreen
 
 val workplaceModule = module {
     factoryOf(::DataMapper)

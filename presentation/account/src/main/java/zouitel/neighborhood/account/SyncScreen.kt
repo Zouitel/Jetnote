@@ -56,8 +56,9 @@ class SyncScreen: Screen {
         var isSigningIn by remember { mutableStateOf(false) }
         var errorState by remember { mutableStateOf<String?>(null) }
 
-        // 🔥 FIX: Use the ViewModel's user state instead of local state
+        // Use the ViewModel's user state instead of local state
         val currentUser by syncModel.userState.collectAsState()
+
         val signInLauncher = rememberLauncherForActivityResult(
             contract = StartActivityForResult()
         ) { result ->
@@ -71,23 +72,9 @@ class SyncScreen: Screen {
                     auth.signInWithCredential(credential)
                         .addOnSuccessListener {
                             Log.d("SyncScreen", "Sign in successful: ${auth.currentUser?.email}")
-
-                            // 🔥 FIX: Initialize Drive and request permissions HERE
-                            scope.launch {
-                                try {
-                                    val driveService = syncModel.initializeDriveService()
-                                    if (driveService != null) {
-                                        // This will create folders and trigger permission if needed
-                                        syncModel.createDriveFolders(driveService)
-                                        // Permission granted, now safe to start workers
-                                        Log.d("SyncScreen", "Drive initialized, starting sync")
-                                    }
-                                } catch (e: Exception) {
-                                    Log.e("SyncScreen", "Drive init error", e)
-                                    errorState = "Drive setup failed: ${e.message}"
-                                }
-                                isSigningIn = false
-                            }
+                            // ✅ FIXED: Don't call createDriveFolders here!
+                            // The AuthStateListener in SyncScreenModel will handle everything
+                            isSigningIn = false
                         }
                         .addOnFailureListener { e ->
                             Log.e("SyncScreen", "Sign in failed", e)
@@ -101,45 +88,6 @@ class SyncScreen: Screen {
                 isSigningIn = false
             }
         }
-
-//        val signInLauncher = rememberLauncherForActivityResult(
-//            contract = StartActivityForResult()
-//        ) { result ->
-//            isSigningIn = true
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-//            try {
-//                val account = task.getResult(ApiException::class.java)
-//                account?.let { acc ->
-//                    val credential =
-//                        GoogleAuthProvider.getCredential(acc.idToken, null)
-//
-//                    auth.signInWithCredential(credential)
-//                        .addOnSuccessListener {
-//                            // 🔥 No need to manually update state - the listener will handle it
-//                            Log.d("SyncScreen", "Sign in successful: ${auth.currentUser?.email}")
-//
-//                            scope.launch {
-//                                syncModel.initializeDriveService()?.let { driveService ->
-//                                    syncModel.createDriveFolders(driveService)
-//                                }
-//                            }
-//                            isSigningIn = false
-//                        }
-//                        .addOnFailureListener { e ->
-//                            Log.e("SyncScreen", "Sign in failed", e)
-//                            errorState = "Firebase authentication failed: ${e.message}"
-//                            isSigningIn = false
-//                        }
-//                } ?: run {
-//                    errorState = "Google account is null."
-//                    isSigningIn = false
-//                }
-//            } catch (e: ApiException) {
-//                Log.e("SyncScreen", "Google sign in failed", e)
-//                errorState = "Google sign-in failed: ${e.localizedMessage}"
-//                isSigningIn = false
-//            }
-//        }
 
         val gso = rememberGso()
         val googleSignInClient = GoogleSignIn.getClient(context, gso)
@@ -163,7 +111,7 @@ class SyncScreen: Screen {
                             scope.launch {
                                 auth.signOut()
                                 googleSignInClient.signOut()
-                                // 🔥 State will update automatically via listener
+                                // State will update automatically via listener
                             }.invokeOnCompletion {
                                 bottomNav.hide()
                             }
@@ -213,9 +161,9 @@ class SyncScreen: Screen {
         ) {
             AsyncImage(
                 ImageRequest.Builder(LocalContext.current).data(data = user?.photoUrl)
-                        .apply(block = fun ImageRequest.Builder.() {
-                            crossfade(true)
-                        }).build()
+                    .apply(block = fun ImageRequest.Builder.() {
+                        crossfade(true)
+                    }).build()
                 ,
                 "User Profile Picture",
                 Modifier
@@ -247,7 +195,7 @@ class SyncScreen: Screen {
         return GoogleSignInOptions.Builder(DEFAULT_SIGN_IN)
             .requestIdToken(webClientId)
             .requestEmail()
-            .requestScopes(com.google.android.gms.common.api.Scope(DriveScopes.DRIVE_FILE)) // 🔥 ADD THIS
+            .requestScopes(com.google.android.gms.common.api.Scope(DriveScopes.DRIVE_FILE))
             .build()
     }
 }

@@ -22,7 +22,7 @@ fun printNote(
     context: Context,
     title: String,
     description: String,
-    tasks: List<Pair<String, Boolean>> = emptyList()
+    tasks: List<Pair<String?, Boolean>> = emptyList()
 ) {
     val printManager = context.getSystemService(Context.PRINT_SERVICE) as PrintManager
 

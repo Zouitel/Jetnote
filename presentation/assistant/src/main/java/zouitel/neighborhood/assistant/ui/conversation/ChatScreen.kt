@@ -111,7 +111,6 @@ import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.assistant.ui.configurations.ModelConfigurationScreen
 import zouitel.neighborhood.assistant.ui.provider.ProviderScreenModel
 import zouitel.neighborhood.assistant.utils.createChatFilesByContents
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -120,6 +119,7 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.feedback.reportable
 import kotlin.uuid.Uuid
 
 class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
@@ -463,7 +463,7 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure
+                        actionColor = CommonColors.prime
                     )
                 }
             }

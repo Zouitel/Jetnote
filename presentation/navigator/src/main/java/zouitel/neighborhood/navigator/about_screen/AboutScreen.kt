@@ -3,6 +3,7 @@ package zouitel.neighborhood.navigator.about_screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,11 +42,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.navigator.R
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.sound
@@ -57,6 +61,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.feedback.reportable
 
 class AboutScreen: Screen {
     @Composable
@@ -79,10 +84,10 @@ class AboutScreen: Screen {
 
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val topAppBarState = rememberTopAppBarState()
-        val lazyListState = rememberLazyListState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val snackbarState = remember { SnackbarHostState() }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
+
 
         Scaffold(
             snackbarHost = {
@@ -91,7 +96,7 @@ class AboutScreen: Screen {
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure
+                        actionColor = CommonColors.prime
                     )
                 }
             }
@@ -109,28 +114,44 @@ class AboutScreen: Screen {
                     )
                 }
             ) {
-                Scaffold(
-                    topBar = {
-                        CommonTopAppBar(
-                            settingsModel = settingsModel,
-                            drawerState = drawerState,
-                            scrollBehavior = scrollBehavior,
-                            title = "About"
+                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                    val viewPortHeight = maxHeight
+
+                    val cacheWindow = remember(viewPortHeight) {
+                        LazyLayoutCacheWindow(
+                            ahead = viewPortHeight,
+                            behind = viewPortHeight
                         )
-                    },
-                    modifier = Modifier
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .reportable(settings.isShakable)
-                        .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen)
-                ) { paddingValues ->
-                    LazyColumn(
-                        state = lazyListState,
-                        contentPadding = paddingValues,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        item { AboutLabel() }
-                        item { AboutDescription() }
+                    }
+
+                    val lazyListState = rememberLazyListState(
+                        cacheWindow = cacheWindow
+                    )
+
+                    Scaffold(
+                        topBar = {
+                            CommonTopAppBar(
+                                settingsModel = settingsModel,
+                                drawerState = drawerState,
+                                scrollBehavior = scrollBehavior,
+                                title = "About"
+                            )
+                        },
+                        modifier = Modifier
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .reportable(settings.isShakable)
+                            .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen)
+                    ) { paddingValues ->
+
+                        LazyColumn(
+                            state = lazyListState,
+                            contentPadding = paddingValues,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            item { AboutLabel() }
+                            item { AboutDescription() }
 //                        item { ProjectSources(settings.isSound) }
+                        }
                     }
                 }
             }
@@ -172,11 +193,22 @@ class AboutScreen: Screen {
                         edgeTreatment = BlurredEdgeTreatment.Rectangle
                     )
             )
-            Text(
-                text = CommonConstants.APP_NAME,
-                style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            val app_title = buildAnnotatedString {
+                withStyle(SpanStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = MaterialTheme.typography.displayLarge.fontSize
+                )) {
+                    append("Jetnote")
+                }
+                withStyle(SpanStyle(
+                    color = CommonColors.prime,
+                    fontSize = MaterialTheme.typography.displayLarge.fontSize
+                )) {
+                    append(".")
+                }
+            }
+
+            Text(app_title)
         }
     }
 

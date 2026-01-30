@@ -157,7 +157,7 @@ private fun Card(
 //                        RoundedCornerShape(20.dp),
 //                        Shadow(
 //                            13.dp,
-//                            color = CommonColors.azure,
+//                            color = CommonColors.prime,
 //                            spread = animatedSpread.value.dp,
 //                            alpha = .7f
 //                        ))
@@ -167,7 +167,7 @@ private fun Card(
 //            )
         shape = AbsoluteRoundedCornerShape(15.dp),
         border = if (uiState.selectedNotes.contains(note)) {
-             BorderStroke(3.dp, CommonColors.azure)
+             BorderStroke(3.dp, CommonColors.prime)
         } else {
             when (note.background == MaterialTheme.colorScheme.surface.toArgb()) {
                 true -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)

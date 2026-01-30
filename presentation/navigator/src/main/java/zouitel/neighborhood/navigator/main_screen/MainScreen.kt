@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -44,6 +46,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.UiComposable
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -58,7 +61,6 @@ import zouitel.neighborhood.account.SyncScreenModel
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.domain.utils.Action
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
@@ -81,6 +83,7 @@ import zouitel.neighborhood.workspace.model.Data
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.feedback.reportable
 
 class MainScreen: Screen {
 
@@ -180,7 +183,7 @@ class MainScreen: Screen {
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure
+                        actionColor = CommonColors.prime
                     )
                 }
             }
@@ -198,140 +201,154 @@ class MainScreen: Screen {
                     )
                 }
             ) {
-                Scaffold(
-                    modifier = Modifier
-                        .cloudy(enabled = navBottomSheet.isVisible || drawerState.isOpen)
-                        .reportable(settings.isShakable)
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    topBar = {
-                        if (uiState.isSelection) {
-                            SelectionTopBar(
-                                searchModel = searchModel,
-                                dataModel = dataModel,
-                                noteAndTagModel = noteAndTagModel,
-                                tagModel = tagModel,
-                                alarmModel = getScreenModel()
-                            ) {
-                                // to.do cancel the alarm manager reminder.
-                                val currentJobId = jobCounter++
-                                deletedNotes.add(Pair(it, currentJobId))
-                                val notePair = deletedNotes.firstOrNull { note -> note.second == currentJobId }
-                                dataModel.sendAction(Action.DeleteByUid(it.uid))
+                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                    val viewPortHeight = maxHeight
 
-                                scope.launch {
-                                    snackbarState.currentSnackbarData?.dismiss()
-                                    val result = snackbarState.showSnackbar(
-                                        message = "${notePair?.first?.title} deleted!",
-                                        actionLabel = "Undo",
-                                        duration = SnackbarDuration.Long
-                                    )
-
-                                    if (result == SnackbarResult.ActionPerformed) {
-                                        notePair?.first?.let { note ->
-                                            dataModel.sendAction(Action.Insert(note))
-                                        }
-                                    }
-                                    notePair?.let { note -> deletedNotes.remove(note) }
-                                }
-                            }
-                        } else {
-                            MainTopAppBar(
-                                settingsModel = settingsModel,
-                                searchModel = searchModel,
-                                scrollBehavior = scrollBehavior,
-                                drawerState = drawerState,
-                                syncModel = getScreenModel()
-                            )
-                        }
-                    },
-                    floatingActionButton = {
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = "Compose",
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                            },
-                            icon = {
-                                Icon(painterResource(CommonIcons.PLUS_20), null)
-                            },
-                            onClick = {
-                                sound.performSoundEffect(
-                                    context,
-                                    CommonConstants.KEY_STANDARD,
-                                    settings.isSound
-                                )
-                                navigator.push(workplaceScreen)
-                            },
-                            expanded = scrollBehavior.state.collapsedFraction != 1f,
-                            containerColor = if (scrollBehavior.state.collapsedFraction != 1f) CommonColors.azure else CommonColors.darkAzure,
-                            contentColor = MaterialTheme.colorScheme.onSurface
+                    val cacheWindow = remember(viewPortHeight) {
+                        LazyLayoutCacheWindow(
+                            ahead = viewPortHeight,
+                            behind = viewPortHeight
                         )
                     }
-                ) { paddingValues ->
-                    PullToRefreshBox(
-                        isRefreshing = syncState,
-                        onRefresh = {
-                            syncModel.enqueueSyncProcessing()
-                            syncModel.enqueueDownloadsProcessing()
-                        },
-                        contentAlignment = Alignment.TopCenter,
+
+                    val lazyListState = rememberLazyListState(
+                        cacheWindow = cacheWindow
+                    )
+
+                    Scaffold(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
-                        state = refreshState,
-                        indicator = {
-                            LoadingIndicator(
-                                refreshState,
-                                syncState,
-                                containerColor = CommonColors.darkAzure,
-                                color = MaterialTheme.colorScheme.surface
-                            )
-                            scope.launch { delay(2000) }
-                        }
-                    ) {
-                        if (settings.layout == CommonConstants.LIST) {
-                            LazyColumn(
-                                state = listLayoutState,
-                                modifier = Modifier
-                                    .animateContentSize()
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                items(
-                                    items = notes.value,
-                                    key = { it.data.uid }
-                                ) { entity ->
-                                    NoteCard(
-                                        settingsModel = settingsModel,
-                                        audioModel = audioModel,
-                                        linkModel = linkModel,
-                                        searchModel = searchModel,
-                                        note = entity
-                                    )
+                            .cloudy(enabled = navBottomSheet.isVisible || drawerState.isOpen)
+                            .reportable(settings.isShakable)
+                            .nestedScroll(scrollBehavior.nestedScrollConnection),
+                        topBar = {
+                            if (uiState.isSelection) {
+                                SelectionTopBar(
+                                    searchModel = searchModel,
+                                    dataModel = dataModel,
+                                    noteAndTagModel = noteAndTagModel,
+                                    tagModel = tagModel
+                                ) {
+                                    // to.do cancel the alarm manager reminder.
+                                    val currentJobId = jobCounter++
+                                    deletedNotes.add(Pair(it, currentJobId))
+                                    val notePair = deletedNotes.firstOrNull { note -> note.second == currentJobId }
+                                    dataModel.sendAction(Action.DeleteByUid(it.uid))
+
+                                    scope.launch {
+                                        snackbarState.currentSnackbarData?.dismiss()
+                                        val result = snackbarState.showSnackbar(
+                                            message = "${notePair?.first?.title} deleted!",
+                                            actionLabel = "Undo",
+                                            duration = SnackbarDuration.Long
+                                        )
+
+                                        if (result == SnackbarResult.ActionPerformed) {
+                                            notePair?.first?.let { note ->
+                                                dataModel.sendAction(Action.Insert(note))
+                                            }
+                                        }
+                                        notePair?.let { note -> deletedNotes.remove(note) }
+                                    }
                                 }
+                            } else {
+                                MainTopAppBar(
+                                    settingsModel = settingsModel,
+                                    searchModel = searchModel,
+                                    scrollBehavior = scrollBehavior,
+                                    drawerState = drawerState,
+                                    syncModel = getScreenModel()
+                                )
                             }
-                        } else {
-                            LazyVerticalStaggeredGrid(
-                                state = gridLayoutState,
-                                modifier = Modifier
-                                    .animateContentSize()
-                                    .fillMaxSize(),
-                                columns = StaggeredGridCells.Fixed(2),
-                                verticalItemSpacing = 6.dp,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                items(
-                                    items = notes.value,
-                                    key = { it.data.uid }
-                                ) { entity ->
-                                    NoteCard(
-                                        settingsModel = settingsModel,
-                                        audioModel = audioModel,
-                                        linkModel = linkModel,
-                                        searchModel = searchModel,
-                                        note = entity
+                        },
+                        floatingActionButton = {
+                            ExtendedFloatingActionButton(
+                                text = {
+                                    Text(
+                                        text = "Compose",
+                                        style = MaterialTheme.typography.bodyLarge
                                     )
+                                },
+                                icon = {
+                                    Icon(painterResource(CommonIcons.PLUS_20), null)
+                                },
+                                onClick = {
+                                    sound.performSoundEffect(
+                                        context,
+                                        CommonConstants.KEY_STANDARD,
+                                        settings.isSound
+                                    )
+                                    navigator.push(workplaceScreen)
+                                },
+                                expanded = scrollBehavior.state.collapsedFraction != 1f,
+                                containerColor = CommonColors.prime,
+                                contentColor = MaterialTheme.colorScheme.surface
+                            )
+                        }
+                    ) { paddingValues ->
+                        PullToRefreshBox(
+                            isRefreshing = syncState,
+                            onRefresh = {
+                                syncModel.enqueueSyncProcessing()
+                                syncModel.enqueueDownloadsProcessing()
+                            },
+                            contentAlignment = Alignment.TopCenter,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(paddingValues),
+                            state = refreshState,
+                            indicator = {
+                                LoadingIndicator(
+                                    refreshState,
+                                    syncState,
+                                    containerColor = CommonColors.prime,
+                                    color = MaterialTheme.colorScheme.surface
+                                )
+                                scope.launch { delay(2000) }
+                            }
+                        ) {
+                            if (settings.layout == CommonConstants.LIST) {
+                                LazyColumn(
+                                    state = lazyListState,
+                                    modifier = Modifier
+                                        .animateContentSize()
+                                        .fillMaxSize(),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    items(
+                                        items = notes.value,
+                                        key = { it.data.uid }
+                                    ) { entity ->
+                                        NoteCard(
+                                            settingsModel = settingsModel,
+                                            audioModel = audioModel,
+                                            linkModel = linkModel,
+                                            searchModel = searchModel,
+                                            note = entity
+                                        )
+                                    }
+                                }
+                            } else {
+                                LazyVerticalStaggeredGrid(
+                                    state = gridLayoutState,
+                                    modifier = Modifier
+                                        .animateContentSize()
+                                        .fillMaxSize(),
+                                    columns = StaggeredGridCells.Fixed(2),
+                                    verticalItemSpacing = 6.dp,
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    items(
+                                        items = notes.value,
+                                        key = { it.data.uid }
+                                    ) { entity ->
+                                        NoteCard(
+                                            settingsModel = settingsModel,
+                                            audioModel = audioModel,
+                                            linkModel = linkModel,
+                                            searchModel = searchModel,
+                                            note = entity
+                                        )
+                                    }
                                 }
                             }
                         }

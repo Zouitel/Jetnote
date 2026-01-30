@@ -3,13 +3,16 @@ package zouitel.neighborhood.search.utils
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.logic.sharNote
 import zouitel.neighborhood.print.printNote
@@ -19,12 +22,11 @@ import zouitel.neighborhood.ui.CommonIcons.INBOX_IN
 import zouitel.neighborhood.ui.CommonIcons.INBOX_OUT
 import zouitel.neighborhood.ui.CommonIcons.PRINT
 import zouitel.neighborhood.ui.CommonIcons.SHARE
-import zouitel.neighborhood.ui.CommonIcons.SHREDDER
 import zouitel.neighborhood.tag.model.NoteAndTag
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
+import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.workspace.model.Data
-import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import kotlin.uuid.Uuid
 
@@ -34,7 +36,6 @@ fun SelectionTopBar(
     dataModel: DataScreenModel,
     noteAndTagModel: NoteAndTagScreenModel,
     tagModel: TagScreenModel,
-    alarmModel: AlarmManagerScreenModel,
     onDelete: (Data) -> Unit
 ) {
     val context = LocalContext.current
@@ -74,7 +75,7 @@ fun SelectionTopBar(
             }
         },
         title = {
-            Row {
+            Row(Modifier.cloudy(enabled = uiState.selectedNotes.count() != 1)) {
                 IconButton(
                     enabled = uiState.selectedNotes.count() == 1,
                     onClick = {
@@ -134,7 +135,8 @@ fun SelectionTopBar(
                         context,
                         uiState.selectedNotes.single().title,
                         uiState.selectedNotes.single().description,
-//                        uiState.selectedNotes.single().tasks
+                        uiState.selectedNotes.single().tasks
+                            .map { Pair(it.item, it.isDone) }
                     )
                 }) {
                     Icon(
@@ -152,8 +154,9 @@ fun SelectionTopBar(
                     },
                 ) {
                     Icon(
-                        painter = painterResource(SHREDDER),
-                        contentDescription = "delete note"
+                        painter = painterResource(CommonIcons.TRASH),
+                        contentDescription = "delete note",
+                        tint = MaterialTheme.colorScheme.errorContainer
                     )
                 }
             }

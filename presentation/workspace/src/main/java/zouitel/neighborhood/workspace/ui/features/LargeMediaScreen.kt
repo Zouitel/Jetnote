@@ -27,8 +27,6 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -54,7 +52,6 @@ import androidx.core.net.toUri
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.print.printImageFromUri
 import zouitel.neighborhood.ui.CommonIcons.MENU_DOTS
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -67,6 +64,7 @@ import zouitel.neighborhood.workspace.ui.features.details.VideoDetails
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
+import zouitel.neighborhood.feedback.reportable
 import kotlin.random.Random
 
 data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>): Screen {
@@ -95,8 +93,6 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>): S
         val menuExpanded = remember { mutableStateOf(false) }
         val deletedMedia = remember { mutableStateListOf<Pair<Media, Int>>() }
         val jobCounter = remember { mutableIntStateOf(0) }
-        val modalSheetState = rememberModalBottomSheetState(true)
-        val scaffoldState = rememberBottomSheetScaffoldState(modalSheetState)
         val snackbarState = remember { SnackbarHostState() }
         var imageDetailsSheet by remember { mutableStateOf(false) }
         var videoDetailsSheet by remember { mutableStateOf(false) }
@@ -192,11 +188,12 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>): S
                                 )
 
                                 scope.launch {
-                                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                                    val result = scaffoldState.snackbarHostState.showSnackbar(
-                                        message = "${mediaPair.first.title} deleted",
-                                        actionLabel = "Undo",
-                                        duration = SnackbarDuration.Long
+                                    snackbarState.currentSnackbarData?.dismiss()
+                                    val result = snackbarState.showSnackbar(
+                                        "media deleted",
+                                        "Undo",
+                                        true,
+                                        SnackbarDuration.Long
                                     )
 
 

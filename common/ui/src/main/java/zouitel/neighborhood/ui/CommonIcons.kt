@@ -11,6 +11,7 @@ object CommonIcons {
     val MIC_18 = R.drawable.microphone_18
     val MIC_36 = R.drawable.microphone_36
     val PAUSE = R.drawable.pause_24
+    val PAUSE_36 = R.drawable.pause_36
     val PLAY = R.drawable.play_24
     val PLAY_36 = R.drawable.play_36
     val REDO = R.drawable.redo_alt_24

@@ -140,7 +140,7 @@ fun SwipableModel(
                 .clip(MaterialTheme.shapes.extraLarge)
                 .align(Alignment.Center),
             colors = CardDefaults.cardColors(
-                containerColor = if (isCurrent) CommonColors.darkAzure
+                containerColor = if (isCurrent) CommonColors.prime
                     else MaterialTheme.colorScheme.surfaceContainer,
                 contentColor = if (isCurrent) MaterialTheme.colorScheme.onPrimaryContainer
                 else MaterialTheme.colorScheme.onSurface

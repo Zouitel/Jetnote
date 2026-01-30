@@ -1,9 +1,11 @@
 package zouitel.neighborhood.navigator.settings_screen
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -33,7 +35,6 @@ import zouitel.neighborhood.account.SyncScreen
 import zouitel.neighborhood.assistant.model.Assistant
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.assistant.ui.configurations.AssistantConfigurationScreen
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.navigator.R
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
@@ -52,6 +53,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.feedback.reportable
 
 class SettingsScreen: Screen {
 
@@ -88,7 +90,6 @@ class SettingsScreen: Screen {
         val assistant by remember(assistantModel,assistantModel::observe).collectAsState(Assistant())
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val topAppBarState = rememberTopAppBarState()
-        val lazyListState = rememberLazyListState()
         val snackbarState = remember { SnackbarHostState() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
 
@@ -99,11 +100,11 @@ class SettingsScreen: Screen {
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure
+                        actionColor = CommonColors.prime
                     )
                 }
             }
-        ) { paddingValues ->
+        ) {
             ModalNavigationDrawer(
                 drawerState = drawerState,
                 drawerContent = {
@@ -115,52 +116,64 @@ class SettingsScreen: Screen {
                         drawerState = drawerState,
                         snackbarState = snackbarState
                     )
-                },
-                modifier = Modifier.padding(paddingValues)
+                }
             ) {
-                Scaffold(
-                    topBar = {
-                        CommonTopAppBar(
-                            settingsModel = settingsModel,
-                            drawerState = drawerState,
-                            scrollBehavior = scrollBehavior,
-                            title = "Settings"
+                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                    val viewPortHeight = maxHeight
+
+                    val cacheWindow = remember(viewPortHeight) {
+                        LazyLayoutCacheWindow(
+                            ahead = viewPortHeight,
+                            behind = viewPortHeight
                         )
-                    },
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .reportable(settings.isShakable)
-                        .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen),
-                ) { paddingValues ->
-                    LazyColumn(
-                        state = lazyListState,
-                        contentPadding = paddingValues,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        item {
-                            NavigateItem(
-                                title = "Account Sync",
-                                description = """
+                    }
+
+                    val lazyListState = rememberLazyListState(
+                        cacheWindow = cacheWindow
+                    )
+                    Scaffold(
+                        topBar = {
+                            CommonTopAppBar(
+                                settingsModel = settingsModel,
+                                drawerState = drawerState,
+                                scrollBehavior = scrollBehavior,
+                                title = "Settings"
+                            )
+                        },
+                        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .reportable(settings.isShakable)
+                            .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen),
+                    ) { paddingValues ->
+                        LazyColumn(
+                            state = lazyListState,
+                            contentPadding = paddingValues,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            item {
+                                NavigateItem(
+                                    title = "Account Sync",
+                                    description = """
                                 Enabling Google Drive account sync for
                                 this application allows you to
                                 seamlessly back up and synchronize
                                 your app data, such as notes and
                                 settings, this ensures that your data is safe.
                             """.trimIndent(),
-                                icon = {
-                                    AsyncImage(
-                                        model = R.drawable.google_drive,
-                                        contentDescription = "google drive"
-                                    )
+                                    icon = {
+                                        AsyncImage(
+                                            model = R.drawable.google_drive,
+                                            contentDescription = "google drive"
+                                        )
+                                    }
+                                ) {
+                                    bottomNav.show(SyncScreen())
                                 }
-                            ) {
-                                bottomNav.show(SyncScreen())
                             }
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            NavigateItem(
-                                title = "Assistant Configuration",
-                                description = """
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                NavigateItem(
+                                    title = "Assistant Configuration",
+                                    description = """
                                 AI assistant is a software program
                                 powered by artificial intelligence designed
                                 to help you with a wide range of tasks in
@@ -169,21 +182,21 @@ class SettingsScreen: Screen {
                                 to natural language, allowing you to
                                 interact with them through image or text.
                             """.trimIndent(),
-                                icon = {
-                                    AsyncImage(
-                                        model = R.drawable.star,
-                                        contentDescription = null
-                                    )
+                                    icon = {
+                                        AsyncImage(
+                                            model = R.drawable.star,
+                                            contentDescription = null
+                                        )
+                                    }
+                                ) {
+                                    navigator.push(AssistantConfigurationScreen(assistant))
                                 }
-                            ) {
-                                navigator.push(AssistantConfigurationScreen(assistant))
                             }
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            CommonActivationItem(
-                                title = "Dark Mode",
-                                description =  """
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                CommonActivationItem(
+                                    title = "Dark Mode",
+                                    description =  """
                                 This mode is a system-wide setting that 
                                 shifts the background scheme of your 
                                 Android app's UI to darker colors.
@@ -191,24 +204,24 @@ class SettingsScreen: Screen {
                                 accessibility, save battery life, and 
                                 enhance user experience.
                             """.trimIndent(),
-                                checked = settings.darkTheme,
-                                icon = {
-                                    AsyncImage(
-                                        model = R.drawable.dark_mode,
-                                        contentDescription = null
-                                    )
-                                },
-                                onChecked = {
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                    settingsModel.update(settings.copy(darkTheme = it))
-                                }
-                            )
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            CommonActivationItem(
-                                "Sound Effect",
-                                """
+                                    checked = settings.darkTheme,
+                                    icon = {
+                                        AsyncImage(
+                                            model = R.drawable.dark_mode,
+                                            contentDescription = null
+                                        )
+                                    },
+                                    onChecked = {
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                        settingsModel.update(settings.copy(darkTheme = it))
+                                    }
+                                )
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                CommonActivationItem(
+                                    "Sound Effect",
+                                    """
                                 In the context of the Jetnote application,
                                 The "Sound Effect" feature provides
                                 auditory feedback to users when they
@@ -219,52 +232,52 @@ class SettingsScreen: Screen {
                                 user experience more interactive and
                                 engaging.
                             """.trimIndent(),
-                                null,
-                                settings.isSound,
-                                {
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                    settingsModel.update(settings.copy(isSound = it))
-                                }
-                            )
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            NavigateItem(
-                                title = "Layouts",
-                                description = """
+                                    null,
+                                    settings.isSound,
+                                    {
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                        settingsModel.update(settings.copy(isSound = it))
+                                    }
+                                )
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                NavigateItem(
+                                    title = "Layouts",
+                                    description = """
                                 Layouts are fundamental to organizing 
                                 and displaying content in your Android 
                                 applications.
                                 They define the structure and arrangement 
                                 of UI elements on the screen.
                             """.trimIndent(),
-                            ) {
-                                bottomNav.show(LayoutScreen())
+                                ) {
+                                    bottomNav.show(LayoutScreen())
+                                }
                             }
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            SortesItem(
-                                "Sort Notes By",
-                                null,
-                                listOf(
-                                    DEFAULT_ORDER,
-                                    NAME_ORDER,
-                                    OLDEST_ORDER,
-                                    NEWEST_ORDER,
-                                    PRIORITY_ORDER
-                                ),
-                                settings.ordination
-                            ) { order ->
-                                sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                settingsModel.update(settings.copy(ordination = order))
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                SortesItem(
+                                    "Sort Notes By",
+                                    null,
+                                    listOf(
+                                        DEFAULT_ORDER,
+                                        NAME_ORDER,
+                                        OLDEST_ORDER,
+                                        NEWEST_ORDER,
+                                        PRIORITY_ORDER
+                                    ),
+                                    settings.ordination
+                                ) { order ->
+                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                    settingsModel.update(settings.copy(ordination = order))
+                                }
                             }
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            CommonActivationItem(
-                                "Zen Mode",
-                                """
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                CommonActivationItem(
+                                    "Zen Mode",
+                                    """
                                 Zen mode (Full screen mode) is a display 
                                 setting in computing that allows an 
                                 application to occupy the entire screen, 
@@ -272,19 +285,19 @@ class SettingsScreen: Screen {
                                 toolbars, menus, and the operating 
                                 system's taskbar or menu bar. 
                             """.trimIndent(),
-                                null,
-                                settings.isZenMode,
-                                {
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                    settingsModel.update(settings.copy(isZenMode = it))
-                                }
-                            )
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            CommonActivationItem(
-                                "Shake To Report",
-                                """
+                                    null,
+                                    settings.isZenMode,
+                                    {
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                        settingsModel.update(settings.copy(isZenMode = it))
+                                    }
+                                )
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                CommonActivationItem(
+                                    "Shake To Report",
+                                    """
                               It's a convenient feature that allows users 
                               to initiate a feedback or bug reporting 
                               process simply by physically shaking their 
@@ -292,19 +305,19 @@ class SettingsScreen: Screen {
                               through multiple menus to find a "Send 
                               Feedback" or "Report a Bug" option, 
                             """.trimIndent(),
-                                null,
-                                settings.isShakable,
-                                {
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                    settingsModel.update(settings.copy(isShakable = it))
-                                }
-                            )
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            CommonActivationItem(
-                                "Block Screenshots",
-                                """
+                                    null,
+                                    settings.isShakable,
+                                    {
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                        settingsModel.update(settings.copy(isShakable = it))
+                                    }
+                                )
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                CommonActivationItem(
+                                    "Block Screenshots",
+                                    """
                                 Screenshot blocking is a security measure 
                                 that prevents users from capturing 
                                 screenshots of your app's content.
@@ -312,19 +325,19 @@ class SettingsScreen: Screen {
                                 information, such as banking details, 
                                 personal data, or copyrighted material.
                             """.trimIndent(),
-                                null,
-                                settings.isScreenshot,
-                                {
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                    settingsModel.update(settings.copy(isScreenshot = it))
-                                }
-                            )
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            CommonActivationItem(
-                                title = "Lock Mode",
-                                description = """
+                                    null,
+                                    settings.isScreenshot,
+                                    {
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                        settingsModel.update(settings.copy(isScreenshot = it))
+                                    }
+                                )
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                CommonActivationItem(
+                                    title = "Lock Mode",
+                                    description = """
                                 This feature enhances the security of your 
                                 app by requiring users to authenticate 
                                 before they can access its content.
@@ -332,33 +345,34 @@ class SettingsScreen: Screen {
                                 device's built-in security features, such as
                                 fingerprint, PIN, or pattern unlock.
                             """.trimIndent(),
-                                icon = {
-                                    AsyncImage(
-                                        model = R.drawable.lock,
-                                        contentDescription = null
-                                    )
-                                },
-                                checked = settings.isLocked,
-                                onChecked = {
+                                    icon = {
+                                        AsyncImage(
+                                            model = R.drawable.lock,
+                                            contentDescription = null
+                                        )
+                                    },
+                                    checked = settings.isLocked,
+                                    onChecked = {
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                        settingsModel.update(settings.copy(isLocked = it))
+                                    }
+                                )
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                NavigateItem(
+                                    title = "Licenses",
+                                    description = "Public repositories on GitHub are often used to share open source software.",
+                                    icon = {
+                                        AsyncImage(
+                                            model = R.drawable.certificate,
+                                            contentDescription = null
+                                        )
+                                    }
+                                ) {
                                     sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                    settingsModel.update(settings.copy(isLocked = it))
+                                    navigator.push(Licenses())
                                 }
-                            )
-                        }
-                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            NavigateItem(
-                                title = "Licenses",
-                                description = "Public repositories on GitHub are often used to share open source software.",
-                                icon = {
-                                    AsyncImage(
-                                        model = R.drawable.certificate,
-                                        contentDescription = null
-                                    )
-                                }
-                            ) {
-                                sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                navigator.push(Licenses())
                             }
                         }
                     }

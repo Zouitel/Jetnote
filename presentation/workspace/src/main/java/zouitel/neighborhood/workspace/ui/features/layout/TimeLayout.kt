@@ -1,11 +1,13 @@
 package zouitel.neighborhood.workspace.ui.features.layout
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -46,23 +48,23 @@ fun TimeLayout(
                     selectedTime.longValue = timeState.hour.hours.inWholeMilliseconds + timeState.minute.minutes.inWholeMilliseconds
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = CommonColors.azure,
-                    contentColor = Color.White
+                    containerColor = CommonColors.prime,
+                    contentColor = MaterialTheme.colorScheme.surface
                 )
             ) {
                 Text(text = "Pick", fontSize = 16.sp)
             }
         },
         dismissButton = {
-            OutlinedButton(
+            Button(
                 {
                     onAction.invoke()
                     timePickerDialog.value = false
                 },
-                modifier = Modifier.border(1.dp, CommonColors.azure, CircleShape),
+                border = BorderStroke(1.dp, CommonColors.prime),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    contentColor = CommonColors.azure
+                    containerColor = Color.Transparent,
+                    contentColor = CommonColors.prime,
                 )
             ) {
                 Text(text = "Cancel", fontSize = 16.sp)
@@ -78,12 +80,12 @@ fun TimeLayout(
             colors = TimePickerDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 clockDialColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                clockDialSelectedContentColor = Color.White,
+                clockDialSelectedContentColor = MaterialTheme.colorScheme.surface,
                 clockDialUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                selectorColor = CommonColors.azure,
-                timeSelectorSelectedContainerColor = CommonColors.azure,
+                selectorColor = CommonColors.prime,
+                timeSelectorSelectedContainerColor = CommonColors.prime,
                 timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                timeSelectorSelectedContentColor = Color.White,
+                timeSelectorSelectedContentColor = MaterialTheme.colorScheme.surface,
                 timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface
             )
         )

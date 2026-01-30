@@ -80,7 +80,7 @@ internal fun Models(
                                 )
                             },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = CommonColors.azure
+                                selectedContainerColor = CommonColors.prime
                             )
                         )
                     },

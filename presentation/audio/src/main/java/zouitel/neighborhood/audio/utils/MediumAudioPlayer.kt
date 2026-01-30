@@ -125,7 +125,7 @@ fun MediumAudioPlayer(playerModel: AudioScreenModel, item: Audio, onDelete: () -
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    color = CommonColors.azure,
+                    color = CommonColors.prime,
                     trackColor = Color.Transparent,
                     strokeCap = StrokeCap.Round
                 )

@@ -107,8 +107,8 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
                                     )
                                 },
                                 colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = CommonColors.darkAzure,
-                                    selectedLabelColor = CommonColors.azure
+                                    selectedContainerColor = CommonColors.prime,
+                                    selectedLabelColor = Color.Black
                                 )
                             )
                         },

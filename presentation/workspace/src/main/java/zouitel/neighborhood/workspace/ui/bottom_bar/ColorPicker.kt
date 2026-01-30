@@ -220,7 +220,7 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
                         )
                     },
                     colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = CommonColors.glaucous,
+                        activeContainerColor = CommonColors.prime,
                         inactiveContentColor = Color.Gray
                     )
                 )

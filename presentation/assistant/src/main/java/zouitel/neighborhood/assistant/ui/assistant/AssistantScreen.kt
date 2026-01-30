@@ -76,7 +76,6 @@ import zouitel.neighborhood.assistant.utils.MessageRegexSheet
 import zouitel.neighborhood.assistant.utils.QuickMessageSheet
 import zouitel.neighborhood.assistant.utils.ResetSheet
 import zouitel.neighborhood.assistant.utils.SaveSheet
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.CommonActivationItem
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
@@ -87,6 +86,7 @@ import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonPrimitive
 import zouitel.neighborhood.assistant.R
+import zouitel.neighborhood.feedback.reportable
 import kotlin.collections.minus
 import kotlin.collections.plus
 import kotlin.math.roundToInt
@@ -328,7 +328,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                     enabled = currentAssistant.value.temperature != null,
                                     colors = SliderDefaults.colors(
                                         thumbColor = Color.Companion.White,
-                                        activeTrackColor = CommonColors.azure
+                                        activeTrackColor = CommonColors.prime
                                     ),
                                     modifier = Modifier.Companion
                                         .fillMaxWidth()
@@ -386,7 +386,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                     enabled = currentAssistant.value.topP != null,
                                     colors = SliderDefaults.colors(
                                         thumbColor = Color.Companion.White,
-                                        activeTrackColor = CommonColors.azure
+                                        activeTrackColor = CommonColors.prime
                                     ),
                                     modifier = Modifier.Companion
                                         .fillMaxWidth()
@@ -434,7 +434,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                     valueRange = 1f..512f,
                                     colors = SliderDefaults.colors(
                                         thumbColor = Color.Companion.White,
-                                        activeTrackColor = CommonColors.azure
+                                        activeTrackColor = CommonColors.prime
                                     ),
                                     modifier = Modifier.Companion
                                         .fillMaxWidth()

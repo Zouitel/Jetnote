@@ -119,7 +119,7 @@ fun MediaTop(data: MutableState<Data>) {
             ) {
                 HorizontalPager(
                     state = pagerState,
-                    key = { index -> data.value.medias.getOrNull(index)?.uri ?: index }
+                    key = { index -> data.value.medias.getOrNull(index)?.id ?: index }
                 ) { index ->
                     val pageOffset = (
                             (pagerState.currentPage - index) + pagerState

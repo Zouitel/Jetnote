@@ -13,7 +13,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.navigator.R
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -24,6 +23,7 @@ import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.chipColors
 import com.mikepenz.aboutlibraries.ui.compose.libraryColors
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.feedback.reportable
 
 class Licenses: Screen {
     @Composable
@@ -56,7 +56,7 @@ class Licenses: Screen {
                 libraryContentColor = MaterialTheme.colorScheme.onSurface,
                 versionChipColors = LibraryDefaults.chipColors(
                     MaterialTheme.colorScheme.surfaceContainerHigh,
-                    CommonColors.azure
+                    CommonColors.prime
                 ),
                 licenseChipColors = LibraryDefaults.chipColors(
                     CommonColors.darkAzure,

@@ -221,7 +221,7 @@ class AccountScreen: Screen {
                                 Spacer(modifier = Modifier.width(16.dp))
                                 AnimatedVisibility(true) {
                                     LinearProgressIndicator(
-                                        color = CommonColors.azure,
+                                        color = CommonColors.prime,
                                         trackColor = Color.Transparent
                                     )
                                 }
@@ -268,7 +268,7 @@ class AccountScreen: Screen {
                                 AnimatedVisibility(true) {
                                     LinearProgressIndicator(
                                         modifier = Modifier.graphicsLayer(scaleX = -1f),
-                                        color = CommonColors.azure,
+                                        color = CommonColors.prime,
                                         trackColor = Color.Transparent
                                     )
                                 }

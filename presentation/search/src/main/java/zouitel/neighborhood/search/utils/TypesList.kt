@@ -5,7 +5,7 @@ import zouitel.neighborhood.ui.CommonIcons
 val typesList = listOf(
     Type(SearchTypes.Links, "Links", CommonIcons.LINK),
     Type(SearchTypes.Reminders, "Reminders", CommonIcons.BELL_RING),
-//    Type(SearchTypes.Audios, "Audios", CommonIcons.WAVEFORM),
+    Type(SearchTypes.Audios, "Audios", CommonIcons.WAVEFORM),
     Type(SearchTypes.Tasks, "Tasks", CommonIcons.CHECK_CIRCLE),
     Type(SearchTypes.Medias, "Medias", CommonIcons.GALLERY),
     Type(SearchTypes.Properties(0), "Priorities", CommonIcons.CIRCLE_18)

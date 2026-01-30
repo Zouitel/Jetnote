@@ -1,5 +1,6 @@
 package zouitel.neighborhood.workspace.ui.features.layout
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -47,23 +48,23 @@ internal fun DateLayout(
                     selectedDate.value = dateState.selectedDateMillis!!
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = CommonColors.azure,
-                    contentColor = Color.White
+                    containerColor = CommonColors.prime,
+                    contentColor = MaterialTheme.colorScheme.surface
                 )
             ) {
                 Text(text = "Pick", fontSize = 16.sp)
             }
         },
         dismissButton = {
-            OutlinedButton(
+            Button(
                 {
                     onAction.invoke()
                     dateDialog.value = false
                 },
-                modifier = Modifier.border(1.dp, CommonColors.azure, CircleShape),
+                border = BorderStroke(1.dp, CommonColors.prime),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    contentColor = CommonColors.azure
+                    containerColor = Color.Transparent,
+                    contentColor = CommonColors.prime
                 )
             ) {
                 Text(text = "Cancel", fontSize = 16.sp)
@@ -93,21 +94,21 @@ internal fun DateLayout(
                 titleContentColor = Color.Gray,
                 headlineContentColor = Color.LightGray,
                 dayContentColor = MaterialTheme.colorScheme.onSurface,
-                selectedDayContentColor  = Color.White,
-                todayDateBorderColor = CommonColors.azure,
-                dayInSelectionRangeContainerColor = CommonColors.azure,
-                selectedDayContainerColor = CommonColors.azure,
-                todayContentColor = CommonColors.azure,
-                selectedYearContainerColor = CommonColors.azure,
-                currentYearContentColor = CommonColors.azure,
-                selectedYearContentColor = Color.White,
+                selectedDayContentColor  = MaterialTheme.colorScheme.surface,
+                todayDateBorderColor = CommonColors.prime,
+                dayInSelectionRangeContainerColor = CommonColors.prime,
+                selectedDayContainerColor = CommonColors.prime,
+                todayContentColor = CommonColors.prime,
+                selectedYearContainerColor = CommonColors.prime,
+                currentYearContentColor = CommonColors.prime,
+                selectedYearContentColor = MaterialTheme.colorScheme.surface,
                 dateTextFieldColors = TextFieldDefaults.colors(
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                     focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    focusedIndicatorColor = CommonColors.azure,
-                    unfocusedIndicatorColor = CommonColors.glaucous,
-                    focusedLabelColor = CommonColors.azure,
-                    unfocusedLabelColor = CommonColors.glaucous
+                    focusedIndicatorColor = CommonColors.prime,
+                    unfocusedIndicatorColor = CommonColors.prime,
+                    focusedLabelColor = CommonColors.prime,
+                    unfocusedLabelColor = CommonColors.prime
                 )
             )
         )

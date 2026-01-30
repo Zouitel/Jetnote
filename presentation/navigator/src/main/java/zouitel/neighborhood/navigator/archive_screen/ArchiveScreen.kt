@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -39,7 +41,6 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.domain.utils.Action
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.navigator.archive_screen.utils.ArchiveTopAppBar
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
@@ -55,6 +56,7 @@ import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.feedback.reportable
 
 class ArchiveScreen: Screen {
     @Composable
@@ -93,7 +95,6 @@ class ArchiveScreen: Screen {
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val archives = remember(archiveModel, archiveModel::observeArchives).collectAsState()
         val uiState by remember(searchModel, searchModel::uiState).collectAsState()
-        val listLayoutState = rememberLazyListState()
         val gridLayoutState = rememberLazyStaggeredGridState()
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -107,7 +108,7 @@ class ArchiveScreen: Screen {
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure
+                        actionColor = CommonColors.prime
                     )
                 }
             }
@@ -125,95 +126,109 @@ class ArchiveScreen: Screen {
                     )
                 }
             ) {
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .reportable(settings.isShakable)
-                        .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen),
-                    topBar = {
-                        if(uiState.isSelection) {
-                            SelectionTopBar(
-                                searchModel = searchModel,
-                                dataModel = dataModel,
-                                noteAndTagModel = getScreenModel(),
-                                tagModel = tagModel,
-                                alarmModel = getScreenModel()
-                            ) {
-                                // to.do cancel the alarm manager reminder.
-                                deletedNote.push(it)
-                                dataModel.sendAction(Action.DeleteByUid(deletedNote.lastItemOrNull?.uid ?: return@SelectionTopBar))
+                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                    val viewPortHeight = maxHeight
 
-                                scope.launch {
-                                    val snackbarResult = snackbarState.showSnackbar(
-                                        message = "${deletedNote.lastItemOrNull?.title} is deleted!",
-                                        actionLabel = "Undo"
-                                    )
-                                    if (snackbarResult == SnackbarResult.ActionPerformed) {
-                                        dataModel.sendAction(Action.Insert(deletedNote.lastItemOrNull ?: return@launch))
-                                        deletedNote.pop()
-                                    } else {
-                                        deletedNote.pop()
+                    val cacheWindow = remember(viewPortHeight) {
+                        LazyLayoutCacheWindow(
+                            ahead = viewPortHeight,
+                            behind = viewPortHeight
+                        )
+                    }
+
+                    val lazyListState = rememberLazyListState(
+                        cacheWindow = cacheWindow
+                    )
+
+                    Scaffold(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .reportable(settings.isShakable)
+                            .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen),
+                        topBar = {
+                            if(uiState.isSelection) {
+                                SelectionTopBar(
+                                    searchModel = searchModel,
+                                    dataModel = dataModel,
+                                    noteAndTagModel = getScreenModel(),
+                                    tagModel = tagModel
+                                ) {
+                                    // to.do cancel the alarm manager reminder.
+                                    deletedNote.push(it)
+                                    dataModel.sendAction(Action.DeleteByUid(deletedNote.lastItemOrNull?.uid ?: return@SelectionTopBar))
+
+                                    scope.launch {
+                                        val snackbarResult = snackbarState.showSnackbar(
+                                            message = "${deletedNote.lastItemOrNull?.title} is deleted!",
+                                            actionLabel = "Undo"
+                                        )
+                                        if (snackbarResult == SnackbarResult.ActionPerformed) {
+                                            dataModel.sendAction(Action.Insert(deletedNote.lastItemOrNull ?: return@launch))
+                                            deletedNote.pop()
+                                        } else {
+                                            deletedNote.pop()
+                                        }
                                     }
                                 }
+                            } else {
+                                ArchiveTopAppBar(
+                                    settingsModel = settingsModel,
+                                    scrollBehavior = scrollBehavior,
+                                    drawerState = drawerState
+                                )
                             }
-                        } else {
-                            ArchiveTopAppBar(
-                                settingsModel = settingsModel,
-                                scrollBehavior = scrollBehavior,
-                                drawerState = drawerState
-                            )
                         }
-                    }
-                ) { paddingValues ->
-                    Box(
-                        contentAlignment = Alignment.TopCenter,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        if (settings.ordination == CommonConstants.LIST) {
-                            LazyColumn(
-                                state = listLayoutState,
-                                contentPadding = paddingValues,
-                                modifier = Modifier
-                                    .animateContentSize()
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                items(
-                                    items = archives.value,
-                                    key = { it.data.uid }
-                                ) { entity ->
-                                    NoteCard(
-                                        settingsModel = settingsModel,
-                                        audioModel = audioModel,
-                                        linkModel = linkModel,
-                                        searchModel = searchModel,
-                                        note = entity
-                                    )
+                    ) { paddingValues ->
+                        Box(
+                            contentAlignment = Alignment.TopCenter,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            if (settings.ordination == CommonConstants.LIST) {
+                                LazyColumn(
+                                    state = lazyListState,
+                                    contentPadding = paddingValues,
+                                    modifier = Modifier
+                                        .animateContentSize()
+                                        .fillMaxSize(),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    items(
+                                        items = archives.value,
+                                        key = { it.data.uid }
+                                    ) { entity ->
+                                        NoteCard(
+                                            settingsModel = settingsModel,
+                                            audioModel = audioModel,
+                                            linkModel = linkModel,
+                                            searchModel = searchModel,
+                                            note = entity
+                                        )
+                                    }
                                 }
-                            }
-                        } else {
-                            LazyVerticalStaggeredGrid(
-                                state = gridLayoutState,
-                                contentPadding = paddingValues,
-                                modifier = Modifier
-                                    .animateContentSize()
-                                    .fillMaxSize(),
-                                columns = StaggeredGridCells.Fixed(2),
-                                verticalItemSpacing = 6.dp,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                items(
-                                    items = archives.value,
-                                    key = { it.data.uid }
-                                ) { entity ->
-                                    NoteCard(
-                                        settingsModel = settingsModel,
-                                        audioModel = audioModel,
-                                        linkModel = linkModel,
-                                        searchModel = searchModel,
-                                        note = entity
-                                    )
+                            } else {
+                                LazyVerticalStaggeredGrid(
+                                    state = gridLayoutState,
+                                    contentPadding = paddingValues,
+                                    modifier = Modifier
+                                        .animateContentSize()
+                                        .fillMaxSize(),
+                                    columns = StaggeredGridCells.Fixed(2),
+                                    verticalItemSpacing = 6.dp,
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    items(
+                                        items = archives.value,
+                                        key = { it.data.uid }
+                                    ) { entity ->
+                                        NoteCard(
+                                            settingsModel = settingsModel,
+                                            audioModel = audioModel,
+                                            linkModel = linkModel,
+                                            searchModel = searchModel,
+                                            note = entity
+                                        )
+                                    }
                                 }
                             }
                         }

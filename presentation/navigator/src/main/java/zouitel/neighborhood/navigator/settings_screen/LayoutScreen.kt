@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import zouitel.neighborhood.ui.CommonBottomSheet
-import zouitel.neighborhood.ui.CommonColors.azure
+import zouitel.neighborhood.ui.CommonColors.prime
 import zouitel.neighborhood.ui.CommonConstants.GRID
 import zouitel.neighborhood.ui.CommonConstants.LIST
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -59,7 +59,7 @@ class LayoutScreen: Screen {
                         .padding(5.dp)
                         .weight(1f),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (settings.layout == GRID) azure
+                        containerColor = if (settings.layout == GRID) prime
                         else Color.Transparent
                     )
                 ) {
@@ -95,7 +95,7 @@ class LayoutScreen: Screen {
                         .padding(5.dp)
                         .weight(1f),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (settings.layout == LIST) azure
+                        containerColor = if (settings.layout == LIST) prime
                         else Color.Transparent
                     )
                 ) {

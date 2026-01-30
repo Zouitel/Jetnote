@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonDimmedText
 
@@ -143,9 +144,9 @@ internal fun SortesItem(
                     },
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor =
-                            if (it == currentItem) Color(0xFF007FFF)
+                            if (it == currentItem) CommonColors.prime
                             else MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = if (it == currentItem) MaterialTheme.colorScheme.onPrimaryContainer
+                        contentColor = if (it == currentItem) MaterialTheme.colorScheme.surface
                         else MaterialTheme.colorScheme.onSurface
                     )
                 ) {

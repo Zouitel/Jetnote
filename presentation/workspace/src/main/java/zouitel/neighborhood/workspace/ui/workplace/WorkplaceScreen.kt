@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.UiComposable
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
@@ -54,7 +59,6 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.domain.utils.Action
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreen
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.ui.CommonTextField
@@ -76,6 +80,7 @@ import zouitel.neighborhood.workspace.ui.utils.remindersContext
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.feedback.reportable
 import kotlin.uuid.Uuid
 
 data class WorkplaceScreen(
@@ -158,113 +163,133 @@ data class WorkplaceScreen(
             if (isNew) focus.requestFocus()
         }
 
-        Scaffold(
-            containerColor = Color(currentData.value.background ?: defaultBackground),
-            modifier = Modifier
-                .fillMaxSize()
-                .cloudy(enabled = navBottomSheet.isVisible)
-                .reportable(settings.isShakable, currentData.value.background),
-            bottomBar = {
-                BottomBar(
-                    data = currentData,
-                    titleState = titleState,
-                    descriptionState = descriptionState,
-                    isSound = settings.isSound,
-                    dataModel = dataModel,
-                    linkModel = linkModel
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val viewPortHeight = maxHeight
+
+            val cacheWindow = remember(viewPortHeight) {
+                LazyLayoutCacheWindow(
+                    ahead = viewPortHeight,
+                    behind = viewPortHeight
                 )
-            },
-            snackbarHost = {
-                SnackbarHost(snackbarState) { data ->
-                    Snackbar(
-                        snackbarData = data,
-                        actionOnNewLine = false,
-                        shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = MaterialTheme.colorScheme.surface
-                    )
-                }
             }
-        ) {
-            LazyColumn(Modifier.animateContentSize()) {
-                // medias display.
-                item {
-                    MediaTop(currentData)
-                }
 
-                // The Title.
-                item {
-                    CommonTextField(
-                        state = titleState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(55.dp)
-                            .focusRequester(focus),
-                        placeholder = "Title",
-                        textSize = MaterialTheme.typography.headlineMedium.fontSize,
-                        textColor = Color(currentData.value.textColor ?: defaultTextColor),
-                        imeAction = ImeAction.Next,
-                        keyboardActions = {
-                            keyboardManager.moveFocus(FocusDirection.Next)
+            val lazyListState = rememberLazyListState(
+                cacheWindow = cacheWindow
+            )
+
+            Scaffold(
+                containerColor = Color(currentData.value.background ?: defaultBackground),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .cloudy(enabled = navBottomSheet.isVisible)
+                    .reportable(settings.isShakable, currentData.value.background),
+                bottomBar = {
+                    BottomBar(
+                        data = currentData,
+                        titleState = titleState,
+                        descriptionState = descriptionState,
+                        isSound = settings.isSound,
+                        dataModel = dataModel,
+                        linkModel = linkModel
+                    )
+                },
+                snackbarHost = {
+                    SnackbarHost(snackbarState) { data ->
+                        Snackbar(
+                            snackbarData = data,
+                            actionOnNewLine = false,
+                            shape = MaterialTheme.shapes.extraLarge,
+                            actionColor = MaterialTheme.colorScheme.surface
+                        )
+                    }
+                }
+            ) {
+                LazyColumn(
+                    Modifier
+                        .animateContentSize()
+                        .statusBarsPadding(),
+                    lazyListState
+                ) {
+                    // medias display.
+                    item {
+                        MediaTop(currentData)
+                    }
+
+                    // The Title.
+                    item {
+                        CommonTextField(
+                            state = titleState,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(55.dp)
+                                .focusRequester(focus),
+                            placeholder = "Title",
+                            textSize = MaterialTheme.typography.headlineMedium.fontSize,
+                            textColor = Color(currentData.value.textColor ?: defaultTextColor),
+                            imeAction = ImeAction.Next,
+                            keyboardActions = {
+                                keyboardManager.moveFocus(FocusDirection.Next)
+                            }
+                        ) {
+                            workplaceModel.handleContentReceiver(currentData, it)
                         }
-                    ) {
-                        workplaceModel.handleContentReceiver(currentData, it)
                     }
-                }
 
-                // The Description.
-                item {
-                    CommonTextField(
-                        state = descriptionState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(50.dp),
-                        textSize = MaterialTheme.typography.titleLarge.fontSize,
-                        placeholder = "Note",
-                        textColor = Color(currentData.value.textColor ?: defaultTextColor)
-                    ) {
-                        workplaceModel.handleContentReceiver(currentData, it)
+                    // The Description.
+                    item {
+                        CommonTextField(
+                            state = descriptionState,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(50.dp),
+                            textSize = MaterialTheme.typography.titleLarge.fontSize,
+                            placeholder = "Note",
+                            textColor = Color(currentData.value.textColor ?: defaultTextColor)
+                        ) {
+                            workplaceModel.handleContentReceiver(currentData, it)
+                        }
                     }
-                }
 
-                // Audios display.
-                item {
-                    Navigator(AudioScreen(currentData, snackbarState))
-                }
+                    // display reminder chips.
+                    remindersContext(
+                        alarmModel,
+                        snackbarState,
+                        toolTipState,
+                        currentData,
+                        scope,
+                        deletedReminders,
+                        jobCounter
+                    )
 
-                // Link display.
-                item {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Navigator(LinkScreen(currentData.value.uid, snackbarState))
-                }
+                    // display the tags.
+                    tagsContext(
+                        currentData.value.uid,
+                        filteredTags,
+                        noteAndTagModel,
+                        snackbarState,
+                        scope,
+                        deletedTagId,
+                        jobCounter
+                    )
 
-                // display reminder chips.
-                remindersContext(
-                    alarmModel,
-                    snackbarState,
-                    toolTipState,
-                    currentData,
-                    scope,
-                    deletedReminders,
-                    jobCounter
-                )
+                    // Audios display.
+                    item {
+                        Navigator(AudioScreen(currentData, snackbarState))
+                    }
 
-                // display the tags.
-                tagsContext(
-                    currentData.value.uid,
-                    filteredTags,
-                    noteAndTagModel,
-                    snackbarState,
-                    scope,
-                    deletedTagId,
-                    jobCounter
-                )
+                    // Link display.
+                    item {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Navigator(LinkScreen(currentData.value.uid, snackbarState))
+                    }
 
-                // display the tasks list.
-                tasksList(snackbarState, currentData, scope, deletedTask, jobCounter)
+                    // display the tasks list.
+                    tasksList(snackbarState, currentData, scope, deletedTask, jobCounter)
 
-                // void space.
-                item {
-                    Box(modifier = Modifier.fillMaxWidth().height(170.dp))
+                    // void space.
+                    item {
+                        Box(modifier = Modifier.fillMaxWidth().height(170.dp))
+                    }
                 }
             }
         }

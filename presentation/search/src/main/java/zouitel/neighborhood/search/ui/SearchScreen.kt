@@ -52,7 +52,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.search.note_card.NoteCard
 import zouitel.neighborhood.search.utils.SearchTopBar
@@ -70,6 +69,7 @@ import zouitel.neighborhood.tag.ui.TagScreenModel
 import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.feedback.reportable
 
 class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
 
@@ -117,8 +117,14 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
         val notesColors = remember(notes) {
             notes.map { it.data.background }.distinct()
         }
-        val notesImages = remember(notes) {
-            medias.map { it.data.medias }.flatten().map { it.uri }.distinct()
+        val notesImages by remember(notes) {
+            derivedStateOf {
+                medias.map { it.data.medias }
+                    .flatten()
+                    .filterNot { it.isVideo }
+                    .map { it.uri }
+                    .distinct()
+            }
         }
         val uiState by remember(searchModel, searchModel::uiState).collectAsState()
         val topAppBarState = rememberTopAppBarState()
@@ -175,8 +181,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                         searchModel = searchModel,
                         dataModel = getScreenModel(),
                         noteAndTagModel = getScreenModel(),
-                        tagModel = tagModel,
-                        alarmModel = getScreenModel()
+                        tagModel = tagModel
                     ) {}
                 } else {
                     SearchTopBar(
@@ -253,7 +258,8 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                 modifier = Modifier.padding(horizontal = 10.dp)
                             )
                             ContextualFlowRow(
-                                itemCount = typesList.size
+                                itemCount = typesList.size,
+                                modifier = Modifier.padding(horizontal = 10.dp)
                             ) { index ->
                                 val type = typesList[index]
                                 FilterChip(
@@ -261,7 +267,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                     enabled = type.isAvailable(
                                         when(type.types) {
                                             SearchTypes.Links -> links
-//                                            SearchTypes.Audios -> audios
+                                            SearchTypes.Audios -> audios
                                             SearchTypes.Reminders -> reminders
                                             SearchTypes.Tasks -> tasks
                                             is SearchTypes.Medias -> medias
@@ -304,7 +310,8 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                     modifier = Modifier.padding(horizontal = 10.dp)
                                 )
                                 ContextualFlowRow(
-                                    itemCount = tags.size
+                                    itemCount = tags.size,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
                                 ) { index ->
                                     val tag = tags[index]
 
@@ -345,7 +352,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                 modifier = Modifier.padding(horizontal = 10.dp)
                             )
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.padding(horizontal = 10.dp),
                                 horizontalArrangement = Arrangement.Absolute.Left
                             ) {
                                 propertiesList
@@ -384,6 +391,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                 )
                                 ContextualFlowRow(
                                     itemCount = notesImages.size,
+                                    modifier = Modifier.padding(horizontal = 10.dp),
                                     horizontalArrangement = Arrangement.spacedBy(3.dp)
                                 ) { index ->
                                     val uri = notesImages[index]
@@ -411,7 +419,8 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                 modifier = Modifier.padding(start = 10.dp)
                             )
                             ContextualFlowRow(
-                                itemCount = notesColors.size
+                                itemCount = notesColors.size,
+                                modifier = Modifier.padding(horizontal = 10.dp)
                             ) { index ->
                                 val color = notesColors[index]
                                 IconButton({

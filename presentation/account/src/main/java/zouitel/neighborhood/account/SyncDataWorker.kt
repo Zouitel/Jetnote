@@ -106,11 +106,6 @@ class SyncDataWorker(
                     val notes = json.decodeFromString<List<Data>>(content)
                     insertData(dataMapper.toDomain(notes))
                 }},
-//                async { downloadAndParse(driveService, "links.json", rootFolderId, tempDir) { content ->
-//                    val links = json.decodeFromString<List<LinkData>>(content)
-//                    insertLinks(linkMapper.toDomain(links))
-//                    Log.d("SyncDataWorker", "Inserted ${links.size} links")
-//                }},
                 async { downloadAndParse(driveService, "noteandtags.json", rootFolderId, tempDir) { content ->
                     val noteTags = json.decodeFromString<List<NoteAndTag>>(content)
                     insertNoteAndTags(noteAndTagMapper.toDomain(noteTags))

@@ -28,10 +28,10 @@ import zouitel.neighborhood.assistant.ui.configurations.ClaudeConfigurationScree
 import zouitel.neighborhood.assistant.ui.configurations.GlobalConfigurationScreen
 import zouitel.neighborhood.assistant.ui.configurations.GoogleConfigurationScreen
 import zouitel.neighborhood.assistant.utils.DEFAULT_PROVIDERS
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.feedback.reportable
 
 class ProvidersScreen: Screen {
     @Composable

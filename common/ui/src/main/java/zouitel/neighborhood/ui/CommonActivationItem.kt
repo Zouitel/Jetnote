@@ -69,7 +69,7 @@ fun CommonActivationItem(
                     modifier = Modifier.weight(.1f),
                     checked = checked == true,
                     colors = SwitchDefaults.colors(
-                        checkedTrackColor = CommonColors.azure,
+                        checkedTrackColor = CommonColors.prime,
                         checkedThumbColor = Color.White
                     ),
                     onCheckedChange = { onChecked.invoke(it) }
@@ -143,7 +143,7 @@ fun CommonActivationItem(
                     modifier = Modifier.weight(.1f),
                     checked = checked == true,
                     colors = SwitchDefaults.colors(
-                        checkedTrackColor = CommonColors.azure,
+                        checkedTrackColor = CommonColors.prime,
                         checkedThumbColor = Color.White
                     ),
                     onCheckedChange = { onChecked.invoke(it) }

@@ -95,8 +95,8 @@ data class FeedbackSheetScreen(val background: Int? = null): Screen {
                         .padding(10.dp)
                         .height(50.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = CommonColors.darkAzure,
-                        contentColor = Color.White
+                        containerColor = CommonColors.prime,
+                        contentColor = MaterialTheme.colorScheme.surface
                     )
                 ) {
                     Text(

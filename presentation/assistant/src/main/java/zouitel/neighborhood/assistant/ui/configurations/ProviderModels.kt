@@ -155,8 +155,8 @@ internal fun ModelsList(
     if (isInitialLoading) {
         Row(Modifier.fillMaxWidth().heightIn(100.dp), Arrangement.Center) {
             CircularWavyProgressIndicator(
-                color = CommonColors.azure,
-                trackColor = CommonColors.azure.copy(alpha = .5f)
+                color = CommonColors.prime,
+                trackColor = CommonColors.prime.copy(alpha = .5f)
             )
         }
     } else {
@@ -191,7 +191,7 @@ internal fun ModelsList(
                     if (isLoadingMore) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
-                            color = CommonColors.azure
+                            color = CommonColors.prime
                         )
                     } else {
                         Button(
@@ -261,7 +261,7 @@ private fun AddModels(
                         .clip(MaterialTheme.shapes.extraLarge)
                         .align(Alignment.Center),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (isExisting) CommonColors.darkAzure
+                        containerColor = if (isExisting) CommonColors.prime
                         else MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = if (isExisting) MaterialTheme.colorScheme.onPrimaryContainer
                         else MaterialTheme.colorScheme.onSurface

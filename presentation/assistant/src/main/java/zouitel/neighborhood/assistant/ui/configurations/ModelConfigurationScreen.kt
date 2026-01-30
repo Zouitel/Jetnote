@@ -66,7 +66,6 @@ import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
 import zouitel.neighborhood.assistant.ui.provider.ProviderScreenModel
 import zouitel.neighborhood.assistant.utils.AdditionalLayout
 import zouitel.neighborhood.assistant.utils.SheetLayout
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.CommonActivationItem
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
@@ -74,6 +73,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonPrimitive
+import zouitel.neighborhood.feedback.reportable
 
 class ModelConfigurationScreen(val model: Model): Screen {
     @Composable
@@ -189,7 +189,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure
+                        actionColor = CommonColors.prime
                     )
                 }
             },
@@ -226,9 +226,9 @@ class ModelConfigurationScreen(val model: Model): Screen {
                                 },
                                 MaterialTheme.shapes.extraLarge,
                                 colors = SegmentedButtonDefaults.colors(
-                                    activeContainerColor = CommonColors.azure,
+                                    activeContainerColor = CommonColors.prime,
                                     activeContentColor = Color.White,
-                                    activeBorderColor = CommonColors.azure
+                                    activeBorderColor = CommonColors.prime
                                 )
                             ) {
                                 Text(type.name, style = MaterialTheme.typography.bodyMedium)
@@ -271,9 +271,9 @@ class ModelConfigurationScreen(val model: Model): Screen {
                                     MaterialTheme.shapes.extraLarge,
                                     enabled = currentModel.type == ModelType.CHAT,
                                     colors = SegmentedButtonDefaults.colors(
-                                        activeContainerColor = CommonColors.azure,
+                                        activeContainerColor = CommonColors.prime,
                                         activeContentColor = Color.White,
-                                        activeBorderColor = CommonColors.azure
+                                        activeBorderColor = CommonColors.prime
                                     )
                                 ) {
                                     Text(modality.name, style = MaterialTheme.typography.bodyMedium)
@@ -317,9 +317,9 @@ class ModelConfigurationScreen(val model: Model): Screen {
                                     MaterialTheme.shapes.extraLarge,
                                     enabled = currentModel.type == ModelType.CHAT,
                                     colors = SegmentedButtonDefaults.colors(
-                                        activeContainerColor = CommonColors.azure,
+                                        activeContainerColor = CommonColors.prime,
                                         activeContentColor = Color.White,
-                                        activeBorderColor = CommonColors.azure
+                                        activeBorderColor = CommonColors.prime
                                     )
                                 ) {
                                     Text(
@@ -366,9 +366,9 @@ class ModelConfigurationScreen(val model: Model): Screen {
                                     MaterialTheme.shapes.extraLarge,
                                     enabled = currentModel.type == ModelType.CHAT,
                                     colors = SegmentedButtonDefaults.colors(
-                                        activeContainerColor = CommonColors.azure,
+                                        activeContainerColor = CommonColors.prime,
                                         activeContentColor = Color.White,
-                                        activeBorderColor = CommonColors.azure
+                                        activeBorderColor = CommonColors.prime
                                     )
                                 ) {
                                     Text(ability.name, style = MaterialTheme.typography.bodyMedium)

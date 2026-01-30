@@ -73,7 +73,7 @@ fun ChooserItem(
                     modifier = Modifier.weight(.1f),
                     checked = checked == true,
                     colors = SwitchDefaults.colors(
-                        checkedTrackColor = CommonColors.azure,
+                        checkedTrackColor = CommonColors.prime,
                         checkedThumbColor = Color.White
                     ),
                     onCheckedChange = { onChecked.invoke(it) }
@@ -121,7 +121,7 @@ fun ChooserItem(
                     },
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor =
-                            if (budgetKey == currentAssistant.value.thinkingBudget) CommonColors.azure
+                            if (budgetKey == currentAssistant.value.thinkingBudget) CommonColors.prime
                             else MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = if (budgetKey == currentAssistant.value.thinkingBudget) Color.White
                         else MaterialTheme.colorScheme.onSurface

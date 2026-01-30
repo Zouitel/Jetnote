@@ -116,7 +116,7 @@ data class OptionsScreen(
         val snackBarHostState = remember { SnackbarHostState() }
         val recorderSheetState = rememberModalBottomSheetState()
         val showRecorderSheet = remember { mutableStateOf(false) }
-        val reminderSheetState = rememberModalBottomSheetState()
+        val reminderSheetState = rememberModalBottomSheetState(true)
         val showReminderSheet = remember { mutableStateOf(false) }
         val sound by lazy { SoundEffect() }
 
@@ -279,138 +279,138 @@ data class OptionsScreen(
                         }
                     }
                 }
-//                item {
-//                    CommonOptionItem(
-//                        name = "Add Audio",
-//                        icon = WAVEFORM
-//                    ) {
-//                        scope.launch {
-//                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            permissionsModel.requestPermission(Permission.STORAGE).collect {
-//                                when(it) {
-//                                    PermissionResult.Denied -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Permission is Denied!",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    is PermissionResult.Error -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            it.message,
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    else -> navigator.push(AudioListScreen(data))
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                item {
-//                    CommonOptionItem(
-//                        name = "Take Photo",
-//                        icon = CAMERA
-//                    ) {
-//                        scope.launch {
-//                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            permissionsModel.requestPermission(Permission.CAMERA).collect {
-//                                when(it) {
-//                                    PermissionResult.Denied -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Permission is Denied!",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    is PermissionResult.Error -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            it.message,
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
-//                                    PermissionResult.PermanentlyDenied -> {
-//                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                item {
-//                    CommonOptionItem(
-//                        name = "Video Capture",
-//                        icon = VIDEO_CAMERA
-//                    ) {
-//                        scope.launch {
-//                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            permissionsModel.requestPermission(Permission.CAMERA).collect {
-//                                when(it) {
-//                                    PermissionResult.Denied -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Permission is Denied!",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    is PermissionResult.Error -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            it.message,
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    PermissionResult.Granted -> {
-//                                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
-//                                            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
-//                                            // Don't use EXTRA_OUTPUT - let camera app handle it
-//                                        }
-//                                        videoCapture.launch(intent)
-//                                    }
-//                                    PermissionResult.PermanentlyDenied -> {
-//                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                item {
-//                    CommonOptionItem(
-//                        name = "Recorder",
-//                        icon = MIC
-//                    ) {
-//                        scope.launch {
-//                            permissionsModel.requestPermission(Permission.RECORD_AUDIO).collectLatest {
-//                                when(it) {
-//                                    PermissionResult.Denied -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Permission is Denied!",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    is PermissionResult.Error -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            it.message,
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                    PermissionResult.Granted -> {
-//                                        showRecorderSheet.value = true
-//                                    }
-//                                    PermissionResult.PermanentlyDenied -> {
-//                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+                item {
+                    CommonOptionItem(
+                        name = "Add Audio",
+                        icon = WAVEFORM
+                    ) {
+                        scope.launch {
+                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                            permissionsModel.requestPermission(Permission.STORAGE).collect {
+                                when(it) {
+                                    PermissionResult.Denied -> {
+                                        Toast.makeText(
+                                            context,
+                                            "Permission is Denied!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    is PermissionResult.Error -> {
+                                        Toast.makeText(
+                                            context,
+                                            it.message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    else -> navigator.push(AudioListScreen(data))
+                                }
+                            }
+                        }
+                    }
+                }
+                item {
+                    CommonOptionItem(
+                        name = "Take Photo",
+                        icon = CAMERA
+                    ) {
+                        scope.launch {
+                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                            permissionsModel.requestPermission(Permission.CAMERA).collect {
+                                when(it) {
+                                    PermissionResult.Denied -> {
+                                        Toast.makeText(
+                                            context,
+                                            "Permission is Denied!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    is PermissionResult.Error -> {
+                                        Toast.makeText(
+                                            context,
+                                            it.message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
+                                    PermissionResult.PermanentlyDenied -> {
+                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                item {
+                    CommonOptionItem(
+                        name = "Video Capture",
+                        icon = VIDEO_CAMERA
+                    ) {
+                        scope.launch {
+                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                            permissionsModel.requestPermission(Permission.CAMERA).collect {
+                                when(it) {
+                                    PermissionResult.Denied -> {
+                                        Toast.makeText(
+                                            context,
+                                            "Permission is Denied!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    is PermissionResult.Error -> {
+                                        Toast.makeText(
+                                            context,
+                                            it.message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    PermissionResult.Granted -> {
+                                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
+                                            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
+                                            // Don't use EXTRA_OUTPUT - let camera app handle it
+                                        }
+                                        videoCapture.launch(intent)
+                                    }
+                                    PermissionResult.PermanentlyDenied -> {
+                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                item {
+                    CommonOptionItem(
+                        name = "Recorder",
+                        icon = MIC
+                    ) {
+                        scope.launch {
+                            permissionsModel.requestPermission(Permission.RECORD_AUDIO).collectLatest {
+                                when(it) {
+                                    PermissionResult.Denied -> {
+                                        Toast.makeText(
+                                            context,
+                                            "Permission is Denied!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    is PermissionResult.Error -> {
+                                        Toast.makeText(
+                                            context,
+                                            it.message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    PermissionResult.Granted -> {
+                                        showRecorderSheet.value = true
+                                    }
+                                    PermissionResult.PermanentlyDenied -> {
+                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 item {
                     CommonOptionItem(
                         name = "Tags",

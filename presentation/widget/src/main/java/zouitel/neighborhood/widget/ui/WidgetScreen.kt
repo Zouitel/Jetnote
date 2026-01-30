@@ -56,11 +56,11 @@ class WidgetScreen: Screen {
                 ComponentName(context, ListReceiver::class.java),
                 R.drawable.notes_list
             ),
-//            WidgetComponent(
-//                "Creator Widget",
-//                ComponentName(context, CreatorReceiver::class.java),
-//                R.drawable.creator
-//            )
+            WidgetComponent(
+                "Creator Widget",
+                ComponentName(context, CreatorReceiver::class.java),
+                R.drawable.creator
+            )
         )
 
         Scaffold(

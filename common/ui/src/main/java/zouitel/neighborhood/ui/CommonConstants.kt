@@ -2,7 +2,7 @@ package zouitel.neighborhood.ui
 
 object CommonConstants {
     const val APP_VERSION = "8.1.0"
-    const val APP_NAME = "JetNote"
+    const val APP_NAME = "Jetnote."
     const val NONE = "unspecified"
 
     const val IMG_DIR = "images-directory"

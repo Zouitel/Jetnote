@@ -85,7 +85,7 @@ fun LazyListScope.remindersContext(
                                         scope.launch {
                                             snackbarHostState.currentSnackbarData?.dismiss()
                                             val result = snackbarHostState.showSnackbar(
-                                                message = "${reminderPair?.first?.atTime} deleted",
+                                                message = "reminder deleted!",
                                                 actionLabel = "Undo",
                                                 duration = SnackbarDuration.Long
                                             )

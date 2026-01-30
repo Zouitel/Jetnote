@@ -75,8 +75,8 @@ fun CommonConfirm(onConfirm: () -> Unit) {
         Button(
             onClick = onConfirm,
             colors = ButtonDefaults.buttonColors(
-                contentColor = MaterialTheme.colorScheme.onSurface,
-                containerColor = CommonColors.azure
+                contentColor = MaterialTheme.colorScheme.surface,
+                containerColor = CommonColors.prime
             )
         ) {
             Text(
@@ -106,7 +106,7 @@ fun CommonInsert(enable: Boolean = true, onConfirm: () -> Unit) {
             onClick = onConfirm,
             colors = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onSurface,
-                containerColor = CommonColors.azure
+                containerColor = CommonColors.prime
             ),
             enabled = enable
         ) {

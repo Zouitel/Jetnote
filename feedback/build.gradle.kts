@@ -28,4 +28,17 @@ dependencies {
 
     //Cloudy.
     implementation(libs.compose.cloudy)
+
+    //Google Drive.
+    implementation(libs.google.api.services.drive)
+    implementation(libs.google.http.client.gson)
+    implementation(libs.play.services.auth)
+    implementation("com.google.api-client:google-api-client-android:2.0.0") {
+        exclude("org.apache.httpcomponents")
+    }
+    implementation(libs.identity.jvm)
+
+    //Firebase.
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
 }

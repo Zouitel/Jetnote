@@ -238,7 +238,7 @@ fun QuickNote(
                         snackbarData = data,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.azure,
+                        actionColor = CommonColors.prime,
                     )
                 }
             }
@@ -465,8 +465,8 @@ fun QuickNote(
                                                 onDismiss()
                                             },
                                             shape = CircleShape,
-                                            containerColor = CommonColors.darkAzure,
-                                            contentColor = Color.White
+                                            containerColor = CommonColors.prime,
+                                            contentColor = MaterialTheme.colorScheme.surface
                                         ) {
                                             Icon(painterResource(CommonIcons.CHECK), null)
                                         }

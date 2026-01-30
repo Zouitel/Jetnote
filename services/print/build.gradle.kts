@@ -10,4 +10,7 @@ android {
 dependencies {
     //Print Service.
     implementation(libs.androidx.print)
+
+    //Serialization.
+    implementation(libs.kotlinx.serialization.json)
 }
