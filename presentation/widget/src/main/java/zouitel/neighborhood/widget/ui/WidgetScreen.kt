@@ -47,15 +47,15 @@ class WidgetScreen: Screen {
 
         val widgets = listOf(
             WidgetComponent(
-                "Quick Note Widget",
+                "Compose Widget",
                 ComponentName(context, QuickReceiver::class.java),
-                R.drawable.plus
+                R.drawable.compose
             ),
-            WidgetComponent(
-                "List Widget",
-                ComponentName(context, ListReceiver::class.java),
-                R.drawable.notes_list
-            ),
+//            WidgetComponent(
+//                "List Widget",
+//                ComponentName(context, ListReceiver::class.java),
+//                R.drawable.notes_list
+//            ),
             WidgetComponent(
                 "Creator Widget",
                 ComponentName(context, CreatorReceiver::class.java),

@@ -90,6 +90,7 @@ import zouitel.neighborhood.workspace.ui.bottom_bar.ColorPicker
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import kotlin.math.abs
 
 class HashTagsScreen: Screen {
@@ -124,6 +125,7 @@ class HashTagsScreen: Screen {
         val focusRequester by lazy { FocusRequester() }
         val colorState = remember { mutableStateOf<Int?>(null) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
+        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
@@ -154,109 +156,95 @@ class HashTagsScreen: Screen {
                     )
                 }
             ) {
-                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-                    val viewPortHeight = maxHeight
-
-                    val cacheWindow = remember(viewPortHeight) {
-                        LazyLayoutCacheWindow(
-                            ahead = viewPortHeight,
-                            behind = viewPortHeight
+                Scaffold(
+                    modifier = Modifier
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .reportable(settings.isShakable)
+                        .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen),
+                    topBar = {
+                        CommonTopAppBar(
+                            settingsModel = settingsModel,
+                            drawerState = drawerState,
+                            scrollBehavior = scrollBehavior,
+                            title = "#Tags"
                         )
+                    },
+                    bottomBar = {
+                        ColorsRow(listOfBackgroundColors) {
+                            colorState.value = it
+                        }
                     }
-
-                    val lazyListState = rememberLazyListState(
-                        cacheWindow = cacheWindow
-                    )
-
-                    Scaffold(
+                ) { paddingValues ->
+                    LazyColumn(
+                        state = lazyListState,
+                        contentPadding = paddingValues,
                         modifier = Modifier
-                            .nestedScroll(scrollBehavior.nestedScrollConnection)
-                            .reportable(settings.isShakable)
-                            .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen),
-                        topBar = {
-                            CommonTopAppBar(
-                                settingsModel = settingsModel,
-                                drawerState = drawerState,
-                                scrollBehavior = scrollBehavior,
-                                title = "#Tags"
-                            )
-                        },
-                        bottomBar = {
-                            ColorsRow(listOfBackgroundColors) {
-                                colorState.value = it
+                            .fillMaxSize()
+                            .then(height)
+                            .background(MaterialTheme.colorScheme.surface)
+                    ) {
+                        item {
+                            HashTagLayout(tagModel, snackbarState) { tag ->
+                                textFieldState.apply {
+                                    clearText()
+                                    edit { append(tag.label) }
+                                }
+                                tagModel.updateId(tag.id)
+                                colorState.value = tag.color
                             }
                         }
-                    ) { paddingValues ->
-                        LazyColumn(
-                            state = lazyListState,
-                            contentPadding = paddingValues,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colorScheme.surface)
-                        ) {
-                            item {
-                                HashTagLayout(tagModel, snackbarState) { tag ->
-                                    textFieldState.apply {
-                                        clearText()
-                                        edit { append(tag.label) }
-                                    }
-                                    tagModel.updateId(tag.id)
-                                    colorState.value = tag.color
-                                }
-                            }
 
-                            item {
-                                OutlinedTextField(
-                                    state = textFieldState,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 8.dp, vertical = 10.dp)
-                                        .focusRequester(focusRequester)
-                                        .onFocusEvent { keyboardManager.moveFocus(FocusDirection.Enter) },
-                                    shape = MaterialTheme.shapes.extraLarge,
-                                    textStyle = MaterialTheme.typography.titleLarge,
-                                    placeholder = { Text("#Tag..", style = MaterialTheme.typography.titleLarge) },
-                                    trailingIcon = {
-                                        IconButton({
-                                            tagModel.updateId().updateLabel()
-                                            textFieldState.clearText()
-                                            colorState.value = null
-                                        }) {
-                                            AnimatedVisibility(textFieldState.text.isNotEmpty()) {
-                                                Icon(
-                                                    painterResource(CommonIcons.CROSS_18),
-                                                    null,
-                                                    tint = colorState.value?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface
-                                                )
-                                            }
-                                        }
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        imeAction = ImeAction.Done
-                                    ),
-                                    onKeyboardAction = KeyboardActionHandler {
-                                        tagModel.sendAction(
-                                            Action.Insert(
-                                                data = Tag(
-                                                    id = uiState.currentId,
-                                                    label = textFieldState.text.toString(),
-                                                    color = colorState.value
-                                                )
-                                            )
-                                        )
+                        item {
+                            OutlinedTextField(
+                                state = textFieldState,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp, vertical = 10.dp)
+                                    .focusRequester(focusRequester)
+                                    .onFocusEvent { keyboardManager.moveFocus(FocusDirection.Enter) },
+                                shape = MaterialTheme.shapes.extraLarge,
+                                textStyle = MaterialTheme.typography.titleLarge,
+                                placeholder = { Text("#Tag..", style = MaterialTheme.typography.titleLarge) },
+                                trailingIcon = {
+                                    IconButton({
                                         tagModel.updateId().updateLabel()
                                         textFieldState.clearText()
                                         colorState.value = null
-                                    },
-                                    colors = TextFieldDefaults.colors(
-                                        unfocusedIndicatorColor = Color.Transparent,
-                                        focusedIndicatorColor = Color.Transparent,
-                                        disabledIndicatorColor = Color.Transparent,
-                                        focusedContainerColor = colorState.value?.let { Color(it).copy(alpha = .5f) } ?: MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .5f),
-                                        focusedTextColor = colorState.value?.let { Color(it) } ?: Color.Unspecified
+                                    }) {
+                                        AnimatedVisibility(textFieldState.text.isNotEmpty()) {
+                                            Icon(
+                                                painterResource(CommonIcons.CROSS_18),
+                                                null,
+                                                tint = colorState.value?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
+                                    }
+                                },
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Done
+                                ),
+                                onKeyboardAction = KeyboardActionHandler {
+                                    tagModel.sendAction(
+                                        Action.Insert(
+                                            data = Tag(
+                                                id = uiState.currentId,
+                                                label = textFieldState.text.toString(),
+                                                color = colorState.value
+                                            )
+                                        )
                                     )
+                                    tagModel.updateId().updateLabel()
+                                    textFieldState.clearText()
+                                    colorState.value = null
+                                },
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
+                                    focusedContainerColor = colorState.value?.let { Color(it).copy(alpha = .5f) } ?: MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .5f),
+                                    focusedTextColor = colorState.value?.let { Color(it) } ?: Color.Unspecified
                                 )
-                            }
+                            )
                         }
                     }
                 }

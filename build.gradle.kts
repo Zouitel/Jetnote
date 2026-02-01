@@ -24,6 +24,13 @@ buildscript {
     }
 }
 
-tasks.register("clean", Delete::class){
-    delete(rootProject.buildDir)
+// Add after your existing code in root build.gradle.kts
+val parentProjects = listOf(":presentation", ":common", ":core", ":services")
+
+parentProjects.forEach { parentPath ->
+    project(parentPath) {
+        tasks.register("clean", Delete::class) {
+            delete(layout.buildDirectory)
+        }
+    }
 }

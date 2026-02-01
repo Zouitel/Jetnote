@@ -62,6 +62,7 @@ import zouitel.neighborhood.tag.ui.TagScreenModel
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class AboutScreen: Screen {
     @Composable
@@ -82,12 +83,12 @@ class AboutScreen: Screen {
     ) {
         val bottomNav = LocalBottomSheetNavigator.current
 
+        val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val snackbarState = remember { SnackbarHostState() }
-        val settings by remember(settingsModel, settingsModel::observe).collectAsState()
-
+        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
         Scaffold(
             snackbarHost = {
@@ -114,44 +115,30 @@ class AboutScreen: Screen {
                     )
                 }
             ) {
-                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-                    val viewPortHeight = maxHeight
-
-                    val cacheWindow = remember(viewPortHeight) {
-                        LazyLayoutCacheWindow(
-                            ahead = viewPortHeight,
-                            behind = viewPortHeight
+                Scaffold(
+                    topBar = {
+                        CommonTopAppBar(
+                            settingsModel = settingsModel,
+                            drawerState = drawerState,
+                            scrollBehavior = scrollBehavior,
+                            title = "About"
                         )
-                    }
-
-                    val lazyListState = rememberLazyListState(
-                        cacheWindow = cacheWindow
-                    )
-
-                    Scaffold(
-                        topBar = {
-                            CommonTopAppBar(
-                                settingsModel = settingsModel,
-                                drawerState = drawerState,
-                                scrollBehavior = scrollBehavior,
-                                title = "About"
-                            )
-                        },
+                    },
+                    modifier = Modifier
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .reportable(settings.isShakable)
+                        .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen)
+                ) { paddingValues ->
+                    LazyColumn(
+                        state = lazyListState,
+                        contentPadding = paddingValues,
                         modifier = Modifier
-                            .nestedScroll(scrollBehavior.nestedScrollConnection)
-                            .reportable(settings.isShakable)
-                            .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen)
-                    ) { paddingValues ->
-
-                        LazyColumn(
-                            state = lazyListState,
-                            contentPadding = paddingValues,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            item { AboutLabel() }
-                            item { AboutDescription() }
+                            .fillMaxSize()
+                            .then(height)
+                    ) {
+                        item { AboutLabel() }
+                        item { AboutDescription() }
 //                        item { ProjectSources(settings.isSound) }
-                        }
                     }
                 }
             }

@@ -7,7 +7,7 @@
     android:targetCellWidth="2"
     android:targetCellHeight="1"
     android:updatePeriodMillis="86400000"
-    android:previewImage="@drawable/plus"
+    android:previewImage="@drawable/compose"
     android:description="@string/quick_widget_description"
     android:widgetCategory="home_screen"
     android:resizeMode="none">
