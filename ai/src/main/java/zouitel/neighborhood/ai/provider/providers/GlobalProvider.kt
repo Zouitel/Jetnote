@@ -23,10 +23,10 @@ import zouitel.neighborhood.ai.ui.ImageGenerationItem
 import zouitel.neighborhood.ai.ui.ImageGenerationResult
 import zouitel.neighborhood.ai.ui.MessageChunk
 import zouitel.neighborhood.ai.ui.UIMessage
-import zouitel.neighborhood.ai.util.KeyRoulette
-import zouitel.neighborhood.ai.util.ModelLogoProvider
-import zouitel.neighborhood.ai.util.configureClientWithProxy
-import zouitel.neighborhood.ai.util.json
+import zouitel.neighborhood.ai.utils.KeyRoulette
+import zouitel.neighborhood.ai.utils.ModelLogoProvider
+import zouitel.neighborhood.ai.utils.configureClientWithProxy
+import zouitel.neighborhood.ai.utils.json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request

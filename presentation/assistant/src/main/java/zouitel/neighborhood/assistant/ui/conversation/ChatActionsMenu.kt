@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.assistant.model.Assistant
 import zouitel.neighborhood.assistant.ui.configurations.AssistantConfigurationScreen
+import zouitel.neighborhood.assistant.ui.provider.ProvidersScreen
 import zouitel.neighborhood.ui.CommonIcons
 
 @Composable
@@ -47,7 +48,7 @@ internal fun ChatActionsMenu(
         )
         HorizontalDivider()
         DropdownMenuItem(
-            { Text("Settings", style = MaterialTheme.typography.bodyLarge) },
+            { Text("Assistant", style = MaterialTheme.typography.bodyLarge) },
             {
                 expanded.value = false
                 navigator?.push(AssistantConfigurationScreen(assistant))
@@ -58,11 +59,35 @@ internal fun ChatActionsMenu(
             }
         )
         DropdownMenuItem(
+            { Text("Providers", style = MaterialTheme.typography.bodyLarge) },
+            { navigator?.push(ProvidersScreen()) },
+            Modifier.padding(horizontal = 10.dp),
+            {
+                Icon(painterResource(CommonIcons.BOX_CONNECTION), null)
+            }
+        )
+        DropdownMenuItem(
             { Text("Retitle", style = MaterialTheme.typography.bodyLarge) },
             onRetitle,
             Modifier.padding(horizontal = 10.dp),
             {
-                Icon(painterResource(CommonIcons.REFRESH), null)
+                Icon(painterResource(CommonIcons.TEXT_BOX_EDIT), null)
+            }
+        )
+        DropdownMenuItem(
+            {
+                Text(
+                    text = "Options",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            },
+            onOptions,
+            Modifier.padding(horizontal = 10.dp),
+            {
+                Icon(
+                    painterResource(CommonIcons.CLIP),
+                    null,
+                )
             }
         )
         HorizontalDivider()
@@ -81,23 +106,6 @@ internal fun ChatActionsMenu(
                     painterResource(CommonIcons.TRASH),
                     null,
                     tint = MaterialTheme.colorScheme.errorContainer
-                )
-            }
-        )
-        HorizontalDivider()
-        DropdownMenuItem(
-            {
-                Text(
-                    text = "Options",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            },
-            onOptions,
-            Modifier.padding(horizontal = 10.dp),
-            {
-                Icon(
-                    painterResource(CommonIcons.PLUS),
-                    null,
                 )
             }
         )

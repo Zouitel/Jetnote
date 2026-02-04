@@ -1,4 +1,4 @@
-package zouitel.neighborhood.ai.util
+package zouitel.neighborhood.ai.utils
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement

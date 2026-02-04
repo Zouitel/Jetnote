@@ -10,26 +10,29 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.content.MediaType
 import androidx.compose.foundation.content.ReceiveContentListener
 import androidx.compose.foundation.content.consume
 import androidx.compose.foundation.content.contentReceiver
 import androidx.compose.foundation.content.hasMediaType
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -38,6 +41,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -52,6 +56,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -63,7 +68,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -77,7 +81,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -119,10 +122,11 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.assistant.utils.JsonInstant
 import zouitel.neighborhood.feedback.reportable
 import kotlin.uuid.Uuid
 
-class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
+class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
     @Composable
     override fun Content() {
         Chat(
@@ -239,6 +243,7 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
         LaunchedEffect(model) {
             providerModel.initProviderId(model?.providerId ?: return@LaunchedEffect)
             inputState.currentLogo = model?.logoUrl ?: return@LaunchedEffect
+            inputState.currentModel = JsonInstant.encodeToString(model)
         }
 
         // Auto-scroll when new messages arrive
@@ -312,7 +317,7 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
             Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .reportable(settings.isShakable)
-                .cloudy(enabled = bottomNav.isVisible || expanded.value),
+                .cloudy(enabled = bottomNav.isVisible || expanded.value || showOptionsSheet.value),
             topBar = {
                 TopAppBar(
                     {
@@ -345,49 +350,40 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                                 expanded.value = false
                             },
                             {
-                                val originalConversation = conversation ?: return@ChatActionsMenu
                                 val currentJobId = jobCounter.intValue++
-
-                                deletedChat.add(Pair(originalConversation, currentJobId))
-
-                                val clearedConversation = originalConversation.copy(
-                                    id = id,
-                                    title = "",
-                                    nodes = emptyList(),
-                                    suggestions = emptyList()
-                                )
-
-                                conversationModel.updateObservedConversation(clearedConversation)
+                                deletedChat.add(Pair(conversation ?: return@ChatActionsMenu, currentJobId))
+                                val chatPair = deletedChat.firstOrNull { pair -> pair.second == currentJobId }
+                                conversationModel.updateObservedConversation(conversation?.copy(nodes = emptyList()) ?: return@ChatActionsMenu)
 
                                 scope.launch {
                                     snackbarState.currentSnackbarData?.dismiss()
                                     val result = snackbarState.showSnackbar(
-                                        message = "${originalConversation.title.ifBlank { "Chat" }} cleared",
+                                        message = "${conversation?.title?.ifBlank { "Chat" }} cleared",
                                         actionLabel = "Undo",
                                         duration = SnackbarDuration.Long
                                     )
 
-                                    val chatPair =
-                                        deletedChat.firstOrNull { pair -> pair.second == currentJobId }
-
-                                    when (result) {
-                                        SnackbarResult.ActionPerformed -> {
-                                            chatPair?.first?.let { original ->
-                                                conversationModel.upsert(original)
-                                            }
-                                        }
-
-                                        SnackbarResult.Dismissed -> {
-                                            conversationModel.upsert(clearedConversation)
+//                                    when (result) {
+//                                        SnackbarResult.ActionPerformed -> {
+//                                            chatPair?.first?.let { original ->
+//                                                conversationModel.upsert(original)
+//                                            }
+//                                        }
+//                                        SnackbarResult.Dismissed -> {
+//                                            conversationModel.upsert(conversation ?: return@launch)
+//                                        }
+//                                    }
+                                    if (result == SnackbarResult.ActionPerformed) {
+                                        chatPair?.first?.let { original ->
+                                            conversationModel.upsert(original)
                                         }
                                     }
-
                                     chatPair?.let { deletedChat.remove(it) }
                                 }
-
                                 expanded.value = false
                             },
                             {
+                                expanded.value = false
                                 showOptionsSheet.value = true
                             }
                         )
@@ -400,6 +396,7 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                     Modifier
                         .fillMaxWidth()
                         .padding(10.dp, 5.dp)
+                        .navigationBarsPadding()
                 ) {
                     LazyRow(
                         verticalAlignment = Alignment.CenterVertically
@@ -411,7 +408,10 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                                     Text(it, style = MaterialTheme.typography.labelLarge)
                                 },
                                 Modifier.padding(3.dp),
-                                shape = CircleShape
+                                shape = CircleShape,
+                                colors = SuggestionChipDefaults.suggestionChipColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                                )
                             )
                         }
                         if(conversation?.suggestions?.isNotEmpty() == true) {
@@ -424,7 +424,10 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                                         Icon(painterResource(CommonIcons.CROSS_SMALL), null)
                                     },
                                     Modifier.padding(3.dp),
-                                    shape = CircleShape
+                                    shape = CircleShape,
+                                    colors = SuggestionChipDefaults.suggestionChipColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                                    )
                                 )
                             }
                         }
@@ -434,7 +437,6 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
 
                     InputBar(
                         isLoading,
-                        placeholderText,
                         model,
                         inputState,
                         {
@@ -448,10 +450,13 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                                 }
                             }
                         },
-                        onAttachClick = {
+                        {
                             navigator?.push(ModelsScreen())
                         },
-                        onCancel = {
+                        {
+                            showOptionsSheet.value = true
+                        },
+                        {
                             conversationJobs.value.values.map { it?.cancel() }
                         }
                     )
@@ -473,9 +478,11 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                 contentPadding = PaddingValues(
                     start = 8.dp,
                     end = 8.dp,
-                    bottom = paddingValues.calculateBottomPadding()
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = 8.dp
                 ),
-                modifier = Modifier.padding(paddingValues),
+                modifier = Modifier
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
             ) {
                 itemsIndexed(
@@ -500,6 +507,10 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                             )
                         }
                     }
+                }
+                // Void.
+                item {
+                    Spacer(Modifier.height(200.dp))
                 }
             }
 
@@ -580,9 +591,7 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
             // Documents
             val documents = parts.filterIsInstance<UIMessagePart.Document>()
             if (documents.isNotEmpty()) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     documents.fastForEach {
                         Surface(
                             tonalElevation = 2.dp,
@@ -650,9 +659,7 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
             // Videos
             val videos = parts.filterIsInstance<UIMessagePart.Video>()
             if (videos.isNotEmpty()) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     videos.fastForEach {
                         Surface(
                             tonalElevation = 2.dp,
@@ -681,9 +688,7 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
             // Audios
             val audios = parts.filterIsInstance<UIMessagePart.Audio>()
             if (audios.isNotEmpty()) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     audios.fastForEach {
                         Surface(
                             tonalElevation = 2.dp,
@@ -729,7 +734,8 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                             isLoading = isProcessing,
                             logo = it.logoUrl
                         ) {
-                            navigator?.push(ModelConfigurationScreen(model))
+                            val currentModel = JsonInstant.decodeFromString<Model>(it.model ?: model.toString())
+                            navigator?.push(ModelConfigurationScreen(currentModel))
                         }
                     }
                 }
@@ -740,11 +746,11 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
     @Composable
     private fun InputBar(
         loading: State<Boolean>,
-        placeholderText: MutableState<String>,
         model: Model?,
         inputState: ChatInputState,
         onSend: () -> Unit,
         onAttachClick: () -> Unit,
+        onOptions: () -> Unit,
         onCancel: () -> Unit
     ) {
         val context = LocalContext.current
@@ -774,45 +780,44 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
         }
         Surface(
             modifier = Modifier
-                .navigationBarsPadding()
-                .draggable(
-                    state = rememberDraggableState { delta ->
-                        if (delta < 0) {
-                            /*bottomNav.show(OptionsScreen())*/
-                        }
-                    },
-                    orientation = Orientation.Vertical,
-                    onDragStarted = { /*bottomNav.show(OptionsScreen())*/ }
-                ),
+                .fillMaxWidth()
+                .wrapContentHeight(),
+//                .draggable(
+//                    state = rememberDraggableState { delta ->
+//                        if (delta < 0) {
+//                            /*bottomNav.show(OptionsScreen())*/
+//                        }
+//                    },
+//                    orientation = Orientation.Vertical,
+//                    onDragStarted = { /*bottomNav.show(OptionsScreen())*/ }
+//                ),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surfaceContainerHighest,
             shadowElevation = elevation.dp,
             tonalElevation = 2.dp
         ) {
             // Send button
-            val sendButtonRotation by animateFloatAsState(
-                targetValue = if (inputState.textContent.text.isNotBlank()) 0f else 45f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessMedium
-                ),
-                label = "sendRotation"
-            )
+//            val sendButtonRotation by animateFloatAsState(
+//                targetValue = if (inputState.textContent.text.isNotBlank()) 0f else 45f,
+//                animationSpec = spring(
+//                    dampingRatio = Spring.DampingRatioMediumBouncy,
+//                    stiffness = Spring.StiffnessMedium
+//                ),
+//                label = "sendRotation"
+//            )
 
             // Text input
             TextField(
-//                value = inputState.getMessageText(),
-//                onValueChange = {
-//                    inputState.setMessageText(it)
-//                    isFocused = it.isNotEmpty()
-//                },
                 state = inputState.textContent,
                 modifier = Modifier
                     .fillMaxWidth()
                     .contentReceiver(receiveContentListener)
                     .onFocusChanged {
                         isFocused = it.isFocused
-                    },
+                    }
+                    .navigationBarsPadding()
+                    .imePadding(),
+                lineLimits = TextFieldLineLimits.MultiLine(maxHeightInLines = 5),
                 textStyle = TextStyle(
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -820,21 +825,21 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                 ),
 //                maxLines = 5,
                 placeholder = {
-                    LaunchedEffect(Unit) {
-                        delay(3000)
-                        placeholderText.value = "Ask AI Assistant"
-                    }
-
-                    AnimatedVisibility(
-                        visible = true,
-                        enter = fadeIn(animationSpec = tween(durationMillis = 300)),
-                    ) {
-                        Text(
-                            text = placeholderText.value,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                        )
-                    }
+//                    LaunchedEffect(Unit) {
+//                        delay(3000)
+//                        placeholderText.value = "Ask AI Assistant"
+//                    }
+//
+//                    AnimatedVisibility(
+//                        visible = true,
+//                        enter = fadeIn(animationSpec = tween(durationMillis = 300)),
+//                    ) {
+//                    }
+                    Text(
+                        text = model?.let{ "Ask ${it.displayName.split(' ','/','-',',').firstOrNull()}"  } ?: "<- Add AI model",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    )
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
@@ -844,37 +849,67 @@ class ChatScreen(val isNew: Boolean, var id: Uuid = Uuid.random()): Screen {
                     unfocusedIndicatorColor = Color.Transparent,
                     cursorColor = MaterialTheme.colorScheme.onSurface
                 ),
-                leadingIcon = if (inputState.textContent.text.isEmpty()) {
+                leadingIcon = if (inputState.getMessageText().isEmpty()) {
                     {
                         // Attach button - only shown when not focused
                         IconButton(onAttachClick, Modifier.padding(5.dp)) {
-                            AsyncImage(
-                                model?.logoUrl,
-                                "Attach",
-                                modifier = Modifier.size(30.dp)
-                            )
+                            model?.let {
+                                AsyncImage(
+                                    it.logoUrl,
+                                    "Attach",
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            } ?: Icon(painterResource(CommonIcons.BOX_CONNECTION), null)
                         }
                     }
                 } else null,
                 // Update the trailing icon to show sending state:
                 trailingIcon = {
-                    if (loading.value) {
-                        IconButton(onCancel, Modifier.padding(5.dp)) {
-                            Icon(
-                                painter = painterResource(CommonIcons.CROSS_18),
-                                contentDescription = "cancel"
-                            )
+                    when {
+                        loading.value -> {
+                            IconButton(onCancel, Modifier.padding(5.dp)) {
+                                Icon(
+                                    painter = painterResource(CommonIcons.CROSS_18),
+                                    contentDescription = "cancel"
+                                )
+                            }
                         }
-                    } else {
-                        IconButton(onSend, Modifier.padding(5.dp)) {
-                            Icon(
-                                painterResource(CommonIcons.ARROW_UP),
-                                "Send",
-                                tint = if (inputState.textContent.text.isNotBlank()) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.rotate(sendButtonRotation)
-                            )
+                        inputState.getMessageText().isEmpty() -> {
+                            IconButton(onOptions, Modifier.padding(5.dp)) {
+                                Icon(
+                                    painterResource(CommonIcons.CLIP),
+                                    "options",
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                        else -> {
+                            IconButton(onSend, Modifier.padding(5.dp)) {
+                                Icon(
+                                    painterResource(CommonIcons.ARROW_UP),
+                                    "send",
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
                         }
                     }
+//                    if (loading.value) {
+//                        IconButton(onCancel, Modifier.padding(5.dp)) {
+//                            Icon(
+//                                painter = painterResource(CommonIcons.CROSS_18),
+//                                contentDescription = "cancel"
+//                            )
+//                        }
+//                    } else {
+//                        IconButton(onSend, Modifier.padding(5.dp)) {
+//                            Icon(
+//                                painterResource(CommonIcons.ARROW_UP),
+//                                "Send",
+//                                tint = if (inputState.textContent.text.isNotBlank()) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+//                                modifier = Modifier.rotate(sendButtonRotation)
+//                            )
+//                        }
+//                    }
                 }
             )
         }

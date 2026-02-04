@@ -1,4 +1,4 @@
-package zouitel.neighborhood.ai.util
+package zouitel.neighborhood.ai.utils
 
 import android.util.Log
 import zouitel.neighborhood.ai.provider.HttpProxy

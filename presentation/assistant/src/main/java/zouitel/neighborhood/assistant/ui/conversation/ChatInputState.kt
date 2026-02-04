@@ -42,6 +42,7 @@ class ChatInputState {
     var editingMessage by mutableStateOf<Uuid?>(null)
     var loading by mutableStateOf(false)
     var currentLogo by mutableStateOf("")
+    var currentModel by mutableStateOf<String?>(null)
 
     fun clearInput() {
         textContent.setTextAndPlaceCursorAtEnd("")
@@ -70,7 +71,7 @@ class ChatInputState {
     fun getContents(): List<UIMessagePart> {
         val content = listOf(
             UIMessagePart.Text(textContent.text.toString())
-        ) + UIMessagePart.Logo(currentLogo) + messageContent
+        ) + UIMessagePart.Logo(currentLogo, currentModel) + messageContent
         return content
     }
 
@@ -78,11 +79,11 @@ class ChatInputState {
         return textContent.text.isEmpty() && messageContent.isEmpty()
     }
 
-    fun addLogo(logo: String) {
-        val newMessage = messageContent.toMutableList()
-        newMessage.add(UIMessagePart.Logo(logo))
-        messageContent = newMessage
-    }
+//    fun addLogo(logo: String) {
+//        val newMessage = messageContent.toMutableList()
+//        newMessage.add(UIMessagePart.Logo(logo))
+//        messageContent = newMessage
+//    }
 
     fun addImages(uris: List<Uri>) {
         val newMessage = messageContent.toMutableList()

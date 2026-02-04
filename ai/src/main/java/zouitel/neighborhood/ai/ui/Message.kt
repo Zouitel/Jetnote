@@ -10,7 +10,7 @@ import kotlinx.serialization.json.JsonObject
 import zouitel.neighborhood.ai.core.MessageRole
 import zouitel.neighborhood.ai.core.TokenUsage
 import zouitel.neighborhood.ai.provider.Model
-import zouitel.neighborhood.ai.util.json
+import zouitel.neighborhood.ai.utils.json
 import kotlinx.serialization.Contextual
 import kotlin.time.Clock
 import kotlin.time.Instant
@@ -327,6 +327,7 @@ sealed class UIMessagePart {
     @Serializable
     data class Logo(
         val logoUrl: String,
+        val model: String? = null,
         override val metadata: JsonObject? = null
     ): UIMessagePart() {
         override val priority: Int = 1

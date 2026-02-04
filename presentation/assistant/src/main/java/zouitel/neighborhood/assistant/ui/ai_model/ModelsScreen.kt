@@ -40,6 +40,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class ModelsScreen: Screen {
     @Composable
@@ -65,6 +66,7 @@ class ModelsScreen: Screen {
         val snackbarState = remember { SnackbarHostState() }
         val jobCounter = remember { mutableIntStateOf(0) }
         val deletedModel = remember { mutableStateListOf<Pair<Model, Int>>() }
+        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
         Scaffold(
             Modifier
@@ -74,7 +76,14 @@ class ModelsScreen: Screen {
                 .cloudy(enabled = bottomNav.isVisible),
                 {
                     TopAppBar(
-                        { Text("A.I Models") },
+                        navigationIcon = {
+                            IconButton({
+                                navigator?.pop()
+                            }) {
+                                Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                            }
+                        },
+                        title = { Text("AI Models") },
                         actions = {
                             IconButton({
                                 navigator?.push(ProvidersScreen())
@@ -96,7 +105,12 @@ class ModelsScreen: Screen {
                 }
             }
         ) { paddingValues ->
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = paddingValues) {
+            LazyColumn(
+                Modifier.fillMaxSize()
+                    .then(height),
+                lazyListState,
+                contentPadding = paddingValues
+            ) {
                 item {
                     Models(
                         assistantModel, modelsModel, false,
@@ -104,7 +118,6 @@ class ModelsScreen: Screen {
                             navigator?.push(ModelConfigurationScreen(it))
                         },
                         {
-                            println(it)
                             val currentJobId = jobCounter.intValue++
                             deletedModel.add(Pair(it, currentJobId))
                             val modelPair =

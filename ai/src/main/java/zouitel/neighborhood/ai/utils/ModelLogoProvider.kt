@@ -1,4 +1,4 @@
-package zouitel.neighborhood.ai.util
+package zouitel.neighborhood.ai.utils
 
 object ModelLogoProvider {
     fun getLogoUrl(modelId: String): String? {
@@ -45,5 +45,15 @@ object ModelLogoProvider {
         "doubao" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/doubao-color.png",
         "anthropic" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/anthropic.png",
         "moonshot" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/moonshot.png",
+        "relace" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/relace.png",
+        "xiaomi" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/xiaomimimo.png",
+        "upstage" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/upstage-color.png",
+        "arcee" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/arcee-color.png",
+        "google" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/google-color.png",
+        "allenai" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/ai2-color.png",
+        "morph" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/morph-color.png",
+        "essentialai" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/essentialai-color.png",
+        "deepcogito" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/deepcogito-color.png",
+        "inception" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/inception.png",
     )
 }

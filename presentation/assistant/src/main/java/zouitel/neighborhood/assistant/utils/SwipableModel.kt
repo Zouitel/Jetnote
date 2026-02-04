@@ -3,6 +3,7 @@ package zouitel.neighborhood.assistant.utils
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
@@ -78,7 +80,7 @@ fun SwipableModel(
             ) {
                 Icon(
                     painter = painterResource(CommonIcons.PENCIL),
-                    contentDescription = "Edit"
+                    contentDescription = "edit"
                 )
             }
 
@@ -100,7 +102,7 @@ fun SwipableModel(
             ) {
                 Icon(
                     painter = painterResource(CommonIcons.TRASH),
-                    contentDescription = "Delete"
+                    contentDescription = "delete"
                 )
             }
 
@@ -142,7 +144,7 @@ fun SwipableModel(
             colors = CardDefaults.cardColors(
                 containerColor = if (isCurrent) CommonColors.prime
                     else MaterialTheme.colorScheme.surfaceContainer,
-                contentColor = if (isCurrent) MaterialTheme.colorScheme.onPrimaryContainer
+                contentColor = if (isCurrent) MaterialTheme.colorScheme.surface
                 else MaterialTheme.colorScheme.onSurface
             )
         ) {
@@ -150,21 +152,23 @@ fun SwipableModel(
                 modifier = Modifier.fillMaxWidth().heightIn(45.dp).padding(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (isCurrent) {
-                    AnimatedVisibility(true) {
-                        Icon(
-                            painterResource(CommonIcons.CHECK_18),
-                            null,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                    }
-                } else {
+//                if (isCurrent) {
+//                    AnimatedVisibility(true) {
+//                        Icon(
+//                            painterResource(CommonIcons.CHECK_18),
+//                            null,
+//                            modifier = Modifier.padding(horizontal = 10.dp)
+//                        )
+//                    }
+//                } else {
                     AsyncImage(
                         model.logoUrl ?: R.drawable.ai_model,
-                        null,
-                        Modifier.size(30.dp)
+                        "model logo",
+                        Modifier
+                            .size(30.dp)
+                            .padding(5.dp)
                     )
-                }
+//                }
 
                 Text(
                     text = model.displayName,

@@ -5,23 +5,32 @@ import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +38,8 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -40,18 +51,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
-import zouitel.neighborhood.ui.hightlight.HighlightText
-import zouitel.neighborhood.ui.hightlight.Highlighter
-import zouitel.neighborhood.ui.hightlight.LocalHighlighter
-import zouitel.neighborhood.ui.hightlight.buildHighlightText
-import zouitel.neighborhood.ui.webview.WebViewPageScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import zouitel.neighborhood.ui.CommonIcons
+import zouitel.neighborhood.ui.hightlight.HighlightText
+import zouitel.neighborhood.ui.hightlight.Highlighter
+import zouitel.neighborhood.ui.hightlight.LocalHighlighter
+import zouitel.neighborhood.ui.hightlight.buildHighlightText
+import zouitel.neighborhood.ui.webview.WebViewPageScreen
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
+
+private const val COLLAPSE_LINES = 10
 
 @Composable
 fun HighlightCodeBlock(
@@ -71,9 +85,10 @@ fun HighlightCodeBlock(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val navigator = LocalNavigator.current
-
+    var isExpanded by remember { mutableStateOf(true) }
+    val autoWrap = false
     val createDocumentLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument("text/plain")
+        contract = ActivityResultContracts.CreateDocument("*/*")
     ) { uri: Uri? ->
         uri?.let {
             scope.launch {
@@ -90,9 +105,9 @@ fun HighlightCodeBlock(
 
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(8.dp),
+            .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 8.dp),
     ) {
         HighlightCodeActions(
             language = language,
@@ -109,20 +124,63 @@ fun HighlightCodeBlock(
             )
             return
         }
+        Spacer(Modifier.height(8.dp))
+
         val textStyle = LocalTextStyle.current.merge(style)
+        val codeLines = remember(code) { code.lines() }
+        val collapsedCode = remember(codeLines) { codeLines.take(COLLAPSE_LINES).joinToString("\n") }
         SelectionContainer {
             HighlightText(
-                code = code,
+                code = if (isExpanded) code else collapsedCode,
                 language = language,
                 modifier = Modifier
-                    .horizontalScroll(scrollState),
+                    .animateContentSize()
+                    .then(
+                        if (autoWrap) {
+                            Modifier
+                        } else {
+                            Modifier.horizontalScroll(scrollState)
+                        }
+                    ),
                 fontSize = textStyle.fontSize,
                 lineHeight = textStyle.lineHeight,
                 colors = colorPalette,
                 overflow = TextOverflow.Visible,
-                softWrap = false,
+                softWrap = autoWrap,
                 fontFamily = JetbrainsMono
             )
+        }
+
+        Spacer(Modifier.height(4.dp))
+
+        if (codeLines.size > COLLAPSE_LINES) {
+            Box(
+                modifier = Modifier
+                    .clickable {
+                        isExpanded = !isExpanded
+                    }
+                    .fillMaxWidth(),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+//                    Icon(
+//                        if (isExpanded) painterResource(CommonIcons.ARROW_UP) else painterResource(CommonIcons.DOWNLOAD_CLOUD),
+//                        contentDescription = null,
+//                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+//                        modifier = Modifier.size(textStyle.fontSize.toDp())
+//                    )
+                    Text(
+                        text = if (isExpanded) "less" else "+more",
+                        fontSize = textStyle.fontSize,
+                        lineHeight = textStyle.lineHeight,
+                    )
+                }
+            }
         }
     }
 }
@@ -144,6 +202,7 @@ private fun HighlightCodeActions(
         Text(
             text = language,
             fontSize = 12.sp,
+            lineHeight = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
                 .copy(alpha = 0.5f),
         )
@@ -159,13 +218,13 @@ private fun HighlightCodeActions(
                             )
                         )
                     }
-                }
-                .padding(1.dp),
+                },
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
                 text = "Save",
                 fontSize = 12.sp,
+                lineHeight = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                 modifier = Modifier.clickable {
                     val extension = when (language.lowercase()) {
@@ -197,6 +256,7 @@ private fun HighlightCodeActions(
             Text(
                 text = "Copy Code",
                 fontSize = 12.sp,
+                lineHeight = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                 modifier = Modifier.clickable {
                     scope.launch {
@@ -209,6 +269,7 @@ private fun HighlightCodeActions(
                 Text(
                     text = "Preview",
                     fontSize = 12.sp,
+                    lineHeight = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier
                         .clickable {

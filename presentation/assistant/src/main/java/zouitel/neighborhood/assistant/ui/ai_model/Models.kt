@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +47,20 @@ internal fun Models(
     val assistant by remember(assistantModel, assistantModel::observe).collectAsState()
     val models by remember(modelsModel, modelsModel::observeAll).collectAsState(emptyList())
     var columnHeight by remember { mutableStateOf(300.dp) }
-    val currentModel = models.find { model -> model.uid == assistant?.currentModelUid }
+
+    // Cache current model with derivedStateOf for automatic smart invalidation
+    val currentModel by remember {
+        derivedStateOf {
+            models.find { model -> model.uid == assistant?.currentModelUid }
+        }
+    }
+
+    // Cache sorted models list with derivedStateOf to prevent unnecessary sorting
+    val sortedModels by remember {
+        derivedStateOf {
+            models.sortedByDescending { it == currentModel }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -61,7 +75,7 @@ internal fun Models(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(0.dp, if (isCollapsed) columnHeight else Dp.Unspecified),
-            itemCount = models.size,
+            itemCount = sortedModels.size,
             maxLines = if (isCollapsed) 1 else Int.MAX_VALUE,
             verticalArrangement = Arrangement.Center,
             horizontalArrangement = Arrangement.Center,
@@ -76,11 +90,12 @@ internal fun Models(
                             label = {
                                 Text(
                                     text = "+${totalItemCount - shownItemCount} more",
-                                    color = Color.White
+//                                    color = Color.White
                                 )
                             },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = CommonColors.prime
+                                selectedContainerColor = CommonColors.prime,
+                                selectedLabelColor = MaterialTheme.colorScheme.surface
                             )
                         )
                     },
@@ -107,7 +122,7 @@ internal fun Models(
                 ContextualFlowColumnOverflow.Clip
             }
         ) { index ->
-            val model = models.sortedByDescending { it == currentModel }.getOrNull(index) ?: return@ContextualFlowColumn
+            val model = sortedModels.getOrNull(index) ?: return@ContextualFlowColumn
             SwipableModel(
                 model = model,
                 isCurrent = model == currentModel,

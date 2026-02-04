@@ -1,7 +1,6 @@
 package zouitel.neighborhood.ui.hightlight
 
 import android.content.Context
-import zouitel.neighborhood.ui.R
 import com.whl.quickjs.android.QuickJSLoader
 import com.whl.quickjs.wrapper.QuickJSArray
 import com.whl.quickjs.wrapper.QuickJSContext
@@ -21,7 +20,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import zouitel.neighborhood.ui.hightlight.HighlightToken.Token.StringContent
+import zouitel.neighborhood.ui.R
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -160,7 +159,7 @@ object HighlightTokenSerializer : KSerializer<HighlightToken.Token> {
 
                 content.forEach { part ->
                     if (part is JsonPrimitive) {
-                        nestedContent += StringContent(
+                        nestedContent += HighlightToken.Token.StringContent(
                             content = part.content,
                             type = type,
                             length = length,
@@ -184,7 +183,7 @@ object HighlightTokenSerializer : KSerializer<HighlightToken.Token> {
 
             is JsonPrimitive -> {
                 val stringContent = content.content
-                StringContent(
+                HighlightToken.Token.StringContent(
                     content = stringContent,
                     type = type,
                     length = length,

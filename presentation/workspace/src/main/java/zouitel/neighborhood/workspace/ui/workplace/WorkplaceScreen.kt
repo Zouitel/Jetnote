@@ -81,6 +81,7 @@ import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import kotlin.uuid.Uuid
 
 data class WorkplaceScreen(
@@ -158,138 +159,125 @@ data class WorkplaceScreen(
         val deletedTask = remember { mutableStateListOf<Pair<Task, Int>>() }
         val jobCounter = remember { mutableIntStateOf(0) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
+        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
         LaunchedEffect(true) {
             if (isNew) focus.requestFocus()
         }
 
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val viewPortHeight = maxHeight
-
-            val cacheWindow = remember(viewPortHeight) {
-                LazyLayoutCacheWindow(
-                    ahead = viewPortHeight,
-                    behind = viewPortHeight
+        Scaffold(
+            containerColor = Color(currentData.value.background ?: defaultBackground),
+            modifier = Modifier
+                .fillMaxSize()
+                .cloudy(enabled = navBottomSheet.isVisible)
+                .reportable(settings.isShakable, currentData.value.background),
+            bottomBar = {
+                BottomBar(
+                    data = currentData,
+                    titleState = titleState,
+                    descriptionState = descriptionState,
+                    isSound = settings.isSound,
+                    dataModel = dataModel,
+                    linkModel = linkModel
                 )
-            }
-
-            val lazyListState = rememberLazyListState(
-                cacheWindow = cacheWindow
-            )
-
-            Scaffold(
-                containerColor = Color(currentData.value.background ?: defaultBackground),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .cloudy(enabled = navBottomSheet.isVisible)
-                    .reportable(settings.isShakable, currentData.value.background),
-                bottomBar = {
-                    BottomBar(
-                        data = currentData,
-                        titleState = titleState,
-                        descriptionState = descriptionState,
-                        isSound = settings.isSound,
-                        dataModel = dataModel,
-                        linkModel = linkModel
+            },
+            snackbarHost = {
+                SnackbarHost(snackbarState) { data ->
+                    Snackbar(
+                        snackbarData = data,
+                        actionOnNewLine = false,
+                        shape = MaterialTheme.shapes.extraLarge,
+                        actionColor = MaterialTheme.colorScheme.surface
                     )
-                },
-                snackbarHost = {
-                    SnackbarHost(snackbarState) { data ->
-                        Snackbar(
-                            snackbarData = data,
-                            actionOnNewLine = false,
-                            shape = MaterialTheme.shapes.extraLarge,
-                            actionColor = MaterialTheme.colorScheme.surface
-                        )
+                }
+            }
+        ) {
+            LazyColumn(
+                Modifier
+                    .animateContentSize()
+                    .statusBarsPadding()
+                    .then(height),
+                lazyListState
+            ) {
+                // medias display.
+                item {
+                    MediaTop(currentData)
+                }
+
+                // The Title.
+                item {
+                    CommonTextField(
+                        state = titleState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(55.dp)
+                            .focusRequester(focus),
+                        placeholder = "Title",
+                        textSize = MaterialTheme.typography.headlineMedium.fontSize,
+                        textColor = Color(currentData.value.textColor ?: defaultTextColor),
+                        imeAction = ImeAction.Next,
+                        keyboardActions = {
+                            keyboardManager.moveFocus(FocusDirection.Next)
+                        }
+                    ) {
+                        workplaceModel.handleContentReceiver(currentData, it)
                     }
                 }
-            ) {
-                LazyColumn(
-                    Modifier
-                        .animateContentSize()
-                        .statusBarsPadding(),
-                    lazyListState
-                ) {
-                    // medias display.
-                    item {
-                        MediaTop(currentData)
+
+                // The Description.
+                item {
+                    CommonTextField(
+                        state = descriptionState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(50.dp),
+                        textSize = MaterialTheme.typography.titleLarge.fontSize,
+                        placeholder = "Note",
+                        textColor = Color(currentData.value.textColor ?: defaultTextColor)
+                    ) {
+                        workplaceModel.handleContentReceiver(currentData, it)
                     }
+                }
 
-                    // The Title.
-                    item {
-                        CommonTextField(
-                            state = titleState,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(55.dp)
-                                .focusRequester(focus),
-                            placeholder = "Title",
-                            textSize = MaterialTheme.typography.headlineMedium.fontSize,
-                            textColor = Color(currentData.value.textColor ?: defaultTextColor),
-                            imeAction = ImeAction.Next,
-                            keyboardActions = {
-                                keyboardManager.moveFocus(FocusDirection.Next)
-                            }
-                        ) {
-                            workplaceModel.handleContentReceiver(currentData, it)
-                        }
-                    }
+                // display reminder chips.
+                remindersContext(
+                    alarmModel,
+                    snackbarState,
+                    toolTipState,
+                    currentData,
+                    scope,
+                    deletedReminders,
+                    jobCounter
+                )
 
-                    // The Description.
-                    item {
-                        CommonTextField(
-                            state = descriptionState,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(50.dp),
-                            textSize = MaterialTheme.typography.titleLarge.fontSize,
-                            placeholder = "Note",
-                            textColor = Color(currentData.value.textColor ?: defaultTextColor)
-                        ) {
-                            workplaceModel.handleContentReceiver(currentData, it)
-                        }
-                    }
+                // display the tags.
+                tagsContext(
+                    currentData.value.uid,
+                    filteredTags,
+                    noteAndTagModel,
+                    snackbarState,
+                    scope,
+                    deletedTagId,
+                    jobCounter
+                )
 
-                    // display reminder chips.
-                    remindersContext(
-                        alarmModel,
-                        snackbarState,
-                        toolTipState,
-                        currentData,
-                        scope,
-                        deletedReminders,
-                        jobCounter
-                    )
+                // Audios display.
+                item {
+                    Navigator(AudioScreen(currentData, snackbarState))
+                }
 
-                    // display the tags.
-                    tagsContext(
-                        currentData.value.uid,
-                        filteredTags,
-                        noteAndTagModel,
-                        snackbarState,
-                        scope,
-                        deletedTagId,
-                        jobCounter
-                    )
+                // Link display.
+                item {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Navigator(LinkScreen(currentData.value.uid, snackbarState))
+                }
 
-                    // Audios display.
-                    item {
-                        Navigator(AudioScreen(currentData, snackbarState))
-                    }
+                // display the tasks list.
+                tasksList(snackbarState, currentData, scope, deletedTask, jobCounter)
 
-                    // Link display.
-                    item {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Navigator(LinkScreen(currentData.value.uid, snackbarState))
-                    }
-
-                    // display the tasks list.
-                    tasksList(snackbarState, currentData, scope, deletedTask, jobCounter)
-
-                    // void space.
-                    item {
-                        Box(modifier = Modifier.fillMaxWidth().height(170.dp))
-                    }
+                // void space.
+                item {
+                    Box(modifier = Modifier.fillMaxWidth().height(170.dp))
                 }
             }
         }

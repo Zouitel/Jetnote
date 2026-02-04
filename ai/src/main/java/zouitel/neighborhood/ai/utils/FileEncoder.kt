@@ -1,4 +1,4 @@
-package zouitel.neighborhood.ai.util
+package zouitel.neighborhood.ai.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

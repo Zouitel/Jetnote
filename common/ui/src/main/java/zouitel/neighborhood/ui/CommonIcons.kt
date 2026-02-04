@@ -91,4 +91,7 @@ object CommonIcons {
     val INFO = R.drawable.info_24
     val FILM_36 = R.drawable.film_36
     val FILM = R.drawable.film_24
+    val CLIP = R.drawable.clip_24
+    val BOX_CONNECTION = R.drawable.box_connection_24
+    val TEXT_BOX_EDIT = R.drawable.text_box_edit_24
 }

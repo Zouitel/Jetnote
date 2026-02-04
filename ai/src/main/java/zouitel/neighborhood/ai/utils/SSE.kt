@@ -1,4 +1,4 @@
-package zouitel.neighborhood.ai.util
+package zouitel.neighborhood.ai.utils
 
 import okhttp3.Call
 import okhttp3.Callback

@@ -5,10 +5,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.ShapeDefaults
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
-import zouitel.neighborhood.account.SyncScreenModel
 import zouitel.neighborhood.security.applock.LockModeHandler
 import zouitel.neighborhood.audio.player.PlaybackManager
 import zouitel.neighborhood.bin.BinScreenModel
@@ -25,6 +26,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
+import zouitel.neighborhood.ui.hightlight.Highlighter
+import zouitel.neighborhood.ui.hightlight.LocalHighlighter
 
 class NoteActivity : AppCompatActivity(), KoinComponent {
 
@@ -32,7 +35,7 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
     private val playerManager: PlaybackManager by inject()
     private val permissionModel: PermissionScreenModel by inject()
     private val binModel: BinScreenModel by inject()
-    private val syncModel: SyncScreenModel by inject()
+    private val highlighter: Highlighter by inject()
     private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +48,14 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
             LockModeHandler(settingsModel)
             ScreenshotHandler(window, settingsModel)
 
-            MainTheme(settingsModel) {
-                BottomSheetNavigator(
-                    sheetShape = ShapeDefaults.Large,
-                    sheetElevation = 150.dp
-                ) {
-                    Navigator(MainScreen())
+            CompositionLocalProvider(LocalHighlighter provides highlighter) {
+                MainTheme(settingsModel) {
+                    BottomSheetNavigator(
+                        sheetShape = ShapeDefaults.Large,
+                        sheetElevation = 150.dp
+                    ) {
+                        Navigator(MainScreen())
+                    }
                 }
             }
         }
