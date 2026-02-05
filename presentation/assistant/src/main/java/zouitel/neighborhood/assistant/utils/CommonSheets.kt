@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -70,7 +71,7 @@ fun SheetLayout(
 
         is SheetContent.Body -> BodySheet(content.body, onClose, content.onDone)
         is SheetContent.Header -> HeaderSheet(content.header, onClose, content.onDone)
-        is SheetContent.Modes -> ModelsListSheet(content.models, onClose, content.onDone)
+//        is SheetContent.Modes -> ModelsListSheet(content.models, onClose, content.onDone)
         is SheetContent.Reset -> ResetSheet(onClose, content.confirm)
         is SheetContent.Save -> SaveSheet(content.onSave, content.onDiscard, onClose)
         else -> Unit
@@ -78,7 +79,7 @@ fun SheetLayout(
 }
 
 @Composable
-fun QuickMessageSheet(
+internal fun QuickMessageSheet(
     quickMessage: QuickMessage,
     onClose: () -> Unit,
     onDone: (QuickMessage) -> Unit
@@ -94,13 +95,13 @@ fun QuickMessageSheet(
             message.title,
             { message = message.copy(title = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Title.."
+            "Title"
         )
         CommonTextField(
             message.content,
             { message = message.copy(content = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Content.."
+            "Content"
         )
         CommonInsert(message.title.isNotEmpty() && message.content.isNotEmpty()) {
             onDone(message)
@@ -111,14 +112,15 @@ fun QuickMessageSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MessageRegexSheet(
+internal fun MessageRegexSheet(
     regex: AssistantRegex,
     onClose: () -> Unit,
     onDone: (AssistantRegex) -> Unit
 ) {
     var currentRegex by remember { mutableStateOf(regex) }
+    val sheetState = rememberModalBottomSheetState(true)
 
-    ModalBottomSheet(onClose) {
+    ModalBottomSheet(onClose, sheetState = sheetState) {
         Row(
             Modifier.fillMaxWidth()
                 .padding(8.dp),
@@ -143,19 +145,19 @@ fun MessageRegexSheet(
             currentRegex.name,
             { currentRegex = currentRegex.copy(name = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Name.."
+            "Name"
         )
         CommonTextField(
             currentRegex.findRegex,
             { currentRegex = currentRegex.copy(findRegex = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Find.."
+            "Find"
         )
         CommonTextField(
             currentRegex.replaceString,
             { currentRegex = currentRegex.copy(replaceString = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Replace..",
+            "Replace",
             textColor = MaterialTheme.colorScheme.error
         )
 
@@ -181,7 +183,7 @@ fun MessageRegexSheet(
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor =
                             if (AssistantAffectScope.ASSISTANT in currentRegex.affectingScope) CommonColors.prime else MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = if (AssistantAffectScope.ASSISTANT in currentRegex.affectingScope) Color.White else MaterialTheme.colorScheme.onSurface
+                        contentColor = if (AssistantAffectScope.ASSISTANT in currentRegex.affectingScope) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface
                     )
                 ) {
                     AnimatedVisibility(AssistantAffectScope.ASSISTANT in currentRegex.affectingScope) {
@@ -214,7 +216,7 @@ fun MessageRegexSheet(
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor =
                             if (AssistantAffectScope.USER in currentRegex.affectingScope) CommonColors.prime else MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = if (AssistantAffectScope.USER in currentRegex.affectingScope) Color.White else MaterialTheme.colorScheme.onSurface
+                        contentColor = if (AssistantAffectScope.USER in currentRegex.affectingScope) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface
                     )
                 ) {
                     AnimatedVisibility(AssistantAffectScope.USER in currentRegex.affectingScope) {
@@ -237,7 +239,7 @@ fun MessageRegexSheet(
                 colors = ButtonDefaults.filledTonalButtonColors(
                     containerColor =
                         if (currentRegex.visualOnly) CommonColors.prime else MaterialTheme.colorScheme.surfaceContainer,
-                    contentColor = if (currentRegex.visualOnly) Color.White else MaterialTheme.colorScheme.onSurface
+                    contentColor = if (currentRegex.visualOnly) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface
                 )
             ) {
                 AnimatedVisibility(currentRegex.visualOnly) {
@@ -255,7 +257,6 @@ fun MessageRegexSheet(
             }
         }
 
-
         CommonInsert(
             currentRegex.name.isNotEmpty() &&
                     currentRegex.findRegex.isNotEmpty() &&
@@ -267,27 +268,27 @@ fun MessageRegexSheet(
     }
 }
 
-@Composable
-private fun ModelsListSheet(
-    models: List<Model>,
-    onClose: () -> Unit,
-    onClick: (String) -> Unit
-) {
-    val scope = rememberCoroutineScope()
-
-    ModalBottomSheet(onClose) {
-        for (model in models) {
-            Button({
-                scope.launch {
-                    onClick(model.modelId)
-                    onClose()
-                }
-            }) {
-                Text(model.displayName)
-            }
-        }
-    }
-}
+//@Composable
+//internal fun ModelsListSheet(
+//    models: List<Model>,
+//    onClose: () -> Unit,
+//    onClick: (String) -> Unit
+//) {
+//    val scope = rememberCoroutineScope()
+//
+//    ModalBottomSheet(onClose) {
+//        for (model in models) {
+//            Button({
+//                scope.launch {
+//                    onClick(model.modelId)
+//                    onClose()
+//                }
+//            }) {
+//                Text(model.displayName)
+//            }
+//        }
+//    }
+//}
 
 @Composable
 internal fun BodySheet(
@@ -304,13 +305,13 @@ internal fun BodySheet(
                 key,
                 { key = it },
                 Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                "Key.."
+                "Key"
             )
             CommonTextField(
                 value,
                 { value = it },
                 Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                "\"Value..\""
+                "\"Value\""
             )
             CommonInsert(key.isNotEmpty() && value.isNotEmpty()) {
                 onDone(currentBody.copy(key = key, value = JsonPrimitive(value)))
@@ -332,13 +333,13 @@ internal fun HeaderSheet(
             header.name,
             { header = header.copy(name = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Name.."
+            "Name"
         )
         CommonTextField(
             header.value,
             { header = header.copy(value = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Value.."
+            "Value"
         )
         CommonInsert(header.name.isNotEmpty() && header.value.isNotEmpty()) {
             onDone(header)
@@ -354,7 +355,7 @@ internal fun ResetSheet(
 ) {
     ModalBottomSheet(onClose) {
         CommonActivationItem(
-            "Reset the assistant configuration to default mode.",
+            "Reset the assistant settings to default mode.",
             null,
             null,
             null,
@@ -382,14 +383,10 @@ internal fun SaveSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Image(
-                painterResource(R.drawable.floppy_disk),
-                null
-            )
-
             Text(
                 text = "Save changes?",
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
 

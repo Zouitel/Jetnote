@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.ai.provider.CustomBody
 import zouitel.neighborhood.ai.provider.CustomHeader
 import zouitel.neighborhood.ai.provider.Model
@@ -110,6 +111,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
         settingsModel: SettingsScreenModel
     ) {
         val navigator = LocalNavigator.current
+        val bottomNav = LocalBottomSheetNavigator.current
 
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
 
@@ -132,11 +134,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
         var quickMessageState by remember { mutableStateOf(QuickMessage()) }
         var messageRegexSheet by remember { mutableStateOf(false) }
         var messageRegexState by remember {
-            mutableStateOf(
-                AssistantRegex(
-                    Random.Default.nextInt().toShort()
-                )
-            )
+            mutableStateOf(AssistantRegex(Random.nextInt().toShort()))
         }
         var headerSheet by remember { mutableStateOf(false) }
         var headerState by remember { mutableStateOf(CustomHeader("", "")) }
@@ -175,7 +173,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Assistant Configurations") },
+                    title = { Text("Assistant Settings") },
                     navigationIcon = {
                         IconButton({
                             if (hasUnsavedChanges) {
@@ -200,15 +198,15 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                     )
                 }
             },
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .reportable(settings.isShakable)
-                .cloudy(enabled = quickMessageSheet || messageRegexSheet || headerSheet || bodySheet || resetSheet || saveSheet)
+                .cloudy(enabled = quickMessageSheet || messageRegexSheet || headerSheet || bodySheet || resetSheet || saveSheet || bottomNav.isVisible)
         ) { paddingValues ->
             LazyColumn(
                 state = listState,
-                modifier = Modifier.Companion.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = paddingValues
             ) {
                 item {
@@ -253,7 +251,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     }
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "Learning Mode",
@@ -266,7 +264,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             AsyncImage(
                                 R.drawable.creative_brain,
                                 null,
-                                contentScale = ContentScale.Companion.Crop
+                                contentScale = ContentScale.Crop
                             )
                         },
                         currentAssistant.value.learningMode,
@@ -276,7 +274,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         {}
                     ) {}
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "Temperature",
@@ -330,7 +328,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                         thumbColor = Color.Companion.White,
                                         activeTrackColor = CommonColors.prime
                                     ),
-                                    modifier = Modifier.Companion
+                                    modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = 10.dp)
                                 )
@@ -338,7 +336,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "Top P",
@@ -385,10 +383,10 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                     },
                                     enabled = currentAssistant.value.topP != null,
                                     colors = SliderDefaults.colors(
-                                        thumbColor = Color.Companion.White,
+                                        thumbColor = Color.White,
                                         activeTrackColor = CommonColors.prime
                                     ),
-                                    modifier = Modifier.Companion
+                                    modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = 10.dp)
                                 )
@@ -396,7 +394,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "Context message size",
@@ -433,10 +431,10 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                     },
                                     valueRange = 1f..512f,
                                     colors = SliderDefaults.colors(
-                                        thumbColor = Color.Companion.White,
+                                        thumbColor = Color.White,
                                         activeTrackColor = CommonColors.prime
                                     ),
-                                    modifier = Modifier.Companion
+                                    modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = 10.dp)
                                 )
@@ -444,7 +442,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "Stream output",
@@ -456,7 +454,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     ChooserItem(
                         currentAssistant,
@@ -474,7 +472,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     }
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     val promptsEntries = remember { systemPrompts.entries.toList() }
 
@@ -486,7 +484,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         content = {
                             CommonTextField(
                                 state = promptState,
-                                modifier = Modifier.Companion.heightIn(220.dp),
+                                modifier = Modifier.heightIn(220.dp),
                                 placeholder = "Prompt.."
                             )
                             Text("Properties:")
@@ -501,7 +499,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
                         "Quick messages",
@@ -547,7 +545,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         quickMessageSheet = true
                     }
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
                         "Regular expressions",
@@ -596,7 +594,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         messageRegexSheet = true
                     }
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
                         "Headers",
@@ -648,7 +646,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         headerSheet = true
                     }
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
                         "Bodies",
@@ -699,7 +697,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         bodySheet = true
                     }
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "Memory",
@@ -712,7 +710,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         { currentAssistant.value = currentAssistant.value.copy(enableMemory = it) }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "Recent Chats Reference",
@@ -728,7 +726,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
                         "JavaScript engine",
@@ -757,10 +755,11 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         }
                     )
                 }
-                item { HorizontalDivider(Modifier.Companion.padding(10.dp, 20.dp)) }
+                item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     Row(
-                        Modifier.Companion.fillMaxWidth(),
+                        Modifier.fillMaxWidth()
+                            .padding(vertical = 30.dp),
                         Arrangement.Center
                     ) {
                         FilledTonalButton(
@@ -771,7 +770,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             )
                         ) {
                             Text(
-                                "Reset configurations!",
+                                "Reset Settings!",
                                 style = MaterialTheme.typography.titleLarge
                             )
                         }

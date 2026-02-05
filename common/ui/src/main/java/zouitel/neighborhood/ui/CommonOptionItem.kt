@@ -105,7 +105,7 @@ fun CommonInsert(enable: Boolean = true, onConfirm: () -> Unit) {
         Button(
             onClick = onConfirm,
             colors = ButtonDefaults.buttonColors(
-                contentColor = MaterialTheme.colorScheme.onSurface,
+                contentColor = MaterialTheme.colorScheme.surface,
                 containerColor = CommonColors.prime
             ),
             enabled = enable

@@ -60,6 +60,7 @@ import zouitel.neighborhood.ui.webview.WebViewPageScreen
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 data class GoogleConfigurationScreen(private val provider: ProviderSetting.Google): Screen {
     @Composable
@@ -90,6 +91,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
         }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+        val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
 
         LaunchedEffect(Unit) {
             providerModel.upsert(provider)
@@ -146,7 +148,11 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .cloudy(enabled = showSaveSheet)
         ) { contentPadding ->
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = contentPadding) {
+            LazyColumn(
+                Modifier.fillMaxSize().then(listHeight),
+                lazyListState,
+                contentPadding = contentPadding
+            ) {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
                     CommonActivationItem(
@@ -165,7 +171,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Vertex A.I",
+                        "Vertex AI",
                         "",
                         {
                             Image(
@@ -182,25 +188,29 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                             currentProvider.serviceAccountEmail,
                             { currentProvider = currentProvider.copy(serviceAccountEmail = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Service account @email.com"
+                            "Service account @email.com",
+                            currentProvider.vertexAI
                         )
                         CommonTextField(
                             currentProvider.privateKey,
                             { currentProvider = currentProvider.copy(privateKey = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Private key.."
+                            "Private key..",
+                            currentProvider.vertexAI
                         )
                         CommonTextField(
                             currentProvider.location,
                             { currentProvider = currentProvider.copy(location = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Location.."
+                            "Location..",
+                            currentProvider.vertexAI
                         )
                         CommonTextField(
                             currentProvider.projectId,
                             { currentProvider = currentProvider.copy(projectId = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Project UID.."
+                            "Project UID..",
+                            currentProvider.vertexAI
                         )
                     }
                 }
@@ -219,12 +229,12 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp),
+                            enabled = currentProvider.vertexAI.not(),
                             placeholder = { Text(placeholder, fontSize = 19.sp) },
                             trailingIcon = {
                                 IconButton({
                                     runCatching {
-                                        val link =
-                                            currentProvider.apiLink.ifEmpty { "https://www.google.com" }
+                                        val link = currentProvider.apiLink.ifEmpty { "https://www.google.com" }
                                         uriHandler.openUri(link)
                                     }.getOrElse {
                                         navigator?.push(WebViewPageScreen(currentProvider.apiLink.ifEmpty { "" }))
@@ -241,6 +251,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                 unfocusedPlaceholderColor = Color.Gray,
                                 focusedBorderColor = Color.Transparent,
                                 unfocusedBorderColor = Color.Transparent,
+                                disabledBorderColor = Color.Transparent,
                                 focusedTrailingIconColor = Color.Gray,
                                 unfocusedTrailingIconColor = Color.Gray
                             )
@@ -282,7 +293,8 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Host.."
+                            "Host..",
+                            currentProvider.proxy.enabled
                         )
 
                         BasicTextField(
@@ -294,6 +306,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                             modifier = Modifier
                                 .padding(7.dp)
                                 .background(Color.Transparent),
+                            enabled = currentProvider.proxy.enabled,
                             textStyle = TextStyle(
                                 fontSize =  TextUnit(19f, TextUnitType.Sp),
                                 fontWeight = FontWeight.Normal,
@@ -316,7 +329,8 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Username (Optional).."
+                            "Username (Optional)..",
+                            currentProvider.proxy.enabled
                         )
 
                         CommonTextField(
@@ -327,7 +341,8 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Password (Optional).."
+                            "Password (Optional)..",
+                            currentProvider.proxy.enabled
                         )
                     }
                 }

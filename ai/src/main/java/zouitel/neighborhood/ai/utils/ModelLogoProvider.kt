@@ -2,7 +2,7 @@ package zouitel.neighborhood.ai.utils
 
 object ModelLogoProvider {
     fun getLogoUrl(modelId: String): String? {
-        return logoMappings.entries.find { it.key in modelId }?.value
+        return logoMappings.entries.find { it.key in modelId.lowercase() }?.value
     }
 
     private val logoMappings = hashMapOf(
@@ -55,5 +55,6 @@ object ModelLogoProvider {
         "essentialai" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/essentialai-color.png",
         "deepcogito" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/deepcogito-color.png",
         "inception" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/inception.png",
+        "groq" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/groq.png",
     )
 }

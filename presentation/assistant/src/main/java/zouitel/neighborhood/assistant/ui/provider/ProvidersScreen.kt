@@ -32,6 +32,7 @@ import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.ui.rememberAutoHeightCacheStaggeredGrid
 
 class ProvidersScreen: Screen {
     @Composable
@@ -49,10 +50,11 @@ class ProvidersScreen: Screen {
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+
         Scaffold(
             topBar = {
                 TopAppBar(
-                    { Text("A.I Providers") },
+                    { Text("AI Providers") },
                     Modifier,
                     {
                         IconButton({
@@ -72,7 +74,7 @@ class ProvidersScreen: Screen {
             LazyVerticalStaggeredGrid(
                 StaggeredGridCells.Fixed(2),
                 Modifier.fillMaxSize(),
-                contentPadding = paddingValues,
+                contentPadding = paddingValues
             ) {
                 items(DEFAULT_PROVIDERS) { it ->
                     ProviderCard(it) {

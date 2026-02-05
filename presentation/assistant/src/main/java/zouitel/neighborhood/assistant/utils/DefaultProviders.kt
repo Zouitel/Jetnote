@@ -30,7 +30,7 @@ val DEFAULT_PROVIDERS = listOf(
     // LLM, Image (GPT-4, DALL-E)
     ProviderSetting.GlobalAI(
         id = 3,
-        name = "OpenAI",
+        name = "OpenAI GPT",
         baseUrl = "https://api.openai.com/v1",
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/openai.png",
         apiLink = "https://platform.openai.com/api-keys",
@@ -47,23 +47,30 @@ val DEFAULT_PROVIDERS = listOf(
         id = 4,
         name = "Deepseek",
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/deepseek-color.png",
-        baseUrl = "https://api.deepseek.com",
+        baseUrl = "https://api.deepseek.com/v1",
         apiLink = "https://platform.deepseek.com/api_keys",
+        builtIn = true,
         description = """
             Offers high-performance, open-source
             models (DeepSeek-Coder/DeepSeek-MoE)
             specialized for code generation,
             competitive benchmarking, and general
             reasoning.
-        """.trimIndent()
+        """.trimIndent(),
+        balanceOption = BalanceOption(
+            enabled = true,
+            apiPath = "/user/balance",
+            resultPath = "balance_infos[0].total_balance"
+        )
     ),
     //Grok
     ProviderSetting.GlobalAI(
         id = 5,
-        name = "Grok (xAI)",
+        name = "xAI Grok",
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/grok.png",
         baseUrl = "",
-        apiLink = "https://console.x.ai",
+        apiLink = "https://api.x.ai/v1",
+        builtIn = true,
         description = """
             The large language model developed by
             xAI, known for its distinct, witty personality
@@ -78,36 +85,49 @@ val DEFAULT_PROVIDERS = listOf(
         name = "Silicon Cloud",
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/siliconcloud-color.png",
         baseUrl = "",
-        apiLink = "https://cloud.siliconflow.cn/account/ak",
+        apiLink = "https://api.siliconflow.cn/v1",
+        builtIn = true,
         description = """
             General cloud providers specializing in
             offering large-scale computational
             infrastructure and hosting for various LLM
             models, often serving the Chinese market.
-        """.trimIndent()
+        """.trimIndent(),
+        balanceOption = BalanceOption(
+            enabled = true,
+            apiPath = "/user/info",
+            resultPath = "data.totalBalance",
+        ),
     ),
     //
     ProviderSetting.GlobalAI(
         id = 7,
-        name = "Kimi (Moonshot AI)",
+        name = "Moonshot AI Kimi",
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/kimi-color.png",
         baseUrl = "https://api.moonshot.cn/v1",
         apiLink = "https://platform.moonshot.ai/console/api-keys",
+        builtIn = true,
         description = """
             Known for its extremely long context
             window capacity, making its models highly
             effective for processing massive
             documents, analyzing complex reports,
             and summarization.
-        """.trimIndent()
+        """.trimIndent(),
+        balanceOption = BalanceOption(
+            enabled = true,
+            apiPath = "/users/me/balance",
+            resultPath = "data.available_balance"
+        )
     ),
     //
     ProviderSetting.GlobalAI(
         id = 8,
-        name = "Qwen (Alibaba Cloud)",
+        name = "Alibaba Cloud Qwen",
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/qwen-color.png",
-        baseUrl = "https://dashscope.aliyuncs.com/api/v1/services/aigc/",
+        baseUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1",
         apiLink = "https://account.aliyun.com/login/login.htm?oauth_callback=https%3A%2F%2Fdashscope.console.aliyun.com%2FapiKey&clearRedirectCookie=1&lang=zh",
+        builtIn = true,
         description = """
             Alibaba's large-scale LLM, Tongyi Qianwen
             (Qwen), offering robust performance
@@ -122,6 +142,7 @@ val DEFAULT_PROVIDERS = listOf(
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/zhipu-color.png",
         baseUrl = "https://open.bigmodel.cn/api/paas/v4",
         apiLink = "https://open.bigmodel.cn/login?redirect=%2Fusercenter%2Fproj-mgmt%2Fapikeys",
+        builtIn = true,
         description = """
             Chinese LLM provider known for its GLM
             series, strong in function calling,
@@ -135,7 +156,8 @@ val DEFAULT_PROVIDERS = listOf(
         name = "ByteDance",
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/bytedance-color.png",
         apiLink = "https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey",
-        baseUrl = "",
+        baseUrl = "https://ark.cn-beijing.volces.com/api/v3",
+        builtIn = true,
         description = """
             Parent company of TikTok, providing
             various AI services, including its Doubao
@@ -151,6 +173,7 @@ val DEFAULT_PROVIDERS = listOf(
         logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/openrouter.png",
         baseUrl = "https://openrouter.ai/api/v1",
         apiLink = "https://openrouter.ai/settings/keys",
+        builtIn = true,
         description = """
             It is a unified API gateway (often called an
             LLM aggregator) that allows you to access
@@ -164,14 +187,28 @@ val DEFAULT_PROVIDERS = listOf(
             resultPath = "data.total_credits - data.total_usage",
         )
     ),
+    //
+    ProviderSetting.GlobalAI(
+        id = 12,
+        name = "AiHubMix",
+        logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/aihubmix-color.png",
+        baseUrl = "https://aihubmix.com/v1",
+        apiLink = "https://console.aihubmix.com/token",
+        builtIn = true,
+        description = """
+            AIHubMix is a high-performance API Aggregator and Router designed for developers who want to access multiple AI models (OpenAI, Claude, Gemini, DeepSeek, Llama, etc.) through a single, unified interface.
+        """.trimIndent()
+    ),
     // Groq.
-//    ProviderSetting.GlobalAI(
-//        name = "Groq",
-    // apiKey = "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",
-    //        baseUrl = "",
-//        description = """
-//        """.trimIndent()
-//    ),
+    ProviderSetting.GlobalAI(
+        name = "Groq",
+        baseUrl = "https://api.groq.com/openai/v1",
+        apiLink = "https://console.groq.com/keys",
+        builtIn = true,
+        description = """
+            Groq is the "Speed King" of the AI world. While most companies (like OpenAI or Google) rely on standard GPUs (Graphics Processing Units), Groq built its own custom hardware called the LPU (Language Processing Unit).
+        """.trimIndent()
+    ),
     // LLM, Services (Copilot)
 //    ProviderSetting.GlobalAI(
 //        id = 5,

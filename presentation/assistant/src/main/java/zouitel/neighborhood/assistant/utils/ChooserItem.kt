@@ -92,7 +92,7 @@ fun ChooserItem(
             Text(
                 text = description!!,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (isSystemInDarkTheme()) Color.LightGray else Color.DarkGray
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -123,7 +123,7 @@ fun ChooserItem(
                         containerColor =
                             if (budgetKey == currentAssistant.value.thinkingBudget) CommonColors.prime
                             else MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = if (budgetKey == currentAssistant.value.thinkingBudget) Color.White
+                        contentColor = if (budgetKey == currentAssistant.value.thinkingBudget) MaterialTheme.colorScheme.surface
                         else MaterialTheme.colorScheme.onSurface
                     )
                 ) {

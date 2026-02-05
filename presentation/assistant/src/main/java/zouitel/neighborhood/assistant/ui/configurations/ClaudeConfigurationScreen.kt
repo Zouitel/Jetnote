@@ -47,6 +47,7 @@ import zouitel.neighborhood.ui.webview.WebViewPageScreen
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): Screen {
     @Composable
@@ -75,6 +76,7 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
         }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+        val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
 
         LaunchedEffect(Unit) {
             providerModel.upsert(provider)
@@ -131,7 +133,10 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .cloudy(enabled = showSaveSheet)
         ) { contentPadding ->
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = contentPadding) {
+            LazyColumn(
+                Modifier.fillMaxSize().then(listHeight),
+                lazyListState,
+                contentPadding = contentPadding) {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
                     CommonActivationItem(

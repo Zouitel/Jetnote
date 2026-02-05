@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.assistant.model.Assistant
-import zouitel.neighborhood.assistant.ui.configurations.AssistantConfigurationScreen
+import zouitel.neighborhood.assistant.ui.assistant.AssistantScreen
 import zouitel.neighborhood.assistant.ui.provider.ProvidersScreen
 import zouitel.neighborhood.ui.CommonIcons
 
@@ -51,7 +51,7 @@ internal fun ChatActionsMenu(
             { Text("Assistant", style = MaterialTheme.typography.bodyLarge) },
             {
                 expanded.value = false
-                navigator?.push(AssistantConfigurationScreen(assistant))
+                navigator?.push(AssistantScreen(assistant))
             },
             Modifier.padding(horizontal = 10.dp),
             {

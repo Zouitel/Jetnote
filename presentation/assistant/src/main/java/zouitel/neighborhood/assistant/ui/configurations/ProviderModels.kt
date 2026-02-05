@@ -2,6 +2,7 @@ package zouitel.neighborhood.assistant.ui.configurations
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -60,6 +63,7 @@ internal fun ModelsList(
     providerManager: ProviderManager,
     modelsModel: ModelsScreenModel
 ) {
+    val providerInstance = providerManager.getProviderByType(provider)
     var isInitialLoading by remember { mutableStateOf(true) }
     var isLoadingMore by remember { mutableStateOf(false) }
     var currentPage by remember { mutableIntStateOf(0) }
@@ -76,28 +80,29 @@ internal fun ModelsList(
         loadedModels = emptyList()
 
         runCatching {
-            val providerInstance = providerManager.getProviderByType(provider)
-
             // Check if provider supports pagination
-            when {
-                providerInstance is GlobalProvider && provider is ProviderSetting.GlobalAI -> {
+            when (providerInstance) {
+                is GlobalProvider if provider is ProviderSetting.GlobalAI -> {
                     val page = providerInstance.listModelsPaginated(provider, 0)
                     loadedModels = page.models.sortedBy { it.modelId }
                     hasMorePages = page.hasMore
                     currentPage = page.nextPage
                 }
-                providerInstance is GoogleProvider && provider is ProviderSetting.Google -> {
+
+                is GoogleProvider if provider is ProviderSetting.Google -> {
                     val page = providerInstance.listModelsPaginated(provider, 0)
                     loadedModels = page.models.sortedBy { it.modelId }
                     hasMorePages = page.hasMore
                     currentPage = page.nextPage
                 }
-                providerInstance is ClaudeProvider && provider is ProviderSetting.Claude -> {
+
+                is ClaudeProvider if provider is ProviderSetting.Claude -> {
                     val page = providerInstance.listModelsPaginated(provider, 0)
                     loadedModels = page.models.sortedBy { it.modelId }
                     hasMorePages = page.hasMore
                     currentPage = page.nextPage
                 }
+
                 else -> {
                     // Fallback to old method for providers without pagination
                     loadedModels = providerInstance
@@ -120,23 +125,23 @@ internal fun ModelsList(
             scope.launch {
                 isLoadingMore = true
                 runCatching {
-                    val providerInstance = providerManager.getProviderByType(provider)
-
                     // Check if provider supports pagination
-                    when {
-                        providerInstance is GlobalProvider && provider is ProviderSetting.GlobalAI -> {
+                    when (val providerInstance = providerManager.getProviderByType(provider)) {
+                        is GlobalProvider if provider is ProviderSetting.GlobalAI -> {
                             val page = providerInstance.listModelsPaginated(provider, currentPage)
                             loadedModels = (loadedModels + page.models).sortedBy { it.modelId }
                             hasMorePages = page.hasMore
                             currentPage = page.nextPage
                         }
-                        providerInstance is GoogleProvider && provider is ProviderSetting.Google -> {
+
+                        is GoogleProvider if provider is ProviderSetting.Google -> {
                             val page = providerInstance.listModelsPaginated(provider, currentPage)
                             loadedModels = (loadedModels + page.models).sortedBy { it.modelId }
                             hasMorePages = page.hasMore
                             currentPage = page.nextPage
                         }
-                        providerInstance is ClaudeProvider && provider is ProviderSetting.Claude -> {
+
+                        is ClaudeProvider if provider is ProviderSetting.Claude -> {
                             val page = providerInstance.listModelsPaginated(provider, currentPage)
                             loadedModels = (loadedModels + page.models).sortedBy { it.modelId }
                             hasMorePages = page.hasMore
@@ -196,9 +201,13 @@ internal fun ModelsList(
                     } else {
                         Button(
                             onClick = loadMoreModels,
-                            enabled = !isLoadingMore
+                            border = BorderStroke(1.dp, CommonColors.prime),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent,
+                                contentColor = CommonColors.prime
+                            )
                         ) {
-                            Text("Load More (${loadedModels.size} loaded)")
+                            Text("Load More")
                         }
                     }
                 }
@@ -229,7 +238,7 @@ private fun AddModels(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Available Models: (${loadedModels.size})",
+            text = "Available Models: ${loadedModels.size}",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )

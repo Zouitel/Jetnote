@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +58,7 @@ import zouitel.neighborhood.ui.webview.WebViewPageScreen
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI): Screen  {
     @Composable
@@ -86,9 +88,21 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
         }
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+        val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
 
         LaunchedEffect(provider) {
             providerModel.upsert(provider)
+        }
+
+        // Clear models cache when navigating back from this screen
+        DisposableEffect(Unit) {
+            onDispose {
+                // Get the GlobalProvider and clear its cache when leaving the screen
+                val globalProvider = providerManager.getProvider("global")
+                if (globalProvider is zouitel.neighborhood.ai.provider.providers.GlobalProvider) {
+                    globalProvider.clearModelsCache()
+                }
+            }
         }
 
         BackHandler(enabled = hasUnsavedChanges) {
@@ -142,7 +156,10 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .cloudy(enabled = showSaveSheet)
         ) { contentPadding ->
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = contentPadding) {
+            LazyColumn(
+                Modifier.fillMaxSize().then(listHeight),
+                lazyListState,
+                contentPadding = contentPadding) {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
                     CommonActivationItem(
@@ -330,30 +347,13 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                     }
                 }
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                item(currentProvider.apiKey) {
+                item(currentProvider.id) {
                     ModelsList(
                         provider = currentProvider,
                         modelsModel = modelsModel,
                         providerManager = providerManager
                     )
                 }
-//                item {
-//                    Row(Modifier.fillMaxWidth().navigationBarsPadding(), Arrangement.Center) {
-//                        FilledTonalButton({
-//                            currentProvider = ProviderSetting.GlobalAI(3)
-//                        },
-//                            colors = ButtonDefaults.filledTonalButtonColors(
-//                                MaterialTheme.colorScheme.errorContainer,
-//                                MaterialTheme.colorScheme.onErrorContainer
-//                            )
-//                        ) {
-//                            Text(
-//                                "Reset Configurations!",
-//                                style = MaterialTheme.typography.titleLarge
-//                            )
-//                        }
-//                    }
-//                }
             }
         }
     }

@@ -35,7 +35,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import zouitel.neighborhood.account.SyncScreen
 import zouitel.neighborhood.assistant.model.Assistant
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
-import zouitel.neighborhood.assistant.ui.configurations.AssistantConfigurationScreen
 import zouitel.neighborhood.navigator.R
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
@@ -54,6 +53,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.assistant.ui.assistant.AssistantScreen
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
@@ -181,7 +181,7 @@ class SettingsScreen: Screen {
                                     )
                                 }
                             ) {
-                                navigator.push(AssistantConfigurationScreen(assistant))
+                                navigator.push(AssistantScreen(assistant))
                             }
                         }
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
