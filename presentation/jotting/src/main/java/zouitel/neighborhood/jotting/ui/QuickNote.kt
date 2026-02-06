@@ -38,6 +38,7 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -103,7 +105,7 @@ fun QuickNote(
     val context = LocalContext.current
     val keyboard = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
-    val focus by lazy { FocusRequester() }
+    val focus = remember { FocusRequester() }
     val pictureUri = rememberSaveable { mutableStateOf<Uri?>(null) }
     val snackbarState = remember { SnackbarHostState() }
     val toolTipState = rememberTooltipState(isPersistent = true)
@@ -134,6 +136,19 @@ fun QuickNote(
     val textColor = contentColorFor(MaterialTheme.colorScheme.surface).toArgb()
     val textColorState = rememberSaveable { mutableIntStateOf(textColor) }
 
+    // Replace your existing LaunchedEffect(screen.value) for focus with this:
+    LaunchedEffect(Unit) { // Use Unit or a specific "Open" trigger
+        // 1. Wait for the composition to settle and the window to be ready
+        kotlinx.coroutines.delay(200)
+
+        // 2. Request focus on the TextField
+        focus.requestFocus()
+
+        // 3. Explicitly tell the keyboard controller to show
+        // Note: Sometimes keyboard?.show() fails if not called directly on the focusable view
+        keyboard?.show()
+    }
+
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success ->
@@ -151,7 +166,6 @@ fun QuickNote(
         dataModel.sendAction(Action.Insert(data))
         when (screen.value) {
             Screens.NOTE_SCREEN -> {
-                focus.requestFocus()
                 playerModel.run {
                     initController()
                 }
@@ -225,7 +239,8 @@ fun QuickNote(
         properties = PopupProperties(
             focusable = true,
             dismissOnBackPress = false,
-            dismissOnClickOutside = false
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false  // Allow custom width
         )
     ) {
         Scaffold(
@@ -275,7 +290,7 @@ fun QuickNote(
                             scope.launch {
                                 snackBarHostState.currentSnackbarData?.dismiss()
                                 val result = snackBarHostState.showSnackbar(
-                                    message = "${mediaPair.first.title} deleted",
+                                    message = "media deleted",
                                     actionLabel = "Undo",
                                     duration = SnackbarDuration.Long
                                 )
@@ -324,7 +339,7 @@ fun QuickNote(
                                     scope.launch {
                                         snackBarHostState.currentSnackbarData?.dismiss()
                                         val result = snackBarHostState.showSnackbar(
-                                            message = "${audioPair.first.title} deleted",
+                                            message = "record deleted",
                                             actionLabel = "Undo",
                                             duration = SnackbarDuration.Long
                                         )
@@ -454,6 +469,7 @@ fun QuickNote(
                                                     Action.Insert(
                                                         data.value.copy(
                                                             uid = data.value.uid,
+                                                            title = "Untitled",
                                                             description = descriptionState.text.toString(),
                                                             background = backgroundColorState.intValue,
                                                             textColor = textColorState.intValue

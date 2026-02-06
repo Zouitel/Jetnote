@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CommonTextField(
     state: TextFieldState,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     placeholder: String = "...",
     textSize: TextUnit = TextUnit(19f, TextUnitType.Sp),
     textColor: Color = Color.LightGray,

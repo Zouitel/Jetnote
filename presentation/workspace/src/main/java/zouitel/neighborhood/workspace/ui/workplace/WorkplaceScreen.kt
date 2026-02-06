@@ -52,6 +52,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -116,6 +117,8 @@ data class WorkplaceScreen(
         val uid = Uuid.random().toString()
         val keyboardManager = LocalFocusManager.current
         val navBottomSheet = LocalBottomSheetNavigator.current
+        val keyboard = LocalSoftwareKeyboardController.current
+
         val titleState = rememberTextFieldState(data.title)
         val descriptionState = rememberTextFieldState(data.description)
         val defaultBackground = MaterialTheme.colorScheme.surface.toArgb()
@@ -161,9 +164,22 @@ data class WorkplaceScreen(
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
-        LaunchedEffect(true) {
-            if (isNew) focus.requestFocus()
+//        LaunchedEffect(true) {
+//            if (isNew) focus.requestFocus()
+//        }
+        // Replace your existing LaunchedEffect(screen.value) for focus with this:
+        LaunchedEffect(Unit) { // Use Unit or a specific "Open" trigger
+            // 1. Wait for the composition to settle and the window to be ready
+            kotlinx.coroutines.delay(200)
+
+            // 2. Request focus on the TextField
+            focus.requestFocus()
+
+            // 3. Explicitly tell the keyboard controller to show
+            // Note: Sometimes keyboard?.show() fails if not called directly on the focusable view
+            keyboard?.show()
         }
+
 
         Scaffold(
             containerColor = Color(currentData.value.background ?: defaultBackground),

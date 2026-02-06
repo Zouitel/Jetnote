@@ -2,6 +2,8 @@ package zouitel.neighborhood.jotting
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -34,6 +36,7 @@ import kotlinx.coroutines.cancel
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import kotlin.uuid.Uuid
+import androidx.core.graphics.drawable.toDrawable
 
 class QuickActivity: ComponentActivity(), KoinComponent {
 
@@ -52,7 +55,7 @@ class QuickActivity: ComponentActivity(), KoinComponent {
         super.onCreate(savedInstanceState)
         handleIncomingIntent(intent)
         permissionModel.activityBind(this)
-
+        window.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         setContent {
             val descriptionState = rememberTextFieldState(description.value)
             val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
