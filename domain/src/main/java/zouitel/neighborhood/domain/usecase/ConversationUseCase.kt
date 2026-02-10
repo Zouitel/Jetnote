@@ -19,4 +19,8 @@ sealed class ConversationUseCase {
     data class Delete(private val repo: ConversationRepo): ConversationUseCase() {
         suspend operator fun invoke(id: String) = repo.delete(id)
     }
+
+    data class Cleanup(private val repo: ConversationRepo): ConversationUseCase() {
+        suspend operator fun invoke() = repo.cleanup()
+    }
 }

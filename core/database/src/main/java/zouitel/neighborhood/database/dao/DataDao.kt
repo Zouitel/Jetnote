@@ -23,15 +23,6 @@ interface DataDao {
     @Query("UPDATE $TABLE_NAME SET USER_UNIQUE_IDENTIFIER = :userUid WHERE $USER_UID = 'null'")
     suspend fun combineUser(userUid: String?)
 
-    @Query("UPDATE $TABLE_NAME SET DATE = datetime('now') WHERE $UUID = :uid")
-    suspend fun lastEdit(uid: String)
-
-    @Transaction
-    suspend fun insert(data: Data) {
-        upsert(data)
-        lastEdit(data.uid)
-    }
-
     @Query("UPDATE $TABLE_NAME SET ARCHIVED = 1 WHERE $UUID = :uid")
     suspend fun archive(uid: String)
 

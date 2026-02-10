@@ -3,7 +3,6 @@ package zouitel.neighborhood.jotting
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,7 +23,7 @@ import androidx.compose.ui.graphics.toArgb
 import zouitel.neighborhood.audio.player.PlaybackManager
 import zouitel.neighborhood.permissions.PermissionScreenModel
 import zouitel.neighborhood.jotting.model.Screens
-import zouitel.neighborhood.jotting.ui.QuickNote
+import zouitel.neighborhood.jotting.ui.Jotting
 import zouitel.neighborhood.ui.MainTheme
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.Data
@@ -38,7 +37,7 @@ import org.koin.core.component.KoinComponent
 import kotlin.uuid.Uuid
 import androidx.core.graphics.drawable.toDrawable
 
-class QuickActivity: ComponentActivity(), KoinComponent {
+class JottingActivity: ComponentActivity(), KoinComponent {
 
     private var mediaUri = mutableStateOf<Uri?>(null)
     private var isVideo = mutableStateOf(false)
@@ -55,7 +54,7 @@ class QuickActivity: ComponentActivity(), KoinComponent {
         super.onCreate(savedInstanceState)
         handleIncomingIntent(intent)
         permissionModel.activityBind(this)
-        window.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
         setContent {
             val descriptionState = rememberTextFieldState(description.value)
             val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
@@ -80,7 +79,7 @@ class QuickActivity: ComponentActivity(), KoinComponent {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface.copy(alpha = .6f))
                 ) {
-                    QuickNote(screen, data) {
+                    Jotting(screen, data) {
                         finish()
                     }
                 }

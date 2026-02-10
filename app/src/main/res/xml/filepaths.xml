@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path name="pictures" path="Android/data/city.zouitel.jetnote/files/Pictures" />
-    <external-path name="movies" path="Android/data/city.zouitel.jetnote/files/Movies" />
+    <external-path name="pictures" path="Android/data/zouitel.neighborhood.jetnote/files/Pictures" />
+    <external-path name="movies" path="Android/data/zouitel.neighborhood.jetnote/files/Movies" />
     <cache-path name="cache" path="." />
     <external-files-path name="external_files" path="." />
     <files-path name="upload" path="." />

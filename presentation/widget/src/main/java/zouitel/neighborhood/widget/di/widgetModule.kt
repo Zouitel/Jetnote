@@ -1,7 +1,7 @@
 package zouitel.neighborhood.widget.di
 
 import zouitel.neighborhood.widget.mapper.WidgetMapper
-import zouitel.neighborhood.widget.ui.QuickWidget
+import zouitel.neighborhood.widget.ui.JottingWidget
 import zouitel.neighborhood.widget.ui.WidgetScreen
 import zouitel.neighborhood.widget.ui.WidgetScreenModel
 import org.koin.core.module.dsl.factoryOf
@@ -16,5 +16,5 @@ val widgetModule = module {
         WidgetScreenModel(get(), get())
     }
     factoryOf(::WidgetScreen)
-    factoryOf(::QuickWidget)
+    factoryOf(::JottingWidget)
 }

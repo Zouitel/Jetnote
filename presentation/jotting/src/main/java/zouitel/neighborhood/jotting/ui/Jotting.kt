@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +39,6 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -53,7 +53,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -90,7 +89,7 @@ import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QuickNote(
+fun Jotting(
     screen: MutableState<Screens?>,
     data: MutableState<Data>,
     onDismiss: () -> Unit
@@ -136,8 +135,7 @@ fun QuickNote(
     val textColor = contentColorFor(MaterialTheme.colorScheme.surface).toArgb()
     val textColorState = rememberSaveable { mutableIntStateOf(textColor) }
 
-    // Replace your existing LaunchedEffect(screen.value) for focus with this:
-    LaunchedEffect(Unit) { // Use Unit or a specific "Open" trigger
+    LaunchedEffect(Unit) {
         // 1. Wait for the composition to settle and the window to be ready
         kotlinx.coroutines.delay(200)
 
@@ -145,7 +143,6 @@ fun QuickNote(
         focus.requestFocus()
 
         // 3. Explicitly tell the keyboard controller to show
-        // Note: Sometimes keyboard?.show() fails if not called directly on the focusable view
         keyboard?.show()
     }
 

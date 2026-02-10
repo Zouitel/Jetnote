@@ -38,4 +38,8 @@ class NoteDataSourceImpl(
     }
 
     override fun observeArchives(userUid: String): Flow<List<OutNote>> = dao.observeArchives(userUid).map { mapper.toRepo(it) }
+
+    override suspend fun cleanup() {
+        dao.cleanup()
+    }
 }

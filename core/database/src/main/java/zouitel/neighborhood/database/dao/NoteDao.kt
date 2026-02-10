@@ -40,4 +40,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $USER_UID = :userUid AND ARCHIVED = 1")
     fun observeArchives(userUid: String): Flow<List<Note>>
+
+    @Query("DELETE FROM $TABLE_NAME WHERE TITLE = ''")
+    suspend fun cleanup()
 }

@@ -34,7 +34,7 @@ class WorkplaceActivity: AppCompatActivity(), KoinComponent {
             val workplaceScreen = rememberScreen(
                     SharedScreen.Workplace(
                         currentNote ?: Data(),
-                        false
+                        true
                     )
                 )
 

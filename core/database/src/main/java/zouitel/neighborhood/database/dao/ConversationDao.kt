@@ -19,4 +19,7 @@ interface ConversationDao {
 
     @Query("DELETE FROM CONVERSATION_TABLE WHERE uid = :uid")
     suspend fun delete(uid: String)
+
+    @Query("DELETE FROM CONVERSATION_TABLE WHERE TITLE = ''")
+    suspend fun cleanup()
 }

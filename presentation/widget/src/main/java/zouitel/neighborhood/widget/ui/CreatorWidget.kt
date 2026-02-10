@@ -26,7 +26,7 @@ import androidx.glance.layout.height
 import androidx.glance.layout.size
 import androidx.glance.unit.ColorProvider
 import cafe.adriel.voyager.core.screen.Screen
-import zouitel.neighborhood.jotting.QuickActivity
+import zouitel.neighborhood.jotting.JottingActivity
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 
@@ -41,15 +41,15 @@ class  CreatorWidget: GlanceAppWidget(), Screen {
     @Composable
     override fun Content() {
         val context = LocalContext.current
-        val intent_record = Intent(context, QuickActivity::class.java).apply {
+        val intent_record = Intent(context, JottingActivity::class.java).apply {
             action = Intent.ACTION_VIEW
             putExtra("quick_record", true)
         }
-        val intent_photo = Intent(context, QuickActivity::class.java).apply {
+        val intent_photo = Intent(context, JottingActivity::class.java).apply {
             action = Intent.ACTION_VIEW
             putExtra("quick_photo", true)
         }
-        val intent_reminder = Intent(context, QuickActivity::class.java).apply {
+        val intent_reminder = Intent(context, JottingActivity::class.java).apply {
             action = Intent.ACTION_VIEW
             putExtra("quick_reminder", true)
         }
@@ -94,7 +94,7 @@ class  CreatorWidget: GlanceAppWidget(), Screen {
             SquareIconButton(
                 ImageProvider(CommonIcons.TEXT),
                 null,
-                actionStartActivity<QuickActivity>(),
+                actionStartActivity<JottingActivity>(),
                 GlanceModifier.size(70.dp),
                 backgroundColor = ColorProvider(CommonColors.prime),
                 contentColor = ColorProvider(MaterialTheme.colorScheme.surface)

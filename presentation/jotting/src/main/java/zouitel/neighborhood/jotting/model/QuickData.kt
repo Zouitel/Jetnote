@@ -5,6 +5,8 @@ import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_INT
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_TXT
 import zouitel.neighborhood.workspace.model.Media
 import zouitel.neighborhood.workspace.model.Task
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class QuickData(
     var uid: String = DEFAULT_TXT,
@@ -13,7 +15,7 @@ data class QuickData(
     var priority: Int = DEFAULT_INT,
     var background: Int = DEFAULT_INT,
     var textColor: Int = DEFAULT_INT,
-    var date: String = DEFAULT_TXT,
+    var date: Instant = Clock.System.now(),
     var archived: Boolean = DEFAULT_BOOLEAN,
     val tasks: List<Task> = emptyList(),
     val medias: List<Media> = emptyList()

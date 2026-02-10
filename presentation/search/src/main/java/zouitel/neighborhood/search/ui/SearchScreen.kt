@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -57,7 +56,7 @@ import zouitel.neighborhood.search.note_card.NoteCard
 import zouitel.neighborhood.search.utils.SearchTopBar
 import zouitel.neighborhood.search.utils.SearchTypes
 import zouitel.neighborhood.search.utils.SelectionTopBar
-import zouitel.neighborhood.search.utils.propertiesList
+import zouitel.neighborhood.search.utils.prioritiesList
 import zouitel.neighborhood.search.utils.typesList
 import zouitel.neighborhood.ui.CommonConstants
 import zouitel.neighborhood.ui.CommonIcons.CIRCLE
@@ -355,7 +354,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                 modifier = Modifier.padding(horizontal = 10.dp),
                                 horizontalArrangement = Arrangement.Absolute.Left
                             ) {
-                                propertiesList
+                                prioritiesList
                                     .filter { it.isAvailable(notes) }
                                     .map { property ->
                                     Column {

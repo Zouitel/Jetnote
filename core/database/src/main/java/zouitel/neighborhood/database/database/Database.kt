@@ -21,7 +21,7 @@ import zouitel.neighborhood.database.dao.ModelDao
 import zouitel.neighborhood.database.dao.ProviderDao
 
 @Database(
-    version = 7,
+    version = 8,
     autoMigrations = [],
     entities = [
         Data::class,

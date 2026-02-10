@@ -13,36 +13,35 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -81,6 +80,8 @@ import dev.icerock.moko.permissions.notifications.REMOTE_NOTIFICATION
 import dev.icerock.moko.permissions.storage.STORAGE
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.workspace.ui.utils.NoteDates
+import zouitel.neighborhood.workspace.ui.utils.PrioritySlider
 import java.io.File
 import kotlin.random.Random
 
@@ -464,14 +465,56 @@ data class OptionsScreen(
                     }
                 }
                 item {
+                    Text(
+                        "Priority.",
+                        Modifier.padding(20.dp, 15.dp),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
+                    )
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    PrioritySlider(
-                        priority = Priorities.entries[data.value.priority],
-                        onPriorityChange = { priority ->
-                            data.value = data.value.copy(priority = priority.index)
-                        }
-                    )
+                    val tooltipState = rememberTooltipState(isPersistent = true)
+                    val scope = rememberCoroutineScope()
+                    val priority = getPriority(data.value.priority)
+
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip(
+                                containerColor = Color(priority.second),
+                                contentColor = MaterialTheme.colorScheme.surface
+                            ) {
+                                Text(
+                                    priority.first,
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        },
+                        state = tooltipState,
+                        focusable = true
+                    ) {
+                        PrioritySlider(
+                            priority = Priorities.entries[data.value.priority],
+                            onPriorityChange = { priority ->
+                                data.value = data.value.copy(priority = priority.index)
+                            },
+                            onDragStart = {
+                                // Show tooltip when dragging starts
+                                scope.launch {
+                                    tooltipState.show()
+                                }
+                            },
+                            onDragEnd = {
+                                // Hide tooltip when dragging ends
+                                scope.launch {
+                                    tooltipState.dismiss()
+                                }
+                            }
+                        )
+                    }
+                }
+                item {
+                    NoteDates(data.value)
                 }
                 item {
                     SnackbarHost(snackBarHostState) {
@@ -544,46 +587,13 @@ data class OptionsScreen(
         return FileProvider.getUriForFile(context, "${context.packageName}.provider", newFile)
     }
 
-    @Composable
-    private fun PrioritySlider(
-        priority: Priorities,
-        onPriorityChange: (Priorities) -> Unit
-    ) {
-        var sliderPosition by remember { mutableFloatStateOf(priority.ordinal.toFloat()) }
-        var selectedPriority by remember { mutableStateOf(priority) }
-        var sliderWidth by remember { mutableStateOf(0f) }
-        val thumbColor = selectedPriority.color
-
-        LaunchedEffect(sliderPosition) {
-            selectedPriority = when (sliderPosition.toInt()) {
-                1 -> Priorities.LOW
-                2 -> Priorities.MED
-                3 -> Priorities.HIG
-                4 -> Priorities.URG
-                else -> Priorities.NON
-            }
-            onPriorityChange(selectedPriority)
-        }
-
-        Slider(
-            value = sliderPosition,
-            onValueChange = { newValue ->
-                sliderPosition = newValue
-            },
-            valueRange = 0f..4f,
-            steps = 3,
-            onValueChangeFinished = { },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp)
-                .onGloballyPositioned { coordinates ->
-                    sliderWidth = coordinates.size.width.toFloat()
-                },
-            colors = SliderDefaults.colors(
-                thumbColor = thumbColor,
-                activeTrackColor = thumbColor.copy(alpha = 0.4f),
-                inactiveTrackColor = thumbColor.copy(alpha = 0.15f),
-            )
-        )
+    fun getPriority(priority: Int) = when (priority) {
+        1 -> Pair("Low", 0xff32cd32)
+        2 -> Pair("Medium", 0xffffef00)
+        3 -> Pair("High", 0xffffa500)
+        4 -> Pair("Urgent", 0xffff2800)
+        else -> Pair("Non", 0xffc0c0c0)
     }
+
+
 }

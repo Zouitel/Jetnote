@@ -25,4 +25,8 @@ class ConversationRepositoryImpl(
     override suspend fun delete(id: String) {
         datasource.delete(id)
     }
+
+    override suspend fun cleanup() {
+        datasource.cleanup()
+    }
 }

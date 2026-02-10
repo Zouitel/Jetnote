@@ -8,4 +8,5 @@ interface ConversationRepo {
     suspend fun observeById(id: String): Flow<Conversation>
     suspend fun upsert(conversation: Conversation)
     suspend fun delete(id: String)
+    suspend fun cleanup()
 }

@@ -29,7 +29,7 @@ import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.workspace.WorkplaceActivity
 
-class QuickWidget: GlanceAppWidget(), Screen {
+class JottingWidget: GlanceAppWidget(), Screen {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) = provideContent {
         this.Content()

@@ -10,7 +10,7 @@ class DataDataSourceImpl(
     private val mapper: DataMapper
 ): DataDataSource {
     override suspend fun insert(data: OutData) {
-        dao.insert(mapper.fromRepo(data))
+        dao.upsert(mapper.fromRepo(data))
     }
 
     override suspend fun insertAll(data: List<OutData>) {

@@ -15,6 +15,7 @@ data class Data(
     val background: Int? = null,
     val textColor: Int? = null,
     val date: String = DEFAULT_TXT,
+    val lastEdit: String,
     val archived: Boolean = DEFAULT_BOOLEAN,
     val tasks: String,
     val medias: String,

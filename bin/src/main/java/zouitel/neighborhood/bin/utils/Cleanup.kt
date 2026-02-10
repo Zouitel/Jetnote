@@ -16,11 +16,8 @@ suspend fun cleanupOrphanedAudios(
 
     runCatching {
         // Get Music directory using Context API
-        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
-
-        if (musicDir == null) {
-            return@withContext 0
-        }
+        val musicDir =
+            context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS) ?: return@withContext 0
 
 
         if (!musicDir.exists()) {
@@ -69,25 +66,22 @@ private fun isAudioFile(file: File): Boolean {
 
 suspend fun cleanupOrphanedImages(
     context: Context,
-    databaseMediaPaths: List<String>,
+    imagePaths: List<String>,
     ioDispatcher: CoroutineDispatcher
 ): Int = withContext(ioDispatcher) {
     var deletedCount = 0
 
     runCatching {
         // Get Pictures directory using Context API
-        val picturesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        if (picturesDir == null) {
-            return@withContext 0
-        }
+        val picturesDir =
+            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: return@withContext 0
 
         if (!picturesDir.exists()) {
             return@withContext 0
         }
 
         // Convert database paths to a Set for O(1) lookup
-        val databasePathsSet = databaseMediaPaths
+        val databasePathsSet = imagePaths
             .map { normalizePath(it) }
             .toSet()
 
@@ -126,25 +120,22 @@ private fun isImageFile(file: File): Boolean {
 
 suspend fun cleanupOrphanedVideos(
     context: Context,
-    databaseVideoPaths: List<String>,
+    videoPaths: List<String>,
     ioDispatcher: CoroutineDispatcher
 ): Int = withContext(ioDispatcher) {
     var deletedCount = 0
 
     runCatching {
         // Get Movies directory using Context API
-        val moviesDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-
-        if (moviesDir == null) {
-            return@withContext 0
-        }
+        val moviesDir =
+            context.getExternalFilesDir(Environment.DIRECTORY_MOVIES) ?: return@withContext 0
 
         if (!moviesDir.exists()) {
             return@withContext 0
         }
 
         // Convert database paths to a Set for O(1) lookup
-        val databasePathsSet = databaseVideoPaths
+        val databasePathsSet = videoPaths
             .map { normalizePath(it) }
             .toSet()
 

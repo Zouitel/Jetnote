@@ -7,9 +7,9 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <application>
         <activity
-            android:name=".QuickActivity"
+            android:name=".JottingActivity"
             android:exported="true"
-            android:label="Quick Note"
+            android:label="Jotting"
             android:launchMode="singleTop"
             android:taskAffinity=""
             android:excludeFromRecents="true"
@@ -31,15 +31,15 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        <!--        <provider-->
-        <!--            android:name="androidx.core.content.FileProvider"-->
-        <!--            android:authorities="${applicationId}.quicknote.provider"-->
-        <!--            android:exported="false"-->
-        <!--            tools:replace="android:authorities"-->
-        <!--            android:grantUriPermissions="true">-->
-        <!--            <meta-data-->
-        <!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-        <!--                android:resource="@xml/filepaths" />-->
-        <!--        </provider>-->
+                <provider
+                    android:name="androidx.core.content.FileProvider"
+                    android:authorities="${applicationId}.quicknote.provider"
+                    android:exported="false"
+                    tools:replace="android:authorities"
+                    android:grantUriPermissions="true">
+                    <meta-data
+                        android:name="android.support.FILE_PROVIDER_PATHS"
+                        android:resource="@xml/filepaths" />
+                </provider>
     </application>
 </manifest>

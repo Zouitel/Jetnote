@@ -110,6 +110,7 @@ val localRepoLazyModule = lazyModule {
     factoryOf(NoteUseCase::ObserveByNewest)
     factoryOf(NoteUseCase::ObserveArchives)
     factoryOf(NoteUseCase::ObserveByPriority)
+    factoryOf(NoteUseCase::Cleanup)
 
     factoryOf(TagUseCase::ObserveAll)
     factoryOf(TagUseCase::GetAll)
@@ -129,6 +130,7 @@ val localRepoLazyModule = lazyModule {
     factoryOf(ConversationUseCase::ObserveById)
     factoryOf(ConversationUseCase::Upsert)
     factoryOf(ConversationUseCase::Delete)
+    factoryOf(ConversationUseCase::Cleanup)
 
     factoryOf(ModelUseCase::ObserveAll)
     factoryOf(ModelUseCase::ObserveById)

@@ -28,4 +28,8 @@ class ConversationDatasourceImpl(
     override suspend fun delete(id: String) {
         dao.delete(id)
     }
+
+    override suspend fun cleanup() {
+        dao.cleanup()
+    }
 }

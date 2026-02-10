@@ -83,6 +83,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 data class WorkplaceScreen(
@@ -103,6 +108,7 @@ data class WorkplaceScreen(
         )
     }
 
+    @OptIn(ExperimentalTime::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "NewApi", "RememberReturnType")
     @Composable
     private fun Workplace(
@@ -169,17 +175,15 @@ data class WorkplaceScreen(
 //        }
         // Replace your existing LaunchedEffect(screen.value) for focus with this:
         LaunchedEffect(Unit) { // Use Unit or a specific "Open" trigger
-            // 1. Wait for the composition to settle and the window to be ready
-            kotlinx.coroutines.delay(200)
-
-            // 2. Request focus on the TextField
-            focus.requestFocus()
-
-            // 3. Explicitly tell the keyboard controller to show
-            // Note: Sometimes keyboard?.show() fails if not called directly on the focusable view
-            keyboard?.show()
+            if (isNew) {
+                // 1. Wait for the composition to settle and the window to be ready
+                kotlinx.coroutines.delay(200)
+                // 2. Request focus on the TextField
+                focus.requestFocus()
+                // 3. Explicitly tell the keyboard controller to show
+                keyboard?.show()
+            }
         }
-
 
         Scaffold(
             containerColor = Color(currentData.value.background ?: defaultBackground),
@@ -293,7 +297,9 @@ data class WorkplaceScreen(
 
                 // void space.
                 item {
-                    Box(modifier = Modifier.fillMaxWidth().height(170.dp))
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(170.dp))
                 }
             }
         }

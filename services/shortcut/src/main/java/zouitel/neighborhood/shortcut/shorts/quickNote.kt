@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import androidx.core.graphics.drawable.IconCompat
-import zouitel.neighborhood.jotting.QuickActivity
+import zouitel.neighborhood.jotting.JottingActivity
 import zouitel.neighborhood.ui.CommonIcons
 
 fun quickNote(context: Context): ShortcutInfo {
-    val intent = Intent(context, QuickActivity::class.java)
+    val intent = Intent(context, JottingActivity::class.java)
     intent.action = Intent.ACTION_VIEW
     intent.putExtra("quick_note", true)
     return ShortcutInfo.Builder(context, "quick")

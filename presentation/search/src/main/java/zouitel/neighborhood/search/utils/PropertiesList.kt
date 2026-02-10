@@ -12,7 +12,7 @@ data class Property(
     }
 }
 
-val propertiesList = listOf(
+val prioritiesList = listOf(
     Property(0,"Non", 0xffc0c0c0),
     Property(1,"Low", 0xff32cd32),
     Property(2,"Medium", 0xffffef00),

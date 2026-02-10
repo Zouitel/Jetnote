@@ -40,4 +40,8 @@ class NoteRepositoryImpl(
     override fun observeArchives(userUid: String): Flow<List<OutNote>> {
         return dataSource.observeArchives(userUid).map { mapper.toDomain(it) }
     }
+
+    override suspend fun cleanup() {
+        dataSource.cleanup()
+    }
 }

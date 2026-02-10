@@ -6,10 +6,12 @@ import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_BOOLEAN
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_INT
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_TXT
 import kotlinx.serialization.Serializable
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @Keep
 @Serializable
-data class Data(
+data class Data (
     val uid: String = DEFAULT_TXT,
     val userUid: String = "null",
     val title: String = DEFAULT_TXT,
@@ -17,7 +19,8 @@ data class Data(
     val priority: Int = DEFAULT_INT,
     val background: Int? = null,
     val textColor: Int? = null,
-    val date: String = DEFAULT_TXT,
+    val date: Instant = Clock.System.now(),
+    val lastEdit: Instant = Clock.System.now(),
     val archived: Boolean = DEFAULT_BOOLEAN,
     val tasks: List<Task> = emptyList(),
     val medias: List<Media> = emptyList(),

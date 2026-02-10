@@ -32,7 +32,8 @@ internal fun Project.configureAndroidCompose(common: CommonExtension<*, *, *, *,
                 "androidx.compose.foundation.layout.ExperimentalLayoutApi",
                 "androidx.compose.foundation.ExperimentalFoundationApi",
                 "androidx.compose.ui.ExperimentalComposeUiApi",
-                "androidx.media3.common.util.UnstableApi"
+                "androidx.media3.common.util.UnstableApi",
+                "kotlin.time.ExperimentalTime"
             )
         }
 

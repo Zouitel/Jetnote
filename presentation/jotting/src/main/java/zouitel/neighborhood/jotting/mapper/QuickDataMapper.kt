@@ -4,6 +4,7 @@ import zouitel.neighborhood.jotting.model.QuickData
 import zouitel.neighborhood.workspace.model.Task
 import zouitel.neighborhood.workspace.mapper.JsonInstant
 import zouitel.neighborhood.workspace.model.Media
+import kotlin.time.Instant
 import zouitel.neighborhood.domain.model.Data as OutData
 
 class QuickDataMapper {
@@ -18,7 +19,6 @@ class QuickDataMapper {
             priority = data.priority,
             background = data.background,
             textColor = data.textColor,
-            date = data.date,
             archived = data.archived,
             tasks = tasks,
             medias = medias

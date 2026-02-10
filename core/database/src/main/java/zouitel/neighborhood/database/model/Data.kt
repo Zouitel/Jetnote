@@ -26,6 +26,7 @@ data class Data(
     @ColumnInfo(COLOR) val background: Int?,
     @ColumnInfo(TXT_COLOR) val textColor: Int?,
     @ColumnInfo(DATE) val date: String,
+    @ColumnInfo("last_edit") val lastEdit: String,
     @ColumnInfo(ARCHIVED) val archived: Boolean,
     @ColumnInfo("tasks", defaultValue = "[]") val tasks: String,
     @ColumnInfo("medias", defaultValue = "[]") val medias: String,
