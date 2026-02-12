@@ -103,3 +103,7 @@
 -dontwarn okio.**
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
+
+-repackageclasses
+-allowaccessmodification
+-overloadaggressively

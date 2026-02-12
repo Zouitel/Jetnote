@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.dependencyanalysis) apply false
     alias(libs.plugins.licenses) apply false
-    alias(libs.plugins.enigma) apply false
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.android.test) apply false
@@ -13,7 +12,6 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath(libs.enigma)
     }
 
     repositories {

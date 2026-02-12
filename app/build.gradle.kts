@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.zouitel.androidApplication)
     alias(libs.plugins.ksp)
     alias(libs.plugins.licenses)
-    alias(libs.plugins.enigma)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.androidApplication)
@@ -39,10 +38,7 @@ android {
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions.optIn.add("org.koin.core.annotation.KoinExperimentalAPI")
     }
-
 }
-enigma.enabled = true
-enigma.injectFakeKeys = true
 
 dependencies {
     //Modules.

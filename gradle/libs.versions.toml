@@ -207,7 +207,7 @@ firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
 #Others.
-enigma = { module = "gradle.plugin.chrisney:enigma", version.ref = "enigma" }
+#enigma = { module = "gradle.plugin.chrisney:enigma", version.ref = "enigma" }
 compose-cloudy = { module = "com.github.skydoves:cloudy", version.ref = "cloudy" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
 metaprobe-kmp = { module = "tech.dev-scion:metaprobe-kmp", version.ref = "metaprobeKmp" }

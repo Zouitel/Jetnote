@@ -50,6 +50,11 @@ internal fun Project.configureAndroidApplication(common: CommonExtension <*, *, 
                 )
             }
         }
+
+        packagingOptions {
+            resources.excludes.add("DebugProbesKt.bin")
+        }
+
         dependencies {
             androidUiTestDependencies(libs)
         }
