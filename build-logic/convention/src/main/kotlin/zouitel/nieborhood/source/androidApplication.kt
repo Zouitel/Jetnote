@@ -13,6 +13,7 @@ internal fun Project.configureAndroidApplication(common: CommonExtension <*, *, 
 
             ndk {
                 abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
+                debugSymbolLevel = "NONE"
             }
         }
 
@@ -45,14 +46,13 @@ internal fun Project.configureAndroidApplication(common: CommonExtension <*, *, 
                         "META-INF/notice.txt",
                         "META-INF/ASL2.0",
                         "META-INF/*.kotlin_module",
-                        "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+                        "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                        "DebugProbesKt.bin"
                     )
                 )
             }
-        }
 
-        packagingOptions {
-            resources.excludes.add("DebugProbesKt.bin")
+            jniLibs.keepDebugSymbols.addAll(listOf("*/armeabi-v7a/*.so","*/arm64-v8a/*.so"))
         }
 
         dependencies {

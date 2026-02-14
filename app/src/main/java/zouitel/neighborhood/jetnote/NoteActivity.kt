@@ -26,6 +26,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
+import zouitel.neighborhood.security.NativeSecurityManager
 import zouitel.neighborhood.ui.hightlight.Highlighter
 import zouitel.neighborhood.ui.hightlight.LocalHighlighter
 
@@ -37,11 +38,13 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
     private val binModel: BinScreenModel by inject()
     private val highlighter: Highlighter by inject()
     private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private val hammer = NativeSecurityManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         permissionModel.activityBind(this)
+        hammer
 
         setContent {
             Navigator(RootCheckerHandler())

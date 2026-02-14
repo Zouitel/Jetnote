@@ -34,5 +34,4 @@ object Constants {
     const val DEFAULT_BOOLEAN = "false"
     const val DEFAULT_TXT = ""
     const val NUL = "null"
-    const val PASS = "crypticpass.bin"
 }

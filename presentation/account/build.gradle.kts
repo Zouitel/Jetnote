@@ -27,6 +27,7 @@ dependencies {
     api(projects.presentation.widget)
     api(projects.presentation.search)
     api(projects.feedback)
+    implementation(projects.security)
 
     //Coil.
     implementation(libs.coil.compose)

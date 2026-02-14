@@ -1,14 +1,12 @@
-package zouitel.neighborhood.database
+package zouitel.neighborhood.security.encrition
 
 import android.content.Context
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKeys
-import zouitel.neighborhood.database.utils.Constants.PASS
 import java.io.File
 import java.security.SecureRandom
 
-class Encryption(private val context: Context) {
-
+class FileEncryption(private val context: Context) {
     fun getCrypticPass(): ByteArray {
         val file = File(context.filesDir, PASS)
         val encryptedFile = EncryptedFile.Builder(
@@ -37,5 +35,9 @@ class Encryption(private val context: Context) {
         }
 
         return res
+    }
+
+    companion object {
+        const val PASS = "crypticpass.bin"
     }
 }

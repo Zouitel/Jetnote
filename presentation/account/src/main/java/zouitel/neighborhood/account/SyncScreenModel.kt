@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.security.NativeSecurityManager
 import com.google.api.services.drive.model.File as DriveFile
 
 @Stable
@@ -37,7 +38,8 @@ class SyncScreenModel(
     application: Application,
     private val context: Context,
     private val auth: FirebaseAuth,
-    private val combineUser: DataUseCase.CombineUser
+    private val combineUser: DataUseCase.CombineUser,
+    private val nativeSecurityManager: NativeSecurityManager
 ): ScreenModel {
 
     private val _userState = MutableStateFlow(auth.currentUser)
@@ -60,6 +62,9 @@ class SyncScreenModel(
     // ✅ Use Mutex to prevent concurrent folder creation
     private val folderCreationMutex = Mutex()
     private var foldersCreatedThisSession = false
+
+    private val _googleClientId = MutableStateFlow("")
+    val googleClientId = _googleClientId.asStateFlow()
 
     init {
         setupAuthStateListener()
@@ -84,6 +89,10 @@ class SyncScreenModel(
                     val workInfo = workInfos.any { it.state == WorkInfo.State.RUNNING }
                     _isDownloading.value = workInfo
                 }
+        }
+
+        screenModelScope.launch {
+            _googleClientId.value = nativeSecurityManager.googleClientId()
         }
     }
 

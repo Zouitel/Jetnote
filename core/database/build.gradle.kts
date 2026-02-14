@@ -19,7 +19,4 @@ dependencies {
     implementation(libs.roomkts)
     api(libs.room.runtime)
     ksp(libs.room.compiler)
-
-    //Security.
-    implementation (libs.security)
 }

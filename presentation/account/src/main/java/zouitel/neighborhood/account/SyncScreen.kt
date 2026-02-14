@@ -58,6 +58,7 @@ class SyncScreen: Screen {
 
         // Use the ViewModel's user state instead of local state
         val currentUser by syncModel.userState.collectAsState()
+        val webClientId by remember(syncModel, syncModel::googleClientId).collectAsState()
 
         val signInLauncher = rememberLauncherForActivityResult(
             contract = StartActivityForResult()
@@ -89,7 +90,7 @@ class SyncScreen: Screen {
             }
         }
 
-        val gso = rememberGso()
+        val gso = rememberGso(webClientId)
         val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
         CommonBottomSheet(null) {
@@ -190,8 +191,7 @@ class SyncScreen: Screen {
     }
 
     @Composable
-    private fun rememberGso(): GoogleSignInOptions {
-        val webClientId = "866712879346-lsqit4thufnkc8ldn6tur5fqlnphlqc6.apps.googleusercontent.com"
+    private fun rememberGso(webClientId: String): GoogleSignInOptions {
         return GoogleSignInOptions.Builder(DEFAULT_SIGN_IN)
             .requestIdToken(webClientId)
             .requestEmail()
