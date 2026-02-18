@@ -1,6 +1,7 @@
 package zouitel.neighborhood.database.di
 
 import androidx.room.Room
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import zouitel.neighborhood.database.database.Database
 import zouitel.neighborhood.database.datasourceImpl.DataDataSourceImpl
 import zouitel.neighborhood.database.datasourceImpl.LinkDataSourceImpl
@@ -35,6 +36,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.lazyModule
+import zouitel.neighborhood.security.encrition.FileEncryption
 
 val databaseLazyModule = lazyModule {
     //DataSource.
@@ -79,7 +81,7 @@ val databaseLazyModule = lazyModule {
             Database::class.java,
             Constants.DATABASE
         )
-            //            .openHelperFactory(SupportFactory(Encryption(androidContext()).getCrypticPass()))
+            .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
             .build()

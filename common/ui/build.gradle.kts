@@ -10,7 +10,7 @@ android {
 
 dependencies {
     //Modules.
-    implementation(projects.core.datastore)
+//    implementation(projects.core.datastore)
     implementation(projects.domain)
 
     //Serialization.

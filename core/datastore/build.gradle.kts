@@ -14,9 +14,6 @@ dependencies {
     //DataStore.
     api(libs.datastore)
 
-    //DS Security.
-    implementation(libs.datastore.security)
-
     //Serialization.
     implementation(libs.kotlinx.serialization.json)
 }

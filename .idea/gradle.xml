@@ -35,7 +35,6 @@
             <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/datastore" />
             <option value="$PROJECT_DIR$/core/repository" />
-            <option value="$PROJECT_DIR$/core/root" />
             <option value="$PROJECT_DIR$/document" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/feedback" />

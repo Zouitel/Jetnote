@@ -8,7 +8,6 @@ import zouitel.neighborhood.domain.repository.ModelRepo
 import zouitel.neighborhood.domain.repository.NoteAndTagRepository
 import zouitel.neighborhood.domain.repository.NoteRepository
 import zouitel.neighborhood.domain.repository.ProviderRepo
-import zouitel.neighborhood.domain.repository.RootRepository
 import zouitel.neighborhood.domain.repository.SettingsRepository
 import zouitel.neighborhood.domain.repository.TagRepository
 import zouitel.neighborhood.domain.usecase.AssistantUseCase
@@ -19,7 +18,6 @@ import zouitel.neighborhood.domain.usecase.ModelUseCase
 import zouitel.neighborhood.domain.usecase.NoteAndTagUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 import zouitel.neighborhood.domain.usecase.ProviderUseCase
-import zouitel.neighborhood.domain.usecase.RootUseCase
 import zouitel.neighborhood.domain.usecase.SettingsUseCase
 import zouitel.neighborhood.domain.usecase.TagUseCase
 import zouitel.neighborhood.repository.repositoryImpl.AssistantRepositoryImpl
@@ -34,14 +32,12 @@ import zouitel.neighborhood.repository.mapper.ModelMapper
 import zouitel.neighborhood.repository.mapper.NoteAndTagMapper
 import zouitel.neighborhood.repository.mapper.NoteMapper
 import zouitel.neighborhood.repository.mapper.ProviderMapper
-import zouitel.neighborhood.repository.mapper.RootMapper
 import zouitel.neighborhood.repository.mapper.SettingsMapper
 import zouitel.neighborhood.repository.mapper.TagMapper
 import zouitel.neighborhood.repository.repositoryImpl.DataRepositoryImpl
 import zouitel.neighborhood.repository.repositoryImpl.LinkRepositoryImpl
 import zouitel.neighborhood.repository.repositoryImpl.NoteAndTagRepositoryImpl
 import zouitel.neighborhood.repository.repositoryImpl.NoteRepositoryImpl
-import zouitel.neighborhood.repository.repositoryImpl.RootRepositoryImpl
 import zouitel.neighborhood.repository.repositoryImpl.SettingsRepositoryImpl
 import zouitel.neighborhood.repository.repositoryImpl.TagRepositoryImpl
 import org.koin.core.module.dsl.factoryOf
@@ -55,7 +51,6 @@ val localRepoLazyModule = lazyModule {
     factoryOf(::LinkMapper)
     factoryOf(::TagMapper)
     factoryOf(::NoteAndTagMapper)
-    factoryOf(::RootMapper)
     factoryOf(::SettingsMapper)
     singleOf(::AssistantMapper)
     singleOf(::ConversationMapper)
@@ -70,7 +65,6 @@ val localRepoLazyModule = lazyModule {
     singleOf(::LinkRepositoryImpl) bind LinkRepository::class
     singleOf(::NoteAndTagRepositoryImpl) bind NoteAndTagRepository::class
     singleOf(::NoteRepositoryImpl) bind NoteRepository::class
-    singleOf(::RootRepositoryImpl) bind RootRepository::class
     singleOf(::TagRepositoryImpl) bind TagRepository::class
     singleOf(::SettingsRepositoryImpl) bind SettingsRepository::class
     singleOf(::AssistantRepositoryImpl) bind AssistantRepo::class
@@ -117,8 +111,6 @@ val localRepoLazyModule = lazyModule {
     factoryOf(TagUseCase::Insert)
     factoryOf(TagUseCase::InsertAll)
     factoryOf(TagUseCase::Delete)
-
-    factoryOf(RootUseCase::RootUseCase)
 
     factoryOf(SettingsUseCase::ObserveSettings)
     factoryOf(SettingsUseCase::SaveSettings)

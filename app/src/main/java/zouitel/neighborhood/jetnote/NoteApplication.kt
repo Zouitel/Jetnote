@@ -3,7 +3,6 @@ package zouitel.neighborhood.jetnote
 import android.app.Application
 import android.os.Build
 import cafe.adriel.voyager.core.registry.ScreenRegistry
-import zouitel.neighborhood.root.di.systemLazyModule
 import zouitel.neighborhood.bin.di.binModule
 import zouitel.neighborhood.database.di.databaseLazyModule
 import zouitel.neighborhood.datastore.di.datastoreLazyModule
@@ -50,6 +49,8 @@ class NoteApplication: Application(), ImageLoaderFactory, KoinStartup {
             })
             fetchAndActivate()
         }
+
+        System.loadLibrary("sqlcipher")
     }
 
     override fun onKoinStartup() = koinConfiguration {
@@ -60,7 +61,6 @@ class NoteApplication: Application(), ImageLoaderFactory, KoinStartup {
             initializerLazyModule,
             databaseLazyModule,
             localRepoLazyModule,
-            systemLazyModule,
             datastoreLazyModule,
             rootedLazyModule,
             playbackLazyModule

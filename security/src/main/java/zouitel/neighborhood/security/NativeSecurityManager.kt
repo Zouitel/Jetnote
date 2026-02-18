@@ -10,4 +10,7 @@ class NativeSecurityManager {
     }
 
     external fun googleClientId(): String
+    external fun isEmulatorNative(): Boolean
+    external fun isDebuggerAttachedNative(): Boolean
+    external fun isRootedNative(): Boolean
 }

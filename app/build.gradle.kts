@@ -32,6 +32,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            isDebuggable = false
+        }
+
+        debug {
+            isDebuggable = false
         }
     }
 
@@ -45,7 +50,6 @@ dependencies {
     implementation(projects.core.database)
     implementation(projects.core.datastore)
     implementation(projects.core.repository)
-    implementation(projects.core.root)
     implementation(projects.domain)
     implementation(projects.services.shortcut)
     implementation(projects.services.playback)

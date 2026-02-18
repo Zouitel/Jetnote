@@ -8,6 +8,7 @@ add_library(
         SHARED
         native-lib.cpp
         string_obfuscator.cpp
+        security_checker.cpp
 )
 
 # Link Android logging library
