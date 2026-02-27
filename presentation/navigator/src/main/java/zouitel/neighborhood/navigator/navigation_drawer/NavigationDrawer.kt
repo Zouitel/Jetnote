@@ -4,19 +4,13 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.ContextualFlowRowOverflow
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DismissibleDrawerSheet
@@ -26,9 +20,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -45,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.UiComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -65,7 +56,6 @@ import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.logic.sharApp
 import zouitel.neighborhood.navigator.about_screen.AboutScreen
 import zouitel.neighborhood.navigator.archive_screen.ArchiveScreen
-import zouitel.neighborhood.navigator.settings_screen.SettingsScreen
 import zouitel.neighborhood.navigator.tags_screen.HashTagsScreen
 import zouitel.neighborhood.navigator.utils.sound
 import zouitel.neighborhood.search.ui.SearchScreen
@@ -79,9 +69,7 @@ import zouitel.neighborhood.ui.CommonIcons.CROSS_SMALL
 import zouitel.neighborhood.ui.CommonIcons.HOME
 import zouitel.neighborhood.ui.CommonIcons.INBOX
 import zouitel.neighborhood.ui.CommonIcons.INTERROGATION
-import zouitel.neighborhood.ui.CommonIcons.SETTINGS
 import zouitel.neighborhood.ui.CommonIcons.SHARE
-import zouitel.neighborhood.ui.CommonIcons.SPARKLES
 import zouitel.neighborhood.ui.CommonIcons.TAGS
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.model.Tag
@@ -96,16 +84,16 @@ fun NavigationDrawer(
     settingsModel: SettingsScreenModel,
     tagModel: TagScreenModel,
     searchModel: SearchScreenModel,
-    conversationModel: ChatScreenModel,
+    chatModel: ChatScreenModel,
     drawerState: DrawerState,
     snackbarState: SnackbarHostState
 ) {
     val context = LocalContext.current
-    val navigator = LocalNavigator.currentOrThrow
+    val navigator = LocalNavigator.current
 
     val tags by remember(tagModel, tagModel::observeAll).collectAsState()
     val settings by remember(settingsModel, settingsModel::observe).collectAsState()
-    val conversations by remember(conversationModel, conversationModel::observeAll).collectAsState()
+    val conversations by remember(chatModel, chatModel::observeAll).collectAsState()
     val uiState by remember(searchModel, searchModel::uiState).collectAsState()
     val scope = rememberCoroutineScope()
     var tagsMaxLines by remember { mutableIntStateOf(3) }
@@ -118,7 +106,7 @@ fun NavigationDrawer(
     // Get current screen from navigator and map to AppScreen
     val currentScreenFromNavigator by remember {
         derivedStateOf {
-            when (navigator.lastItem::class.simpleName) {
+            when (navigator?.lastItem!!::class.simpleName) {
                 "MainScreen" -> AppScreen.MAIN_SCREEN
                 "AssistantScreen" -> AppScreen.CHAT_SCREEN
                 "HashTagsScreen" -> AppScreen.TAGS_SCREEN
@@ -141,7 +129,6 @@ fun NavigationDrawer(
 
     val mainScreen = rememberScreen(SharedScreen.MainScreen)
     val feedbackScreen = rememberScreen(SharedScreen.FeedbackScreen)
-//    val appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
     DismissibleDrawerSheet(
         drawerState = drawerState,
@@ -185,7 +172,7 @@ fun NavigationDrawer(
                         if (uiState.currentScreen != AppScreen.MAIN_SCREEN) {
                             scope.launch {
                                 searchModel.updateCurrentScreen(AppScreen.MAIN_SCREEN)
-                                navigator.push(mainScreen)
+                                navigator?.push(mainScreen)
                                 drawerState.close()
                             }
                         } else {
@@ -200,34 +187,34 @@ fun NavigationDrawer(
                     )
                 )
             }
-            item {
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = AppScreen.CHAT_SCREEN.screen,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    },
-                    icon = { Icon(painterResource(SPARKLES), null) },
-                    onClick = {
-                        if (uiState.currentScreen != AppScreen.CHAT_SCREEN) {
-                            scope.launch {
-                                searchModel.updateCurrentScreen(AppScreen.CHAT_SCREEN)
-                                navigator.push(ChatScreen(true))
-                                drawerState.close()
-                            }
-                        } else {
-                            scope.launch { drawerState.close() }
-                        }
-                    },
-                    selected = uiState.currentScreen == AppScreen.CHAT_SCREEN,
-                    colors = NavigationDrawerItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.surface,
-                        selectedTextColor = MaterialTheme.colorScheme.surface,
-                        selectedContainerColor = CommonColors.prime,
-                    )
-                )
-            }
+//            item {
+//                NavigationDrawerItem(
+//                    label = {
+//                        Text(
+//                            text = AppScreen.CHAT_SCREEN.screen,
+//                            style = MaterialTheme.typography.titleLarge
+//                        )
+//                    },
+//                    icon = { Icon(painterResource(SPARKLES), null) },
+//                    onClick = {
+//                        if (uiState.currentScreen != AppScreen.CHAT_SCREEN) {
+//                            scope.launch {
+//                                searchModel.updateCurrentScreen(AppScreen.CHAT_SCREEN)
+//                                navigator.push(ChatScreen(true))
+//                                drawerState.close()
+//                            }
+//                        } else {
+//                            scope.launch { drawerState.close() }
+//                        }
+//                    },
+//                    selected = uiState.currentScreen == AppScreen.CHAT_SCREEN,
+//                    colors = NavigationDrawerItemDefaults.colors(
+//                        selectedIconColor = MaterialTheme.colorScheme.surface,
+//                        selectedTextColor = MaterialTheme.colorScheme.surface,
+//                        selectedContainerColor = CommonColors.prime,
+//                    )
+//                )
+//            }
 
             item {
                 ContextualFlowRow(
@@ -280,7 +267,7 @@ fun NavigationDrawer(
                         onClick = {
                             scope.launch {
                                 sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                navigator.push(
+                                navigator?.push(
                                     ChatScreen(
                                         false,
                                         conversations.getOrNull(index)?.id ?: return@launch
@@ -309,7 +296,7 @@ fun NavigationDrawer(
                                                 deletedChats.firstOrNull { pair -> pair.second == currentJobId }
 
                                             scope.launch {
-                                                conversationModel.upsert(
+                                                chatModel.upsert(
                                                     conversations.getOrNull(index)?.copy(
                                                         id = chatPair?.first?.id
                                                             ?: return@launch,
@@ -330,7 +317,7 @@ fun NavigationDrawer(
 
                                                 if (result == SnackbarResult.ActionPerformed) {
                                                     chatPair?.first?.let { chat ->
-                                                        conversationModel.upsert(chat)
+                                                        chatModel.upsert(chat)
                                                     }
                                                 }
                                                 chatPair.let { chat -> deletedChats.remove(chat) }
@@ -339,7 +326,7 @@ fun NavigationDrawer(
                                         onClick = {
                                             scope.launch {
                                                 sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                                navigator.push(
+                                                navigator?.push(
                                                     ChatScreen(
                                                         false,
                                                         conversations.getOrNull(index)?.id ?: return@launch
@@ -380,7 +367,7 @@ fun NavigationDrawer(
                         if (uiState.currentScreen != AppScreen.TAGS_SCREEN) {
                             scope.launch {
                                 searchModel.updateCurrentScreen(AppScreen.TAGS_SCREEN)
-                                navigator.push(HashTagsScreen())
+                                navigator?.push(HashTagsScreen())
                                 drawerState.close()
                             }
                         } else {
@@ -447,7 +434,7 @@ fun NavigationDrawer(
                         onClick = {
                             scope.launch {
                                 sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                navigator.push(
+                                navigator?.push(
                                     SearchScreen(
                                         SearchTypes.Tag(
                                             tags.getOrNull(index)?.label ?: return@launch
@@ -497,7 +484,7 @@ fun NavigationDrawer(
                                         onClick = {
                                             scope.launch {
                                                 sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                                navigator.push(
+                                                navigator?.push(
                                                     SearchScreen(
                                                         SearchTypes.Tag(
                                                             tags.getOrNull(index)?.label ?: return@launch
@@ -533,34 +520,34 @@ fun NavigationDrawer(
 
             item { HorizontalDivider() }
 
-            item {
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = AppScreen.SETTINGS_SCREEN.screen,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    },
-                    icon = { Icon(painterResource(SETTINGS), null) },
-                    onClick = {
-                        if (uiState.currentScreen != AppScreen.SETTINGS_SCREEN) {
-                            scope.launch {
-                                searchModel.updateCurrentScreen(AppScreen.SETTINGS_SCREEN)
-                                navigator.push(SettingsScreen())
-                                drawerState.close()
-                            }
-                        } else {
-                            scope.launch { drawerState.close() }
-                        }
-                    },
-                    selected = uiState.currentScreen == AppScreen.SETTINGS_SCREEN,
-                    colors = NavigationDrawerItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.surface,
-                        selectedTextColor = MaterialTheme.colorScheme.surface,
-                        selectedContainerColor = CommonColors.prime,
-                    )
-                )
-            }
+//            item {
+//                NavigationDrawerItem(
+//                    label = {
+//                        Text(
+//                            text = AppScreen.SETTINGS_SCREEN.screen,
+//                            style = MaterialTheme.typography.titleLarge
+//                        )
+//                    },
+//                    icon = { Icon(painterResource(SETTINGS), null) },
+//                    onClick = {
+//                        if (uiState.currentScreen != AppScreen.SETTINGS_SCREEN) {
+//                            scope.launch {
+//                                searchModel.updateCurrentScreen(AppScreen.SETTINGS_SCREEN)
+//                                navigator.push(SettingsScreen())
+//                                drawerState.close()
+//                            }
+//                        } else {
+//                            scope.launch { drawerState.close() }
+//                        }
+//                    },
+//                    selected = uiState.currentScreen == AppScreen.SETTINGS_SCREEN,
+//                    colors = NavigationDrawerItemDefaults.colors(
+//                        selectedIconColor = MaterialTheme.colorScheme.surface,
+//                        selectedTextColor = MaterialTheme.colorScheme.surface,
+//                        selectedContainerColor = CommonColors.prime,
+//                    )
+//                )
+//            }
 
 //            item {
 //                NavigationDrawerItem(
@@ -598,8 +585,8 @@ fun NavigationDrawer(
                     onClick = {
                         if (uiState.currentScreen != AppScreen.ARCHIVE_SCREEN) {
                             scope.launch {
-                                searchModel.updateCurrentScreen(AppScreen.ARCHIVE_SCREEN)
-                                navigator.push(ArchiveScreen())
+                                searchModel.updateCurrentScreen(AppScreen.ARCHIVE_SCREEN) // Explicit update
+                                navigator?.push(ArchiveScreen())
                                 drawerState.close()
                             }
                         } else {
@@ -650,7 +637,7 @@ fun NavigationDrawer(
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             scope.launch {
                                 searchModel.updateCurrentScreen(AppScreen.FEEDBACK_AND_HELP)
-                                navigator.push(feedbackScreen)
+                                navigator?.push(feedbackScreen)
                                 drawerState.close()
                             }
                         } else {
@@ -679,7 +666,7 @@ fun NavigationDrawer(
                         if (uiState.currentScreen != AppScreen.ABOUT_SCREEN) {
                             scope.launch {
                                 searchModel.updateCurrentScreen(AppScreen.ABOUT_SCREEN)
-                                navigator.push(AboutScreen())
+                                navigator?.push(AboutScreen())
                                 delay(100)
                                 drawerState.close()
                             }

@@ -107,3 +107,7 @@
 -repackageclasses
 -allowaccessmodification
 -overloadaggressively
+
+# Prevent Voyager screens from being renamed to the same letter
+-keep class * implements cafe.adriel.voyager.core.screen.Screen { *; }
+-keepclassmembers class * extends cafe.adriel.voyager.core.model.ScreenModel { *; }

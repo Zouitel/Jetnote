@@ -4,12 +4,9 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -56,20 +53,24 @@ import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class ArchiveScreen: Screen {
     @Composable
     override fun Content() {
         Archive(
-            settingsModel = getScreenModel(),
-            archiveModel = getScreenModel(),
-            audioModel = getScreenModel(),
-            linkModel = getScreenModel(),
-            searchModel = getScreenModel(),
-            dataModel = getScreenModel(),
-            tagModel = getScreenModel()
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel()
         )
     }
 
@@ -82,7 +83,9 @@ class ArchiveScreen: Screen {
         linkModel: LinkScreenModel,
         searchModel: SearchScreenModel,
         dataModel: DataScreenModel,
-        tagModel: TagScreenModel
+        tagModel: TagScreenModel,
+        noteAndTagModel: NoteAndTagScreenModel,
+        chatModel: ChatScreenModel
     ) {
         val bottomNav = LocalBottomSheetNavigator.current
         val auth = FirebaseAuth.getInstance()
@@ -121,7 +124,7 @@ class ArchiveScreen: Screen {
                     NavigationDrawer(
                         settingsModel = settingsModel,
                         tagModel = tagModel,
-                        conversationModel = getScreenModel(),
+                        chatModel = chatModel,
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState
@@ -139,7 +142,7 @@ class ArchiveScreen: Screen {
                             SelectionTopBar(
                                 searchModel = searchModel,
                                 dataModel = dataModel,
-                                noteAndTagModel = getScreenModel(),
+                                noteAndTagModel = noteAndTagModel,
                                 tagModel = tagModel
                             ) {
                                 // to.do cancel the alarm manager reminder.

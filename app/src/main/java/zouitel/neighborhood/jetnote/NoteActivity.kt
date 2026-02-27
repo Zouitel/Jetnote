@@ -60,34 +60,35 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
         }
 
         setContent {
-            val securityState by securityHandler.securityState.collectAsState()
+//            val securityState by securityHandler.securityState.collectAsState()
 
             // Show security screen if threat detected
-            when (securityState) {
-                is SecurityState.Checking -> {
-                    SecurityCheckingScreen()
-                }
-                is SecurityState.Threat -> {
-                    SecurityThreatScreen(
-                        result = (securityState as SecurityState.Threat).result,
-                        onExit = {
-                            finish()
-                        }
-                    )
-                }
-                is SecurityState.Secure -> {
-                    showMainApp()
-                }
-                is SecurityState.Error -> {
-                    // Show error but allow to continue
-                    showMainApp()
-                }
-            }
+//            when (securityState) {
+//                is SecurityState.Checking -> {
+//                    SecurityCheckingScreen()
+//                }
+//                is SecurityState.Threat -> {
+//                    SecurityThreatScreen(
+//                        result = (securityState as SecurityState.Threat).result,
+//                        onExit = {
+//                            finish()
+//                        }
+//                    )
+//                }
+//                is SecurityState.Secure -> {
+//                    showMainApp()
+//                }
+//                is SecurityState.Error -> {
+//                    // Show error but allow to continue
+//                    showMainApp()
+//                }
+//            }
+            MainApp()
         }
     }
 
     @Composable
-    private fun showMainApp() {
+    private fun MainApp() {
         LockModeHandler(settingsModel)
         ScreenshotHandler(window, settingsModel)
 

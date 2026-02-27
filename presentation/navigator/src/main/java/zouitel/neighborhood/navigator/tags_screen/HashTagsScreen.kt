@@ -9,7 +9,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,8 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
@@ -89,6 +86,7 @@ import zouitel.neighborhood.workspace.R
 import zouitel.neighborhood.workspace.ui.bottom_bar.ColorPicker
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import kotlin.math.abs
@@ -97,9 +95,10 @@ class HashTagsScreen: Screen {
     @Composable
     override fun Content() {
         Tags(
-            settingsModel = getScreenModel(),
-            tagModel = getScreenModel(),
-            searchModel = getScreenModel()
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel()
         )
     }
 
@@ -111,7 +110,8 @@ class HashTagsScreen: Screen {
     private fun Tags(
         settingsModel: SettingsScreenModel,
         tagModel: TagScreenModel,
-        searchModel: SearchScreenModel
+        searchModel: SearchScreenModel,
+        chatModel: ChatScreenModel
     ) {
         val keyboardManager = LocalFocusManager.current
         val bottomNav = LocalBottomSheetNavigator.current
@@ -149,7 +149,7 @@ class HashTagsScreen: Screen {
                     NavigationDrawer(
                         settingsModel = settingsModel,
                         tagModel = tagModel,
-                        conversationModel = getScreenModel(),
+                        chatModel = chatModel,
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState

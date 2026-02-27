@@ -3,7 +3,6 @@ package zouitel.neighborhood.navigator.about_screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
@@ -61,6 +58,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
+import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
@@ -68,9 +66,10 @@ class AboutScreen: Screen {
     @Composable
     override fun Content() {
         About(
-            settingsModel = getScreenModel(),
-            tagModel = getScreenModel(),
-            searchModel = getScreenModel()
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel()
         )
     }
 
@@ -79,7 +78,8 @@ class AboutScreen: Screen {
     private fun About(
         settingsModel: SettingsScreenModel,
         tagModel: TagScreenModel,
-        searchModel: SearchScreenModel
+        searchModel: SearchScreenModel,
+        chatModel: ChatScreenModel
     ) {
         val bottomNav = LocalBottomSheetNavigator.current
 
@@ -108,7 +108,7 @@ class AboutScreen: Screen {
                     NavigationDrawer(
                         settingsModel = settingsModel,
                         tagModel = tagModel,
-                        conversationModel = getScreenModel(),
+                        chatModel = chatModel,
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState
@@ -147,17 +147,25 @@ class AboutScreen: Screen {
 
     companion object {
         const val ABOUT = "${CommonConstants.APP_NAME} is a note-taking and task management application.\n\n" +
-                " And It is intended for archiving and creating notes in which photos and tags saved and web links.\n\n" +
-                "Version: ${CommonConstants.APP_VERSION}"
+                " And It is intended for archiving and creating notes in which photos and tags saved and web links.\n\n"
     }
 
     @Composable
     private fun AboutDescription() {
+        val context = LocalContext.current
+        val appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+
         Text(
             text = ABOUT,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(10.dp)
+        )
+
+        Text(
+            text =  "Version: $appVersion",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 

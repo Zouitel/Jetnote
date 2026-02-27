@@ -1,13 +1,9 @@
 package zouitel.neighborhood.navigator.settings_screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -54,6 +50,7 @@ import zouitel.neighborhood.tag.ui.TagScreenModel
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreen
+import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
@@ -66,6 +63,7 @@ class SettingsScreen: Screen {
 
         Settings(
             settingsModel,
+            getScreenModel(),
             getScreenModel(),
             getScreenModel(),
             getScreenModel()
@@ -82,7 +80,8 @@ class SettingsScreen: Screen {
         settingsModel: SettingsScreenModel,
         tagModel: TagScreenModel,
         searchModel: SearchScreenModel,
-        assistantModel: AssistantScreenModel
+        assistantModel: AssistantScreenModel,
+        chatModel: ChatScreenModel
     ) {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
@@ -114,7 +113,7 @@ class SettingsScreen: Screen {
                     NavigationDrawer(
                         settingsModel = settingsModel,
                         tagModel = tagModel,
-                        conversationModel = getScreenModel(),
+                        chatModel = chatModel,
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState

@@ -4,17 +4,13 @@ import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,7 +42,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.UiComposable
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -83,6 +78,7 @@ import zouitel.neighborhood.workspace.model.Data
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import zouitel.neighborhood.ui.rememberAutoHeightCacheStaggeredGrid
@@ -96,15 +92,16 @@ class MainScreen: Screen {
         SystemBarsBehavior(settingsModel)
 
         Main(
-            mainModel = getScreenModel(),
-            settingsModel = settingsModel,
-            tagModel = getScreenModel(),
-            noteAndTagModel = getScreenModel(),
-            dataModel = getScreenModel(),
-            audioModel = getScreenModel(),
-            linkModel = getScreenModel(),
-            searchModel = getScreenModel(),
-            syncModel = getScreenModel()
+            getScreenModel(),
+            settingsModel,
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel()
         )
     }
 
@@ -120,7 +117,8 @@ class MainScreen: Screen {
         audioModel: AudioScreenModel,
         linkModel: LinkScreenModel,
         searchModel: SearchScreenModel,
-        syncModel: SyncScreenModel
+        syncModel: SyncScreenModel,
+        chatModel: ChatScreenModel
     ) {
 
         val context = LocalContext.current
@@ -198,7 +196,7 @@ class MainScreen: Screen {
                     NavigationDrawer(
                         settingsModel = settingsModel,
                         tagModel = tagModel,
-                        conversationModel = getScreenModel(),
+                        chatModel = chatModel,
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState
@@ -246,7 +244,7 @@ class MainScreen: Screen {
                                 searchModel = searchModel,
                                 scrollBehavior = scrollBehavior,
                                 drawerState = drawerState,
-                                syncModel = getScreenModel()
+                                syncModel = syncModel
                             )
                         }
                     },
