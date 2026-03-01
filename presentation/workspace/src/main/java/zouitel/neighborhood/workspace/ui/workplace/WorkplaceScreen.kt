@@ -170,9 +170,6 @@ data class WorkplaceScreen(
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
-//        LaunchedEffect(true) {
-//            if (isNew) focus.requestFocus()
-//        }
         // Replace your existing LaunchedEffect(screen.value) for focus with this:
         LaunchedEffect(Unit) { // Use Unit or a specific "Open" trigger
             if (isNew) {

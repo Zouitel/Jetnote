@@ -49,6 +49,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -86,6 +88,7 @@ import zouitel.neighborhood.workspace.R
 import zouitel.neighborhood.workspace.ui.bottom_bar.ColorPicker
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
+import kotlinx.coroutines.launch
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
@@ -126,6 +129,8 @@ class HashTagsScreen: Screen {
         val colorState = remember { mutableStateOf<Int?>(null) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
+        val scope = rememberCoroutineScope()
+        var placeholderText by remember { mutableStateOf("Tag..") }
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
@@ -166,7 +171,7 @@ class HashTagsScreen: Screen {
                             settingsModel = settingsModel,
                             drawerState = drawerState,
                             scrollBehavior = scrollBehavior,
-                            title = "#Tags"
+                            title = "Tags"
                         )
                     },
                     bottomBar = {
@@ -204,7 +209,7 @@ class HashTagsScreen: Screen {
                                     .onFocusEvent { keyboardManager.moveFocus(FocusDirection.Enter) },
                                 shape = MaterialTheme.shapes.extraLarge,
                                 textStyle = MaterialTheme.typography.titleLarge,
-                                placeholder = { Text("#Tag..", style = MaterialTheme.typography.titleLarge) },
+                                placeholder = { Text(placeholderText, style = MaterialTheme.typography.titleLarge) },
                                 trailingIcon = {
                                     IconButton({
                                         tagModel.updateId().updateLabel()
@@ -223,19 +228,30 @@ class HashTagsScreen: Screen {
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Done
                                 ),
+
                                 onKeyboardAction = KeyboardActionHandler {
-                                    tagModel.sendAction(
-                                        Action.Insert(
-                                            data = Tag(
-                                                id = uiState.currentId,
-                                                label = textFieldState.text.toString(),
-                                                color = colorState.value
+                                    val inputTag = textFieldState.text.toString().trim()
+
+                                    if (inputTag.isEmpty()) {
+                                        placeholderText = "Tag cannot be empty!"
+                                        scope.launch {
+                                            kotlinx.coroutines.delay(3000)
+                                            placeholderText = "Tag.."
+                                        }
+                                    } else {
+                                        tagModel.sendAction(
+                                            Action.Insert(
+                                                data = Tag(
+                                                    id = uiState.currentId,
+                                                    label = inputTag,
+                                                    color = colorState.value
+                                                )
                                             )
                                         )
-                                    )
-                                    tagModel.updateId().updateLabel()
-                                    textFieldState.clearText()
-                                    colorState.value = null
+                                        tagModel.updateId().updateLabel()
+                                        textFieldState.clearText()
+                                        colorState.value = null
+                                    }
                                 },
                                 colors = TextFieldDefaults.colors(
                                     unfocusedIndicatorColor = Color.Transparent,

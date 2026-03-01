@@ -23,7 +23,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.ui.CommonBottomSheet
 import zouitel.neighborhood.ui.CommonColors
@@ -76,12 +79,14 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
         val uiState by remember(tagModel, tagModel::uiState).collectAsState()
         var maxLines by remember { mutableIntStateOf(3) }
         val fieldState = rememberTextFieldState(uiState.currentLabel)
-
         val focusRequester by lazy { FocusRequester() }
+        val scope = rememberCoroutineScope()
+        var placeholder by remember { mutableStateOf("Tag..") }
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -175,20 +180,30 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
                         .imePadding()
                         .focusRequester(focusRequester)
                         .onFocusEvent { keyboardManager.moveFocus(FocusDirection.Enter) },
-                    placeholder = "Tag..",
+                    placeholder = placeholder,
                     imeAction = ImeAction.Done,
                     keyboardActions = {
-                        tagModel.sendAction(
-                            Action.Insert(
-                                data = Tag(
-                                    id = uiState.currentId,
-                                    label = fieldState.text.toString(),
-                                    color = uiState.currentColor
+                        val inputTag = fieldState.text.toString().trim()
+
+                        if (inputTag.isEmpty()) {
+                            placeholder = "Tag cannot be empty!"
+                            scope.launch {
+                                kotlinx.coroutines.delay(3000)
+                                placeholder = "Tag.."
+                            }
+                        } else {
+                            tagModel.sendAction(
+                                Action.Insert(
+                                    data = Tag(
+                                        id = uiState.currentId,
+                                        label = inputTag,
+                                        color = uiState.currentColor
+                                    )
                                 )
                             )
-                        )
-                        tagModel.updateColor().updateId()
-                        fieldState.clearText()
+                            tagModel.updateColor().updateId()
+                            fieldState.clearText()
+                        }
                     }
                 )
             }
