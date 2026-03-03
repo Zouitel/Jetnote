@@ -52,7 +52,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import zouitel.neighborhood.account.SyncScreenModel
+import zouitel.neighborhood.account.ui.SyncScreenModel
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.domain.utils.Action

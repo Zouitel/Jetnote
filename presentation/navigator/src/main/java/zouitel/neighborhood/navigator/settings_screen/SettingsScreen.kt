@@ -28,7 +28,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import zouitel.neighborhood.account.SyncScreen
+import zouitel.neighborhood.account.ui.SyncScreen
 import zouitel.neighborhood.assistant.model.Assistant
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.navigator.R

@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.utils
 
 import android.net.Uri
 import androidx.compose.foundation.Canvas

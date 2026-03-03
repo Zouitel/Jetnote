@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.worker
 
 import android.content.Context
 import android.os.Environment
@@ -8,7 +8,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.media.MediaHttpUploader
 import com.google.api.client.http.FileContent
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -21,6 +20,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.utils.findFolderId
 import java.net.SocketTimeoutException
 import com.google.api.services.drive.model.File as DriveFile
 import java.io.File as JavaFile
@@ -152,13 +152,13 @@ class MoviesUploadWorker(
             try {
                 if (attempt > 0) {
                     Log.d("MoviesUploadWorker", "Retry attempt ${attempt + 1} for ${localFile.name}")
-                    kotlinx.coroutines.delay(2000L * attempt) // Exponential backoff
+                    delay(2000L * attempt) // Exponential backoff
                 }
 
                 updateFile(driveService, localFile, folderId)
                 return // Success, exit function
 
-            } catch (e: java.net.SocketTimeoutException) {
+            } catch (e: SocketTimeoutException) {
                 lastException = e
                 Log.w("MoviesUploadWorker", "Timeout on attempt ${attempt + 1} for ${localFile.name}")
             } catch (e: Exception) {

@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.utils
 
 import kotlinx.serialization.json.Json
 

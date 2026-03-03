@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.ui
 
 import android.content.Context
 import android.content.Intent

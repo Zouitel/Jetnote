@@ -4,7 +4,7 @@ import androidx.compose.ui.platform.ComposeView
 import cafe.adriel.voyager.core.registry.screenModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.createdAtStart
-import zouitel.neighborhood.account.accountModule
+import zouitel.neighborhood.account.di.accountModule
 import zouitel.neighborhood.assistant.di.assistantModule
 import zouitel.neighborhood.audio.di.audioPlayerModule
 import zouitel.neighborhood.workspace.provider.SharedScreen

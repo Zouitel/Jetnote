@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.worker
 
 import android.content.Context
 import android.os.Environment
@@ -8,7 +8,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.media.MediaHttpUploader
 import com.google.api.client.http.FileContent
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -19,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.utils.findFolderId
 import com.google.api.services.drive.model.File as DriveFile
 import java.io.File as JavaFile
 

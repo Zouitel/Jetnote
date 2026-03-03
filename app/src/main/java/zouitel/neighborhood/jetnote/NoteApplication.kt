@@ -2,6 +2,7 @@ package zouitel.neighborhood.jetnote
 
 import android.app.Application
 import android.os.Build
+import androidx.work.Configuration
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import zouitel.neighborhood.bin.di.binModule
 import zouitel.neighborhood.database.di.databaseLazyModule
@@ -26,6 +27,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.workmanager.koin.workManagerFactory

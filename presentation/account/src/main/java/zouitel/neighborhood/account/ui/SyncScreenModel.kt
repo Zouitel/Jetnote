@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.ui
 
 import android.app.Application
 import android.content.Context
@@ -20,7 +20,6 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +29,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.worker.AudiosDownloadsWorker
+import zouitel.neighborhood.account.worker.AudiosUploadWorker
+import zouitel.neighborhood.account.worker.DataUploadWorker
+import zouitel.neighborhood.account.worker.MoviesDownloadsWorker
+import zouitel.neighborhood.account.worker.MoviesUploadWorker
+import zouitel.neighborhood.account.worker.OthersDownloadsWorker
+import zouitel.neighborhood.account.worker.OthersUploadWorker
+import zouitel.neighborhood.account.worker.PicturesDownloadsWorker
+import zouitel.neighborhood.account.worker.PicturesUploadWorker
+import zouitel.neighborhood.account.worker.SyncDataWorker
 import zouitel.neighborhood.security.NativeSecurityManager
 import com.google.api.services.drive.model.File as DriveFile
 

@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.ui
 
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -38,11 +38,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.account.utils.DriveSignIn
 
 class SyncScreen: Screen {
     @Composable
@@ -195,7 +197,7 @@ class SyncScreen: Screen {
         return GoogleSignInOptions.Builder(DEFAULT_SIGN_IN)
             .requestIdToken(webClientId)
             .requestEmail()
-            .requestScopes(com.google.android.gms.common.api.Scope(DriveScopes.DRIVE_FILE))
+            .requestScopes(Scope(DriveScopes.DRIVE_FILE))
             .build()
     }
 }

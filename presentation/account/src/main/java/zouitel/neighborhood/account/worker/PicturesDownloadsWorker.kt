@@ -1,4 +1,4 @@
-package zouitel.neighborhood.account
+package zouitel.neighborhood.account.worker
 
 import android.content.Context
 import android.os.Environment
@@ -21,18 +21,17 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class MoviesDownloadsWorker(
+class PicturesDownloadsWorker(
     context: Context,
     params: WorkerParameters,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher
 ): CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         return try {
-            downloadMovies(applicationContext, initializeDriveService())
+            downloadPictures(applicationContext, initializeDriveService())
             Result.success()
-        } catch (e: Exception) {
-            Log.e("MoviesDownloadsWorker", "Download failed: ${e.message}", e)
+        } catch (_: Exception) {
             Result.failure()
         }
     }
@@ -54,45 +53,49 @@ class MoviesDownloadsWorker(
                     credential
                 ).setApplicationName("Drive File Manager").build()
             }
-        } catch (e: Exception) {
-            Log.e("MoviesDownloadsWorker", "Failed to initialize Drive service: ${e.message}", e)
+        } catch (_: Exception) {
             null
         }
     }
 
     @WorkerThread
-    suspend fun downloadMovies(context: Context, driveService: Drive?) = withContext(ioDispatcher) {
+    suspend fun downloadPictures(context: Context, driveService: Drive?) = withContext(ioDispatcher) {
         if (driveService == null) {
-            Log.e("MoviesDownloadsWorker", "Drive service is null")
+            Log.e("PicturesDownloadsWorker", "Drive service is null")
             return@withContext
         }
 
+        // Find root media folder
         val mediasFolderId = findFolderId(driveService, "jetnote_medias")
         if (mediasFolderId == null) {
-            Log.e("MoviesDownloadsWorker", "Root folder 'jetnote_medias' not found in Drive")
+            Log.e("PicturesDownloadsWorker", "Root folder 'jetnote_medias' not found in Drive")
             return@withContext
         }
 
-        val moviesFolderId = findFolderId(driveService, "movies", mediasFolderId)
-        if (moviesFolderId == null) {
-            Log.e("MoviesDownloadsWorker", "Movies folder not found in Drive")
+        // Find pictures subfolder
+        val picturesFolderId = findFolderId(driveService, "pictures", mediasFolderId)
+        if (picturesFolderId == null) {
+            Log.e("PicturesDownloadsWorker", "Pictures folder not found in Drive")
             return@withContext
         }
 
-        val moviesDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-        if (moviesDir == null) {
-            Log.e("MoviesDownloadsWorker", "Downloads directory not accessible")
+        // Get local pictures directory
+        val picturesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        if (picturesDir == null) {
+            Log.e("PicturesDownloadsWorker", "Pictures directory not accessible")
             return@withContext
         }
 
-        if (!moviesDir.exists()) {
-            moviesDir.mkdirs()
+        // Create directory if it doesn't exist
+        if (!picturesDir.exists()) {
+            picturesDir.mkdirs()
         }
 
+        // Get all image files from Drive pictures folder
         val downloadJobs = mutableListOf<Deferred<Unit>>()
 
         try {
-            val query = "'$moviesFolderId' in parents and trashed=false"
+            val query = "'$picturesFolderId' in parents and trashed=false"
             val result = driveService.files().list()
                 .setQ(query)
                 .setSpaces("drive")
@@ -102,25 +105,42 @@ class MoviesDownloadsWorker(
             val driveFiles = result.files ?: emptyList()
 
             if (driveFiles.isEmpty()) {
-                Log.d("MoviesDownloadsWorker", "No files found in Drive downloads folder")
+                Log.d("PicturesDownloadsWorker", "No pictures found in Drive folder")
                 return@withContext
             }
 
-            Log.d("MoviesDownloadsWorker", "Found ${driveFiles.size} files in Drive downloads folder")
+            Log.d("PicturesDownloadsWorker", "Found ${driveFiles.size} files in Drive pictures folder")
 
-            // Download all files (any type)
+            // Download each picture
             driveFiles.forEach { driveFile ->
-                downloadJobs.add(async {
-                    downloadFile(driveService, driveFile.id, driveFile.name, moviesDir)
-                })
+                // Filter only image files
+                if (isImageFile(driveFile.name, driveFile.mimeType)) {
+                    downloadJobs.add(async {
+                        downloadFile(driveService, driveFile.id, driveFile.name, picturesDir)
+                    })
+                }
             }
 
+            // Wait for all downloads to complete
             downloadJobs.forEach { it.await() }
-            Log.d("MoviesDownloadsWorker", "All download files completed")
+            Log.d("PicturesDownloadsWorker", "All picture downloads completed")
 
         } catch (e: Exception) {
-            Log.e("MoviesDownloadsWorker", "Error listing files from Drive: ${e.message}", e)
+            Log.e("PicturesDownloadsWorker", "Error listing files from Drive: ${e.message}", e)
         }
+    }
+
+    private fun isImageFile(fileName: String, mimeType: String?): Boolean {
+        val imageExtensions = setOf(
+            "jpg", "jpeg", "png", "gif", "bmp", "webp",
+            "heic", "heif", "svg", "tiff", "tif"
+        )
+
+        val extension = fileName.substringAfterLast('.', "").lowercase()
+        val hasImageExtension = extension in imageExtensions
+        val hasImageMimeType = mimeType?.startsWith("image/") == true
+
+        return hasImageExtension || hasImageMimeType
     }
 
     private suspend fun downloadFile(
@@ -132,22 +152,24 @@ class MoviesDownloadsWorker(
         try {
             val localFile = File(localDir, fileName)
 
+            // Skip if file already exists
             if (localFile.exists()) {
-                Log.d("MoviesDownloadsWorker", "File already exists, skipping: $fileName")
+                Log.d("PicturesDownloadsWorker", "File already exists, skipping: $fileName")
                 return@withContext
             }
 
+            // Download file from Drive
             FileOutputStream(localFile).use { outputStream ->
                 driveService.files().get(fileId).executeMediaAndDownloadTo(outputStream)
                 outputStream.flush()
             }
 
-            Log.d("MoviesDownloadsWorker", "Downloaded: $fileName to ${localFile.absolutePath}")
+            Log.d("PicturesDownloadsWorker", "Downloaded: $fileName to ${localFile.absolutePath}")
 
         } catch (e: IOException) {
-            Log.e("MoviesDownloadsWorker", "Error downloading file $fileName: ${e.message}", e)
+            Log.e("PicturesDownloadsWorker", "Error downloading file $fileName: ${e.message}", e)
         } catch (e: Exception) {
-            Log.e("MoviesDownloadsWorker", "Unexpected error downloading $fileName: ${e.message}", e)
+            Log.e("PicturesDownloadsWorker", "Unexpected error downloading $fileName: ${e.message}", e)
         }
     }
 
@@ -171,7 +193,7 @@ class MoviesDownloadsWorker(
 
             result.files?.firstOrNull()?.id
         } catch (e: Exception) {
-            Log.e("MoviesDownloadsWorker", "Failed to find folder '$folderName': ${e.message}", e)
+            Log.e("PicturesDownloadsWorker", "Failed to find folder '$folderName': ${e.message}", e)
             null
         }
     }

@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.navigator.Navigator
@@ -29,10 +27,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
-import zouitel.neighborhood.security.detection.SecurityCheckingScreen
+import zouitel.neighborhood.account.utils.DriveCleanupScreenModel
 import zouitel.neighborhood.security.detection.SecurityHandler
-import zouitel.neighborhood.security.detection.SecurityState
-import zouitel.neighborhood.security.detection.SecurityThreatScreen
 import zouitel.neighborhood.ui.hightlight.Highlighter
 import zouitel.neighborhood.ui.hightlight.LocalHighlighter
 
@@ -42,6 +38,7 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
     private val playerManager: PlaybackManager by inject()
     private val permissionModel: PermissionScreenModel by inject()
     private val binModel: BinScreenModel by inject()
+    private val driveCleanupModel: DriveCleanupScreenModel by inject()
     private val highlighter: Highlighter by inject()
     private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private lateinit var securityHandler: SecurityHandler
@@ -119,6 +116,7 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
 
     override fun onStop() {
         super.onStop()
+        driveCleanupModel.executeManualCleanup()
         binModel.initBinWorker()
 //        syncModel.enqueueUploadsProcessing()
     }

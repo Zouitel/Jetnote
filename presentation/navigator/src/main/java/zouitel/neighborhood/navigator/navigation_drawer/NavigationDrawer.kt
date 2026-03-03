@@ -76,6 +76,9 @@ import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.navigator.settings_screen.SettingsScreen
+import zouitel.neighborhood.ui.CommonIcons.SETTINGS
+import zouitel.neighborhood.ui.CommonIcons.SPARKLES
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -187,34 +190,34 @@ fun NavigationDrawer(
                     )
                 )
             }
-//            item {
-//                NavigationDrawerItem(
-//                    label = {
-//                        Text(
-//                            text = AppScreen.CHAT_SCREEN.screen,
-//                            style = MaterialTheme.typography.titleLarge
-//                        )
-//                    },
-//                    icon = { Icon(painterResource(SPARKLES), null) },
-//                    onClick = {
-//                        if (uiState.currentScreen != AppScreen.CHAT_SCREEN) {
-//                            scope.launch {
-//                                searchModel.updateCurrentScreen(AppScreen.CHAT_SCREEN)
-//                                navigator.push(ChatScreen(true))
-//                                drawerState.close()
-//                            }
-//                        } else {
-//                            scope.launch { drawerState.close() }
-//                        }
-//                    },
-//                    selected = uiState.currentScreen == AppScreen.CHAT_SCREEN,
-//                    colors = NavigationDrawerItemDefaults.colors(
-//                        selectedIconColor = MaterialTheme.colorScheme.surface,
-//                        selectedTextColor = MaterialTheme.colorScheme.surface,
-//                        selectedContainerColor = CommonColors.prime,
-//                    )
-//                )
-//            }
+            item {
+                NavigationDrawerItem(
+                    label = {
+                        Text(
+                            text = AppScreen.CHAT_SCREEN.screen,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    icon = { Icon(painterResource(SPARKLES), null) },
+                    onClick = {
+                        if (uiState.currentScreen != AppScreen.CHAT_SCREEN) {
+                            scope.launch {
+                                searchModel.updateCurrentScreen(AppScreen.CHAT_SCREEN)
+                                navigator?.push(ChatScreen(true))
+                                drawerState.close()
+                            }
+                        } else {
+                            scope.launch { drawerState.close() }
+                        }
+                    },
+                    selected = uiState.currentScreen == AppScreen.CHAT_SCREEN,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.surface,
+                        selectedTextColor = MaterialTheme.colorScheme.surface,
+                        selectedContainerColor = CommonColors.prime,
+                    )
+                )
+            }
 
             item {
                 ContextualFlowRow(
@@ -520,34 +523,34 @@ fun NavigationDrawer(
 
             item { HorizontalDivider() }
 
-//            item {
-//                NavigationDrawerItem(
-//                    label = {
-//                        Text(
-//                            text = AppScreen.SETTINGS_SCREEN.screen,
-//                            style = MaterialTheme.typography.titleLarge
-//                        )
-//                    },
-//                    icon = { Icon(painterResource(SETTINGS), null) },
-//                    onClick = {
-//                        if (uiState.currentScreen != AppScreen.SETTINGS_SCREEN) {
-//                            scope.launch {
-//                                searchModel.updateCurrentScreen(AppScreen.SETTINGS_SCREEN)
-//                                navigator.push(SettingsScreen())
-//                                drawerState.close()
-//                            }
-//                        } else {
-//                            scope.launch { drawerState.close() }
-//                        }
-//                    },
-//                    selected = uiState.currentScreen == AppScreen.SETTINGS_SCREEN,
-//                    colors = NavigationDrawerItemDefaults.colors(
-//                        selectedIconColor = MaterialTheme.colorScheme.surface,
-//                        selectedTextColor = MaterialTheme.colorScheme.surface,
-//                        selectedContainerColor = CommonColors.prime,
-//                    )
-//                )
-//            }
+            item {
+                NavigationDrawerItem(
+                    label = {
+                        Text(
+                            text = AppScreen.SETTINGS_SCREEN.screen,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    icon = { Icon(painterResource(SETTINGS), null) },
+                    onClick = {
+                        if (uiState.currentScreen != AppScreen.SETTINGS_SCREEN) {
+                            scope.launch {
+                                searchModel.updateCurrentScreen(AppScreen.SETTINGS_SCREEN)
+                                navigator?.push(SettingsScreen())
+                                drawerState.close()
+                            }
+                        } else {
+                            scope.launch { drawerState.close() }
+                        }
+                    },
+                    selected = uiState.currentScreen == AppScreen.SETTINGS_SCREEN,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.surface,
+                        selectedTextColor = MaterialTheme.colorScheme.surface,
+                        selectedContainerColor = CommonColors.prime,
+                    )
+                )
+            }
 
 //            item {
 //                NavigationDrawerItem(
