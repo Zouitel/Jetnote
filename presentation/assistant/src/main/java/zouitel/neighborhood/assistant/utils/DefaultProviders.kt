@@ -201,7 +201,9 @@ val DEFAULT_PROVIDERS = listOf(
     ),
     // Groq.
     ProviderSetting.GlobalAI(
+        id = 13,
         name = "Groq",
+        logoUrl = "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/groq.png",
         baseUrl = "https://api.groq.com/openai/v1",
         apiLink = "https://console.groq.com/keys",
         builtIn = true,
@@ -209,15 +211,41 @@ val DEFAULT_PROVIDERS = listOf(
             Groq is the "Speed King" of the AI world. While most companies (like OpenAI or Google) rely on standard GPUs (Graphics Processing Units), Groq built its own custom hardware called the LPU (Language Processing Unit).
         """.trimIndent()
     ),
-    // LLM, Services (Copilot)
-//    ProviderSetting.GlobalAI(
-//        id = 5,
-//        name = "Microsoft (Azure OpenAI)",
-//        baseUrl = "https://{resource-name}.openai.prime.com/openai/deployments/{deployment-id}/",
-//        description = """
-//            Provides enterprise-grade access to OpenAI models (like GPT) and other services via the Azure cloud, focusing on security, scalability, and integration into business workflows.
-//        """.trimIndent()
-//    ),
+    // Nvidia.
+    ProviderSetting.GlobalAI(
+        id = 14,
+        name = "Nvidia",
+        logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/nvidia-color.png",
+        baseUrl = "https://integrate.api.nvidia.com/v1",
+        apiLink = "https://build.nvidia.com/explore/discover",
+        builtIn = true,
+        description = """
+            Provides cloud APIs to run optimized versions of various third-party and open-source models, leveraging their powerful GPU hardware for high performance.
+        """.trimIndent()
+    ),
+    // Mistral.
+    ProviderSetting.GlobalAI(
+        id = 15,
+        name = "Mistral",
+        logoUrl = "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/mistral-color.png",
+        baseUrl = "https://api.mistral.ai/v1",
+        apiLink = "https://console.mistral.ai/home",
+        builtIn = true,
+        description = """
+            ...
+        """.trimIndent()
+    ),
+    // Github.
+    ProviderSetting.GlobalAI(
+        id = 16,
+        name = "Github",
+        baseUrl = "https://models.github.ai/inference",
+        apiLink = "",
+        apiKey = "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",
+        description = """
+            ...
+        """.trimIndent()
+    ),
     // Image, LLM (Stable Diffusion)
 //    ProviderSetting.GlobalAI(
 //        id = 6,
@@ -245,15 +273,7 @@ val DEFAULT_PROVIDERS = listOf(
 //            Focuses on language models specifically built for enterprise needs, offering powerful tools for search, summarization, and RAG applications.
 //        """.trimIndent()
 //    ),
-//    // Hardware, Platform (AI Infrastructure)
-//    ProviderSetting.GlobalAI(
-//        id = 10,
-//        name = "NVIDIA",
-//        baseUrl = "https://api.nvcf.nvidia.com/v2/nvcf/",
-//        description = """
-//            Provides cloud APIs to run optimized versions of various third-party and open-source models, leveraging their powerful GPU hardware for high performance.
-//        """.trimIndent()
-//    ),
+
 //    // LLM (ERNIE Bot)
 //    ProviderSetting.GlobalAI(
 //        id = 11,
@@ -380,13 +400,5 @@ val DEFAULT_PROVIDERS = listOf(
 //            An enterprise platform for building and deploying robust, complex virtual assistants (chatbots) and conversational AI solutions.
 //        """.trimIndent()
 //    ),
-//    // Image Generation
-//    ProviderSetting.GlobalAI(
-//        id = 30,
-//        name = "Leonardo.ai",
-//        baseUrl = "https://cloud.leonardo.ai/api/v1/",
-//        description = """
-//            A platform focused on creative image generation, offering highly customized models, fine-tuning options, and an API for asset generation.
-//        """.trimIndent()
-//    )
+
 )

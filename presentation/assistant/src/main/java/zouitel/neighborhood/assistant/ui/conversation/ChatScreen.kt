@@ -10,7 +10,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.content.MediaType
 import androidx.compose.foundation.content.ReceiveContentListener
 import androidx.compose.foundation.content.consume
@@ -31,7 +30,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,7 +43,6 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ProvideTextStyle
@@ -123,6 +120,7 @@ import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.assistant.utils.JsonInstant
+import zouitel.neighborhood.assistant.utils.Avatar
 import zouitel.neighborhood.feedback.reportable
 import kotlin.uuid.Uuid
 
@@ -230,7 +228,6 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
         val provider by remember(providerModel, providerModel::observeById).collectAsState()
 
         val conversationJobs = remember(conversationModel, conversationModel::conversationJobs).collectAsState()
-        val placeholderText = remember { mutableStateOf("Swipe up for more options") }
         val expanded = remember { mutableStateOf(false) }
 
         val inputState = rememberChatInputState()
@@ -729,13 +726,15 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
             val logos = parts.filterIsInstance<UIMessagePart.Logo>()
             if (logos.isNotEmpty()) {
                 logos.fastForEach {
+                    val model = JsonInstant.decodeFromString<Model>(it.model ?: model.toString())
+
                     Row(Modifier.fillMaxWidth(), Arrangement.Start) {
-                        UIAvatar(
+                        Avatar(
                             isLoading = isProcessing,
-                            logo = it.logoUrl
+                            logo = model.logoUrl,
+                            modelName = model.displayName
                         ) {
-                            val currentModel = JsonInstant.decodeFromString<Model>(it.model ?: model.toString())
-                            navigator?.push(ModelConfigurationScreen(currentModel))
+                            navigator?.push(ModelConfigurationScreen(model))
                         }
                     }
                 }
@@ -782,30 +781,11 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-//                .draggable(
-//                    state = rememberDraggableState { delta ->
-//                        if (delta < 0) {
-//                            /*bottomNav.show(OptionsScreen())*/
-//                        }
-//                    },
-//                    orientation = Orientation.Vertical,
-//                    onDragStarted = { /*bottomNav.show(OptionsScreen())*/ }
-//                ),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surfaceContainerHighest,
             shadowElevation = elevation.dp,
             tonalElevation = 2.dp
         ) {
-            // Send button
-//            val sendButtonRotation by animateFloatAsState(
-//                targetValue = if (inputState.textContent.text.isNotBlank()) 0f else 45f,
-//                animationSpec = spring(
-//                    dampingRatio = Spring.DampingRatioMediumBouncy,
-//                    stiffness = Spring.StiffnessMedium
-//                ),
-//                label = "sendRotation"
-//            )
-
             // Text input
             TextField(
                 state = inputState.textContent,
@@ -823,18 +803,7 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                     color = MaterialTheme.colorScheme.onSurface,
                     lineHeight = 22.sp
                 ),
-//                maxLines = 5,
                 placeholder = {
-//                    LaunchedEffect(Unit) {
-//                        delay(3000)
-//                        placeholderText.value = "Ask AI Assistant"
-//                    }
-//
-//                    AnimatedVisibility(
-//                        visible = true,
-//                        enter = fadeIn(animationSpec = tween(durationMillis = 300)),
-//                    ) {
-//                    }
                     Text(
                         text = model?.let{ "Ask ${it.displayName.split(' ','/','-',',').firstOrNull()}"  } ?: "<- Add AI model",
                         style = MaterialTheme.typography.bodyLarge,
@@ -861,6 +830,12 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                                 )
                             } ?: Icon(painterResource(CommonIcons.BOX_CONNECTION), null)
                         }
+                        Avatar(
+                            isLoading = false,
+                            logo = model?.logoUrl,
+                            modelName = model?.displayName ?: "/",
+                            onClick = onAttachClick
+                        )
                     }
                 } else null,
                 // Update the trailing icon to show sending state:
@@ -893,41 +868,7 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                             }
                         }
                     }
-//                    if (loading.value) {
-//                        IconButton(onCancel, Modifier.padding(5.dp)) {
-//                            Icon(
-//                                painter = painterResource(CommonIcons.CROSS_18),
-//                                contentDescription = "cancel"
-//                            )
-//                        }
-//                    } else {
-//                        IconButton(onSend, Modifier.padding(5.dp)) {
-//                            Icon(
-//                                painterResource(CommonIcons.ARROW_UP),
-//                                "Send",
-//                                tint = if (inputState.textContent.text.isNotBlank()) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
-//                                modifier = Modifier.rotate(sendButtonRotation)
-//                            )
-//                        }
-//                    }
                 }
-            )
-        }
-    }
-
-    @Composable
-    private fun UIAvatar(isLoading: Boolean, logo: String?, onClick: () -> Unit) {
-        IconButton(
-            onClick,
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = if (isLoading) MaterialTheme.colorScheme.surfaceContainerHighest else Color.Transparent
-            ),
-            shape = rememberAvatarShape(isLoading)
-        ) {
-            AsyncImage(
-                logo,
-                "avatar",
-                modifier = Modifier.size(30.dp)
             )
         }
     }

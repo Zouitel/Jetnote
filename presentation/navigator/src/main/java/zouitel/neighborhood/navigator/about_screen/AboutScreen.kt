@@ -111,7 +111,9 @@ class AboutScreen: Screen {
                         chatModel = chatModel,
                         searchModel = searchModel,
                         drawerState = drawerState,
-                        snackbarState = snackbarState
+                        snackbarState = snackbarState,
+                        modelsModel = getScreenModel(),
+                        assistantModel = getScreenModel()
                     )
                 }
             ) {

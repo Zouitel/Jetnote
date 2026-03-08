@@ -1,4 +1,4 @@
-package zouitel.neighborhood.workspace.ui.features
+package zouitel.neighborhood.ui
 
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable

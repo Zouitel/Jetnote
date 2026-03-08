@@ -75,7 +75,6 @@ import zouitel.neighborhood.workspace.model.Reminder
 import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
 import zouitel.neighborhood.workspace.ui.features.RecorderSheet
 import zouitel.neighborhood.workspace.ui.features.ReminderSheet
-import zouitel.neighborhood.workspace.ui.features.getAverageColorFromImage
 import zouitel.neighborhood.workspace.ui.utils.remindersContext
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreenModel
@@ -84,6 +83,7 @@ import dev.icerock.moko.permissions.camera.CAMERA
 import dev.icerock.moko.permissions.microphone.RECORD_AUDIO
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import zouitel.neighborhood.ui.getAverageColorFromImage
 import java.io.File
 import kotlin.random.Random
 

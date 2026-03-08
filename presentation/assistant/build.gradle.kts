@@ -15,7 +15,7 @@ dependencies {
     implementation(projects.common.ui)
     implementation(projects.common.logic)
     implementation(projects.common.permissions)
-    implementation(projects.ai)
+    api(projects.ai)
     implementation(projects.feedback)
     implementation(projects.document)
 

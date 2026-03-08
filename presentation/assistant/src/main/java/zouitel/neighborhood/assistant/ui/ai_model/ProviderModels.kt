@@ -1,4 +1,4 @@
-package zouitel.neighborhood.assistant.ui.configurations
+package zouitel.neighborhood.assistant.ui.ai_model
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -48,13 +48,13 @@ import zouitel.neighborhood.ai.provider.ProviderSetting
 import zouitel.neighborhood.ai.provider.providers.GlobalProvider
 import zouitel.neighborhood.ai.registry.ModelRegistry
 import zouitel.neighborhood.assistant.R
-import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.ai.provider.providers.ClaudeProvider
 import zouitel.neighborhood.ai.provider.providers.GoogleProvider
+import zouitel.neighborhood.assistant.utils.Avatar
 import kotlin.uuid.Uuid
 
 @Composable
@@ -272,7 +272,7 @@ private fun AddModels(
                     colors = CardDefaults.cardColors(
                         containerColor = if (isExisting) CommonColors.prime
                         else MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = if (isExisting) MaterialTheme.colorScheme.onPrimaryContainer
+                        contentColor = if (isExisting) MaterialTheme.colorScheme.surface
                         else MaterialTheme.colorScheme.onSurface
                     )
                 ) {
@@ -280,21 +280,11 @@ private fun AddModels(
                         modifier = Modifier.fillMaxWidth().heightIn(45.dp).padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (isExisting) {
-                            AnimatedVisibility(true) {
-                                Icon(
-                                    painterResource(CommonIcons.CHECK_18),
-                                    null,
-                                    modifier = Modifier.padding(horizontal = 10.dp)
-                                )
-                            }
-                        } else {
-                            AsyncImage(
-                                model.logoUrl ?: R.drawable.ai_model,
-                                null,
-                                Modifier.size(30.dp).padding(horizontal = 5.dp)
-                            )
-                        }
+                        Avatar(
+                            isLoading = false,
+                            logo = model.logoUrl,
+                            modelName = model.displayName
+                        ) { }
 
                         Text(
                             text = model.modelId,

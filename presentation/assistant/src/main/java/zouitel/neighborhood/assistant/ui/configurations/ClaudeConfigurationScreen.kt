@@ -47,6 +47,7 @@ import zouitel.neighborhood.ui.webview.WebViewPageScreen
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
+import zouitel.neighborhood.assistant.ui.ai_model.ModelsList
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): Screen {

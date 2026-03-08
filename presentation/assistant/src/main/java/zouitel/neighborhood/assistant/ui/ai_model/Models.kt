@@ -88,10 +88,7 @@ internal fun Models(
                             shape = CircleShape,
                             onClick = { columnHeight = Dp.Unspecified },
                             label = {
-                                Text(
-                                    text = "+${totalItemCount - shownItemCount} more",
-//                                    color = Color.White
-                                )
+                                Text("+${totalItemCount - shownItemCount} more")
                             },
                             colors = FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = CommonColors.prime,

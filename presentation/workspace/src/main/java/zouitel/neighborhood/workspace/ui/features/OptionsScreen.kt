@@ -80,6 +80,7 @@ import dev.icerock.moko.permissions.notifications.REMOTE_NOTIFICATION
 import dev.icerock.moko.permissions.storage.STORAGE
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.ui.getAverageColorFromImage
 import zouitel.neighborhood.workspace.ui.utils.NoteDates
 import zouitel.neighborhood.workspace.ui.utils.PrioritySlider
 import java.io.File

@@ -41,6 +41,7 @@ import zouitel.neighborhood.video.VideoPlayer
 import zouitel.neighborhood.workspace.model.Data
 import coil.compose.SubcomposeAsyncImage
 import kotlinx.coroutines.delay
+import zouitel.neighborhood.ui.getAverageColorFromImage
 import kotlin.math.absoluteValue
 
 @SuppressLint("CoroutineCreationDuringComposition")

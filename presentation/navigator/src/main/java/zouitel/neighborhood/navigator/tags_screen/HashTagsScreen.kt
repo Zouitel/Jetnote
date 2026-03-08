@@ -88,6 +88,7 @@ import zouitel.neighborhood.workspace.R
 import zouitel.neighborhood.workspace.ui.bottom_bar.ColorPicker
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
@@ -157,7 +158,9 @@ class HashTagsScreen: Screen {
                         chatModel = chatModel,
                         searchModel = searchModel,
                         drawerState = drawerState,
-                        snackbarState = snackbarState
+                        snackbarState = snackbarState,
+                        modelsModel = getScreenModel(),
+                        assistantModel = getScreenModel()
                     )
                 }
             ) {
@@ -235,7 +238,7 @@ class HashTagsScreen: Screen {
                                     if (inputTag.isEmpty()) {
                                         placeholderText = "Tag cannot be empty!"
                                         scope.launch {
-                                            kotlinx.coroutines.delay(3000)
+                                            delay(3000)
                                             placeholderText = "Tag.."
                                         }
                                     } else {

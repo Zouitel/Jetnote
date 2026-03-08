@@ -18,10 +18,10 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
-import zouitel.neighborhood.workspace.ui.features.getAverageColorFromImage
 import zouitel.neighborhood.workspace.ui.utils.getImageDisplayName
 import zouitel.neighborhood.workspace.worker.CopyMediaWorker
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.ui.getAverageColorFromImage
 import java.io.File
 import kotlin.random.Random
 

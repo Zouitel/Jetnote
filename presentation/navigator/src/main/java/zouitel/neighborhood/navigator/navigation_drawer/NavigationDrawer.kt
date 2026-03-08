@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import coil.compose.AsyncImage
 import zouitel.neighborhood.assistant.model.Conversation
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreen
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
@@ -76,6 +77,11 @@ import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
+import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
+import zouitel.neighborhood.assistant.ui.conversation.rememberChatInputState
+import zouitel.neighborhood.assistant.ui.provider.ProviderScreenModel
+import zouitel.neighborhood.assistant.utils.Avatar
 import zouitel.neighborhood.navigator.settings_screen.SettingsScreen
 import zouitel.neighborhood.ui.CommonIcons.SETTINGS
 import zouitel.neighborhood.ui.CommonIcons.SPARKLES
@@ -88,6 +94,8 @@ fun NavigationDrawer(
     tagModel: TagScreenModel,
     searchModel: SearchScreenModel,
     chatModel: ChatScreenModel,
+    modelsModel: ModelsScreenModel,
+    assistantModel: AssistantScreenModel,
     drawerState: DrawerState,
     snackbarState: SnackbarHostState
 ) {
@@ -98,6 +106,13 @@ fun NavigationDrawer(
     val settings by remember(settingsModel, settingsModel::observe).collectAsState()
     val conversations by remember(chatModel, chatModel::observeAll).collectAsState()
     val uiState by remember(searchModel, searchModel::uiState).collectAsState()
+    val assistant by remember(assistantModel, assistantModel::observe).collectAsState()
+    val models by remember(modelsModel, modelsModel::observeAll).collectAsState(emptyList())
+    val model by remember {
+        derivedStateOf {
+            models.find { it.uid == assistant?.currentModelUid }
+        }
+    }
     val scope = rememberCoroutineScope()
     var tagsMaxLines by remember { mutableIntStateOf(3) }
     var conversationsMaxLines by remember { mutableIntStateOf(3) }
@@ -159,9 +174,7 @@ fun NavigationDrawer(
                     modifier = Modifier.padding(20.dp)
                 )
             }
-
             item { HorizontalDivider() }
-
             item {
                 NavigationDrawerItem(
                     label = {
@@ -198,7 +211,19 @@ fun NavigationDrawer(
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
-                    icon = { Icon(painterResource(SPARKLES), null) },
+                    icon = {
+                        model?.let {
+                            if (it.logoUrl.isNullOrEmpty()) {
+                                Icon(painterResource(SPARKLES), null)
+                            } else {
+                                AsyncImage(
+                                    it.logoUrl,
+                                    null,
+                                    modifier = Modifier.size(26.dp)
+                                )
+                            }
+                        } ?: Icon(painterResource(SPARKLES), null)
+                    },
                     onClick = {
                         if (uiState.currentScreen != AppScreen.CHAT_SCREEN) {
                             scope.launch {

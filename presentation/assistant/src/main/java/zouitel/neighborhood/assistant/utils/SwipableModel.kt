@@ -143,7 +143,7 @@ fun SwipableModel(
                 .align(Alignment.Center),
             colors = CardDefaults.cardColors(
                 containerColor = if (isCurrent) CommonColors.prime
-                    else MaterialTheme.colorScheme.surfaceContainer,
+                else MaterialTheme.colorScheme.surfaceContainer,
                 contentColor = if (isCurrent) MaterialTheme.colorScheme.surface
                 else MaterialTheme.colorScheme.onSurface
             )
@@ -152,23 +152,11 @@ fun SwipableModel(
                 modifier = Modifier.fillMaxWidth().heightIn(45.dp).padding(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-//                if (isCurrent) {
-//                    AnimatedVisibility(true) {
-//                        Icon(
-//                            painterResource(CommonIcons.CHECK_18),
-//                            null,
-//                            modifier = Modifier.padding(horizontal = 10.dp)
-//                        )
-//                    }
-//                } else {
-                    AsyncImage(
-                        model.logoUrl ?: R.drawable.ai_model,
-                        "model logo",
-                        Modifier
-                            .size(30.dp)
-                            .padding(5.dp)
-                    )
-//                }
+                Avatar(
+                    isLoading = false,
+                    logo = model.logoUrl,
+                    modelName = model.displayName
+                ) { }
 
                 Text(
                     text = model.displayName,

@@ -37,10 +37,10 @@ import androidx.media3.common.util.UnstableApi
 import zouitel.neighborhood.video.VideoPlayer
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
-import zouitel.neighborhood.workspace.ui.features.getAverageColorFromImage
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.ui.getAverageColorFromImage
 import kotlin.math.absoluteValue
 
 @SuppressLint("CoroutineCreationDuringComposition")
