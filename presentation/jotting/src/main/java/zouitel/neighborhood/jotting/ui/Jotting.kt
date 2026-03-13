@@ -9,9 +9,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
@@ -20,12 +20,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -55,8 +53,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import androidx.core.content.FileProvider
 import zouitel.neighborhood.audio.model.Audio
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
@@ -95,7 +91,7 @@ fun Jotting(
     onDismiss: () -> Unit
 ) {
     val playerModel = koinInject<AudioScreenModel>()
-    val alarmModel =  koinInject<AlarmManagerScreenModel>()
+    val alarmModel = koinInject<AlarmManagerScreenModel>()
     val workplaceModel = koinInject<WorkplaceScreenModel>()
     val permissionsModel = koinInject<PermissionScreenModel>()
     val dataModel = koinInject<DataScreenModel>()
@@ -109,7 +105,8 @@ fun Jotting(
     val snackbarState = remember { SnackbarHostState() }
     val toolTipState = rememberTooltipState(isPersistent = true)
 
-    // Bottom sheet states
+    val jottingSheetState = rememberModalBottomSheetState(true)
+
     val showRecorderSheet = remember { mutableStateOf(false) }
     val showReminderSheet = remember { mutableStateOf(false) }
     val recorderSheetState = rememberModalBottomSheetState()
@@ -136,13 +133,8 @@ fun Jotting(
     val textColorState = rememberSaveable { mutableIntStateOf(textColor) }
 
     LaunchedEffect(Unit) {
-        // 1. Wait for the composition to settle and the window to be ready
         kotlinx.coroutines.delay(200)
-
-        // 2. Request focus on the TextField
         focus.requestFocus()
-
-        // 3. Explicitly tell the keyboard controller to show
         keyboard?.show()
     }
 
@@ -153,7 +145,9 @@ fun Jotting(
             scope.launch {
                 val averageColor = getAverageColorFromImage(context, pictureUri.value.toString())
                 data.value = data.value.copy(
-                    medias = data.value.medias.plusElement(Media(uri = pictureUri.value.toString(), color = averageColor.toArgb()))
+                    medias = data.value.medias.plusElement(
+                        Media(uri = pictureUri.value.toString(), color = averageColor.toArgb())
+                    )
                 )
             }
         }
@@ -162,350 +156,240 @@ fun Jotting(
     LaunchedEffect(screen.value) {
         dataModel.sendAction(Action.Insert(data))
         when (screen.value) {
-            Screens.NOTE_SCREEN -> {
-                playerModel.run {
-                    initController()
-                }
-            }
+            Screens.NOTE_SCREEN -> playerModel.initController()
             Screens.RECORD_SCREEN -> {
-                permissionsModel.requestPermission(Permission.RECORD_AUDIO)
-                    .collect {
-                        when(it) {
-                            PermissionResult.Denied -> {
-                                Toast.makeText(
-                                    context,
-                                    "Permission is Denied!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            is PermissionResult.Error -> {
-                                Toast.makeText(
-                                    context,
-                                    it.message,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            PermissionResult.Granted -> {
-                                showRecorderSheet.value = true
-                            }
-                            PermissionResult.PermanentlyDenied -> {
-                                permissionsModel.permissionDeniedHandle(snackBarHostState)
-                            }
-                        }
+                permissionsModel.requestPermission(Permission.RECORD_AUDIO).collect {
+                    when (it) {
+                        PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                        is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                        PermissionResult.Granted -> showRecorderSheet.value = true
+                        PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
                     }
+                }
             }
             Screens.PHOTO_SCREEN -> {
                 scope.launch {
                     permissionsModel.requestPermission(Permission.CAMERA).collect {
-                        when(it) {
-                            PermissionResult.Denied -> {
-                                Toast.makeText(
-                                    context,
-                                    "Permission is Denied!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            is PermissionResult.Error -> {
-                                Toast.makeText(
-                                    context,
-                                    it.message,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        when (it) {
+                            PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                            is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                             PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
-                            PermissionResult.PermanentlyDenied -> {
-                                permissionsModel.permissionDeniedHandle(snackBarHostState)
-                            }
+                            PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
                         }
                     }
                 }
             }
-
-            Screens.REMINDER_SCREEN -> {
-                showReminderSheet.value = true
-            }
+            Screens.REMINDER_SCREEN -> showReminderSheet.value = true
             null -> Unit
         }
         screen.value = null
     }
 
-    // Custom Popup that looks like a tooltip but supports interaction
-    Popup(
-        alignment = Alignment.Center,
+    // ── Main Jotting Bottom Sheet ─────────────────────────────────────────────
+    ModalBottomSheet(
         onDismissRequest = onDismiss,
-        properties = PopupProperties(
-            focusable = true,
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false  // Allow custom width
-        )
+        sheetState = jottingSheetState,
+        containerColor = Color(backgroundColorState.intValue),
     ) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            containerColor = Color.Transparent,
-            snackbarHost = {
-                SnackbarHost(snackBarHostState) { data ->
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 220.dp, max = 500.dp)
+//                .imePadding()
+            ,
+            color = Color.Transparent
+        ) {
+            // Box lets the Snackbar float over content without a Scaffold slot
+            Column(modifier = Modifier.fillMaxWidth()) {
+
+                // Media thumbnails row
+                QuickMediaTop(data) { media ->
+                    val currentJobId = jobCounter.intValue++
+                    deletedMedias.add(Pair(media, currentJobId))
+                    val mediaPair = deletedMedias.firstOrNull { it.second == currentJobId }
+                    data.value = data.value.copy(
+                        medias = data.value.medias.minusElement(
+                            mediaPair?.first ?: return@QuickMediaTop
+                        )
+                    )
+                    scope.launch {
+                        snackBarHostState.currentSnackbarData?.dismiss()
+                        val result = snackBarHostState.showSnackbar(
+                            message = "media deleted",
+                            actionLabel = "Undo",
+                            duration = SnackbarDuration.Long
+                        )
+                        if (result == SnackbarResult.ActionPerformed) {
+                            data.value = data.value.copy(
+                                medias = data.value.medias.plusElement(mediaPair!!.first)
+                            )
+                        }
+                        deletedMedias.remove(mediaPair)
+                    }
+                }
+
+                // Scrollable area — weight(1f) takes remaining height,
+                // leaving no room for the action row to drift upward
+                LazyColumn(
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .fillMaxWidth()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    item {
+                        CommonTextField(
+                            state = descriptionState,
+                            modifier = Modifier.focusRequester(focus),
+                            placeholder = "Note",
+                            textColor = MaterialTheme.colorScheme.onSurface
+                        ) {
+                            workplaceModel.handleContentReceiver(data, it)
+                        }
+                    }
+
+                    items(data.value.audios) { audio ->
+                        MediumAudioPlayer(playerModel, audio) {
+                            val currentJobId = jobCounter.intValue++
+                            deletedAudios.add(Pair(audio, currentJobId))
+                            val audioPair = deletedAudios.firstOrNull { it.second == currentJobId }
+                            data.value = data.value.copy(
+                                audios = data.value.audios.minusElement(
+                                    audioPair?.first ?: return@MediumAudioPlayer
+                                )
+                            )
+                            scope.launch {
+                                snackBarHostState.currentSnackbarData?.dismiss()
+                                val result = snackBarHostState.showSnackbar(
+                                    message = "record deleted",
+                                    actionLabel = "Undo",
+                                    duration = SnackbarDuration.Long
+                                )
+                                if (result == SnackbarResult.ActionPerformed) {
+                                    data.value = data.value.copy(
+                                        audios = data.value.audios.plusElement(audioPair!!.first)
+                                    )
+                                }
+                                deletedAudios.remove(audioPair)
+                            }
+                        }
+                    }
+
+                    remindersContext(
+                        alarmModel,
+                        snackbarState,
+                        toolTipState,
+                        data,
+                        scope,
+                        deletedReminders,
+                        jobCounter
+                    )
+                }
+
+                // ── Action row — pinned to bottom of Surface ──────────────
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SmallFloatingActionButton(
+                        onClick = {
+                            scope.launch {
+                                keyboard?.hide()
+                                permissionsModel.requestPermission(Permission.RECORD_AUDIO).collect {
+                                    when (it) {
+                                        PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                        is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                                        PermissionResult.Granted -> showRecorderSheet.value = true
+                                        PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
+                                    }
+                                }
+                            }
+                        },
+                        shape = CircleShape,
+                        containerColor = MaterialTheme.colorScheme.outlineVariant,
+                        contentColor = contentColorFor(MaterialTheme.colorScheme.outlineVariant)
+                    ) {
+                        Icon(painterResource(CommonIcons.MIC), null)
+                    }
+
+                    SmallFloatingActionButton(
+                        onClick = {
+                            scope.launch {
+                                permissionsModel.requestPermission(Permission.CAMERA).collect {
+                                    when (it) {
+                                        PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                        is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                                        PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
+                                        PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
+                                    }
+                                }
+                            }
+                        },
+                        shape = CircleShape,
+                        containerColor = MaterialTheme.colorScheme.outlineVariant,
+                        contentColor = contentColorFor(MaterialTheme.colorScheme.outlineVariant)
+                    ) {
+                        Icon(painterResource(CommonIcons.CAMERA), null)
+                    }
+
+                    SmallFloatingActionButton(
+                        onClick = {
+                            dataModel.sendAction(
+                                Action.Insert(
+                                    data.value.copy(
+                                        uid = data.value.uid,
+                                        title = "Untitled",
+                                        description = descriptionState.text.toString(),
+                                        background = backgroundColorState.intValue,
+                                        textColor = textColorState.intValue
+                                    )
+                                )
+                            )
+                            linkModel.urlsProcessing(data.value.uid, descriptionState.text.toString())
+                            onDismiss()
+                        },
+                        shape = CircleShape,
+                        containerColor = CommonColors.prime,
+                        contentColor = MaterialTheme.colorScheme.surface
+                    ) {
+                        Icon(painterResource(CommonIcons.CHECK), null)
+                    }
+                }
+            }
+            Box(modifier = Modifier.fillMaxWidth()) {
+
+
+                // Snackbar overlays content without needing a Scaffold slot
+                SnackbarHost(
+                    hostState = snackBarHostState,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 72.dp) // clears the action row height
+                ) { snackbarData ->
                     Snackbar(
-                        modifier = Modifier.imePadding(),
-                        snackbarData = data,
+                        snackbarData = snackbarData,
                         actionOnNewLine = false,
                         shape = MaterialTheme.shapes.extraLarge,
                         actionColor = CommonColors.prime,
                     )
                 }
             }
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(270.dp)
-                        .padding(start = 25.dp, end = 25.dp)
-                        .imePadding()
-                        .background(Color.Transparent),
-                    shape = MaterialTheme.shapes.extraLarge
-                ) {
-                    Column {
-                        // media display.
-                        QuickMediaTop(data) { media ->
-                            val currentJobId = jobCounter.intValue++
-                            deletedMedias.add(Pair(media, currentJobId))
-                            val mediaPair = deletedMedias.firstOrNull { it.second == currentJobId }
-
-                            data.value = data.value.copy(
-                                medias = data.value.medias.minusElement(
-                                    mediaPair?.first ?: return@QuickMediaTop
-                                )
-                            )
-
-                            scope.launch {
-                                snackBarHostState.currentSnackbarData?.dismiss()
-                                val result = snackBarHostState.showSnackbar(
-                                    message = "media deleted",
-                                    actionLabel = "Undo",
-                                    duration = SnackbarDuration.Long
-                                )
-
-                                if (result == SnackbarResult.ActionPerformed) {
-                                    mediaPair.first.let { media ->
-                                        data.value = data.value.copy(
-                                            medias = data.value.medias.plusElement(media)
-                                        )
-                                    }
-                                }
-                                mediaPair.let { deletedMedias.remove(it) }
-                            }
-                        }
-
-                        LazyColumn(
-                            modifier = Modifier
-                                .background(Color.Transparent)
-                                .fillMaxWidth()
-                                .heightIn(300.dp),
-                            verticalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            // description field.
-                            item {
-                                CommonTextField(
-                                    state = descriptionState,
-                                    modifier = Modifier.focusRequester(focus),
-                                    placeholder = "Note",
-                                    textColor = MaterialTheme.colorScheme.onSurface
-                                ) {
-                                    workplaceModel.handleContentReceiver(data, it)
-                                }
-                            }
-
-                            //audios display.
-                            items(data.value.audios) { audio ->
-                                MediumAudioPlayer(playerModel, audio) {
-                                    val currentJobId = jobCounter.intValue++
-                                    deletedAudios.add(Pair(audio, currentJobId))
-                                    val audioPair = deletedAudios.firstOrNull { it.second == currentJobId }
-
-                                    data.value = data.value.copy(
-                                        audios = data.value.audios.minusElement(audioPair?.first ?: return@MediumAudioPlayer)
-                                    )
-
-                                    scope.launch {
-                                        snackBarHostState.currentSnackbarData?.dismiss()
-                                        val result = snackBarHostState.showSnackbar(
-                                            message = "record deleted",
-                                            actionLabel = "Undo",
-                                            duration = SnackbarDuration.Long
-                                        )
-
-                                        if (result == SnackbarResult.ActionPerformed) {
-                                            audioPair.first.let { audio ->
-                                                data.value = data.value.copy(
-                                                    audios = data.value.audios.plusElement(audio)
-                                                )
-                                            }
-                                        }
-                                        audioPair.let { deletedAudios.remove(it) }
-                                    }
-                                }
-                            }
-
-                            // display reminder chips.
-                            remindersContext(
-                                alarmModel,
-                                snackbarState,
-                                toolTipState,
-                                data,
-                                scope,
-                                deletedReminders,
-                                jobCounter
-                            )
-
-                            //bottom options.
-                            item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(10.dp),
-                                    verticalAlignment = Alignment.Bottom
-                                ) {
-                                    SmallFloatingActionButton(
-                                        onClick = onDismiss,
-                                        shape = CircleShape,
-                                        containerColor = MaterialTheme.colorScheme.outlineVariant,
-                                        contentColor = contentColorFor(
-                                            backgroundColor = MaterialTheme.colorScheme.outlineVariant
-                                        )
-                                    ) {
-                                        Icon(painterResource(CommonIcons.CROSS_SMALL), null)
-                                    }
-                                    Row(Modifier.fillMaxWidth(), Arrangement.End) {
-                                        SmallFloatingActionButton(
-                                            onClick = {
-                                                scope.launch {
-                                                    keyboard?.hide()
-                                                    permissionsModel.requestPermission(Permission.RECORD_AUDIO)
-                                                        .collect {
-                                                            when(it) {
-                                                                PermissionResult.Denied -> {
-                                                                    Toast.makeText(
-                                                                        context,
-                                                                        "Permission is Denied!",
-                                                                        Toast.LENGTH_SHORT
-                                                                    ).show()
-                                                                }
-                                                                is PermissionResult.Error -> {
-                                                                    Toast.makeText(
-                                                                        context,
-                                                                        it.message,
-                                                                        Toast.LENGTH_SHORT
-                                                                    ).show()
-                                                                }
-                                                                PermissionResult.Granted -> {
-                                                                    showRecorderSheet.value = true
-                                                                }
-                                                                PermissionResult.PermanentlyDenied -> {
-                                                                    permissionsModel.permissionDeniedHandle(snackBarHostState)
-                                                                }
-                                                            }
-                                                        }
-                                                }
-                                            },
-                                            shape = CircleShape,
-                                            containerColor = MaterialTheme.colorScheme.outlineVariant,
-                                            contentColor = contentColorFor(
-                                                backgroundColor = MaterialTheme.colorScheme.outlineVariant
-                                            )
-                                        ) {
-                                            Icon(painterResource(CommonIcons.MIC), null)
-                                        }
-
-                                        SmallFloatingActionButton(
-                                            onClick = {
-                                                scope.launch {
-                                                    permissionsModel.requestPermission(Permission.CAMERA)
-                                                        .collect {
-                                                            when(it) {
-                                                                PermissionResult.Denied -> {
-                                                                    Toast.makeText(
-                                                                        context,
-                                                                        "Permission is Denied!",
-                                                                        Toast.LENGTH_SHORT
-                                                                    ).show()
-                                                                }
-                                                                is PermissionResult.Error -> {
-                                                                    Toast.makeText(
-                                                                        context,
-                                                                        it.message,
-                                                                        Toast.LENGTH_SHORT
-                                                                    ).show()
-                                                                }
-                                                                PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
-                                                                PermissionResult.PermanentlyDenied -> {
-                                                                    permissionsModel.permissionDeniedHandle(snackBarHostState)
-                                                                }
-                                                            }
-                                                        }
-                                                }
-                                            },
-                                            shape = CircleShape,
-                                            containerColor = MaterialTheme.colorScheme.outlineVariant,
-                                            contentColor = contentColorFor(
-                                                backgroundColor = MaterialTheme.colorScheme.outlineVariant
-                                            )
-                                        ) {
-                                            Icon(painterResource(CommonIcons.CAMERA), null)
-                                        }
-
-                                        SmallFloatingActionButton(
-                                            onClick = {
-                                                dataModel.sendAction(
-                                                    Action.Insert(
-                                                        data.value.copy(
-                                                            uid = data.value.uid,
-                                                            title = "Untitled",
-                                                            description = descriptionState.text.toString(),
-                                                            background = backgroundColorState.intValue,
-                                                            textColor = textColorState.intValue
-                                                        )
-                                                    )
-                                                )
-                                                // links handel.
-                                                linkModel.urlsProcessing(data.value.uid, descriptionState.text.toString())
-                                                onDismiss()
-                                            },
-                                            shape = CircleShape,
-                                            containerColor = CommonColors.prime,
-                                            contentColor = MaterialTheme.colorScheme.surface
-                                        ) {
-                                            Icon(painterResource(CommonIcons.CHECK), null)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
-// RecorderSheet Bottom Sheet
+    // ── Recorder Bottom Sheet ─────────────────────────────────────────────────
     if (showRecorderSheet.value) {
         ModalBottomSheet(
-            onDismissRequest = {
-                showRecorderSheet.value = false
-            },
+            onDismissRequest = { showRecorderSheet.value = false },
             sheetState = recorderSheetState,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             RecorderSheet(
                 data = data,
                 onRecordingComplete = {
-                    // Auto-close the bottom sheet when recording is complete
                     scope.launch {
                         recorderSheetState.hide()
                         showRecorderSheet.value = false
@@ -515,19 +399,16 @@ fun Jotting(
         }
     }
 
-// Reminder Bottom Sheet
+    // ── Reminder Bottom Sheet ─────────────────────────────────────────────────
     if (showReminderSheet.value) {
         ModalBottomSheet(
-            onDismissRequest = {
-                showReminderSheet.value = false
-            },
+            onDismissRequest = { showReminderSheet.value = false },
             sheetState = reminderSheetState,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             ReminderSheet(
                 data = data,
                 onReminderSet = {
-                    // Auto-close the bottom sheet when reminder is set
                     scope.launch {
                         reminderSheetState.hide()
                         showReminderSheet.value = false
@@ -541,7 +422,7 @@ fun Jotting(
 @SuppressLint("SimpleDateFormat")
 fun createMediaUri(context: Context, pattern: String): Uri {
     val fileName = "${Random.nextLong()}.$pattern"
-    val imagePath = when(pattern) {
+    val imagePath = when (pattern) {
         "jpg" -> Environment.DIRECTORY_PICTURES
         "mp4" -> Environment.DIRECTORY_MOVIES
         else -> Environment.DIRECTORY_DOWNLOADS

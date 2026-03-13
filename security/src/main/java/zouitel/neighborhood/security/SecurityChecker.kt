@@ -76,7 +76,7 @@ object SecurityChecker {
             
             // Get it by running this code once in debug mode and logging the hash
             val expectedHash = "781b62fc7118763c7a159c4c207a9e859a4489e04eaccb50de4163e0b5da1351"
-            println("app signature: $hashString")
+//            println("app signature: $hashString")
             return hashString != expectedHash  // TAMPERED!
 
         } catch (e: Exception) {

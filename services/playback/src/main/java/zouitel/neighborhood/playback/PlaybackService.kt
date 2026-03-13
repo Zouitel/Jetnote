@@ -18,8 +18,12 @@ class PlaybackService : MediaSessionService() {
     private var player: ExoPlayer? = null
     private var mediaLibrarySession: MediaSession? = null
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? {
-        return mediaLibrarySession
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
+        mediaLibrarySession
+
+    // Prevent Media3 from starting a foreground service notification
+    override fun onUpdateNotification(session: MediaSession, startInForegroundRequired: Boolean) {
+        // Intentionally no-op: suppresses foreground service promotion
     }
 
     override fun onCreate() {
@@ -28,11 +32,12 @@ class PlaybackService : MediaSessionService() {
             .setAudioAttributes(AudioAttributes.DEFAULT, true)
             .setHandleAudioBecomingNoisy(true)
             .build()
+
         val sessionActivityPendingIntent = TaskStackBuilder.create(this).run {
             addNextIntent(Intent(this@PlaybackService, AudioActivity::class.java))
-            val immutableFlag = PendingIntent.FLAG_IMMUTABLE
-            getPendingIntent(0, immutableFlag or PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         }
+
         mediaLibrarySession = MediaSession.Builder(this, player!!)
             .setCallback(librarySessionCallback)
             .setSessionActivity(sessionActivityPendingIntent)

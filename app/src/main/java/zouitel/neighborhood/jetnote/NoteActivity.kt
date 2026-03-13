@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.navigator.Navigator
@@ -28,7 +30,10 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import zouitel.neighborhood.account.utils.DriveCleanupScreenModel
+import zouitel.neighborhood.security.detection.SecurityCheckingScreen
 import zouitel.neighborhood.security.detection.SecurityHandler
+import zouitel.neighborhood.security.detection.SecurityState
+import zouitel.neighborhood.security.detection.SecurityThreatScreen
 import zouitel.neighborhood.ui.hightlight.Highlighter
 import zouitel.neighborhood.ui.hightlight.LocalHighlighter
 
@@ -57,30 +62,29 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
         }
 
         setContent {
-//            val securityState by securityHandler.securityState.collectAsState()
+            val securityState by securityHandler.securityState.collectAsState()
 
             // Show security screen if threat detected
-//            when (securityState) {
-//                is SecurityState.Checking -> {
-//                    SecurityCheckingScreen()
-//                }
-//                is SecurityState.Threat -> {
-//                    SecurityThreatScreen(
-//                        result = (securityState as SecurityState.Threat).result,
-//                        onExit = {
-//                            finish()
-//                        }
-//                    )
-//                }
-//                is SecurityState.Secure -> {
-//                    showMainApp()
-//                }
-//                is SecurityState.Error -> {
-//                    // Show error but allow to continue
-//                    showMainApp()
-//                }
-//            }
-            MainApp()
+            when (securityState) {
+                is SecurityState.Checking -> {
+                    SecurityCheckingScreen()
+                }
+                is SecurityState.Threat -> {
+                    SecurityThreatScreen(
+                        result = (securityState as SecurityState.Threat).result,
+                        onExit = {
+                            finish()
+                        }
+                    )
+                }
+                is SecurityState.Secure -> {
+                    MainApp()
+                }
+                is SecurityState.Error -> {
+                    // Show error but allow to continue
+                    MainApp()
+                }
+            }
         }
     }
 
