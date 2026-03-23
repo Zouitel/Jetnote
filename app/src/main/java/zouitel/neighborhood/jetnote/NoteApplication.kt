@@ -2,21 +2,7 @@ package zouitel.neighborhood.jetnote
 
 import android.app.Application
 import android.os.Build
-import androidx.work.Configuration
 import cafe.adriel.voyager.core.registry.ScreenRegistry
-import zouitel.neighborhood.bin.di.binModule
-import zouitel.neighborhood.database.di.databaseLazyModule
-import zouitel.neighborhood.datastore.di.datastoreLazyModule
-import zouitel.neighborhood.workspace.di.workplaceScreenModule
-import zouitel.neighborhood.permissions.permissionsModule
-import zouitel.neighborhood.playback.di.playbackLazyModule
-import zouitel.neighborhood.repository.di.localRepoLazyModule
-import zouitel.neighborhood.security.di.rootedLazyModule
-import zouitel.neighborhood.navigator.di.screensModule
-import zouitel.neighborhood.navigator.di.screensScreenModule
-import zouitel.neighborhood.ui.di.systemDesignModule
-import zouitel.neighborhood.workspace.di.feedbackScreenModule
-import zouitel.neighborhood.workspace.di.tagsScreenModule
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
@@ -27,7 +13,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.workmanager.koin.workManagerFactory
@@ -35,8 +20,21 @@ import org.koin.androix.startup.KoinStartup
 import org.koin.core.lazyModules
 import org.koin.core.logger.Level
 import org.koin.dsl.koinConfiguration
+import zouitel.neighborhood.bin.di.binModule
+import zouitel.neighborhood.database.di.databaseLazyModule
+import zouitel.neighborhood.datastore.di.datastoreLazyModule
 import zouitel.neighborhood.feedback.feedbackModule
 import zouitel.neighborhood.navigator.di.initializerLazyModule
+import zouitel.neighborhood.navigator.di.screensModule
+import zouitel.neighborhood.navigator.di.screensScreenModule
+import zouitel.neighborhood.permissions.permissionsModule
+import zouitel.neighborhood.playback.di.playbackLazyModule
+import zouitel.neighborhood.repository.di.localRepoLazyModule
+import zouitel.neighborhood.security.di.rootedLazyModule
+import zouitel.neighborhood.ui.di.systemDesignModule
+import zouitel.neighborhood.workspace.di.feedbackScreenModule
+import zouitel.neighborhood.workspace.di.tagsScreenModule
+import zouitel.neighborhood.workspace.di.workplaceScreenModule
 
 class NoteApplication: Application(), ImageLoaderFactory, KoinStartup {
 

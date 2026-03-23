@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "866712879346-9elilcl33dl7j4fpb2agajgav1rgtgkn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "zouitel.neighborhood.jetnote",
+            "certificate_hash": "227fa19aada92567981295829e07a57f3146a5be"
+          }
+        },
+        {
+          "client_id": "866712879346-vcv4rkqeun1sg7qqghaukqfe1e8jaoq2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "zouitel.neighborhood.jetnote",
+            "certificate_hash": "91c6c29b3243e6bd4ef9d3f07111e7a8a147b1ce"
+          }
+        },
+        {
           "client_id": "866712879346-lsqit4thufnkc8ldn6tur5fqlnphlqc6.apps.googleusercontent.com",
           "client_type": 3
         }

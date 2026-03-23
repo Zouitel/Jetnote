@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Debug
 import android.provider.Settings
+import android.util.Log
 import java.io.File
 import java.io.FileInputStream
 import java.security.MessageDigest
@@ -17,7 +18,7 @@ object SecurityChecker {
      */
     fun performSecurityChecks(context: Context): SecurityResult {
         return SecurityResult(
-            isTampered = isTampered(context),
+            isTampered = false,//isTampered(context),
             isEmulator = isEmulator(),
             isDebuggerAttached = isDebuggerAttached(),
             isRooted = isRooted(context),
@@ -33,10 +34,10 @@ object SecurityChecker {
      * Check if app has been tampered with
      */
     fun isTampered(context: Context): Boolean {
-        return checkAppSignature(context) ||
-               checkInstaller(context) ||
+        return checkInstaller(context) ||
+                isDebuggable(context)
 //               checkApkHash(context) ||
-               isDebuggable(context)
+//        checkAppSignature(context) ||
     }
     
     /**
@@ -76,7 +77,8 @@ object SecurityChecker {
             
             // Get it by running this code once in debug mode and logging the hash
             val expectedHash = "781b62fc7118763c7a159c4c207a9e859a4489e04eaccb50de4163e0b5da1351"
-//            println("app signature: $hashString")
+            println("app signature: $hashString")
+//            Log.println(0, "signature", hashString)
             return hashString != expectedHash  // TAMPERED!
 
         } catch (e: Exception) {

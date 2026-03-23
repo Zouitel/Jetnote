@@ -13,15 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
-import zouitel.neighborhood.security.applock.LockModeHandler
-import zouitel.neighborhood.audio.player.PlaybackManager
-import zouitel.neighborhood.bin.BinScreenModel
-import zouitel.neighborhood.permissions.PermissionScreenModel
-import zouitel.neighborhood.navigator.main_screen.MainScreen
-import zouitel.neighborhood.security.screenshot.ScreenshotHandler
-import zouitel.neighborhood.shortcut.checkNoteActivityShortcut
-import zouitel.neighborhood.ui.MainTheme
-import zouitel.neighborhood.ui.SettingsScreenModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -30,10 +21,19 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import zouitel.neighborhood.account.utils.DriveCleanupScreenModel
+import zouitel.neighborhood.audio.player.PlaybackManager
+import zouitel.neighborhood.bin.BinScreenModel
+import zouitel.neighborhood.navigator.main_screen.MainScreen
+import zouitel.neighborhood.permissions.PermissionScreenModel
+import zouitel.neighborhood.security.applock.LockModeHandler
 import zouitel.neighborhood.security.detection.SecurityCheckingScreen
 import zouitel.neighborhood.security.detection.SecurityHandler
 import zouitel.neighborhood.security.detection.SecurityState
 import zouitel.neighborhood.security.detection.SecurityThreatScreen
+import zouitel.neighborhood.security.screenshot.ScreenshotHandler
+import zouitel.neighborhood.shortcut.checkNoteActivityShortcut
+import zouitel.neighborhood.ui.MainTheme
+import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.hightlight.Highlighter
 import zouitel.neighborhood.ui.hightlight.LocalHighlighter
 

@@ -17,8 +17,8 @@ android {
         applicationId = "zouitel.neighborhood.jetnote"
         minSdk = 27
         targetSdk = 36
-        versionCode = 1007
-        versionName = "10.0.7"
+        versionCode = 10_0_13
+        versionName = "10.0.13"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -80,4 +80,11 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.config)
+
+    //RevenueCat.
+//    implementation(libs.revenuecat)
+//    implementation(libs.revenuecat.ui)
+
+    //
+//    implementation("com.android.billingclient:billing:8.3.0")
 }

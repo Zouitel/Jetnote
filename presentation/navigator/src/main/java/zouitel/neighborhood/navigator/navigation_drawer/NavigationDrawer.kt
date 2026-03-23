@@ -645,7 +645,7 @@ fun NavigationDrawer(
                     onClick = {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                            sharApp(context, "[COMING SOON.]")
+                            sharApp(context, "https://play.google.com/store/apps/details?id=zouitel.neighborhood.jetnote")
                         }
                     }
                 )
