@@ -60,6 +60,7 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.ui.markdown.MarkdownBlock
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class AboutScreen: Screen {
@@ -148,8 +149,40 @@ class AboutScreen: Screen {
     }
 
     companion object {
-        const val ABOUT = "${CommonConstants.APP_NAME} is a note-taking and task management application.\n\n" +
-                " And It is intended for archiving and creating notes in which photos and tags saved and web links.\n\n"
+        const val ABOUT = "## Your AI-Powered Universal Brain \uD83E\uDDE0⚡\n" +
+                "\n" +
+                "Is your digital life fragmented across a dozen different apps? Meet **Jetnote**, the next-generation productivity co-pilot designed to centralize your thoughts, actions, and intellectual resources into one seamless experience. \uD83D\uDE80\n" +
+                "\n" +
+                "In an increasingly complex world, Jetnote offers **universal simplicity** backed by advanced functionality. This isn’t just a digital notepad; it’s a **contextual brain** that evolves with you. \uD83E\uDDEC\n" +
+                "\n" +
+                "---\n" +
+                "\n" +
+                "### Why Jetnote? ✨\n" +
+                "\n" +
+                "* **Capture Everything:** From quick text snippets to media-rich entries featuring our built-in **audio waveform player** \uD83C\uDF99\uFE0F\uD83C\uDFB5.\n" +
+                "* **Integrated Task Management:** Turn ideas into action with integrated checklists and smart project tags like `[project \uD83C\uDFD7\uFE0F]`.\n" +
+                "* **Ironclad Security:** Work with peace of mind using our **Secure Mock Mode** to keep your most sensitive data under wraps \uD83D\uDD12\uD83D\uDEE1\uFE0F.\n" +
+                "* **Cloud Sync:** Your \"brain\" stays updated across all your devices, ensuring you're always in flow ☁\uFE0F\uD83D\uDD04.\n" +
+                "\n" +
+                "---\n" +
+                "\n" +
+                "### The Power of Multi-AI Integration \uD83E\uDD16\uD83C\uDF10\n" +
+                "\n" +
+                "Jetnote is one of the few platforms that gives you the keys to the kingdom. We don't lock you into one ecosystem; instead, we grant you access to the world’s leading AI providers:\n" +
+                "\n" +
+                "* **Google Gemini** ✨\n" +
+                "* **OpenAI GPT** ⚡\n" +
+                "* **Anthropic Claude** \uD83C\uDF3F\n" +
+                "\n" +
+                "With **full assistant customization**, you are in total control of which intelligence powers your creative workflow. Whether you're drafting a heartfelt birthday wish \uD83C\uDF82 or architecting a new business strategy, Jetnote adapts to your needs.\n" +
+                "\n" +
+                "---\n" +
+                "\n" +
+                "### Experience the Future of Thought \uD83D\uDE80\n" +
+                "\n" +
+                "Stop searching through tabs and start building your legacy. Jetnote is universal, secure, and ready to simplify your digital landscape.\n" +
+                "\n" +
+                "**Download Jetnote today and unlock your universal brain.** \uD83D\uDCF2\uD83D\uDC8E"
     }
 
     @Composable
@@ -157,17 +190,16 @@ class AboutScreen: Screen {
         val context = LocalContext.current
         val appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
-        Text(
-            text = ABOUT,
+        MarkdownBlock(
+            ABOUT,
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(10.dp)
         )
 
-        Text(
-            text =  "Version: $appVersion",
+        MarkdownBlock(
+            "\n\n## Version: $appVersion",
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(10.dp)
         )
     }
 
@@ -206,58 +238,6 @@ class AboutScreen: Screen {
             }
 
             Text(app_title)
-        }
-    }
-
-    @Composable
-    private fun ProjectSources(isSound: Boolean?) {
-        val uri = LocalUriHandler.current
-        val context = LocalContext.current
-
-        Opensource(
-            text = "Project Source",
-            icon = {
-                Icon(
-                    painter = painterResource(CommonIcons.GITHUB),
-                    contentDescription = ""
-                )
-            }
-        ) {
-            sound.performSoundEffect(context, CommonConstants.KEY_CLICK, isSound)
-            uri.openUri("https://github.com/City-Zouitel/JetNote")
-        }
-    }
-
-    @Composable
-    private fun Opensource(
-        text: String,
-        icon: @Composable () -> Unit,
-        action: () -> Unit
-    ) {
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .alpha(.5f)
-                .padding(50.dp),
-            onClick = action,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.onSurface
-            )
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp)
-            ) {
-                icon.invoke()
-                Spacer(modifier = Modifier.width(15.dp))
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.surface
-                )
-            }
         }
     }
 }

@@ -302,7 +302,8 @@ class MainScreen: Screen {
                                 modifier = Modifier
                                     .animateContentSize()
                                     .fillMaxSize()
-                                    .then(listHeight),
+                                    .then(listHeight)
+                                    .padding((3.dp)),
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 items(
@@ -324,7 +325,8 @@ class MainScreen: Screen {
                                 modifier = Modifier
                                     .animateContentSize()
                                     .fillMaxSize()
-                                    .then(gridHeight),
+                                    .then(gridHeight)
+                                    .padding(3.dp),
                                 columns = StaggeredGridCells.Fixed(2),
                                 verticalItemSpacing = 6.dp,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)

@@ -4,8 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.MaterialTheme
@@ -67,20 +69,23 @@ internal fun MainTopAppBar(
         },
         actions = {
             user?.let {
-                AsyncImage(
-                    model = it.photoUrl,
-                    contentDescription = "account photo",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .sizeIn(maxHeight = 35.dp, maxWidth = 35.dp)
-                        .combinedClickable(
-                            onLongClick = {
-                                bottomNav.show(SyncScreen())
+                Row {
+                    AsyncImage(
+                        model = it.photoUrl,
+                        contentDescription = "account photo",
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .sizeIn(maxHeight = 35.dp, maxWidth = 35.dp)
+                            .combinedClickable(
+                                onLongClick = {
+                                    bottomNav.show(SyncScreen())
+                                }
+                            ) {
+                                navigator?.push(AccountScreen())
                             }
-                        ) {
-                            navigator?.push(AccountScreen())
-                        }
-                )
+                    )
+                    Spacer(Modifier.width(10.dp))
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
