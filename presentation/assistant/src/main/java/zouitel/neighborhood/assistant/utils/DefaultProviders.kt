@@ -196,7 +196,12 @@ val DEFAULT_PROVIDERS = listOf(
         apiLink = "https://console.aihubmix.com/token",
         builtIn = true,
         description = """
-            AIHubMix is a high-performance API Aggregator and Router designed for developers who want to access multiple AI models (OpenAI, Claude, Gemini, DeepSeek, Llama, etc.) through a single, unified interface.
+            AIHubMix is a high-performance API
+            Aggregator and Router designed for
+            developers who want to access multiple AI
+            models (OpenAI, Claude, Gemini,
+            DeepSeek, Llama, etc.) through a single,
+            unified interface.
         """.trimIndent()
     ),
     // Groq.
@@ -208,7 +213,12 @@ val DEFAULT_PROVIDERS = listOf(
         apiLink = "https://console.groq.com/keys",
         builtIn = true,
         description = """
-            Groq is the "Speed King" of the AI world. While most companies (like OpenAI or Google) rely on standard GPUs (Graphics Processing Units), Groq built its own custom hardware called the LPU (Language Processing Unit).
+            Groq is the "Speed King" of the AI world.
+            While most companies (like OpenAI or
+            Google) rely on standard GPUs (Graphics
+            Processing Units), Groq built its own
+            custom hardware called the LPU
+            (Language Processing Unit).
         """.trimIndent()
     ),
     // Nvidia.
@@ -220,7 +230,11 @@ val DEFAULT_PROVIDERS = listOf(
         apiLink = "https://build.nvidia.com/explore/discover",
         builtIn = true,
         description = """
-            Provides cloud APIs to run optimized versions of various third-party and open-source models, leveraging their powerful GPU hardware for high performance.
+            Provides cloud APIs to run optimized
+            versions of various third-party and
+            open-source models, leveraging their
+            powerful GPU hardware for high
+            performance.
         """.trimIndent()
     ),
     // Mistral.
@@ -232,20 +246,20 @@ val DEFAULT_PROVIDERS = listOf(
         apiLink = "https://console.mistral.ai/home",
         builtIn = true,
         description = """
-            ...
+            Mistral AI is a French artificial intelligence company that has quickly become a leading European challenger in the LLM (Large Language Model) space. Founded by former researchers from Meta and Google DeepMind, they are best known for their focus on efficiency, open-weight models, and high performance relative to model size.
         """.trimIndent()
     ),
     // Github.
-    ProviderSetting.GlobalAI(
-        id = 16,
-        name = "Github",
-        baseUrl = "https://models.github.ai/inference",
-        apiLink = "",
-        apiKey = "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",
-        description = """
-            ...
-        """.trimIndent()
-    ),
+//    ProviderSetting.GlobalAI(
+//        id = 16,
+//        name = "Github",
+//        baseUrl = "https://models.github.ai/inference",
+//        apiLink = "",
+//        apiKey = "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",
+//        description = """
+//            ...
+//        """.trimIndent()
+//    ),
     // Image, LLM (Stable Diffusion)
 //    ProviderSetting.GlobalAI(
 //        id = 6,

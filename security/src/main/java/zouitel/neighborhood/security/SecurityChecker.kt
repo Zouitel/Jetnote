@@ -18,7 +18,7 @@ object SecurityChecker {
      */
     fun performSecurityChecks(context: Context): SecurityResult {
         return SecurityResult(
-            isTampered = false,//isTampered(context),
+            isTampered = isTampered(context),
             isEmulator = isEmulator(),
             isDebuggerAttached = isDebuggerAttached(),
             isRooted = isRooted(context),
@@ -34,10 +34,10 @@ object SecurityChecker {
      * Check if app has been tampered with
      */
     fun isTampered(context: Context): Boolean {
-        return checkInstaller(context) ||
-                isDebuggable(context)
+        return isDebuggable(context) ||
+        checkAppSignature(context) ||
+        checkInstaller(context)
 //               checkApkHash(context) ||
-//        checkAppSignature(context) ||
     }
     
     /**
