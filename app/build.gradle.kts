@@ -17,8 +17,8 @@ android {
         applicationId = "zouitel.neighborhood.jetnote"
         minSdk = 27
         targetSdk = 36
-        versionCode = 10_0_15
-        versionName = "10.0.15"
+        versionCode = 10_0_18
+        versionName = "10.0.18"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

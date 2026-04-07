@@ -21,15 +21,11 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
@@ -466,53 +462,27 @@ data class OptionsScreen(
                     }
                 }
                 item {
+                    val currentPriority = Priorities.entries[data.value.priority]
+                    val priorityPair = getPriority(data.value.priority)
+
                     Text(
-                        "Priority.",
-                        Modifier.padding(20.dp, 15.dp),
+                        text = if (currentPriority == Priorities.NON) "Priority"
+                        else "Priority · ${currentPriority.priority}",
+                        modifier = Modifier.padding(20.dp, 15.dp),
                         style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
+                        color = if (currentPriority == Priorities.NON)
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = .6f)
+                        else
+                            Color(priorityPair.second).copy(alpha = .9f),
                     )
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    val tooltipState = rememberTooltipState(isPersistent = true)
-                    val scope = rememberCoroutineScope()
-                    val priority = getPriority(data.value.priority)
-
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = {
-                            PlainTooltip(
-                                containerColor = Color(priority.second),
-                                contentColor = MaterialTheme.colorScheme.surface
-                            ) {
-                                Text(
-                                    priority.first,
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                            }
-                        },
-                        state = tooltipState,
-                        focusable = true
-                    ) {
-                        PrioritySlider(
-                            priority = Priorities.entries[data.value.priority],
-                            onPriorityChange = { priority ->
-                                data.value = data.value.copy(priority = priority.index)
-                            },
-                            onDragStart = {
-                                // Show tooltip when dragging starts
-                                scope.launch {
-                                    tooltipState.show()
-                                }
-                            },
-                            onDragEnd = {
-                                // Hide tooltip when dragging ends
-                                scope.launch {
-                                    tooltipState.dismiss()
-                                }
-                            }
-                        )
-                    }
+                    PrioritySlider(
+                        priority = currentPriority,
+                        onPriorityChange = { priority ->
+                            data.value = data.value.copy(priority = priority.index)
+                        }
+                    )
                 }
                 item {
                     NoteDates(data.value)

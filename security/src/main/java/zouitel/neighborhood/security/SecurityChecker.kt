@@ -35,7 +35,7 @@ object SecurityChecker {
      */
     fun isTampered(context: Context): Boolean {
         return isDebuggable(context) ||
-        checkAppSignature(context) ||
+//        checkAppSignature(context) ||
         checkInstaller(context)
 //               checkApkHash(context) ||
     }

@@ -19,9 +19,7 @@ import zouitel.neighborhood.workspace.model.Priorities
 @Composable
 internal fun PrioritySlider(
     priority: Priorities,
-    onPriorityChange: (Priorities) -> Unit,
-    onDragStart: () -> Unit = {},
-    onDragEnd: () -> Unit = {}
+    onPriorityChange: (Priorities) -> Unit
 ) {
     var sliderPosition by remember { mutableFloatStateOf(priority.ordinal.toFloat()) }
     var selectedPriority by remember { mutableStateOf(priority) }
@@ -43,13 +41,10 @@ internal fun PrioritySlider(
         value = sliderPosition,
         onValueChange = { newValue ->
             sliderPosition = newValue
-            onDragStart() // Called when dragging
         },
         valueRange = 0f..4f,
         steps = 3,
-        onValueChangeFinished = {
-            onDragEnd() // Called when drag is finished
-        },
+        onValueChangeFinished = {},
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 20.dp, end = 20.dp)
