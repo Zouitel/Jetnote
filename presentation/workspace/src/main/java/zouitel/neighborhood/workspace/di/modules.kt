@@ -17,6 +17,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import zouitel.neighborhood.feedback.FeedbackScreen
 import zouitel.neighborhood.feedback.FeedbackSheetScreen
+import zouitel.neighborhood.workspace.ui.features.document.DocumentScreenModel
 
 val workplaceModule = module {
     factoryOf(::DataMapper)
@@ -27,6 +28,7 @@ val workplaceModule = module {
     factory {
         DataScreenModel(get(), get(), get(), get(), get(), get())
     }
+    factoryOf(::DocumentScreenModel)
     single {
         NotificationReceiver()
     }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Notes</string>
+    <string name="screen_assistant">Assistant</string>
+    <string name="screen_tags">Tags</string>
+    <string name="screen_settings">Settings</string>
+    <string name="screen_archive">Archive</string>
+    <string name="screen_about">About</string>
+    <string name="screen_feedback">Feedback</string>
+    <string name="share_app">Share This App</string>
+    <string name="label_more">more</string>
+    <string name="msg_deleted">deleted</string>
+    <string name="action_undo">Undo</string>
+</resources>

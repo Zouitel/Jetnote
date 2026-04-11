@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Snackbar
@@ -48,12 +48,19 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.cherry.lib.doc.DocViewerActivity
+import com.cherry.lib.doc.bean.DocSourceType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import zouitel.neighborhood.permissions.PermissionResult
 import zouitel.neighborhood.permissions.PermissionScreenModel
 import zouitel.neighborhood.ui.CommonBottomSheet
 import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
 import zouitel.neighborhood.ui.CommonIcons.BELL
 import zouitel.neighborhood.ui.CommonIcons.CAMERA
+import zouitel.neighborhood.ui.CommonIcons.DOCUMENT
 import zouitel.neighborhood.ui.CommonIcons.GALLERY
 import zouitel.neighborhood.ui.CommonIcons.LIST_CHECK
 import zouitel.neighborhood.ui.CommonIcons.MIC
@@ -63,10 +70,13 @@ import zouitel.neighborhood.ui.CommonIcons.WAVEFORM
 import zouitel.neighborhood.ui.CommonOptionItem
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.SoundEffect
+import zouitel.neighborhood.ui.getAverageColorFromImage
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
 import zouitel.neighborhood.workspace.model.Priorities
 import zouitel.neighborhood.workspace.provider.SharedScreen
+import zouitel.neighborhood.workspace.ui.utils.NoteDates
+import zouitel.neighborhood.workspace.ui.utils.PrioritySlider
 import zouitel.neighborhood.workspace.ui.utils.getImageDisplayName
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreenModel
 import dev.icerock.moko.permissions.Permission
@@ -74,19 +84,17 @@ import dev.icerock.moko.permissions.camera.CAMERA
 import dev.icerock.moko.permissions.microphone.RECORD_AUDIO
 import dev.icerock.moko.permissions.notifications.REMOTE_NOTIFICATION
 import dev.icerock.moko.permissions.storage.STORAGE
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import zouitel.neighborhood.ui.getAverageColorFromImage
-import zouitel.neighborhood.workspace.ui.utils.NoteDates
-import zouitel.neighborhood.workspace.ui.utils.PrioritySlider
+import zouitel.neighborhood.workspace.WorkplaceActivity
 import java.io.File
+import java.io.FileOutputStream
 import kotlin.random.Random
 
 data class OptionsScreen(
     val data: MutableState<Data>,
     val titleState: TextFieldState?,
     val descriptionState: TextFieldState?
-): Screen {
+) : Screen {
+
     @Composable
     override fun Content() {
         Options(
@@ -102,7 +110,7 @@ data class OptionsScreen(
         workspaceModel: WorkplaceScreenModel,
         permissionsModel: PermissionScreenModel
     ) {
-        val context = LocalContext.current
+        val context   = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
         val bottomNav = LocalBottomSheetNavigator.current
 
@@ -117,6 +125,39 @@ data class OptionsScreen(
         val reminderSheetState = rememberModalBottomSheetState(true)
         val showReminderSheet = remember { mutableStateOf(false) }
         val sound by lazy { SoundEffect() }
+
+        val documentLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.OpenDocument()
+        ) { uri: Uri? ->
+            if (uri == null) {
+                bottomNav.hide()
+                return@rememberLauncherForActivityResult
+            }
+            scope.launch {
+                // 1. Persist read permission (safe on any thread)
+                runCatching {
+                    context.contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                }
+
+                // 2. Copy file on IO thread
+                val localPath = copyUriToCache(context, uri)
+
+                // 3. Launch DocViewer strictly on Main with the Compose Activity context
+                withContext(Dispatchers.Main) {
+                    DocViewerActivity.launchDocViewer(
+                        context as AppCompatActivity,       // ← LocalContext.current from Composable, NOT WorkplaceActivity
+                        DocSourceType.PATH,
+                        localPath
+                    )
+                }
+
+                bottomNav.hide()
+            }
+        }
+
 
         val galleryLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickMultipleVisualMedia()
@@ -139,26 +180,20 @@ data class OptionsScreen(
                         Color.DarkGray
                     }
 
-                    // Add media with ORIGINAL URI immediately
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
                             Media(
-                                uri = uri.toString(), // Use original URI
+                                uri = uri.toString(),
                                 isVideo = isVideo,
                                 color = averageColor.toArgb()
                             )
                         )
                     )
 
-                    // Enqueue worker to copy file in background
                     workspaceModel.enqueueFileProcessing(uri, destinationPath) { copiedPath ->
-                        // Update to local path after copy completes
                         val updatedMedias = data.value.medias.map { media ->
-                            if (media.uri == uri.toString()) {
-                                media.copy(uri = copiedPath)
-                            } else {
-                                media
-                            }
+                            if (media.uri == uri.toString()) media.copy(uri = copiedPath)
+                            else media
                         }
                         data.value = data.value.copy(medias = updatedMedias)
                     }
@@ -177,23 +212,21 @@ data class OptionsScreen(
         ) { success ->
             if (success && pictureUri.value != null) {
                 scope.launch {
-                    val mediaPath = Environment.DIRECTORY_PICTURES?.let { context.getExternalFilesDir(it) }
-                    val mediaName = getImageDisplayName(context, pictureUri.value ?: return@launch)
+                    val mediaPath = Environment.DIRECTORY_PICTURES
+                        ?.let { context.getExternalFilesDir(it) }
+                    val mediaName = getImageDisplayName(
+                        context, pictureUri.value ?: return@launch
+                    )
                     val destinationPath = File(mediaPath, mediaName).path
-                    val averageColor =
-                        getAverageColorFromImage(context, pictureUri.value.toString())
-
+                    val averageColor = getAverageColorFromImage(
+                        context, pictureUri.value.toString()
+                    )
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
-                            Media(
-                                uri = destinationPath,
-                                color = averageColor.toArgb()
-                            )
+                            Media(uri = destinationPath, color = averageColor.toArgb())
                         )
                     )
-                }.invokeOnCompletion {
-                    bottomNav.hide()
-                }
+                }.invokeOnCompletion { bottomNav.hide() }
             }
         }
 
@@ -203,11 +236,10 @@ data class OptionsScreen(
             if (result.resultCode == Activity.RESULT_OK) {
                 scope.launch {
                     val resultUri = result.data?.data ?: videoUri.value
-
                     if (resultUri != null) {
                         try {
-                            // Copy video to our desired location
-                            val mediaPath = Environment.DIRECTORY_MOVIES?.let { context.getExternalFilesDir(it) }
+                            val mediaPath = Environment.DIRECTORY_MOVIES
+                                ?.let { context.getExternalFilesDir(it) }
                             val fileName = "${System.currentTimeMillis()}.mp4"
                             val destinationFile = File(mediaPath, fileName)
 
@@ -227,12 +259,14 @@ data class OptionsScreen(
                                 )
                             )
                         } catch (e: Exception) {
-                            Toast.makeText(context, "Error saving video: ${e.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Error saving video: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
-                }.invokeOnCompletion {
-                    bottomNav.hide()
-                }
+                }.invokeOnCompletion { bottomNav.hide() }
             } else {
                 bottomNav.hide()
             }
@@ -246,225 +280,208 @@ data class OptionsScreen(
             }
         }
 
-        val getVideoUri: () -> Uri = remember {
-            {
-                val fileName = "${Random.nextLong()}.mp4"
-                val mediaPath = Environment.DIRECTORY_MOVIES?.let { context.getExternalFilesDir(it) }
-                if (!mediaPath?.exists()!!) mediaPath.mkdirs()
-                val newFile = File(mediaPath, fileName)
-                val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", newFile)
-                videoUri.value = uri
-                uri
-            }
-        }
-
         SideEffect {
-            (context as Activity).window?.navigationBarColor = Color(data.value.background.let { Color.Black.copy(alpha = .7f).toArgb() }).toArgb()
+            (context as Activity).window?.navigationBarColor =
+                Color(data.value.background.let {
+                    Color.Black.copy(alpha = .7f).toArgb()
+                }).toArgb()
         }
 
         CommonBottomSheet(data.value.background) {
             LazyColumn(modifier = Modifier.navigationBarsPadding()) {
+
+                // Gallery
                 item {
-                    CommonOptionItem(
-                        name = "Gallery",
-                        icon = GALLERY
-                    ) {
+                    CommonOptionItem(name = "Gallery", icon = GALLERY) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             galleryLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageAndVideo
+                                )
                             )
                         }
                     }
                 }
+
+                // Add Audio
                 item {
-                    CommonOptionItem(
-                        name = "Add Audio",
-                        icon = WAVEFORM
-                    ) {
+                    CommonOptionItem(name = "Audio", icon = WAVEFORM) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.STORAGE).collect {
-                                when(it) {
-                                    PermissionResult.Denied -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Permission is Denied!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                    is PermissionResult.Error -> {
-                                        Toast.makeText(
-                                            context,
-                                            it.message,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                when (it) {
+                                    PermissionResult.Denied -> Toast.makeText(
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    is PermissionResult.Error -> Toast.makeText(
+                                        context, it.message, Toast.LENGTH_SHORT
+                                    ).show()
+
                                     else -> navigator.push(AudioListScreen(data))
                                 }
                             }
                         }
                     }
                 }
+
+                // Take Photo
                 item {
-                    CommonOptionItem(
-                        name = "Take Photo",
-                        icon = CAMERA
-                    ) {
+                    CommonOptionItem(name = "Take Photo", icon = CAMERA) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
-                                when(it) {
-                                    PermissionResult.Denied -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Permission is Denied!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                    is PermissionResult.Error -> {
-                                        Toast.makeText(
-                                            context,
-                                            it.message,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                    PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
-                                    PermissionResult.PermanentlyDenied -> {
+                                when (it) {
+                                    PermissionResult.Denied -> Toast.makeText(
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    is PermissionResult.Error -> Toast.makeText(
+                                        context, it.message, Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    PermissionResult.Granted ->
+                                        cameraLauncher.launch(getPictureUri())
+
+                                    PermissionResult.PermanentlyDenied ->
                                         permissionsModel.permissionDeniedHandle(snackBarHostState)
-                                    }
                                 }
                             }
                         }
                     }
                 }
+
+                // Video Capture
                 item {
-                    CommonOptionItem(
-                        name = "Video Capture",
-                        icon = VIDEO_CAMERA
-                    ) {
+                    CommonOptionItem(name = "Video Capture", icon = VIDEO_CAMERA) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
-                                when(it) {
-                                    PermissionResult.Denied -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Permission is Denied!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                    is PermissionResult.Error -> {
-                                        Toast.makeText(
-                                            context,
-                                            it.message,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                when (it) {
+                                    PermissionResult.Denied -> Toast.makeText(
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    is PermissionResult.Error -> Toast.makeText(
+                                        context, it.message, Toast.LENGTH_SHORT
+                                    ).show()
+
                                     PermissionResult.Granted -> {
-                                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
-                                            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
-                                            // Don't use EXTRA_OUTPUT - let camera app handle it
-                                        }
+                                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                                            .apply {
+                                                putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
+                                            }
                                         videoCapture.launch(intent)
                                     }
-                                    PermissionResult.PermanentlyDenied -> {
+
+                                    PermissionResult.PermanentlyDenied ->
                                         permissionsModel.permissionDeniedHandle(snackBarHostState)
-                                    }
                                 }
                             }
                         }
                     }
                 }
+
+                // Recorder
                 item {
-                    CommonOptionItem(
-                        name = "Recorder",
-                        icon = MIC
-                    ) {
+                    CommonOptionItem(name = "Recorder", icon = MIC) {
                         scope.launch {
-                            permissionsModel.requestPermission(Permission.RECORD_AUDIO).collectLatest {
-                                when(it) {
-                                    PermissionResult.Denied -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Permission is Denied!",
-                                            Toast.LENGTH_SHORT
+                            permissionsModel.requestPermission(Permission.RECORD_AUDIO)
+                                .collectLatest {
+                                    when (it) {
+                                        PermissionResult.Denied -> Toast.makeText(
+                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
                                         ).show()
-                                    }
-                                    is PermissionResult.Error -> {
-                                        Toast.makeText(
-                                            context,
-                                            it.message,
-                                            Toast.LENGTH_SHORT
+
+                                        is PermissionResult.Error -> Toast.makeText(
+                                            context, it.message, Toast.LENGTH_SHORT
                                         ).show()
-                                    }
-                                    PermissionResult.Granted -> {
-                                        showRecorderSheet.value = true
-                                    }
-                                    PermissionResult.PermanentlyDenied -> {
-                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
+
+                                        PermissionResult.Granted ->
+                                            showRecorderSheet.value = true
+
+                                        PermissionResult.PermanentlyDenied ->
+                                            permissionsModel.permissionDeniedHandle(
+                                                snackBarHostState
+                                            )
                                     }
                                 }
-                            }
                         }
                     }
                 }
+
+                // ── Open Document ────────────────────────────────────────────
                 item {
-                    CommonOptionItem(
-                        name = "Tags",
-                        icon = TAGS
-                    ) {
+                    CommonOptionItem(name = "Document", icon = DOCUMENT) {
+                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                        documentLauncher.launch(
+                            arrayOf(
+                                "application/pdf",
+                                "application/msword",
+                                "application/vnd.openxmlformats-officedocument" +
+                                        ".wordprocessingml.document",
+                                "application/vnd.ms-excel",
+                                "application/vnd.openxmlformats-officedocument" +
+                                        ".spreadsheetml.sheet",
+                                "application/vnd.ms-powerpoint",
+                                "application/vnd.openxmlformats-officedocument" +
+                                        ".presentationml.presentation",
+                                "text/plain"
+                            )
+                        )
+                    }
+                }
+                // ────────────────────────────────────────────────────────────
+
+                // Tags
+                item {
+                    CommonOptionItem(name = "Tags", icon = TAGS) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                         bottomNav.show(tagsScreen)
                     }
                 }
+
+                // Task List
                 item {
-                    CommonOptionItem(
-                        name = "Task List",
-                        icon = LIST_CHECK
-                    ) {
+                    CommonOptionItem(name = "Task List", icon = LIST_CHECK) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                         bottomNav.show(AddTaskScreen(null, data))
                     }
                 }
+
+                // Reminder
                 item {
-                    CommonOptionItem(
-                        name = "Reminder",
-                        icon = BELL
-                    ) {
+                    CommonOptionItem(name = "Reminder", icon = BELL) {
                         scope.launch {
                             permissionsModel.requestPermission(Permission.REMOTE_NOTIFICATION)
                                 .collect {
                                     when (it) {
-                                        PermissionResult.Denied -> {
-                                            Toast.makeText(
-                                                context,
-                                                "Permission is Denied!",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                        is PermissionResult.Error -> {
-                                            Toast.makeText(
-                                                context,
-                                                it.message,
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                        PermissionResult.Granted -> {
+                                        PermissionResult.Denied -> Toast.makeText(
+                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        is PermissionResult.Error -> Toast.makeText(
+                                            context, it.message, Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        PermissionResult.Granted ->
                                             showReminderSheet.value = true
-                                        }
-                                        PermissionResult.PermanentlyDenied -> {
-                                            permissionsModel.permissionDeniedHandle(snackBarHostState)
-                                        }
+
+                                        PermissionResult.PermanentlyDenied ->
+                                            permissionsModel.permissionDeniedHandle(
+                                                snackBarHostState
+                                            )
                                     }
                                 }
                         }
                     }
                 }
+
+                // Priority
                 item {
                     val currentPriority = Priorities.entries[data.value.priority]
                     val priorityPair = getPriority(data.value.priority)
-
                     Text(
                         text = if (currentPriority == Priorities.NON) "Priority"
                         else "Priority · ${currentPriority.priority}",
@@ -473,10 +490,9 @@ data class OptionsScreen(
                         color = if (currentPriority == Priorities.NON)
                             MaterialTheme.colorScheme.onSurface.copy(alpha = .6f)
                         else
-                            Color(priorityPair.second).copy(alpha = .9f),
+                            Color(priorityPair.second).copy(alpha = .9f)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-
                     PrioritySlider(
                         priority = currentPriority,
                         onPriorityChange = { priority ->
@@ -484,9 +500,11 @@ data class OptionsScreen(
                         }
                     )
                 }
-                item {
-                    NoteDates(data.value)
-                }
+
+                // Note dates
+                item { NoteDates(data.value) }
+
+                // Snackbar
                 item {
                     SnackbarHost(snackBarHostState) {
                         Snackbar(
@@ -495,20 +513,18 @@ data class OptionsScreen(
                             shape = MaterialTheme.shapes.large,
                             containerColor = MaterialTheme.colorScheme.onSurface,
                             contentColor = MaterialTheme.colorScheme.surface,
-                            actionColor = MaterialTheme.colorScheme.surface,
+                            actionColor = MaterialTheme.colorScheme.surface
                         )
                     }
                 }
             }
 
-            // RecorderSheet Bottom Sheet
+            // Recorder bottom sheet
             if (showRecorderSheet.value) {
                 ModalBottomSheet(
-                    onDismissRequest = {
-                        showRecorderSheet.value = false
-                    },
-                    sheetState = recorderSheetState,
-                    containerColor = MaterialTheme.colorScheme.surface
+                    onDismissRequest = { showRecorderSheet.value = false },
+                    sheetState       = recorderSheetState,
+                    containerColor   = MaterialTheme.colorScheme.surface
                 ) {
                     RecorderSheet(
                         data = data,
@@ -522,14 +538,12 @@ data class OptionsScreen(
                 }
             }
 
-            // Reminder Bottom Sheet
+            // Reminder bottom sheet
             if (showReminderSheet.value) {
                 ModalBottomSheet(
-                    onDismissRequest = {
-                        showReminderSheet.value = false
-                    },
-                    sheetState = reminderSheetState,
-                    containerColor = MaterialTheme.colorScheme.surface
+                    onDismissRequest = { showReminderSheet.value = false },
+                    sheetState       = reminderSheetState,
+                    containerColor   = MaterialTheme.colorScheme.surface
                 ) {
                     ReminderSheet(
                         data = data,
@@ -545,17 +559,50 @@ data class OptionsScreen(
         }
     }
 
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    /**
+     * Copies a content URI into the app cache dir and returns the local file path.
+     * DocViewer needs a real file-system path (DocSourceType.SDCARD).
+     */
+    private suspend fun copyUriToCache(context: Context, uri: Uri): String =
+        withContext(Dispatchers.IO) {
+            // Derive extension from MIME type so DocViewer picks the right renderer
+            val mime = context.contentResolver.getType(uri) ?: "application/pdf"
+            val ext = when {
+                mime.contains("pdf") -> "pdf"
+                mime.contains("msword") ||
+                        mime.contains("wordprocessing") -> "docx"
+
+                mime.contains("excel") ||
+                        mime.contains("spreadsheet") -> "xlsx"
+
+                mime.contains("powerpoint") ||
+                        mime.contains("presentation") -> "pptx"
+
+                mime.contains("text") -> "txt"
+                else -> "pdf"
+            }
+            val dest = File(context.cacheDir, "docviewer_${System.currentTimeMillis()}.$ext")
+            context.contentResolver.openInputStream(uri)?.use { src ->
+                FileOutputStream(dest).use { dst -> src.copyTo(dst) }
+            }
+            dest.absolutePath
+        }
+
     @SuppressLint("SimpleDateFormat")
     private fun createMediaUri(context: Context, pattern: String): Uri {
-        val fileName = "${Random.nextLong()}.$pattern"
-        val mediaPath = when(pattern) {
+        val fileName  = "${Random.nextLong()}.$pattern"
+        val mediaPath = when (pattern) {
             "jpg" -> Environment.DIRECTORY_PICTURES
             "mp4" -> Environment.DIRECTORY_MOVIES
-            else -> Environment.DIRECTORY_DOWNLOADS
+            else  -> Environment.DIRECTORY_DOWNLOADS
         }?.let { context.getExternalFilesDir(it) }
         if (!mediaPath?.exists()!!) mediaPath.mkdirs()
         val newFile = File(mediaPath, fileName)
-        return FileProvider.getUriForFile(context, "${context.packageName}.provider", newFile)
+        return FileProvider.getUriForFile(
+            context, "${context.packageName}.provider", newFile
+        )
     }
 
     fun getPriority(priority: Int) = when (priority) {
@@ -565,6 +612,4 @@ data class OptionsScreen(
         4 -> Pair("Urgent", 0xffff2800)
         else -> Pair("Non", 0xffc0c0c0)
     }
-
-
 }

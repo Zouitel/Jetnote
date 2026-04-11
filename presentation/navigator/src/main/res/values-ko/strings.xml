@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">노트</string>
+    <string name="screen_assistant">어시스턴트</string>
+    <string name="screen_tags">태그</string>
+    <string name="screen_settings">설정</string>
+    <string name="screen_archive">보관함</string>
+    <string name="screen_about">정보</string>
+    <string name="screen_feedback">피드백</string>
+    <string name="share_app">앱 공유하기</string>
+    <string name="label_more">+ 더 보기</string>
+    <string name="msg_deleted">%s 삭제됨</string>
+    <string name="action_undo">실행 취소</string>
+</resources>

@@ -23,6 +23,7 @@ dependencies {
     implementation(projects.presentation.link)
     implementation(projects.services.print)
     implementation(projects.feedback)
+    implementation(projects.document)
 
     //Cloudy.
     implementation(libs.compose.cloudy)
@@ -51,4 +52,9 @@ dependencies {
 
     //Datetime.
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.androidx.recyclerview)
+
+    // Add DocViewer library
+    implementation("com.github.Victor2018:DocViewer:v3.0.3")
 }

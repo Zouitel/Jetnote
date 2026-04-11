@@ -41,13 +41,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.AsyncImage
 import zouitel.neighborhood.assistant.model.Conversation
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreen
@@ -79,10 +79,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
-import zouitel.neighborhood.assistant.ui.conversation.rememberChatInputState
-import zouitel.neighborhood.assistant.ui.provider.ProviderScreenModel
-import zouitel.neighborhood.assistant.utils.Avatar
 import zouitel.neighborhood.navigator.settings_screen.SettingsScreen
+import zouitel.neighborhood.search.R
 import zouitel.neighborhood.ui.CommonIcons.SETTINGS
 import zouitel.neighborhood.ui.CommonIcons.SPARKLES
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
@@ -129,7 +127,7 @@ fun NavigationDrawer(
                 "AssistantScreen" -> AppScreen.CHAT_SCREEN
                 "HashTagsScreen" -> AppScreen.TAGS_SCREEN
                 "SettingsScreen" -> AppScreen.SETTINGS_SCREEN
-                "WidgetScreen" -> AppScreen.WIDGETS_SCREEN
+//                "WidgetScreen" -> AppScreen.WIDGETS_SCREEN
                 "ArchiveScreen" -> AppScreen.ARCHIVE_SCREEN
                 "AboutScreen" -> AppScreen.ABOUT_SCREEN
                 "FeedbackScreen" -> AppScreen.FEEDBACK_AND_HELP
@@ -179,7 +177,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = AppScreen.MAIN_SCREEN.screen,
+                            text = stringResource(AppScreen.MAIN_SCREEN.screen),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -207,7 +205,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = AppScreen.CHAT_SCREEN.screen,
+                            text = stringResource(AppScreen.CHAT_SCREEN.screen),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -386,7 +384,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = AppScreen.TAGS_SCREEN.screen,
+                            text = stringResource(AppScreen.TAGS_SCREEN.screen),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -552,7 +550,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = AppScreen.SETTINGS_SCREEN.screen,
+                            text = stringResource(AppScreen.SETTINGS_SCREEN.screen),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -605,7 +603,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = AppScreen.ARCHIVE_SCREEN.screen,
+                            text = stringResource(AppScreen.ARCHIVE_SCREEN.screen),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -636,7 +634,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = "Share This App",
+                            text = stringResource(R.string.share_app),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -655,7 +653,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = "Feedback",
+                            text = stringResource(R.string.screen_feedback),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
@@ -685,7 +683,7 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Text(
-                            text = AppScreen.ABOUT_SCREEN.screen,
+                            text = stringResource(AppScreen.ABOUT_SCREEN.screen),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },

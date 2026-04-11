@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">ノート</string>
+    <string name="screen_assistant">アシスタント</string>
+    <string name="screen_tags">タグ</string>
+    <string name="screen_settings">設定</string>
+    <string name="screen_archive">アーカイブ</string>
+    <string name="screen_about">アプリについて</string>
+    <string name="screen_feedback">フィードバック</string>
+    <string name="share_app">アプリを共有</string>
+    <string name="label_more">+ もっと見る</string>
+    <string name="msg_deleted">%s を削除しました</string>
+    <string name="action_undo">元に戻す</string>
+</resources>

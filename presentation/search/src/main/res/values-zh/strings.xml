@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">笔记</string>
+    <string name="screen_assistant">助手</string>
+    <string name="screen_tags">标签</string>
+    <string name="screen_settings">设置</string>
+    <string name="screen_archive">归档</string>
+    <string name="screen_about">关于</string>
+    <string name="screen_feedback">反馈</string>
+    <string name="share_app">分享此应用</string>
+    <string name="label_more">更多</string>
+    <string name="msg_deleted">%s 已删除</string>
+    <string name="action_undo">撤销</string>
+    <string name="title">标题</string>
+    <string name="note">笔记</string>
+</resources>

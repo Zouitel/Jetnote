@@ -1,12 +1,15 @@
 package zouitel.neighborhood.search.utils
 
-enum class AppScreen(val screen: String) {
-    MAIN_SCREEN("Notes"),
-    CHAT_SCREEN("AI Chat"),
-    TAGS_SCREEN("Tags"),
-    SETTINGS_SCREEN("Settings"),
-    WIDGETS_SCREEN("Widgets"),
-    ARCHIVE_SCREEN("Archive"),
-    FEEDBACK_AND_HELP("Feedback"),
-    ABOUT_SCREEN("About")
+import zouitel.neighborhood.search.R
+import kotlin.random.Random
+
+enum class AppScreen(val screen: Int) {
+    MAIN_SCREEN(R.string.screen_notes),
+    CHAT_SCREEN(R.string.screen_assistant),
+    TAGS_SCREEN(R.string.screen_tags),
+    SETTINGS_SCREEN(R.string.screen_settings),
+//    WIDGETS_SCREEN("Widgets"),
+    ARCHIVE_SCREEN(R.string.screen_archive),
+    FEEDBACK_AND_HELP(R.string.screen_feedback),
+    ABOUT_SCREEN(R.string.screen_about)
 }

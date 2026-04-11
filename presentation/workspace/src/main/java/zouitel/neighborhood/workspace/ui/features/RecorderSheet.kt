@@ -1,6 +1,7 @@
 package zouitel.neighborhood.workspace.ui.features
 
 import android.os.Environment
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,6 +66,9 @@ fun RecorderSheet(
             }
         }
     }
+
+    // Prevent the sheet from being dismissed while recording is active
+    BackHandler(enabled = uiState.isRecording) { /* consume back press — do nothing */ }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
