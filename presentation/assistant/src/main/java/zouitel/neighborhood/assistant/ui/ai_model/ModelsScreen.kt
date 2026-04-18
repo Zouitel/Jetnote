@@ -48,100 +48,101 @@ class ModelsScreen: Screen {
         FullModels(getScreenModel(), getScreenModel(), getScreenModel())
     }
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @Composable
-    private fun FullModels(
-        assistantModel: AssistantScreenModel,
-        modelsModel: ModelsScreenModel,
-        settingsModel: SettingsScreenModel
-    ) {
-        val navigator = LocalNavigator.current
-        val bottomNav = LocalBottomSheetNavigator.current
+}
 
-        val settings by remember(settingsModel, settingsModel::observe).collectAsState()
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun FullModels(
+    assistantModel: AssistantScreenModel,
+    modelsModel: ModelsScreenModel,
+    settingsModel: SettingsScreenModel
+) {
+    val navigator = LocalNavigator.current
+    val bottomNav = LocalBottomSheetNavigator.current
 
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val scope = rememberCoroutineScope()
-        val snackbarState = remember { SnackbarHostState() }
-        val jobCounter = remember { mutableIntStateOf(0) }
-        val deletedModel = remember { mutableStateListOf<Pair<Model, Int>>() }
-        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
+    val settings by remember(settingsModel, settingsModel::observe).collectAsState()
 
-        Scaffold(
-            Modifier
-                .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .reportable(settings.isShakable)
-                .cloudy(enabled = bottomNav.isVisible),
-                {
-                    TopAppBar(
-                        navigationIcon = {
-                            IconButton({
-                                navigator?.pop()
-                            }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
-                            }
-                        },
-                        title = { Text("AI Models") },
-                        actions = {
-                            IconButton({
-                                navigator?.push(ProvidersScreen())
-                            }) {
-                                Icon(painterResource(CommonIcons.PLUS), "add model")
-                            }
-                        },
-                        scrollBehavior = scrollBehavior
-                    )
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val scope = rememberCoroutineScope()
+    val snackbarState = remember { SnackbarHostState() }
+    val jobCounter = remember { mutableIntStateOf(0) }
+    val deletedModel = remember { mutableStateListOf<Pair<Model, Int>>() }
+    val (lazyListState, height) = rememberAutoHeightCacheLazyList()
+
+    Scaffold(
+        Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .reportable(settings.isShakable)
+            .cloudy(enabled = bottomNav.isVisible),
+        {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton({
+                        navigator?.pop()
+                    }) {
+                        Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                    }
                 },
-            snackbarHost = {
-                SnackbarHost(snackbarState) { data ->
-                    Snackbar(
-                        snackbarData = data,
-                        actionOnNewLine = false,
-                        shape = MaterialTheme.shapes.extraLarge,
-                        actionColor = CommonColors.prime
-                    )
-                }
+                title = { Text("AI Models") },
+                actions = {
+                    IconButton({
+                        navigator?.push(ProvidersScreen())
+                    }) {
+                        Icon(painterResource(CommonIcons.PLUS), "add model")
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    actionOnNewLine = false,
+                    shape = MaterialTheme.shapes.extraLarge,
+                    actionColor = CommonColors.prime
+                )
             }
-        ) { paddingValues ->
-            LazyColumn(
-                Modifier.fillMaxSize()
-                    .then(height),
-                lazyListState,
-                contentPadding = paddingValues
-            ) {
-                item {
-                    Models(
-                        assistantModel, modelsModel, false,
-                        {
-                            navigator?.push(ModelConfigurationScreen(it))
-                        },
-                        {
-                            val currentJobId = jobCounter.intValue++
-                            deletedModel.add(Pair(it, currentJobId))
-                            val modelPair =
-                                deletedModel.firstOrNull { pair -> pair.second == currentJobId }
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            Modifier.fillMaxSize()
+                .then(height),
+            lazyListState,
+            contentPadding = paddingValues
+        ) {
+            item {
+                Models(
+                    assistantModel, modelsModel, false,
+                    {
+                        navigator?.push(ModelConfigurationScreen(it))
+                    },
+                    {
+                        val currentJobId = jobCounter.intValue++
+                        deletedModel.add(Pair(it, currentJobId))
+                        val modelPair =
+                            deletedModel.firstOrNull { pair -> pair.second == currentJobId }
 
-                            modelsModel.delete(it.modelId)
+                        modelsModel.delete(it.modelId)
 
-                            scope.launch {
-                                snackbarState.currentSnackbarData?.dismiss()
-                                val result = snackbarState.showSnackbar(
-                                    message = "${modelPair?.first?.displayName} deleted",
-                                    actionLabel = "Undo",
-                                    duration = SnackbarDuration.Long
-                                )
+                        scope.launch {
+                            snackbarState.currentSnackbarData?.dismiss()
+                            val result = snackbarState.showSnackbar(
+                                message = "${modelPair?.first?.displayName} deleted",
+                                actionLabel = "Undo",
+                                duration = SnackbarDuration.Long
+                            )
 
-                                if (result == SnackbarResult.ActionPerformed) {
-                                    modelPair?.first?.let { model ->
-                                        modelsModel.upsert(model)
-                                    }
+                            if (result == SnackbarResult.ActionPerformed) {
+                                modelPair?.first?.let { model ->
+                                    modelsModel.upsert(model)
                                 }
-                                modelPair?.let { model -> deletedModel.remove(model) }
                             }
-                        })
-                }
+                            modelPair?.let { model -> deletedModel.remove(model) }
+                        }
+                    })
             }
         }
     }

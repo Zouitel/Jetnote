@@ -67,6 +67,16 @@ import zouitel.neighborhood.video.SmallVideoPlayer
 import zouitel.neighborhood.workspace.model.Note
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
 import coil.compose.AsyncImage
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.graphics.asImageBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import zouitel.neighborhood.workspace.model.MediaType
+import zouitel.neighborhood.workspace.ui.features.DocumentThumbnail
+import zouitel.neighborhood.workspace.ui.features.LargeMediaScreen
 
 @Composable
 fun NoteCard(
@@ -126,12 +136,7 @@ private fun Card(
                 }
             ) {
                 if (uiState.isSelection.not()) {
-                    navigator?.push(
-                        WorkplaceScreen(
-                            data = note,
-                            isNew = false
-                        )
-                    )
+                    navigator?.push(WorkplaceScreen(note, false))
                 } else {
                     when {
                         uiState.selectedNotes.contains(note)
@@ -210,11 +215,24 @@ private fun Card(
                         elevation = CardDefaults.cardElevation(),
                         colors = CardDefaults.cardColors(containerColor)
                     ) {
-                        when (note.medias[index].isVideo) {
-                            true -> SmallVideoPlayer(note.medias[index].uri.toUri())
-                            else -> {
+                        val media = note.medias[index]
+
+                        when (media.type) {
+                            MediaType.VIDEO -> {
+                                SmallVideoPlayer(media.uri.toUri())
+                            }
+                            MediaType.DOCUMENT -> {
+                                DocumentThumbnail(
+                                    filePath = media.uri,
+                                    onClick = {
+                                        navigator?.push(WorkplaceScreen(note, false))
+                                    },
+                                    onLongClick = {}
+                                )
+                            }
+                            MediaType.IMAGE -> {
                                 AsyncImage(
-                                    model = note.medias[index].uri,
+                                    model = media.uri,
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier.fillMaxWidth()

@@ -37,6 +37,7 @@
         tools:targetApi="33"
         android:process=":IPC"
         tools:replace="android:name">
+
         <profileable
             android:shell="true"
             tools:targetApi="29" />
@@ -75,5 +76,4 @@
                 android:resource="@xml/filepaths" />
         </provider>
     </application>
-
 </manifest>

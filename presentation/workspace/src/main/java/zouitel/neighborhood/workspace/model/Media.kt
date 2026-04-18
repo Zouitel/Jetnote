@@ -13,6 +13,8 @@ data class Media(
     val id: Long = Random.nextLong(),
     val uri: String = "",
     val isVideo: Boolean = false,
+    val isDocument : Boolean = false,
+    val type: MediaType = MediaType.IMAGE,
     val title: String? = DEFAULT_TXT,
     val color: Int = Color.Black.toArgb()
 )

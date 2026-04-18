@@ -69,6 +69,7 @@ import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.workspace.model.MediaType
 
 class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
 
@@ -120,7 +121,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
             derivedStateOf {
                 medias.map { it.data.medias }
                     .flatten()
-                    .filterNot { it.isVideo }
+                    .filterNot { it.type == MediaType.IMAGE }
                     .map { it.uri }
                     .distinct()
             }
@@ -343,47 +344,48 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                             }
                         }
                         item { Spacer(Modifier.height(20.dp)) }
-                        item {
-                            Text(
-                                text = "Priority",
-                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                            Row(
-                                modifier = Modifier.padding(horizontal = 10.dp),
-                                horizontalArrangement = Arrangement.Absolute.Left
-                            ) {
-                                prioritiesList
-                                    .filter { it.isAvailable(notes) }
-                                    .map { property ->
-                                    Column {
-                                        IconButton({
-                                            searchModel.updateSearchType(SearchTypes.Properties(property.index))
-                                            searchModel.updateSearchTitle("Search within \"${property.name}\" property")
-                                        }) {
-                                            Icon(
-                                                painter = painterResource(CIRCLE),
-                                                contentDescription = null,
-                                                tint = Color(property.color)
-                                            )
+                        if (notes.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = "Priority",
+                                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 10.dp),
+                                    horizontalArrangement = Arrangement.Absolute.Left
+                                ) {
+                                    prioritiesList
+                                        .filter { it.isAvailable(notes) }
+                                        .map { property ->
+                                            Column {
+                                                IconButton({
+                                                    searchModel.updateSearchType(SearchTypes.Properties(property.index))
+                                                    searchModel.updateSearchTitle("Search within \"${property.name}\" property")
+                                                }) {
+                                                    Icon(
+                                                        painter = painterResource(CIRCLE),
+                                                        contentDescription = null,
+                                                        tint = Color(property.color)
+                                                    )
+                                                }
+                                                Text(
+                                                    text = property.name,
+                                                    fontStyle = MaterialTheme.typography.labelSmall.fontStyle,
+                                                    color = Color(property.color).copy(alpha = .5f)
+                                                )
+                                            }
+                                            Spacer(Modifier.width(5.dp))
                                         }
-                                        Text(
-                                            text = property.name,
-                                            fontStyle = MaterialTheme.typography.labelSmall.fontStyle,
-                                            color = Color(property.color).copy(alpha = .5f)
-                                        )
-                                    }
-                                        Spacer(Modifier.width(5.dp))
                                 }
                             }
                         }
-
                         item { Spacer(Modifier.height(20.dp)) }
                         if (notesImages.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Images",
+                                    text = "Medias",
                                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(horizontal = 10.dp)
@@ -410,33 +412,35 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                             }
                         }
                         item { Spacer(Modifier.height(20.dp)) }
-                        item {
-                            Text(
-                                text = "Colors",
-                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(start = 10.dp)
-                            )
-                            ContextualFlowRow(
-                                itemCount = notesColors.size,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            ) { index ->
-                                val color = notesColors[index]
-                                IconButton({
-                                    searchModel.updateSearchType(SearchTypes.Color(color))
-                                    searchModel.updateSearchTitle("Search within color.")
-                                }) {
-                                    if (color == MaterialTheme.colorScheme.surface.toArgb()) {
-                                        Icon(
-                                            painter = painterResource(id = TINT_SLASH),
-                                            contentDescription = null,
-                                        )
-                                    } else {
-                                        Icon(
-                                            painter = painterResource(id = CIRCLE_48),
-                                            contentDescription = null,
-                                            tint = color?.let { Color(it) } ?: MaterialTheme.colorScheme.surface
-                                        )
+                        if (notes.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = "Colors",
+                                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(start = 10.dp)
+                                )
+                                ContextualFlowRow(
+                                    itemCount = notesColors.size,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                ) { index ->
+                                    val color = notesColors[index]
+                                    IconButton({
+                                        searchModel.updateSearchType(SearchTypes.Color(color))
+                                        searchModel.updateSearchTitle("Search within color.")
+                                    }) {
+                                        if (color == MaterialTheme.colorScheme.surface.toArgb()) {
+                                            Icon(
+                                                painter = painterResource(id = TINT_SLASH),
+                                                contentDescription = null,
+                                            )
+                                        } else {
+                                            Icon(
+                                                painter = painterResource(id = CIRCLE_48),
+                                                contentDescription = null,
+                                                tint = color?.let { Color(it) } ?: MaterialTheme.colorScheme.surface
+                                            )
+                                        }
                                     }
                                 }
                             }

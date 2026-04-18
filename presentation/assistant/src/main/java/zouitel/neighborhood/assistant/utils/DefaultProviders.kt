@@ -246,7 +246,10 @@ val DEFAULT_PROVIDERS = listOf(
         apiLink = "https://console.mistral.ai/home",
         builtIn = true,
         description = """
-            Mistral AI is a French artificial intelligence company that has quickly become a leading European challenger in the LLM (Large Language Model) space. Founded by former researchers from Meta and Google DeepMind, they are best known for their focus on efficiency, open-weight models, and high performance relative to model size.
+            Mistral AI is a French artificial intelligence
+            company that has quickly become a
+            leading European challenger in the LLM space.
+            Founded by former researchers from Meta and Google DeepMind, they are best known for their focus on efficiency, open-weight models, and high performance relative to model size.
         """.trimIndent()
     ),
     // Github.

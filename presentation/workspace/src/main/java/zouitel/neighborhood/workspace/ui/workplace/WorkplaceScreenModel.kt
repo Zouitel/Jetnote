@@ -7,6 +7,7 @@ import androidx.compose.foundation.content.TransferableContent
 import androidx.compose.foundation.content.consume
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy.*
@@ -18,6 +19,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
+import zouitel.neighborhood.workspace.model.MediaType
 import zouitel.neighborhood.workspace.ui.utils.getImageDisplayName
 import zouitel.neighborhood.workspace.worker.CopyMediaWorker
 import kotlinx.coroutines.launch
@@ -26,7 +28,7 @@ import java.io.File
 import kotlin.random.Random
 
 @Stable
-class WorkplaceScreenModel(val application: Application): ScreenModel {
+class WorkplaceScreenModel(val application: Application) : ScreenModel {
 
     private val workManager = WorkManager.getInstance(application)
 
@@ -34,35 +36,50 @@ class WorkplaceScreenModel(val application: Application): ScreenModel {
         content.consume {
             it.uri?.let { uri ->
                 screenModelScope.launch {
-                    val mediaName = getImageDisplayName(application, uri)
-                    val averageColor = getAverageColorFromImage(application, uri.toString())
-                    val mediaPath = Environment.DIRECTORY_PICTURES?.let {
-                        application.getExternalFilesDir(it)
+                    // ── 1. Resolve the real media type from the URI's MIME ────
+                    val mime      = application.contentResolver.getType(uri) ?: ""
+                    val mediaType = when {
+                        mime.startsWith("video/") -> MediaType.VIDEO
+                        mime.startsWith("image/") -> MediaType.IMAGE
+                        else                      -> MediaType.DOCUMENT   // pdf, docx, xlsx, pptx …
                     }
 
-                    val destinationPath = File(mediaPath, mediaName).path
+                    // ── 2. Route to the correct app-private directory ─────────
+                    val mediaDir = when (mediaType) {
+                        MediaType.DOCUMENT -> Environment.DIRECTORY_DOCUMENTS   // ← was always PICTURES
+                        MediaType.VIDEO    -> Environment.DIRECTORY_MOVIES
+                        MediaType.IMAGE    -> Environment.DIRECTORY_PICTURES
+                    }.let { dir -> application.getExternalFilesDir(dir) }
 
-                    // IMMEDIATELY add media with ORIGINAL URI (works right away)
+                    val mediaName       = getImageDisplayName(application, uri)
+                    val destinationPath = File(mediaDir, mediaName).path
+
+                    // ── 3. Colour — only meaningful for images ────────────────
+                    val averageColor = when (mediaType) {
+                        MediaType.IMAGE -> getAverageColorFromImage(application, uri.toString())
+                        else            -> Color.DarkGray   // neutral placeholder for video/document
+                    }
+
+                    // ── 4. Optimistic insert with the original URI ────────────
+                    //      (visible immediately; replaced with local path once copied)
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
                             Media(
-                                uri = uri.toString(),  // Use original URI first!
+                                uri   = uri.toString(),
+                                type  = mediaType,          // ← was missing, defaulted to IMAGE
                                 color = averageColor.toArgb()
                             )
                         )
                     )
 
-                    // Enqueue worker to copy in background
+                    // ── 5. Background copy → swap URI when done ───────────────
                     enqueueFileProcessing(uri, destinationPath) { copiedPath ->
-                        // Update to local path after copy is complete
-                        val updatedMedias = data.value.medias.map { media ->
-                            if (media.uri == uri.toString()) {
-                                media.copy(uri = copiedPath)
-                            } else {
-                                media
+                        data.value = data.value.copy(
+                            medias = data.value.medias.map { media ->
+                                if (media.uri == uri.toString()) media.copy(uri = copiedPath)
+                                else media
                             }
-                        }
-                        data.value = data.value.copy(medias = updatedMedias)
+                        )
                     }
                 }
             } ?: return@consume false
@@ -71,9 +88,9 @@ class WorkplaceScreenModel(val application: Application): ScreenModel {
     }
 
     fun enqueueFileProcessing(
-        uri: Uri,
+        uri            : Uri,
         destinationPath: String,
-        onComplete: (String) -> Unit = {}
+        onComplete     : (String) -> Unit = {}
     ) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
@@ -81,7 +98,7 @@ class WorkplaceScreenModel(val application: Application): ScreenModel {
             .build()
 
         val inputData = workDataOf(
-            "CONTENT_URI" to uri.toString(),
+            "CONTENT_URI"      to uri.toString(),
             "DESTINATION_PATH" to destinationPath
         )
 
@@ -96,7 +113,6 @@ class WorkplaceScreenModel(val application: Application): ScreenModel {
             request
         )
 
-        // Observe work completion
         workManager.getWorkInfoByIdLiveData(request.id).observeForever { workInfo ->
             if (workInfo?.state?.isFinished == true) {
                 onComplete(destinationPath)

@@ -16,20 +16,18 @@ import java.io.FileOutputStream
 
 class CopyMediaWorker(
     context: Context,
-    params: WorkerParameters,
+    params : WorkerParameters,
     private val ioDeprecated: CoroutineDispatcher
-): CoroutineWorker(context, params) {
+) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         return try {
-            val mediaUri = inputData.getString("CONTENT_URI") ?: return Result.failure()
+            val mediaUri        = inputData.getString("CONTENT_URI") ?: return Result.failure()
             val destinationPath = inputData.getString("DESTINATION_PATH")
 
             if (destinationPath != null) {
-                // New approach: Copy to specific destination
                 copyMediaToDestination(mediaUri.toUri(), destinationPath)
             } else {
-                // Old approach: Copy to external storage
                 copyMediaToExternalStorage(mediaUri.toUri())
             }
 
@@ -40,67 +38,66 @@ class CopyMediaWorker(
         }
     }
 
+    // ── Targeted copy (preferred path — used by handleContentReceiver) ────────
+
     @WorkerThread
     private suspend fun copyMediaToDestination(uri: Uri, destinationPath: String) {
-        val context = applicationContext
         val destinationFile = File(destinationPath)
 
-        // If file already exists, skip copying
-        if (destinationFile.exists()) {
-            return
-        }
+        // Skip if already present (e.g. worker retried after process death).
+        if (destinationFile.exists()) return
 
         withContext(ioDeprecated) {
-            val parentDir = destinationFile.parentFile
-            if (parentDir != null && !parentDir.exists()) {
-                parentDir.mkdirs()
-            }
+            destinationFile.parentFile?.takeIf { !it.exists() }?.mkdirs()
 
-            try {
-                context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                    FileOutputStream(destinationFile).use { outputStream ->
-                        inputStream.copyTo(outputStream)
-                    }
+            runCatching {
+                applicationContext.contentResolver.openInputStream(uri)?.use { src ->
+                    FileOutputStream(destinationFile).use { dst -> src.copyTo(dst) }
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                throw e
-            }
+            }.onFailure { it.printStackTrace(); throw it }
         }
     }
 
+    // ── Fallback copy (legacy path — no explicit destination supplied) ─────────
+
     @WorkerThread
     private suspend fun copyMediaToExternalStorage(uri: Uri) {
-        val context = applicationContext
+        val context        = applicationContext
         val fileDescriptor = context.contentResolver.openFileDescriptor(uri, "r") ?: return
+
         val inputStream = try {
-            context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-                cursor.moveToFirst()
-            }
+            context.contentResolver.query(uri, null, null, null, null)?.use { it.moveToFirst() }
             FileInputStream(fileDescriptor.fileDescriptor)
         } catch (e: Exception) {
             fileDescriptor.close()
             return
         }
+
         val mediaName = getImageDisplayName(context, uri)
         val mediaType = context.contentResolver.getType(uri)
 
-        val mediaPath = when {
-            mediaType?.startsWith("image/") == true -> Environment.DIRECTORY_PICTURES?.let { context.getExternalFilesDir(it) }
-            mediaType?.startsWith("video/") == true -> Environment.DIRECTORY_MOVIES?.let { context.getExternalFilesDir(it) }
-            else -> Environment.DIRECTORY_DOWNLOADS?.let { context.getExternalFilesDir(it) }
-        }
+        // ── Route to the correct directory based on MIME type ─────────────────
+        val mediaDir = when {
+            mediaType?.startsWith("image/") == true ->
+                Environment.DIRECTORY_PICTURES
+            mediaType?.startsWith("video/") == true ->
+                Environment.DIRECTORY_MOVIES
+            else ->
+                // Documents (pdf, docx, xlsx, pptx …) go to DIRECTORY_DOCUMENTS,
+                // not DIRECTORY_DOWNLOADS as before.
+                Environment.DIRECTORY_DOCUMENTS
+        }.let { context.getExternalFilesDir(it) }
 
-        val file = File(mediaPath, mediaName)
+        val file = File(mediaDir, mediaName)
+
         withContext(ioDeprecated) {
-            if (!mediaPath?.exists()!!) mediaPath.mkdirs()
+            if (mediaDir?.exists() == false) mediaDir.mkdirs()
 
-            if(file.exists().not()) {
-                FileOutputStream(file).use { outputStream ->
-                    inputStream.copyTo(outputStream)
-                }
+            if (!file.exists()) {
+                FileOutputStream(file).use { dst -> inputStream.copyTo(dst) }
             }
         }
+
         runCatching {
             inputStream.close()
             fileDescriptor.close()

@@ -375,7 +375,7 @@ internal fun Options(provider: ProviderSetting?, inputState: ChatInputState) {
         Item(
             "Files",
             {
-                Icon(painterResource(CommonIcons.CLIP_36), null)
+                Icon(painterResource(CommonIcons.DOCUMENT), null)
             }
         ) {
             pickMedia.launch(arrayOf("*/*"))

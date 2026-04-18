@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -48,8 +47,11 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.cherry.lib.doc.DocViewerActivity
-import com.cherry.lib.doc.bean.DocSourceType
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.camera.CAMERA
+import dev.icerock.moko.permissions.microphone.RECORD_AUDIO
+import dev.icerock.moko.permissions.notifications.REMOTE_NOTIFICATION
+import dev.icerock.moko.permissions.storage.STORAGE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -73,18 +75,13 @@ import zouitel.neighborhood.ui.SoundEffect
 import zouitel.neighborhood.ui.getAverageColorFromImage
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
+import zouitel.neighborhood.workspace.model.MediaType
 import zouitel.neighborhood.workspace.model.Priorities
 import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.workspace.ui.utils.NoteDates
 import zouitel.neighborhood.workspace.ui.utils.PrioritySlider
 import zouitel.neighborhood.workspace.ui.utils.getImageDisplayName
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreenModel
-import dev.icerock.moko.permissions.Permission
-import dev.icerock.moko.permissions.camera.CAMERA
-import dev.icerock.moko.permissions.microphone.RECORD_AUDIO
-import dev.icerock.moko.permissions.notifications.REMOTE_NOTIFICATION
-import dev.icerock.moko.permissions.storage.STORAGE
-import zouitel.neighborhood.workspace.WorkplaceActivity
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.random.Random
@@ -98,109 +95,134 @@ data class OptionsScreen(
     @Composable
     override fun Content() {
         Options(
-            settingsModel = getScreenModel(),
-            workspaceModel = getScreenModel(),
-            permissionsModel = getScreenModel()
+            getScreenModel(),
+            getScreenModel(),
+            getScreenModel(),
+        getScreenModel()
         )
     }
 
     @Composable
     private fun Options(
-        settingsModel: SettingsScreenModel,
-        workspaceModel: WorkplaceScreenModel,
-        permissionsModel: PermissionScreenModel
+        settingsModel   : SettingsScreenModel,
+        workspaceModel  : WorkplaceScreenModel,
+        permissionsModel: PermissionScreenModel,
+        OCRModel: OCRScreenModel
     ) {
         val context   = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
         val bottomNav = LocalBottomSheetNavigator.current
 
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
-        val tagsScreen = rememberScreen(SharedScreen.Tags(data.value.uid, data.value.background))
-        val scope = rememberCoroutineScope()
-        val pictureUri = rememberSaveable { mutableStateOf<Uri?>(null) }
-        val videoUri = rememberSaveable { mutableStateOf<Uri?>(null) }
-        val snackBarHostState = remember { SnackbarHostState() }
+        val tagsScreen       = rememberScreen(SharedScreen.Tags(data.value.uid, data.value.background))
+        val scope            = rememberCoroutineScope()
+        val pictureUri       = rememberSaveable { mutableStateOf<Uri?>(null) }
+        val videoUri         = rememberSaveable { mutableStateOf<Uri?>(null) }
+        val snackBarHostState  = remember { SnackbarHostState() }
         val recorderSheetState = rememberModalBottomSheetState()
-        val showRecorderSheet = remember { mutableStateOf(false) }
+        val showRecorderSheet  = remember { mutableStateOf(false) }
         val reminderSheetState = rememberModalBottomSheetState(true)
-        val showReminderSheet = remember { mutableStateOf(false) }
+        val showReminderSheet  = remember { mutableStateOf(false) }
         val sound by lazy { SoundEffect() }
 
+        // ── Document picker ───────────────────────────────────────────────────
         val documentLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.OpenDocument()
-        ) { uri: Uri? ->
-            if (uri == null) {
-                bottomNav.hide()
-                return@rememberLauncherForActivityResult
-            }
+        ) { sourceUri: Uri? ->
+            if (sourceUri == null) { bottomNav.hide(); return@rememberLauncherForActivityResult }
+
             scope.launch {
-                // 1. Persist read permission (safe on any thread)
                 runCatching {
                     context.contentResolver.takePersistableUriPermission(
-                        uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        sourceUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
                 }
 
-                // 2. Copy file on IO thread
-                val localPath = copyUriToCache(context, uri)
+                // ── Reliable extension detection ──────────────────────────────
+                val displayName = resolveDisplayName(context, sourceUri)
+                val ext = run {
+                    val extFromName = displayName.substringAfterLast('.', "").lowercase()
+                    extFromName.ifBlank {
+                        extensionFromMime(
+                            context.contentResolver.getType(sourceUri) ?: "application/pdf"
+                        )
+                    }
+                }
+                // ─────────────────────────────────────────────────────────────
 
-                // 3. Launch DocViewer strictly on Main with the Compose Activity context
-                withContext(Dispatchers.Main) {
-                    DocViewerActivity.launchDocViewer(
-                        context as AppCompatActivity,       // ← LocalContext.current from Composable, NOT WorkplaceActivity
-                        DocSourceType.PATH,
-                        localPath
-                    )
+                val destUri = createMediaUri(context, ext)
+
+                val destPath = withContext(Dispatchers.IO) {
+                    runCatching {
+                        context.contentResolver.openInputStream(sourceUri)?.use { src ->
+                            context.contentResolver.openOutputStream(destUri)?.use { dst ->
+                                src.copyTo(dst)
+                            }
+                        }
+                        filePathFromUri(context, destUri)
+                    }.getOrNull()
                 }
 
+                if (destPath == null) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Failed to save document.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    bottomNav.hide()
+                    return@launch
+                }
+
+                // Save to database — type = DOCUMENT, no auto-open
+                data.value = data.value.copy(
+                    medias = data.value.medias.plusElement(
+                        Media(
+                            uri = destPath,
+                            type = MediaType.DOCUMENT,
+                            color = Color.Transparent.toArgb()
+                        )
+                    )
+                )
+
+                // ✦ Do NOT open DocViewer here — user taps the thumbnail to open it
                 bottomNav.hide()
             }
         }
-
+        // ─────────────────────────────────────────────────────────────────────
 
         val galleryLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickMultipleVisualMedia()
         ) { uris ->
-            uris.fastForEachIndexed { index, uri ->
+            uris.fastForEachIndexed { _, uri ->
                 scope.launch {
-                    val mediaName = getImageDisplayName(context, uri)
-                    val isVideo = context.contentResolver.getType(uri)?.startsWith("video/") == true
-
-                    val mediaPath = if (isVideo) {
+                    val mediaName    = getImageDisplayName(context, uri)
+                    val mime         = context.contentResolver.getType(uri) ?: ""
+                    val mediaType    = if (mime.startsWith("video/")) MediaType.VIDEO else MediaType.IMAGE
+                    val mediaDir     = if (mediaType == MediaType.VIDEO) {
                         Environment.DIRECTORY_MOVIES?.let { context.getExternalFilesDir(it) }
                     } else {
                         Environment.DIRECTORY_PICTURES?.let { context.getExternalFilesDir(it) }
                     }
-
-                    val destinationPath = File(mediaPath, mediaName).path
-                    val averageColor = if (!isVideo) {
+                    val destPath     = File(mediaDir, mediaName).path
+                    val averageColor = if (mediaType == MediaType.IMAGE) {
                         getAverageColorFromImage(context, uri.toString())
-                    } else {
-                        Color.DarkGray
-                    }
+                    } else Color.DarkGray
 
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
-                            Media(
-                                uri = uri.toString(),
-                                isVideo = isVideo,
-                                color = averageColor.toArgb()
-                            )
+                            Media(uri = uri.toString(), type = mediaType,
+                                color = averageColor.toArgb())
                         )
                     )
 
-                    workspaceModel.enqueueFileProcessing(uri, destinationPath) { copiedPath ->
-                        val updatedMedias = data.value.medias.map { media ->
-                            if (media.uri == uri.toString()) media.copy(uri = copiedPath)
-                            else media
-                        }
-                        data.value = data.value.copy(medias = updatedMedias)
+                    workspaceModel.enqueueFileProcessing(uri, destPath) { copiedPath ->
+                        data.value = data.value.copy(
+                            medias = data.value.medias.map { m ->
+                                if (m.uri == uri.toString()) m.copy(uri = copiedPath) else m
+                            }
+                        )
                     }
-
                     context.contentResolver.takePersistableUriPermission(
-                        uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        uri, Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
                 }
             }
@@ -212,18 +234,14 @@ data class OptionsScreen(
         ) { success ->
             if (success && pictureUri.value != null) {
                 scope.launch {
-                    val mediaPath = Environment.DIRECTORY_PICTURES
+                    val mediaDir   = Environment.DIRECTORY_PICTURES
                         ?.let { context.getExternalFilesDir(it) }
-                    val mediaName = getImageDisplayName(
-                        context, pictureUri.value ?: return@launch
-                    )
-                    val destinationPath = File(mediaPath, mediaName).path
-                    val averageColor = getAverageColorFromImage(
-                        context, pictureUri.value.toString()
-                    )
+                    val mediaName  = getImageDisplayName(context, pictureUri.value ?: return@launch)
+                    val destPath   = File(mediaDir, mediaName).path
+                    val avgColor   = getAverageColorFromImage(context, pictureUri.value.toString())
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
-                            Media(uri = destinationPath, color = averageColor.toArgb())
+                            Media(uri = destPath, type = MediaType.IMAGE, color = avgColor.toArgb())
                         )
                     )
                 }.invokeOnCompletion { bottomNav.hide() }
@@ -238,59 +256,39 @@ data class OptionsScreen(
                     val resultUri = result.data?.data ?: videoUri.value
                     if (resultUri != null) {
                         try {
-                            val mediaPath = Environment.DIRECTORY_MOVIES
+                            val mediaDir  = Environment.DIRECTORY_MOVIES
                                 ?.let { context.getExternalFilesDir(it) }
-                            val fileName = "${System.currentTimeMillis()}.mp4"
-                            val destinationFile = File(mediaPath, fileName)
-
-                            context.contentResolver.openInputStream(resultUri)?.use { input ->
-                                destinationFile.outputStream().use { output ->
-                                    input.copyTo(output)
-                                }
+                            val destFile  = File(mediaDir, "${System.currentTimeMillis()}.mp4")
+                            context.contentResolver.openInputStream(resultUri)?.use { src ->
+                                destFile.outputStream().use { dst -> src.copyTo(dst) }
                             }
-
                             data.value = data.value.copy(
                                 medias = data.value.medias.plusElement(
-                                    Media(
-                                        uri = destinationFile.absolutePath,
-                                        isVideo = true,
-                                        color = Color.DarkGray.toArgb()
-                                    )
+                                    Media(uri = destFile.absolutePath, type = MediaType.VIDEO,
+                                        color = Color.DarkGray.toArgb())
                                 )
                             )
                         } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "Error saving video: ${e.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(context, "Error saving video: ${e.message}",
+                                Toast.LENGTH_SHORT).show()
                         }
                     }
                 }.invokeOnCompletion { bottomNav.hide() }
-            } else {
-                bottomNav.hide()
-            }
+            } else bottomNav.hide()
         }
 
         val getPictureUri: () -> Uri = remember {
-            {
-                val uri = createMediaUri(context, "jpg")
-                pictureUri.value = uri
-                uri
-            }
+            { val uri = createMediaUri(context, "jpg"); pictureUri.value = uri; uri }
         }
 
         SideEffect {
             (context as Activity).window?.navigationBarColor =
-                Color(data.value.background.let {
-                    Color.Black.copy(alpha = .7f).toArgb()
-                }).toArgb()
+                Color(data.value.background.let { Color.Black.copy(alpha = .7f).toArgb() }).toArgb()
         }
 
         CommonBottomSheet(data.value.background) {
             LazyColumn(modifier = Modifier.navigationBarsPadding()) {
 
-                // Gallery
                 item {
                     CommonOptionItem(name = "Gallery", icon = GALLERY) {
                         scope.launch {
@@ -304,21 +302,16 @@ data class OptionsScreen(
                     }
                 }
 
-                // Add Audio
                 item {
-                    CommonOptionItem(name = "Audio", icon = WAVEFORM) {
+                    CommonOptionItem(name = "Add Audio", icon = WAVEFORM) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.STORAGE).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
-                                    ).show()
-
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
                                     is PermissionResult.Error -> Toast.makeText(
-                                        context, it.message, Toast.LENGTH_SHORT
-                                    ).show()
-
+                                        context, it.message, Toast.LENGTH_SHORT).show()
                                     else -> navigator.push(AudioListScreen(data))
                                 }
                             }
@@ -326,7 +319,6 @@ data class OptionsScreen(
                     }
                 }
 
-                // Take Photo
                 item {
                     CommonOptionItem(name = "Take Photo", icon = CAMERA) {
                         scope.launch {
@@ -334,16 +326,11 @@ data class OptionsScreen(
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
-                                    ).show()
-
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
                                     is PermissionResult.Error -> Toast.makeText(
-                                        context, it.message, Toast.LENGTH_SHORT
-                                    ).show()
-
+                                        context, it.message, Toast.LENGTH_SHORT).show()
                                     PermissionResult.Granted ->
                                         cameraLauncher.launch(getPictureUri())
-
                                     PermissionResult.PermanentlyDenied ->
                                         permissionsModel.permissionDeniedHandle(snackBarHostState)
                                 }
@@ -352,7 +339,6 @@ data class OptionsScreen(
                     }
                 }
 
-                // Video Capture
                 item {
                     CommonOptionItem(name = "Video Capture", icon = VIDEO_CAMERA) {
                         scope.launch {
@@ -360,21 +346,14 @@ data class OptionsScreen(
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
-                                    ).show()
-
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
                                     is PermissionResult.Error -> Toast.makeText(
-                                        context, it.message, Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    PermissionResult.Granted -> {
-                                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-                                            .apply {
-                                                putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
-                                            }
-                                        videoCapture.launch(intent)
-                                    }
-
+                                        context, it.message, Toast.LENGTH_SHORT).show()
+                                    PermissionResult.Granted -> videoCapture.launch(
+                                        Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
+                                            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
+                                        }
+                                    )
                                     PermissionResult.PermanentlyDenied ->
                                         permissionsModel.permissionDeniedHandle(snackBarHostState)
                                 }
@@ -383,7 +362,6 @@ data class OptionsScreen(
                     }
                 }
 
-                // Recorder
                 item {
                     CommonOptionItem(name = "Recorder", icon = MIC) {
                         scope.launch {
@@ -391,27 +369,18 @@ data class OptionsScreen(
                                 .collectLatest {
                                     when (it) {
                                         PermissionResult.Denied -> Toast.makeText(
-                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
-                                        ).show()
-
+                                            context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
                                         is PermissionResult.Error -> Toast.makeText(
-                                            context, it.message, Toast.LENGTH_SHORT
-                                        ).show()
-
-                                        PermissionResult.Granted ->
-                                            showRecorderSheet.value = true
-
+                                            context, it.message, Toast.LENGTH_SHORT).show()
+                                        PermissionResult.Granted -> showRecorderSheet.value = true
                                         PermissionResult.PermanentlyDenied ->
-                                            permissionsModel.permissionDeniedHandle(
-                                                snackBarHostState
-                                            )
+                                            permissionsModel.permissionDeniedHandle(snackBarHostState)
                                     }
                                 }
                         }
                     }
                 }
 
-                // ── Open Document ────────────────────────────────────────────
                 item {
                     CommonOptionItem(name = "Document", icon = DOCUMENT) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
@@ -419,22 +388,23 @@ data class OptionsScreen(
                             arrayOf(
                                 "application/pdf",
                                 "application/msword",
-                                "application/vnd.openxmlformats-officedocument" +
-                                        ".wordprocessingml.document",
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                                 "application/vnd.ms-excel",
-                                "application/vnd.openxmlformats-officedocument" +
-                                        ".spreadsheetml.sheet",
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                 "application/vnd.ms-powerpoint",
-                                "application/vnd.openxmlformats-officedocument" +
-                                        ".presentationml.presentation",
+                                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
                                 "text/plain"
                             )
                         )
                     }
                 }
-                // ────────────────────────────────────────────────────────────
 
-                // Tags
+//                item {
+//                    CommonOptionItem(name = "Scanner", icon = DOCUMENT) {
+//                        navigator.push(OCRScreen(data.value.uid))
+//                    }
+//                }
+
                 item {
                     CommonOptionItem(name = "Tags", icon = TAGS) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
@@ -442,7 +412,6 @@ data class OptionsScreen(
                     }
                 }
 
-                // Task List
                 item {
                     CommonOptionItem(name = "Task List", icon = LIST_CHECK) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
@@ -450,7 +419,6 @@ data class OptionsScreen(
                     }
                 }
 
-                // Reminder
                 item {
                     CommonOptionItem(name = "Reminder", icon = BELL) {
                         scope.launch {
@@ -458,68 +426,55 @@ data class OptionsScreen(
                                 .collect {
                                     when (it) {
                                         PermissionResult.Denied -> Toast.makeText(
-                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
-                                        ).show()
-
+                                            context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
                                         is PermissionResult.Error -> Toast.makeText(
-                                            context, it.message, Toast.LENGTH_SHORT
-                                        ).show()
-
-                                        PermissionResult.Granted ->
-                                            showReminderSheet.value = true
-
+                                            context, it.message, Toast.LENGTH_SHORT).show()
+                                        PermissionResult.Granted -> showReminderSheet.value = true
                                         PermissionResult.PermanentlyDenied ->
-                                            permissionsModel.permissionDeniedHandle(
-                                                snackBarHostState
-                                            )
+                                            permissionsModel.permissionDeniedHandle(snackBarHostState)
                                     }
                                 }
                         }
                     }
                 }
 
-                // Priority
                 item {
                     val currentPriority = Priorities.entries[data.value.priority]
-                    val priorityPair = getPriority(data.value.priority)
+                    val priorityPair    = getPriority(data.value.priority)
                     Text(
-                        text = if (currentPriority == Priorities.NON) "Priority"
+                        text     = if (currentPriority == Priorities.NON) "Priority"
                         else "Priority · ${currentPriority.priority}",
                         modifier = Modifier.padding(20.dp, 15.dp),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = if (currentPriority == Priorities.NON)
+                        style    = MaterialTheme.typography.labelLarge,
+                        color    = if (currentPriority == Priorities.NON)
                             MaterialTheme.colorScheme.onSurface.copy(alpha = .6f)
-                        else
-                            Color(priorityPair.second).copy(alpha = .9f)
+                        else Color(priorityPair.second).copy(alpha = .9f)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     PrioritySlider(
-                        priority = currentPriority,
+                        priority         = currentPriority,
                         onPriorityChange = { priority ->
                             data.value = data.value.copy(priority = priority.index)
                         }
                     )
                 }
 
-                // Note dates
                 item { NoteDates(data.value) }
 
-                // Snackbar
                 item {
                     SnackbarHost(snackBarHostState) {
                         Snackbar(
-                            snackbarData = it,
-                            modifier = Modifier.animateContentSize(),
-                            shape = MaterialTheme.shapes.large,
+                            snackbarData   = it,
+                            modifier       = Modifier.animateContentSize(),
+                            shape          = MaterialTheme.shapes.large,
                             containerColor = MaterialTheme.colorScheme.onSurface,
-                            contentColor = MaterialTheme.colorScheme.surface,
-                            actionColor = MaterialTheme.colorScheme.surface
+                            contentColor   = MaterialTheme.colorScheme.surface,
+                            actionColor    = MaterialTheme.colorScheme.surface
                         )
                     }
                 }
             }
 
-            // Recorder bottom sheet
             if (showRecorderSheet.value) {
                 ModalBottomSheet(
                     onDismissRequest = { showRecorderSheet.value = false },
@@ -538,7 +493,6 @@ data class OptionsScreen(
                 }
             }
 
-            // Reminder bottom sheet
             if (showReminderSheet.value) {
                 ModalBottomSheet(
                     onDismissRequest = { showReminderSheet.value = false },
@@ -561,55 +515,77 @@ data class OptionsScreen(
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    /**
-     * Copies a content URI into the app cache dir and returns the local file path.
-     * DocViewer needs a real file-system path (DocSourceType.SDCARD).
-     */
-    private suspend fun copyUriToCache(context: Context, uri: Uri): String =
-        withContext(Dispatchers.IO) {
-            // Derive extension from MIME type so DocViewer picks the right renderer
-            val mime = context.contentResolver.getType(uri) ?: "application/pdf"
-            val ext = when {
-                mime.contains("pdf") -> "pdf"
-                mime.contains("msword") ||
-                        mime.contains("wordprocessing") -> "docx"
-
-                mime.contains("excel") ||
-                        mime.contains("spreadsheet") -> "xlsx"
-
-                mime.contains("powerpoint") ||
-                        mime.contains("presentation") -> "pptx"
-
-                mime.contains("text") -> "txt"
-                else -> "pdf"
-            }
-            val dest = File(context.cacheDir, "docviewer_${System.currentTimeMillis()}.$ext")
-            context.contentResolver.openInputStream(uri)?.use { src ->
-                FileOutputStream(dest).use { dst -> src.copyTo(dst) }
-            }
-            dest.absolutePath
-        }
-
     @SuppressLint("SimpleDateFormat")
     private fun createMediaUri(context: Context, pattern: String): Uri {
-        val fileName  = "${Random.nextLong()}.$pattern"
-        val mediaPath = when (pattern) {
-            "jpg" -> Environment.DIRECTORY_PICTURES
-            "mp4" -> Environment.DIRECTORY_MOVIES
-            else  -> Environment.DIRECTORY_DOWNLOADS
-        }?.let { context.getExternalFilesDir(it) }
-        if (!mediaPath?.exists()!!) mediaPath.mkdirs()
-        val newFile = File(mediaPath, fileName)
-        return FileProvider.getUriForFile(
-            context, "${context.packageName}.provider", newFile
-        )
+        val type = MediaType.fromExtension(pattern)
+
+        val dir = when (type) {
+            MediaType.DOCUMENT -> Environment.DIRECTORY_DOCUMENTS
+            MediaType.VIDEO    -> Environment.DIRECTORY_MOVIES
+            MediaType.IMAGE    -> Environment.DIRECTORY_PICTURES
+        }.let { context.getExternalFilesDir(it) }
+
+        if (!dir?.exists()!!) dir.mkdirs()
+
+        val fileName = if (type == MediaType.DOCUMENT) "doc_${System.currentTimeMillis()}.$pattern"
+        else "${Random.nextLong()}.$pattern"
+
+        val newFile = File(dir, fileName)
+        return FileProvider.getUriForFile(context, "${context.packageName}.provider", newFile)
+    }
+
+    private fun filePathFromUri(context: Context, uri: Uri): String? =
+        runCatching {
+            context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val idx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                    if (idx >= 0) {
+                        val name    = cursor.getString(idx)
+                        val docsDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+                        File(docsDir, name).takeIf { it.exists() }?.absolutePath
+                    } else null
+                } else null
+            }
+        }.getOrNull()
+            ?: uri.path?.substringAfter("/external_files")
+                ?.let { Environment.getExternalStorageDirectory().absolutePath + it }
+
+    private fun resolveDisplayName(context: Context, uri: Uri): String =
+        runCatching {
+            context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val idx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                    if (idx >= 0) cursor.getString(idx) else null
+                } else null
+            }
+        }.getOrNull() ?: "document_${System.currentTimeMillis()}"
+
+    /**
+     * Extension from MIME — used only when the display-name has no extension.
+     * Explicit MIME checks come before any "contains" checks to avoid
+     * xlsx/pptx matching "text" on devices that return ambiguous types.
+     */
+    private fun extensionFromMime(mime: String): String = when (mime) {
+        "application/pdf" -> "pdf"
+        "application/msword" -> "doc"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> "docx"
+        "application/vnd.ms-excel" -> "xls"
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" -> "xlsx"
+        "application/vnd.ms-powerpoint" -> "ppt"
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation" -> "pptx"
+        "text/plain" -> "txt"
+        else -> when {
+            mime.startsWith("video/") -> "mp4"
+            mime.startsWith("image/") -> "jpg"
+            else -> "pdf"      // safe fallback
+        }
     }
 
     fun getPriority(priority: Int) = when (priority) {
-        1 -> Pair("Low", 0xff32cd32)
-        2 -> Pair("Medium", 0xffffef00)
-        3 -> Pair("High", 0xffffa500)
-        4 -> Pair("Urgent", 0xffff2800)
-        else -> Pair("Non", 0xffc0c0c0)
+        1    -> Pair("Low",    0xff32cd32)
+        2    -> Pair("Medium", 0xffffef00)
+        3    -> Pair("High",   0xffffa500)
+        4    -> Pair("Urgent", 0xffff2800)
+        else -> Pair("Non",    0xffc0c0c0)
     }
 }

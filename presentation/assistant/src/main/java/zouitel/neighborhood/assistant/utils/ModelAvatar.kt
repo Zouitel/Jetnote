@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import zouitel.neighborhood.assistant.R
 import zouitel.neighborhood.assistant.ui.conversation.rememberAvatarShape
 import zouitel.neighborhood.ui.getAverageColorFromImage
 

@@ -65,6 +65,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -105,7 +106,6 @@ import zouitel.neighborhood.ai.provider.Model
 import zouitel.neighborhood.ai.ui.UIMessagePart
 import zouitel.neighborhood.assistant.VibrationHelper
 import zouitel.neighborhood.assistant.model.Conversation
-import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreen
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.assistant.ui.configurations.ModelConfigurationScreen
@@ -119,8 +119,12 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.assistant.R
+import zouitel.neighborhood.assistant.ui.ai_model.FullModels
+import zouitel.neighborhood.assistant.ui.provider.ProvidersScreen
 import zouitel.neighborhood.assistant.utils.JsonInstant
 import zouitel.neighborhood.assistant.utils.Avatar
+import zouitel.neighborhood.assistant.utils.ModelSwitcherPopup
 import zouitel.neighborhood.feedback.reportable
 import kotlin.uuid.Uuid
 
@@ -209,8 +213,10 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
 
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val showOptionsSheet = remember { mutableStateOf(false) }
-        val optionsSheetState = rememberModalBottomSheetState()
+        val optionsSheet = remember { mutableStateOf(false) }
+        val optionsState = rememberModalBottomSheetState()
+        val modelsSheet = remember { mutableStateOf(false) }
+        val modelsState = rememberModalBottomSheetState()
 
         val conversation by remember(
             conversationModel,
@@ -235,6 +241,7 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
         val snackbarState = remember { SnackbarHostState() }
         val jobCounter = remember { mutableIntStateOf(0) }
         val deletedChat = remember { mutableStateListOf<Pair<Conversation, Int>>() }
+        val showModelSwitcher = remember { mutableStateOf(false) }   // NEW
 
         // Load model logo
         LaunchedEffect(model) {
@@ -314,7 +321,7 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
             Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .reportable(settings.isShakable)
-                .cloudy(enabled = bottomNav.isVisible || expanded.value || showOptionsSheet.value),
+                .cloudy(enabled = bottomNav.isVisible || expanded.value || optionsSheet.value || showModelSwitcher.value),
             topBar = {
                 TopAppBar(
                     {
@@ -381,7 +388,7 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                             },
                             {
                                 expanded.value = false
-                                showOptionsSheet.value = true
+                                optionsSheet.value = true
                             }
                         )
                     },
@@ -435,7 +442,9 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                     InputBar(
                         isLoading,
                         model,
+                        models,
                         inputState,
+                        showModelSwitcher,
                         {
                             if (inputState.isEmpty().not()) {
                                 scope.launch {
@@ -448,13 +457,20 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                             }
                         },
                         {
-                            navigator?.push(ModelsScreen())
+//                            navigator?.push(ModelsScreen())
+//                            modelsSheet.value = true
+                            navigator?.push(ProvidersScreen())
                         },
                         {
-                            showOptionsSheet.value = true
+                            optionsSheet.value = true
                         },
                         {
                             conversationJobs.value.values.map { it?.cancel() }
+                        },
+                        {
+                            assistantModel.upsert(
+                                assistant?.copy(currentModelUid = it.uid) ?: return@InputBar
+                            )
                         }
                     )
                 }
@@ -511,18 +527,27 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                 }
             }
 
-            if (showOptionsSheet.value) {
+            if (optionsSheet.value) {
                 ModalBottomSheet(
                     onDismissRequest = {
-                        showOptionsSheet.value = false
+                        optionsSheet.value = false
                     },
-                    sheetState = optionsSheetState,
+                    sheetState = optionsState,
                     containerColor = MaterialTheme.colorScheme.surface
                 ) {
-                    Options(
-                        provider,
-                        inputState
-                    )
+                    Options(provider, inputState)
+                }
+            }
+
+            if (modelsSheet.value) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        modelsSheet.value = false
+                    },
+                    sheetState = modelsState,
+                    containerColor = MaterialTheme.colorScheme.surface
+                ) {
+                    FullModels(getScreenModel(), getScreenModel(), getScreenModel())
                 }
             }
         }
@@ -746,15 +771,18 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
     private fun InputBar(
         loading: State<Boolean>,
         model: Model?,
+        models: List<Model>,              // NEW — full list for the switcher
         inputState: ChatInputState,
+        modelSwitcher: MutableState<Boolean>,
         onSend: () -> Unit,
         onAttachClick: () -> Unit,
         onOptions: () -> Unit,
-        onCancel: () -> Unit
+        onCancel: () -> Unit,
+        onModelSelect: (Model) -> Unit    // NEW — called when user picks a model
     ) {
         val context = LocalContext.current
-
         var isFocused by remember { mutableStateOf(false) }
+
         val elevation by animateFloatAsState(
             targetValue = if (isFocused) 8f else 2f,
             label = "elevation"
@@ -777,89 +805,82 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                 }
             }
         }
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surfaceContainerHighest,
-            shadowElevation = elevation.dp,
-            tonalElevation = 2.dp
-        ) {
-            // Text input
-            TextField(
-                state = inputState.textContent,
+
+        Box {
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .contentReceiver(receiveContentListener)
-                    .onFocusChanged {
-                        isFocused = it.isFocused
-                    }
-                    .navigationBarsPadding()
-                    .imePadding(),
-                lineLimits = TextFieldLineLimits.MultiLine(maxHeightInLines = 5),
-                textStyle = TextStyle(
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    lineHeight = 22.sp
-                ),
-                placeholder = {
-                    Text(
-                        text = model?.let{ "Ask ${it.displayName.split(' ','/','-',',').firstOrNull()}"  } ?: "<- Add AI model",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                    )
-                },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurface
-                ),
-                leadingIcon = if (inputState.getMessageText().isEmpty()) {
-                    {
-                        // Attach button - only shown when not focused
-                        IconButton(onAttachClick, Modifier.padding(5.dp)) {
-                            model?.let {
-                                AsyncImage(
-                                    it.logoUrl,
-                                    "Attach",
-                                    modifier = Modifier.size(30.dp)
-                                )
-                            } ?: Icon(painterResource(CommonIcons.BOX_CONNECTION), null)
-                        }
-                        Avatar(
-                            isLoading = false,
-                            logo = model?.logoUrl,
-                            modelName = model?.displayName ?: "/",
-                            onClick = onAttachClick
+                    .wrapContentHeight(),
+                shape = MaterialTheme.shapes.extraLarge,
+                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                shadowElevation = elevation.dp,
+                tonalElevation = 2.dp
+            ) {
+                TextField(
+                    state = inputState.textContent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .contentReceiver(receiveContentListener)
+                        .onFocusChanged { isFocused = it.isFocused }
+                        .navigationBarsPadding()
+                        .imePadding(),
+                    lineLimits = TextFieldLineLimits.MultiLine(maxHeightInLines = 5),
+                    textStyle = TextStyle(
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        lineHeight = 22.sp
+                    ),
+                    placeholder = {
+                        Text(
+                            text = model?.let {
+                                "Ask ${it.displayName.split(' ', '/', '-', ',').firstOrNull()}"
+                            } ?: "<- Add AI model",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
-                    }
-                } else null,
-                // Update the trailing icon to show sending state:
-                trailingIcon = {
-                    when {
-                        loading.value -> {
-                            IconButton(onCancel, Modifier.padding(5.dp)) {
-                                Icon(
-                                    painter = painterResource(CommonIcons.CROSS_18),
-                                    contentDescription = "cancel"
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    leadingIcon = if (inputState.getMessageText().isEmpty()) {
+                        {
+                            if (model == null) {
+                                IconButton({
+                                    modelSwitcher.value = true
+                                }) {
+                                    Icon(painterResource(CommonIcons.BOX_ADD), null)
+                                }
+                            } else {
+                                Avatar(
+                                    isLoading = loading.value,
+                                    logo = model.logoUrl,
+                                    modelName = model.displayName,
+                                    onClick = {
+                                        if (models.size > 1) modelSwitcher.value = true
+                                        else onAttachClick()
+                                    }
                                 )
                             }
                         }
-                        inputState.getMessageText().isEmpty() -> {
-                            IconButton(onOptions, Modifier.padding(5.dp)) {
+                    } else null,
+                    trailingIcon = {
+                        when {
+                            loading.value -> IconButton(onCancel, Modifier.padding(5.dp)) {
+                                Icon(painterResource(CommonIcons.CROSS_18), "cancel")
+                            }
+                            inputState.getMessageText().isEmpty() -> IconButton(onOptions, Modifier.padding(5.dp)) {
                                 Icon(
                                     painterResource(CommonIcons.CLIP),
                                     "options",
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }
-                        }
-                        else -> {
-                            IconButton(onSend, Modifier.padding(5.dp)) {
+                            else -> IconButton(onSend, Modifier.padding(5.dp)) {
                                 Icon(
                                     painterResource(CommonIcons.ARROW_UP),
                                     "send",
@@ -868,8 +889,25 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                             }
                         }
                     }
-                }
-            )
+                )
+            }
+
+            // Gmail-style model switcher popup, anchored above the avatar
+            if (modelSwitcher.value) {
+                ModelSwitcherPopup(
+                    models = models,
+                    currentModel = model,
+                    onDismiss = { modelSwitcher.value = false },
+                    onModelSelect = { model ->
+                        onModelSelect(model)
+                        modelSwitcher.value = false
+                    },
+                    onAddModel = {
+                        modelSwitcher.value = false
+                        onAttachClick()
+                    }
+                )
+            }
         }
     }
 }

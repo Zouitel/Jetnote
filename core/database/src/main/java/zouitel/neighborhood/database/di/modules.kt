@@ -81,7 +81,7 @@ val databaseLazyModule = lazyModule {
             Database::class.java,
             Constants.DATABASE
         )
-            .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
+//            .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
             .build()
