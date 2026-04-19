@@ -1,5 +1,6 @@
 [versions]
 agp = "8.11.2"
+docviewer = "v3.0.3"
 exifinterface = "1.4.1"
 googleApiServicesDrive = "v3-rev136-1.25.0"
 googleHttpClientGson = "1.47.1"
@@ -8,6 +9,7 @@ compileSdk-version = "36"
 minSdk-version = "27"
 permissionsCompose = "0.20.1"
 playServicesAuth = "21.4.0"
+playServicesMlkitDocumentScanner = "16.0.0"
 print = "1.1.0"
 sqliteKtx = "2.6.1"
 targetSdk-version = "35"
@@ -106,6 +108,7 @@ androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", vers
 androidx-print = { module = "androidx.print:print", version.ref = "print" }
 androidx-sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqliteKtx" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+docviewer = { module = "com.github.Victor2018:DocViewer", version.ref = "docviewer" }
 google-http-client-gson = { module = "com.google.http-client:google-http-client-gson", version.ref = "googleHttpClientGson" }
 google-api-services-drive = { module = "com.google.apis:google-api-services-drive", version.ref = "googleApiServicesDrive" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -130,6 +133,7 @@ permissions-notifications = { module = "dev.icerock.moko:permissions-notificatio
 permissions-microphone = { module = "dev.icerock.moko:permissions-microphone", version.ref = "permissionsCompose" }
 permissions-gallery = { module = "dev.icerock.moko:permissions-gallery", version.ref = "permissionsCompose" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-mlkit-document-scanner = { module = "com.google.android.gms:play-services-mlkit-document-scanner", version.ref = "playServicesMlkitDocumentScanner" }
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
 workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }

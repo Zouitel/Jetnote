@@ -20,6 +20,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -27,12 +29,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.AsyncImage
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
 import zouitel.neighborhood.ui.CommonIcons
+import zouitel.neighborhood.workspace.model.Data
+import zouitel.neighborhood.workspace.model.Media
+import zouitel.neighborhood.workspace.model.MediaType
 
 /**
  * Full-page scan screen for Jetnote.
@@ -48,7 +54,7 @@ import zouitel.neighborhood.ui.CommonIcons
  *   }
  */
 @OptIn(ExperimentalMaterial3Api::class)
-class OCRScreen(val noteId: String = ""): Screen {
+class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) : Screen {
 
     @Composable
     override fun Content() {
@@ -57,9 +63,10 @@ class OCRScreen(val noteId: String = ""): Screen {
 
     @Composable
     private fun OCR(OCRModel: OCRScreenModel) {
-        val uiState by OCRModel.uiState.collectAsStateWithLifecycle()
-        val context = LocalContext.current
+        val uiState  by OCRModel.uiState.collectAsStateWithLifecycle()
+        val context  = LocalContext.current
         val activity = context as? Activity
+        val navigator = LocalNavigator.currentOrThrow
 
         // ── ML Kit launcher ───────────────────────────────────────────────────────
         val scanLauncher = rememberLauncherForActivityResult(
@@ -97,9 +104,21 @@ class OCRScreen(val noteId: String = ""): Screen {
             }
         }
 
-        // ── Navigate back after save ──────────────────────────────────────────────
-        LaunchedEffect(uiState.savedToNote) {
-            if (uiState.savedToNote) true
+        // ── Write saved PDF into data.medias, then navigate back ─────────────
+        LaunchedEffect(uiState.savedPdfPath) {
+            val path = uiState.savedPdfPath ?: return@LaunchedEffect
+            if (path.isNotBlank()) {
+                data?.value = data?.value?.copy(
+                    medias = data.value.medias.plusElement(
+                        Media(
+                            uri   = path,
+                            type  = MediaType.DOCUMENT,
+                            color = Color.Transparent.toArgb()
+                        )
+                    )
+                ) ?: return@LaunchedEffect
+                navigator.pop()
+            }
         }
 
         Scaffold(

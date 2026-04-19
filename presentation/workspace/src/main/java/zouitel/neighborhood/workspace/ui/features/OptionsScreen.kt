@@ -60,6 +60,7 @@ import zouitel.neighborhood.permissions.PermissionResult
 import zouitel.neighborhood.permissions.PermissionScreenModel
 import zouitel.neighborhood.ui.CommonBottomSheet
 import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
+import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonIcons.BELL
 import zouitel.neighborhood.ui.CommonIcons.CAMERA
 import zouitel.neighborhood.ui.CommonIcons.DOCUMENT
@@ -98,38 +99,40 @@ data class OptionsScreen(
             getScreenModel(),
             getScreenModel(),
             getScreenModel(),
-        getScreenModel()
+            getScreenModel()
         )
     }
 
     @Composable
     private fun Options(
-        settingsModel   : SettingsScreenModel,
-        workspaceModel  : WorkplaceScreenModel,
+        settingsModel: SettingsScreenModel,
+        workspaceModel: WorkplaceScreenModel,
         permissionsModel: PermissionScreenModel,
         OCRModel: OCRScreenModel
     ) {
-        val context   = LocalContext.current
+        val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
         val bottomNav = LocalBottomSheetNavigator.current
 
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
-        val tagsScreen       = rememberScreen(SharedScreen.Tags(data.value.uid, data.value.background))
-        val scope            = rememberCoroutineScope()
-        val pictureUri       = rememberSaveable { mutableStateOf<Uri?>(null) }
-        val videoUri         = rememberSaveable { mutableStateOf<Uri?>(null) }
-        val snackBarHostState  = remember { SnackbarHostState() }
+        val tagsScreen = rememberScreen(SharedScreen.Tags(data.value.uid, data.value.background))
+        val scope = rememberCoroutineScope()
+        val pictureUri = rememberSaveable { mutableStateOf<Uri?>(null) }
+        val videoUri = rememberSaveable { mutableStateOf<Uri?>(null) }
+        val snackBarHostState = remember { SnackbarHostState() }
         val recorderSheetState = rememberModalBottomSheetState()
-        val showRecorderSheet  = remember { mutableStateOf(false) }
+        val showRecorderSheet = remember { mutableStateOf(false) }
         val reminderSheetState = rememberModalBottomSheetState(true)
-        val showReminderSheet  = remember { mutableStateOf(false) }
+        val showReminderSheet = remember { mutableStateOf(false) }
         val sound by lazy { SoundEffect() }
 
         // ── Document picker ───────────────────────────────────────────────────
         val documentLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.OpenDocument()
         ) { sourceUri: Uri? ->
-            if (sourceUri == null) { bottomNav.hide(); return@rememberLauncherForActivityResult }
+            if (sourceUri == null) {
+                bottomNav.hide(); return@rememberLauncherForActivityResult
+            }
 
             scope.launch {
                 runCatching {
@@ -194,23 +197,26 @@ data class OptionsScreen(
         ) { uris ->
             uris.fastForEachIndexed { _, uri ->
                 scope.launch {
-                    val mediaName    = getImageDisplayName(context, uri)
-                    val mime         = context.contentResolver.getType(uri) ?: ""
-                    val mediaType    = if (mime.startsWith("video/")) MediaType.VIDEO else MediaType.IMAGE
-                    val mediaDir     = if (mediaType == MediaType.VIDEO) {
+                    val mediaName = getImageDisplayName(context, uri)
+                    val mime = context.contentResolver.getType(uri) ?: ""
+                    val mediaType =
+                        if (mime.startsWith("video/")) MediaType.VIDEO else MediaType.IMAGE
+                    val mediaDir = if (mediaType == MediaType.VIDEO) {
                         Environment.DIRECTORY_MOVIES?.let { context.getExternalFilesDir(it) }
                     } else {
                         Environment.DIRECTORY_PICTURES?.let { context.getExternalFilesDir(it) }
                     }
-                    val destPath     = File(mediaDir, mediaName).path
+                    val destPath = File(mediaDir, mediaName).path
                     val averageColor = if (mediaType == MediaType.IMAGE) {
                         getAverageColorFromImage(context, uri.toString())
                     } else Color.DarkGray
 
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
-                            Media(uri = uri.toString(), type = mediaType,
-                                color = averageColor.toArgb())
+                            Media(
+                                uri = uri.toString(), type = mediaType,
+                                color = averageColor.toArgb()
+                            )
                         )
                     )
 
@@ -234,11 +240,11 @@ data class OptionsScreen(
         ) { success ->
             if (success && pictureUri.value != null) {
                 scope.launch {
-                    val mediaDir   = Environment.DIRECTORY_PICTURES
+                    val mediaDir = Environment.DIRECTORY_PICTURES
                         ?.let { context.getExternalFilesDir(it) }
-                    val mediaName  = getImageDisplayName(context, pictureUri.value ?: return@launch)
-                    val destPath   = File(mediaDir, mediaName).path
-                    val avgColor   = getAverageColorFromImage(context, pictureUri.value.toString())
+                    val mediaName = getImageDisplayName(context, pictureUri.value ?: return@launch)
+                    val destPath = File(mediaDir, mediaName).path
+                    val avgColor = getAverageColorFromImage(context, pictureUri.value.toString())
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
                             Media(uri = destPath, type = MediaType.IMAGE, color = avgColor.toArgb())
@@ -256,21 +262,25 @@ data class OptionsScreen(
                     val resultUri = result.data?.data ?: videoUri.value
                     if (resultUri != null) {
                         try {
-                            val mediaDir  = Environment.DIRECTORY_MOVIES
+                            val mediaDir = Environment.DIRECTORY_MOVIES
                                 ?.let { context.getExternalFilesDir(it) }
-                            val destFile  = File(mediaDir, "${System.currentTimeMillis()}.mp4")
+                            val destFile = File(mediaDir, "${System.currentTimeMillis()}.mp4")
                             context.contentResolver.openInputStream(resultUri)?.use { src ->
                                 destFile.outputStream().use { dst -> src.copyTo(dst) }
                             }
                             data.value = data.value.copy(
                                 medias = data.value.medias.plusElement(
-                                    Media(uri = destFile.absolutePath, type = MediaType.VIDEO,
-                                        color = Color.DarkGray.toArgb())
+                                    Media(
+                                        uri = destFile.absolutePath, type = MediaType.VIDEO,
+                                        color = Color.DarkGray.toArgb()
+                                    )
                                 )
                             )
                         } catch (e: Exception) {
-                            Toast.makeText(context, "Error saving video: ${e.message}",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context, "Error saving video: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }.invokeOnCompletion { bottomNav.hide() }
@@ -303,15 +313,19 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Add Audio", icon = WAVEFORM) {
+                    CommonOptionItem(name = "Audio", icon = WAVEFORM) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.STORAGE).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                    ).show()
+
                                     is PermissionResult.Error -> Toast.makeText(
-                                        context, it.message, Toast.LENGTH_SHORT).show()
+                                        context, it.message, Toast.LENGTH_SHORT
+                                    ).show()
+
                                     else -> navigator.push(AudioListScreen(data))
                                 }
                             }
@@ -326,11 +340,16 @@ data class OptionsScreen(
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                    ).show()
+
                                     is PermissionResult.Error -> Toast.makeText(
-                                        context, it.message, Toast.LENGTH_SHORT).show()
+                                        context, it.message, Toast.LENGTH_SHORT
+                                    ).show()
+
                                     PermissionResult.Granted ->
                                         cameraLauncher.launch(getPictureUri())
+
                                     PermissionResult.PermanentlyDenied ->
                                         permissionsModel.permissionDeniedHandle(snackBarHostState)
                                 }
@@ -346,14 +365,19 @@ data class OptionsScreen(
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                    ).show()
+
                                     is PermissionResult.Error -> Toast.makeText(
-                                        context, it.message, Toast.LENGTH_SHORT).show()
+                                        context, it.message, Toast.LENGTH_SHORT
+                                    ).show()
+
                                     PermissionResult.Granted -> videoCapture.launch(
                                         Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
                                             putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
                                         }
                                     )
+
                                     PermissionResult.PermanentlyDenied ->
                                         permissionsModel.permissionDeniedHandle(snackBarHostState)
                                 }
@@ -369,12 +393,18 @@ data class OptionsScreen(
                                 .collectLatest {
                                     when (it) {
                                         PermissionResult.Denied -> Toast.makeText(
-                                            context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                        ).show()
+
                                         is PermissionResult.Error -> Toast.makeText(
-                                            context, it.message, Toast.LENGTH_SHORT).show()
+                                            context, it.message, Toast.LENGTH_SHORT
+                                        ).show()
+
                                         PermissionResult.Granted -> showRecorderSheet.value = true
                                         PermissionResult.PermanentlyDenied ->
-                                            permissionsModel.permissionDeniedHandle(snackBarHostState)
+                                            permissionsModel.permissionDeniedHandle(
+                                                snackBarHostState
+                                            )
                                     }
                                 }
                         }
@@ -399,11 +429,11 @@ data class OptionsScreen(
                     }
                 }
 
-//                item {
-//                    CommonOptionItem(name = "Scanner", icon = DOCUMENT) {
-//                        navigator.push(OCRScreen(data.value.uid))
-//                    }
-//                }
+                item {
+                    CommonOptionItem(name = "Scanner", icon = CommonIcons.DOCUMENT_SCANNER) {
+                        navigator.push(OCRScreen(noteId = data.value.uid, data = data))
+                    }
+                }
 
                 item {
                     CommonOptionItem(name = "Tags", icon = TAGS) {
@@ -413,7 +443,7 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Task List", icon = LIST_CHECK) {
+                    CommonOptionItem(name = "Tasks", icon = LIST_CHECK) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                         bottomNav.show(AddTaskScreen(null, data))
                     }
@@ -426,12 +456,18 @@ data class OptionsScreen(
                                 .collect {
                                     when (it) {
                                         PermissionResult.Denied -> Toast.makeText(
-                                            context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                        ).show()
+
                                         is PermissionResult.Error -> Toast.makeText(
-                                            context, it.message, Toast.LENGTH_SHORT).show()
+                                            context, it.message, Toast.LENGTH_SHORT
+                                        ).show()
+
                                         PermissionResult.Granted -> showReminderSheet.value = true
                                         PermissionResult.PermanentlyDenied ->
-                                            permissionsModel.permissionDeniedHandle(snackBarHostState)
+                                            permissionsModel.permissionDeniedHandle(
+                                                snackBarHostState
+                                            )
                                     }
                                 }
                         }
@@ -440,19 +476,19 @@ data class OptionsScreen(
 
                 item {
                     val currentPriority = Priorities.entries[data.value.priority]
-                    val priorityPair    = getPriority(data.value.priority)
+                    val priorityPair = getPriority(data.value.priority)
                     Text(
-                        text     = if (currentPriority == Priorities.NON) "Priority"
+                        text = if (currentPriority == Priorities.NON) "Priority"
                         else "Priority · ${currentPriority.priority}",
                         modifier = Modifier.padding(20.dp, 15.dp),
-                        style    = MaterialTheme.typography.labelLarge,
-                        color    = if (currentPriority == Priorities.NON)
+                        style = MaterialTheme.typography.labelLarge,
+                        color = if (currentPriority == Priorities.NON)
                             MaterialTheme.colorScheme.onSurface.copy(alpha = .6f)
                         else Color(priorityPair.second).copy(alpha = .9f)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     PrioritySlider(
-                        priority         = currentPriority,
+                        priority = currentPriority,
                         onPriorityChange = { priority ->
                             data.value = data.value.copy(priority = priority.index)
                         }
@@ -464,12 +500,12 @@ data class OptionsScreen(
                 item {
                     SnackbarHost(snackBarHostState) {
                         Snackbar(
-                            snackbarData   = it,
-                            modifier       = Modifier.animateContentSize(),
-                            shape          = MaterialTheme.shapes.large,
+                            snackbarData = it,
+                            modifier = Modifier.animateContentSize(),
+                            shape = MaterialTheme.shapes.large,
                             containerColor = MaterialTheme.colorScheme.onSurface,
-                            contentColor   = MaterialTheme.colorScheme.surface,
-                            actionColor    = MaterialTheme.colorScheme.surface
+                            contentColor = MaterialTheme.colorScheme.surface,
+                            actionColor = MaterialTheme.colorScheme.surface
                         )
                     }
                 }
@@ -478,8 +514,8 @@ data class OptionsScreen(
             if (showRecorderSheet.value) {
                 ModalBottomSheet(
                     onDismissRequest = { showRecorderSheet.value = false },
-                    sheetState       = recorderSheetState,
-                    containerColor   = MaterialTheme.colorScheme.surface
+                    sheetState = recorderSheetState,
+                    containerColor = MaterialTheme.colorScheme.surface
                 ) {
                     RecorderSheet(
                         data = data,
@@ -496,8 +532,8 @@ data class OptionsScreen(
             if (showReminderSheet.value) {
                 ModalBottomSheet(
                     onDismissRequest = { showReminderSheet.value = false },
-                    sheetState       = reminderSheetState,
-                    containerColor   = MaterialTheme.colorScheme.surface
+                    sheetState = reminderSheetState,
+                    containerColor = MaterialTheme.colorScheme.surface
                 ) {
                     ReminderSheet(
                         data = data,
@@ -521,8 +557,8 @@ data class OptionsScreen(
 
         val dir = when (type) {
             MediaType.DOCUMENT -> Environment.DIRECTORY_DOCUMENTS
-            MediaType.VIDEO    -> Environment.DIRECTORY_MOVIES
-            MediaType.IMAGE    -> Environment.DIRECTORY_PICTURES
+            MediaType.VIDEO -> Environment.DIRECTORY_MOVIES
+            MediaType.IMAGE -> Environment.DIRECTORY_PICTURES
         }.let { context.getExternalFilesDir(it) }
 
         if (!dir?.exists()!!) dir.mkdirs()
@@ -540,7 +576,7 @@ data class OptionsScreen(
                 if (cursor.moveToFirst()) {
                     val idx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
                     if (idx >= 0) {
-                        val name    = cursor.getString(idx)
+                        val name = cursor.getString(idx)
                         val docsDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
                         File(docsDir, name).takeIf { it.exists() }?.absolutePath
                     } else null
@@ -582,10 +618,10 @@ data class OptionsScreen(
     }
 
     fun getPriority(priority: Int) = when (priority) {
-        1    -> Pair("Low",    0xff32cd32)
-        2    -> Pair("Medium", 0xffffef00)
-        3    -> Pair("High",   0xffffa500)
-        4    -> Pair("Urgent", 0xffff2800)
-        else -> Pair("Non",    0xffc0c0c0)
+        1 -> Pair("Low", 0xff32cd32)
+        2 -> Pair("Medium", 0xffffef00)
+        3 -> Pair("High", 0xffffa500)
+        4 -> Pair("Urgent", 0xffff2800)
+        else -> Pair("Non", 0xffc0c0c0)
     }
 }

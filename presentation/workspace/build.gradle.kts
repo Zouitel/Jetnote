@@ -55,9 +55,9 @@ dependencies {
 
     implementation(libs.androidx.recyclerview)
 
-    // Add DocViewer library
-    implementation("com.github.Victor2018:DocViewer:v3.0.3")
+    //DocViewer.
+    implementation(libs.docviewer)
 
-    // ── ML Kit Document Scanner (Google Play Services — no APK size hit) ──
-    implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0")
+    //ML Kit Document Scanner.
+    implementation(libs.play.services.mlkit.document.scanner)
 }

@@ -2,40 +2,41 @@ package zouitel.neighborhood.database.di
 
 import androidx.room.Room
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
-import zouitel.neighborhood.database.database.Database
-import zouitel.neighborhood.database.datasourceImpl.DataDataSourceImpl
-import zouitel.neighborhood.database.datasourceImpl.LinkDataSourceImpl
-import zouitel.neighborhood.database.datasourceImpl.NoteAndTagDataSourceImpl
-import zouitel.neighborhood.database.datasourceImpl.NoteDataSourceImpl
-import zouitel.neighborhood.database.datasourceImpl.TagDataSourceImpl
-import zouitel.neighborhood.database.mapper.LinkMapper
-import zouitel.neighborhood.database.mapper.NoteAndTagMapper
-import zouitel.neighborhood.database.mapper.NoteMapper
-import zouitel.neighborhood.database.mapper.DataMapper
-import zouitel.neighborhood.database.mapper.TagMapper
-import zouitel.neighborhood.database.utils.Constants
-import zouitel.neighborhood.database.datasourceImpl.AssistantDatasourceImpl
-import zouitel.neighborhood.database.datasourceImpl.ConversationDatasourceImpl
-import zouitel.neighborhood.database.datasourceImpl.ModelDatasourceImpl
-import zouitel.neighborhood.database.datasourceImpl.ProviderDatasourceImpl
-import zouitel.neighborhood.database.mapper.AssistantMapper
-import zouitel.neighborhood.database.mapper.ConversationMapper
-import zouitel.neighborhood.database.mapper.ModelMapper
-import zouitel.neighborhood.database.mapper.ProviderMapper
-import zouitel.neighborhood.repository.datasource.ModelDatasource
-import zouitel.neighborhood.repository.datasource.ProviderDatasource
-import zouitel.neighborhood.repository.datasource.AssistantDatasource
-import zouitel.neighborhood.repository.datasource.ConversationDatasource
-import zouitel.neighborhood.repository.datasource.DataDataSource
-import zouitel.neighborhood.repository.datasource.LinkDataSource
-import zouitel.neighborhood.repository.datasource.NoteAndTagDataSource
-import zouitel.neighborhood.repository.datasource.NoteDataSource
-import zouitel.neighborhood.repository.datasource.TagDataSource
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.lazyModule
+import zouitel.neighborhood.database.database.Database
+import zouitel.neighborhood.database.database.TagsCallback
+import zouitel.neighborhood.database.datasourceImpl.AssistantDatasourceImpl
+import zouitel.neighborhood.database.datasourceImpl.ConversationDatasourceImpl
+import zouitel.neighborhood.database.datasourceImpl.DataDataSourceImpl
+import zouitel.neighborhood.database.datasourceImpl.LinkDataSourceImpl
+import zouitel.neighborhood.database.datasourceImpl.ModelDatasourceImpl
+import zouitel.neighborhood.database.datasourceImpl.NoteAndTagDataSourceImpl
+import zouitel.neighborhood.database.datasourceImpl.NoteDataSourceImpl
+import zouitel.neighborhood.database.datasourceImpl.ProviderDatasourceImpl
+import zouitel.neighborhood.database.datasourceImpl.TagDataSourceImpl
+import zouitel.neighborhood.database.mapper.AssistantMapper
+import zouitel.neighborhood.database.mapper.ConversationMapper
+import zouitel.neighborhood.database.mapper.DataMapper
+import zouitel.neighborhood.database.mapper.LinkMapper
+import zouitel.neighborhood.database.mapper.ModelMapper
+import zouitel.neighborhood.database.mapper.NoteAndTagMapper
+import zouitel.neighborhood.database.mapper.NoteMapper
+import zouitel.neighborhood.database.mapper.ProviderMapper
+import zouitel.neighborhood.database.mapper.TagMapper
+import zouitel.neighborhood.database.utils.Constants
+import zouitel.neighborhood.repository.datasource.AssistantDatasource
+import zouitel.neighborhood.repository.datasource.ConversationDatasource
+import zouitel.neighborhood.repository.datasource.DataDataSource
+import zouitel.neighborhood.repository.datasource.LinkDataSource
+import zouitel.neighborhood.repository.datasource.ModelDatasource
+import zouitel.neighborhood.repository.datasource.NoteAndTagDataSource
+import zouitel.neighborhood.repository.datasource.NoteDataSource
+import zouitel.neighborhood.repository.datasource.ProviderDatasource
+import zouitel.neighborhood.repository.datasource.TagDataSource
 import zouitel.neighborhood.security.encrition.FileEncryption
 
 val databaseLazyModule = lazyModule {
@@ -76,14 +77,17 @@ val databaseLazyModule = lazyModule {
 
     //Database.
     single {
-        Room.databaseBuilder(
+        lateinit var db: Database
+        db = Room.databaseBuilder(
             androidContext(),
             Database::class.java,
             Constants.DATABASE
         )
-//            .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
+            .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
+            .addCallback(TagsCallback { db })
             .build()
+        db
     }
 }

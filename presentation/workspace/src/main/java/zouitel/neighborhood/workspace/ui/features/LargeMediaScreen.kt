@@ -30,7 +30,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,7 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -61,6 +59,7 @@ import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.print.printDocumentFromUri
 import zouitel.neighborhood.print.printImageFromUri
 import zouitel.neighborhood.ui.CommonIcons.MENU_DOTS
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -68,6 +67,7 @@ import zouitel.neighborhood.video.VideoPlayer
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
 import zouitel.neighborhood.workspace.model.MediaType
+import zouitel.neighborhood.workspace.ui.features.details.DocumentDetails
 import zouitel.neighborhood.workspace.ui.features.details.ImageDetails
 import zouitel.neighborhood.workspace.ui.features.details.MediaActionsMenu
 import zouitel.neighborhood.workspace.ui.features.details.VideoDetails
@@ -76,43 +76,44 @@ import kotlin.random.Random
 data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : Screen {
 
     @Composable
-    override fun Content() { MediaLarge(getScreenModel()) }
+    override fun Content() {
+        MediaLarge(getScreenModel())
+    }
 
     @Composable
     private fun MediaLarge(settingsModel: SettingsScreenModel) {
-        val vibe      = LocalHapticFeedback.current
-        val context   = LocalContext.current
+        val vibe = LocalHapticFeedback.current
+        val context = LocalContext.current
         val bottomNav = LocalBottomSheetNavigator.current
 
         BackHandler { bottomNav.hide() }
 
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val scope          = rememberCoroutineScope()
+        val scope = rememberCoroutineScope()
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
 
-        val pagerState    = rememberPagerState(index) { data.value.medias.size }
-        val menuExpanded  = remember { mutableStateOf(false) }
-        val deletedMedia  = remember { mutableStateListOf<Pair<Media, Int>>() }
-        val jobCounter    = remember { mutableIntStateOf(0) }
+        val pagerState = rememberPagerState(index) { data.value.medias.size }
+        val menuExpanded = remember { mutableStateOf(false) }
+        val deletedMedia = remember { mutableStateListOf<Pair<Media, Int>>() }
+        val jobCounter = remember { mutableIntStateOf(0) }
         val snackbarState = remember { SnackbarHostState() }
 
         var imageDetailsSheet by remember { mutableStateOf(false) }
         var videoDetailsSheet by remember { mutableStateOf(false) }
+        var documentDetailsSheet by remember { mutableStateOf(false) }  // ← new
 
-        val currentMedia      = data.value.medias.getOrNull(pagerState.currentPage)
+        val currentMedia = data.value.medias.getOrNull(pagerState.currentPage)
         val isCurrentDocument = currentMedia?.type == MediaType.DOCUMENT
-
-
 
         Scaffold(
             snackbarHost = {
                 SnackbarHost(hostState = snackbarState) { snackData ->
                     Snackbar(
-                        snackbarData    = snackData,
+                        snackbarData = snackData,
                         actionOnNewLine = false,
-                        shape           = MaterialTheme.shapes.extraLarge,
-                        actionColor     = MaterialTheme.colorScheme.surface
+                        shape = MaterialTheme.shapes.extraLarge,
+                        actionColor = MaterialTheme.colorScheme.surface
                     )
                 }
             },
@@ -121,28 +122,34 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                 .animateContentSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .reportable(settings.isShakable)
-                .cloudy(enabled = imageDetailsSheet || videoDetailsSheet || menuExpanded.value)
+                .cloudy(
+                    enabled = imageDetailsSheet || videoDetailsSheet ||
+                            menuExpanded.value || documentDetailsSheet   // ← added
+                )
                 .background(
-                    try { Color(data.value.medias[pagerState.currentPage].color) }
-                    catch (_: IndexOutOfBoundsException) { Color.DarkGray }
+                    try {
+                        Color(data.value.medias[pagerState.currentPage].color)
+                    } catch (_: IndexOutOfBoundsException) {
+                        Color.DarkGray
+                    }
                 ),
             containerColor = Color.Transparent,
             topBar = {
                 TopAppBar(
                     navigationIcon = {
                         Text(
-                            text     = "${pagerState.currentPage.inc()} of ${pagerState.pageCount}",
+                            text = "${pagerState.currentPage.inc()} of ${pagerState.pageCount}",
                             fontSize = 19.sp,
                             modifier = Modifier.padding(20.dp)
                         )
                     },
-                    title   = {},
+                    title = {},
                     actions = {
                         IconButton({ menuExpanded.value = true }) {
                             Icon(painterResource(MENU_DOTS), contentDescription = null)
                         }
                         MediaActionsMenu(
-                            expanded    = menuExpanded,
+                            expanded = menuExpanded,
                             onDuplicate = {
                                 data.value = data.value.copy(
                                     medias = data.value.medias.plusElement(
@@ -152,28 +159,23 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 )
                             },
                             onSend = {
-                                sendMedia(context,
-                                    data.value.medias[pagerState.currentPage].uri.toUri())
+                                sendMedia(
+                                    context,
+                                    data.value.medias[pagerState.currentPage].uri.toUri()
+                                )
                             },
                             onPrint = {
-                                printImageFromUri(context,
-                                    data.value.medias[pagerState.currentPage].uri)
+                                val media = data.value.medias[pagerState.currentPage]
+                                when (media.type) {
+                                    MediaType.DOCUMENT -> printDocumentFromUri(context, media.uri)
+                                    else -> printImageFromUri(context, media.uri)
+                                }
                             },
                             onDetails = {
                                 when (data.value.medias[pagerState.currentPage].type) {
-                                    MediaType.VIDEO    -> videoDetailsSheet = true
-                                    MediaType.IMAGE    -> imageDetailsSheet = true
-                                    // Document details are handled by DocViewerActivity itself
-                                    MediaType.DOCUMENT -> {
-                                        (context as? AppCompatActivity)?.let { activity ->
-                                            DocViewerActivity.launchDocViewer(
-                                                activity,
-                                                DocSourceType.PATH
-                                                ,
-                                                data.value.medias[pagerState.currentPage].uri
-                                            )
-                                        }
-                                    }
+                                    MediaType.VIDEO -> videoDetailsSheet = true
+                                    MediaType.IMAGE -> imageDetailsSheet = true
+                                    MediaType.DOCUMENT -> documentDetailsSheet = true
                                 }
                             },
                             onDelete = {
@@ -204,7 +206,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                             }
                         )
                     },
-                    colors         = TopAppBarDefaults.topAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
                     ),
                     scrollBehavior = scrollBehavior
@@ -213,26 +215,24 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
         ) { paddingValues ->
             Box {
                 HorizontalPager(
-                    state    = pagerState,
+                    state = pagerState,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
-                        .pointerInput(isCurrentDocument) {
-                            // Documents are handled by DocViewerActivity — skip
-                            // the swipe-up-for-details gesture on document pages.
-                            if (!isCurrentDocument) {
-                                detectVerticalDragGestures { change, dragAmount ->
-                                    change.consume()
-                                    if (dragAmount < -20) {
-                                        val m = data.value.medias
-                                            .getOrNull(pagerState.currentPage)
-                                        when (m?.type) {
-                                            MediaType.VIDEO -> videoDetailsSheet = true
-                                            else           -> imageDetailsSheet = true
-                                        }
+                        .pointerInput(Unit) {
+                            // Swipe up → details sheet for every media type, including documents.
+                            // Swipe down → dismiss LargeMediaScreen.
+                            detectVerticalDragGestures { change, dragAmount ->
+                                change.consume()
+                                if (dragAmount < -20) {
+                                    when (data.value.medias.getOrNull(pagerState.currentPage)?.type) {
+                                        MediaType.VIDEO -> videoDetailsSheet = true
+                                        MediaType.IMAGE -> imageDetailsSheet = true
+                                        MediaType.DOCUMENT -> documentDetailsSheet = true  // ← new
+                                        null -> Unit
                                     }
-                                    if (dragAmount > 20) bottomNav.hide()
                                 }
+                                if (dragAmount > 20) bottomNav.hide()
                             }
                         }
                 ) { page ->
@@ -248,20 +248,18 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                         // ── Video ─────────────────────────────────────────────
                         MediaType.VIDEO -> {
                             VideoPlayer(
-                                uri         = media.uri.toUri(),
+                                uri = media.uri.toUri(),
                                 onLongClock = {
                                     vibe.performHapticFeedback(HapticFeedbackType.LongPress)
                                 }
                             ) {}
                         }
 
-                        // ── Document ──────────────────────────────────────────
-                        // Shows the first-page thumbnail as a full-screen preview.
-                        // DocViewerActivity opens only when the user taps.
+                        // ── Document — first-page thumbnail; tap = open viewer
                         MediaType.DOCUMENT -> {
                             DocumentThumbnail(
-                                filePath    = media.uri,
-                                onClick     = {
+                                filePath = media.uri,
+                                onClick = {
                                     (context as? AppCompatActivity)?.let { activity ->
                                         DocViewerActivity.launchDocViewer(
                                             activity,
@@ -272,6 +270,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 },
                                 onLongClick = {
                                     vibe.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    documentDetailsSheet = true   // ← long-press opens details
                                 }
                             )
                         }
@@ -279,9 +278,9 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                         // ── Image ─────────────────────────────────────────────
                         MediaType.IMAGE -> {
                             ZoomableAsyncImage(
-                                model              = media.uri,
+                                model = media.uri,
                                 contentDescription = null,
-                                modifier           = Modifier
+                                modifier = Modifier
                                     .fillMaxSize()
                                     .combinedClickable(
                                         onLongClick = {
@@ -293,6 +292,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                     }
                 }
 
+                // ── Detail sheets ─────────────────────────────────────────────
                 if (imageDetailsSheet) {
                     ImageDetails(data.value.medias[pagerState.currentPage].uri) {
                         imageDetailsSheet = false
@@ -301,6 +301,12 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                 if (videoDetailsSheet) {
                     VideoDetails(data.value.medias[pagerState.currentPage].uri) {
                         videoDetailsSheet = false
+                    }
+                }
+                // ↓ new document metadata sheet
+                if (documentDetailsSheet) {
+                    DocumentDetails(data.value.medias[pagerState.currentPage].uri) {
+                        documentDetailsSheet = false
                     }
                 }
             }

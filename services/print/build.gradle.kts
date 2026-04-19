@@ -8,6 +8,9 @@ android {
     namespace = "zouitel.neighborhood.print"
 }
 dependencies {
+    //Projects.
+    implementation(projects.document)
+
     //Print Service.
     implementation(libs.androidx.print)
 
