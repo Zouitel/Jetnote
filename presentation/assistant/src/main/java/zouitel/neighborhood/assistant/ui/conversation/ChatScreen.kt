@@ -85,6 +85,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -119,13 +120,13 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import zouitel.neighborhood.assistant.R
 import zouitel.neighborhood.assistant.ui.ai_model.FullModels
 import zouitel.neighborhood.assistant.ui.provider.ProvidersScreen
 import zouitel.neighborhood.assistant.utils.JsonInstant
 import zouitel.neighborhood.assistant.utils.Avatar
 import zouitel.neighborhood.assistant.utils.ModelSwitcherPopup
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
 import kotlin.uuid.Uuid
 
 class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
@@ -833,8 +834,8 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                     placeholder = {
                         Text(
                             text = model?.let {
-                                "Ask ${it.displayName.split(' ', '/', '-', ',').firstOrNull()}"
-                            } ?: "<- Add AI model",
+                                "${stringResource(R.string.ask)} ${it.displayName.split(' ', '/', '-', ',').firstOrNull()}"
+                            } ?: stringResource(R.string.add_model),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
@@ -871,19 +872,19 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                     trailingIcon = {
                         when {
                             loading.value -> IconButton(onCancel, Modifier.padding(5.dp)) {
-                                Icon(painterResource(CommonIcons.CROSS_18), "cancel")
+                                Icon(painterResource(CommonIcons.CROSS_18), null)
                             }
                             inputState.getMessageText().isEmpty() -> IconButton(onOptions, Modifier.padding(5.dp)) {
                                 Icon(
                                     painterResource(CommonIcons.CLIP),
-                                    "options",
+                                    null,
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                             else -> IconButton(onSend, Modifier.padding(5.dp)) {
                                 Icon(
                                     painterResource(CommonIcons.ARROW_UP),
-                                    "send",
+                                    null,
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }

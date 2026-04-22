@@ -26,11 +26,7 @@ fun SystemBarsBehavior(settingsModel: SettingsScreenModel) {
 
     LaunchedEffect(settings) {
         controller.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && settings.isZenMode ?: false) {
-                hide(WindowInsets.Type.systemBars())
-                systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 show(WindowInsets.Type.systemBars())
                 systemBarsBehavior = WindowInsetsController.BEHAVIOR_DEFAULT
             }

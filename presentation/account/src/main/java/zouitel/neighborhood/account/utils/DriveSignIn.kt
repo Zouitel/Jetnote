@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.account.R
 
@@ -47,13 +48,13 @@ fun DriveSignIn(onClick: () -> Unit) {
                 // Actual Google Logo
                 Image(
                     painter = painterResource(id = R.drawable.google),
-                    contentDescription = "Google Logo",
+                    contentDescription = null,
                     modifier = Modifier.size(20.dp)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Sign in with Google",
+                text = stringResource(zouitel.neighborhood.logic.R.string.sign_in_with_google),
                 style = MaterialTheme.typography.titleMedium
             )
         }

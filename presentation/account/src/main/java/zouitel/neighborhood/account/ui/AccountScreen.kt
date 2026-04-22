@@ -35,11 +35,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.account.utils.PhotoProfile
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonIcons.USER_ADD
@@ -85,7 +87,7 @@ class AccountScreen: Screen {
                         }) {
                             Icon(
                                 painter = painterResource(CommonIcons.ARROW_LEFT),
-                                contentDescription = "button back"
+                                contentDescription = null
                             )
                         }
                     },
@@ -110,13 +112,13 @@ class AccountScreen: Screen {
                     ) {
                         Icon(
                             painter = painterResource(USER_LOGOUT),
-                            contentDescription = "logout",
+                            contentDescription = null,
                             tint = MaterialTheme.colorScheme.onErrorContainer,
                             modifier = Modifier.padding(15.dp)
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = "Log out",
+                            text = stringResource(R.string.log_out),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onErrorContainer,
                             modifier = Modifier.padding(vertical = 15.dp, horizontal = 5.dp)
@@ -141,7 +143,7 @@ class AccountScreen: Screen {
                 item {
                     currentUser?.let {
                         Text(
-                            text = ("Hi, ${it.displayName}"),
+                            text = ("${stringResource(R.string.hi)}, ${it.displayName}"),
                             style = MaterialTheme.typography.headlineSmall,
                             modifier = Modifier.padding(vertical = 15.dp)
                         )
@@ -167,13 +169,13 @@ class AccountScreen: Screen {
                         ) {
                             Icon(
                                 painter = painterResource(USER_ADD),
-                                contentDescription = "Add another account",
+                                contentDescription = null,
                                 tint = MaterialTheme.colorScheme.surface,
                                 modifier = Modifier.padding(15.dp)
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
-                                text = "Add another account",
+                                text = stringResource(R.string.add_account),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.surface,
                                 modifier = Modifier.padding(vertical = 15.dp, horizontal = 5.dp)
@@ -191,13 +193,13 @@ class AccountScreen: Screen {
                         ) {
                             Icon(
                                 painter = painterResource(USER_GEAR),
-                                contentDescription = "manage accounts",
+                                contentDescription = null,
                                 tint = MaterialTheme.colorScheme.surface,
                                 modifier = Modifier.padding(15.dp)
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
-                                text = "Manage accounts",
+                                text = stringResource(R.string.manage_account),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.surface,
                                 modifier = Modifier.padding(vertical = 15.dp, horizontal = 5.dp)
@@ -215,7 +217,7 @@ class AccountScreen: Screen {
                             ) {
                                 Icon(
                                     painter = painterResource(CommonIcons.CROSS_18),
-                                    contentDescription = "cancel",
+                                    contentDescription = null,
                                     tint = MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.padding(15.dp)
                                 )
@@ -236,13 +238,13 @@ class AccountScreen: Screen {
                             ) {
                                 Icon(
                                     painter = painterResource(CommonIcons.UPLOAD_CLOUD),
-                                    contentDescription = "uploads",
+                                    contentDescription = null,
                                     tint = MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.padding(15.dp)
                                 )
                                 Spacer(modifier = Modifier.width(16.dp))
                                 Text(
-                                    text = "Upload Data",
+                                    text = stringResource(R.string.upload_data),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.padding(vertical = 15.dp, horizontal = 5.dp)
@@ -261,7 +263,7 @@ class AccountScreen: Screen {
                             ) {
                                 Icon(
                                     painter = painterResource(CommonIcons.CROSS_18),
-                                    contentDescription = "download",
+                                    contentDescription = null,
                                     tint = MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.padding(15.dp)
                                 )
@@ -283,13 +285,13 @@ class AccountScreen: Screen {
                             ) {
                                 Icon(
                                     painter = painterResource(CommonIcons.DOWNLOAD_CLOUD),
-                                    contentDescription = "download",
+                                    contentDescription = null,
                                     tint = MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.padding(15.dp)
                                 )
                                 Spacer(modifier = Modifier.width(16.dp))
                                 Text(
-                                    text = "Download Data",
+                                    text = stringResource(R.string.download_data),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.padding(vertical = 15.dp, horizontal = 5.dp)

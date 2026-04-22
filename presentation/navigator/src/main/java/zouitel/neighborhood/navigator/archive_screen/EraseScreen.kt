@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +28,7 @@ import zouitel.neighborhood.ui.CommonConstants
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.logic.R
 
 data class EraseScreen(val onConfirm: () -> Unit): Screen {
     @Composable
@@ -53,21 +55,21 @@ data class EraseScreen(val onConfirm: () -> Unit): Screen {
             LazyColumn {
                 item {
                     Text(
-                        modifier = Modifier.Companion.padding(7.dp),
-                        text = "Erase Notes?",
+                        modifier = Modifier.padding(7.dp),
+                        text = stringResource(R.string.erase_notes),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Companion.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        modifier = Modifier.Companion.padding(7.dp),
-                        text = "All notes in trash will be permanently deleted.",
+                        modifier = Modifier.padding(7.dp),
+                        text = stringResource(R.string.confirm_erase_notes),
                         fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
                 item {
-                    Spacer(modifier = Modifier.Companion.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
                 item {
                     CommonConfirm(

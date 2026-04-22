@@ -48,11 +48,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
 import kotlin.math.abs
 
@@ -243,7 +245,7 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
         ) {
             // Hue slider
             ColorSliderRow(
-                label = "Hue",
+                label = stringResource(R.string.hue),
                 value = hue,
                 valueRange = 0f..360f,
                 onValueChange = onHueChanged,
@@ -269,7 +271,7 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
 
             // Saturation slider
             ColorSliderRow(
-                label = "Saturation",
+                label = stringResource(R.string.saturation),
                 value = saturation,
                 valueRange = 0f..1f,
                 onValueChange = onSaturationChanged,
@@ -284,7 +286,7 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
 
             // Brightness slider
             ColorSliderRow(
-                label = "Brightness",
+                label = stringResource(R.string.brightness),
                 value = brightness,
                 valueRange = 0f..1f,
                 onValueChange = onBrightnessChanged,
@@ -375,9 +377,9 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
                             (valueRange.endInclusive - valueRange.start)
 
                     val thumbColor = hsbToColor(
-                        if (label == "Hue") value else 0f,
-                        if (label == "Saturation") value else 1f,
-                        if (label == "Brightness") value else 1f
+                        if (label == stringResource(R.string.hue)) value else 0f,
+                        if (label == stringResource(R.string.saturation)) value else 1f,
+                        if (label == stringResource(R.string.brightness)) value else 1f
                     )
 
                     Canvas(
@@ -412,7 +414,7 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
         Column {
             // Shades colors
             ColorPaletteRow(
-                title = "Shades",
+                title = stringResource(R.string.shades),
                 colors = generatePrimaryVariations(selectedColor),
                 onColorSelected = onColorSelected
             )
@@ -421,7 +423,7 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
 
             // Complementary colors
             ColorPaletteRow(
-                title = "Complementary",
+                title = stringResource(R.string.complementary),
                 colors = generateComplementaryColors(selectedColor),
                 onColorSelected = onColorSelected
             )

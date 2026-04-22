@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">الملاحظات</string>
+    <string name="screen_chat">محادثة AI</string>
+    <string name="screen_tags">الوسوم</string>
+    <string name="screen_settings">الإعدادات</string>
+    <string name="screen_archive">الأرشيف</string>
+    <string name="screen_about">حول التطبيق</string>
+    <string name="screen_feedback">الإبلاغ</string>
+    <string name="share_app">شارك هذا التطبيق</string>
+    <string name="label_more">المزيد</string>
+    <string name="label_less">أقل</string>
+    <string name="msg_deleted">تم الحذف</string>
+    <string name="action_undo">تراجع</string>
+    <string name="tag_placeholder">وسم..</string>
+    <string name="tag_cannot_be_empty">لا يمكن أن يكون الوسم فارغاً!</string>
+    <string name="archive">الأرشيف</string>
+    <string name="deleted">تم الحذف!</string>
+    <string name="erase_notes">مسح الملاحظات؟</string>
+    <string name="confirm_erase_notes">"سيتم حذف جميع الملاحظات الموجودة في سلة المهملات نهائياً."</string>
+    <string name="search_in_notes">"البحث في الملاحظات.."</string>
+    <string name="select_layout">"اختر التخطيط"</string>
+    <string name="settings">"الإعدادات"</string>
+    <string name="account_sync">"مزامنة الحساب"</string>
+    <string name="account_sync_description">"
+                                تتيح لك مزامنة حساب Google Drive
+                                في هذا التطبيق نسخ بياناتك احتياطياً
+                                ومزامنتها بسلاسة،
+                                مثل الملاحظات والإعدادات،
+                                مما يضمن أمان بياناتك.
+        "</string>
+    <string name="assistant_configuration">"إعداد المساعد"</string>
+    <string name="assistant_configuration_description">"
+                                مساعد AI هو برنامج
+                                مدعوم بالذكاء الاصطناعي مصمم
+                                لمساعدتك في مجموعة واسعة من المهام
+                                داخل هذا التطبيق.
+                                يفهم هؤلاء المساعدون اللغة الطبيعية
+                                ويستجيبون لها، مما يتيح لك
+                                التفاعل معهم عبر الصورة أو النص.
+                            "</string>
+    <string name="dark_mode">"الوضع الداكن"</string>
+    <string name="dark_mode_description">"
+                                هذا الوضع هو إعداد على مستوى النظام
+                                يحوّل نظام ألوان خلفية واجهة
+                                تطبيق Android إلى ألوان داكنة.
+                                تم تصميمه لتقليل إجهاد العينين،
+                                وتحسين إمكانية الوصول، وتوفير
+                                عمر البطارية، وتعزيز تجربة المستخدم.
+                            "</string>
+    <string name="sound_effect">"المؤثرات الصوتية"</string>
+    <string name="sound_effect_description">"
+                                في سياق تطبيق Jetnote،
+                                توفر ميزة \"المؤثرات الصوتية\"
+                                ردود فعل صوتية للمستخدمين عند
+                                تفاعلهم مع الأزرار وعناصر
+                                واجهة المستخدم الأخرى.
+                                هذه ممارسة شائعة في تطوير
+                                تطبيقات الجوال لجعل تجربة
+                                المستخدم أكثر تفاعلاً وجاذبية.
+                            "</string>
+    <string name="layouts">"التخطيطات"</string>
+    <string name="layouts_description">"
+                                التخطيطات أساسية لتنظيم
+                                المحتوى وعرضه في تطبيقات
+                                Android الخاصة بك.
+                                فهي تحدد بنية عناصر واجهة
+                                المستخدم وترتيبها على الشاشة.
+                            "</string>
+    <string name="sort_notes">"ترتيب الملاحظات"</string>
+    <string name="default_sort">"افتراضي"</string>
+    <string name="name_sort">"الاسم"</string>
+    <string name="oldest_sort">"الأقدم"</string>
+    <string name="newest_sort">"الأحدث"</string>
+    <string name="priority_sort">"الأولوية"</string>
+    <string name="zen_mode">"وضع Zen"</string>
+    <string name="zen_mode_description">"
+                                وضع Zen (وضع ملء الشاشة) هو إعداد
+                                عرض في الحوسبة يتيح للتطبيق
+                                احتلال الشاشة بالكامل، مع إخفاء
+                                جميع عناصر الواجهة الأخرى مثل
+                                أشرطة الأدوات والقوائم وشريط
+                                المهام أو شريط القوائم الخاص
+                                بنظام التشغيل.
+                            "</string>
+    <string name="shake">"الاهتزاز للإبلاغ"</string>
+    <string name="shake_description">"
+                              إنها ميزة مريحة تتيح للمستخدمين
+                              بدء عملية الإبلاغ عن ملاحظة أو خطأ
+                              ببساطة عن طريق هز جهاز Android
+                              فعلياً. بدلاً من التنقل عبر
+                              قوائم متعددة للعثور على خيار
+                              \"إرسال بلاغ\" أو \"الإبلاغ عن خطأ\"،
+                            "</string>
+    <string name="block_screenshot">"حظر لقطة الشاشة"</string>
+    <string name="block_screenshot_description">"
+                                حظر لقطات الشاشة هو إجراء أمني
+                                يمنع المستخدمين من التقاط
+                                لقطات شاشة لمحتوى تطبيقك.
+                                يُستخدم هذا عادةً لحماية
+                                المعلومات الحساسة، مثل بيانات
+                                البنك والبيانات الشخصية
+                                أو المواد المحمية بحقوق الطبع والنشر.
+                            "</string>
+    <string name="lock_mode">"وضع القفل"</string>
+    <string name="lock_mode_description">"
+                                تعزز هذه الميزة أمان تطبيقك
+                                من خلال مطالبة المستخدمين
+                                بالمصادقة قبل الوصول إلى محتواه.
+                                يتم تحقيق ذلك عادةً باستخدام
+                                ميزات الأمان المدمجة في الجهاز،
+                                مثل بصمة الإصبع أو رمز PIN
+                                أو النمط.
+                            "</string>
+    <string name="licenses">"التراخيص"</string>
+    <string name="licenses_description">"
+                                تم تضمين هذه التراخيص هنا للامتثال
+                                لمتطلبات التوزيع الخاصة بالمؤلفين
+                                المعنيين وتوفير الشفافية فيما يتعلق
+                                ببنية البرنامج.
+                                "</string>
+    <string name="title">"العنوان"</string>
+    <string name="note">"ملاحظة"</string>
+    <string name="failed_to_save_document">"فشل حفظ المستند."</string>
+    <string name="gallery">"المعرض"</string>
+    <string name="audio">صوت</string>
+    <string name="permission_denied">تم رفض الإذن!</string>
+    <string name="take_photo">التقاط صورة</string>
+    <string name="video_capture">تسجيل فيديو</string>
+    <string name="recorder">المسجل</string>
+    <string name="document">مستند</string>
+    <string name="scanner">مسح المستندات</string>
+    <string name="tasks">المهام</string>
+    <string name="tags">الوسوم</string>
+    <string name="reminder">تذكير</string>
+    <string name="priority">الأولوية</string>
+    <string name="low_priority">منخفضة</string>
+    <string name="medium_priority">متوسطة</string>
+    <string name="high_priority">عالية</string>
+    <string name="urgent_priority">عاجلة</string>
+    <string name="non_priority">بدون</string>
+    <string name="created">تم الإنشاء</string>
+    <string name="edited">تم التعديل</string>
+    <string name="types">الأنواع</string>
+    <string name="media">وسائط</string>
+    <string name="medias">الوسائط</string>
+    <string name="colour">اللون</string>
+    <string name="colours">الألوان</string>
+    <string name="search_within">البحث داخل</string>
+    <string name="issue_title">عنوان البلاغ*</string>
+    <string name="issue_description">وصف البلاغ (اختياري)</string>
+    <string name="noAccount">تسجيل الدخول بدون حساب</string>
+    <string name="screenshot_selected">✓ تم اختيار لقطة الشاشة</string>
+    <string name="drive_submit">سيتم الرفع إلى Drive عند الإرسال</string>
+    <string name="select_screenshot">اختر لقطة شاشة</string>
+    <string name="system_logs">هل تريد تضمين سجلات النظام؟</string>
+    <string name="find_an_issue">هل وجدت مشكلة؟</string>
+    <string name="take_a_screenshot">لا تنسَ التقاط لقطة شاشة.</string>
+    <string name="report_an_issue">أبلغ عن مشكلة!</string>
+    <string name="bug">خطأ برمجي</string>
+    <string name="logs_title">\\uD83D\\uDC!E سجلات نظام Android (Logcat) في تقرير الإبلاغ</string>
+    <string name="logs_description">سجلات نظام Android هي تدفق مختوم بالوقت من الرسائل الصادرة عن نظام التشغيل والنواة.\n    | عندما يواجه المستخدم مشكلة (مثل تعطل تطبيق أو تجمده أو سلوك غير متوقع)، تلتقط السجلات الأحداث التي سبقت المشكلة وتشمل تفاصيلها، مما يزود المطورين بالسياق اللازم للتشخيص.</string>
+    <string name="label_bug">خطأ برمجي</string>
+    <string name="label_feature">ميزة</string>
+    <string name="label_invalid">غير صالح</string>
+    <string name="label_question">سؤال</string>
+    <string name="label_security">أمان</string>
+    <string name="failed">فشل</string>
+    <string name="submit_feedback">إرسال البلاغ!</string>
+    <string name="uploading_screenshot">جارٍ رفع لقطة الشاشة…</string>
+    <string name="creating_github_issue">جارٍ إنشاء بلاغ على GitHub…</string>
+    <string name="upload_faild">فشل الرفع…</string>
+    <string name="upload_failed">فشل الرفع…</string>
+    <string name="issue_crea">تم إنشاء البلاغ.</string>
+    <string name="issue_created">تم إنشاء البلاغ!</string>
+    <string name="log_out">تسجيل الخروج</string>
+    <string name="hi">مرحباً</string>
+    <string name="add_account">إضافة حساب آخر</string>
+    <string name="manage_account">إدارة الحساب</string>
+    <string name="upload_data">رفع البيانات</string>
+    <string name="download_data">تنزيل البيانات</string>
+    <string name="firebase_authentication_failed">فشل المصادقة عبر Firebase</string>
+    <string name="sign_in_failed">فشل تسجيل الدخول عبر Google</string>
+    <string name="please_wait">جارٍ تسجيل الدخول، يرجى الانتظار…</string>
+    <string name="sync_title">سجّل الدخول للمزامنة</string>
+    <string name="sync_description">سجّل الدخول بحساب Google لنسخ ملاحظاتك احتياطياً ومزامنتها عبر جميع أجهزتك.</string>
+    <string name="current_account">الحساب الحالي</string>
+    <string name="no_name">بدون اسم</string>
+    <string name="no_email">بدون بريد إلكتروني</string>
+    <string name="sign_out">تسجيل الخروج</string>
+    <string name="sign_in_with_google">تسجيل الدخول عبر Google</string>
+    <string name="ai_models">نماذج AI</string>
+    <string name="load_more">تحميل المزيد</string>
+    <string name="available_models">النماذج المتاحة</string>
+    <string name="assistant_settings">إعدادات المساعد</string>
+    <string name="learning_mode">وضع التعلم</string>
+    <string name="learning_mode_description">"
+                    للتنبؤ بمخرجات البيانات الجديدة غير المرئية
+                    بناءً على الأنماط المستفادة من الأمثلة المسمّاة.
+                "</string>
+    <string name="temperat">درجة الحرارة</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="temperature_description">"
+           يتحكم في عشوائية المخرجات.
+           القيم الأعلى تُنتج نتائج أكثر إبداعاً.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            يتحكم في الرموز المرشحة
+            للمخرجات.
+            </string>
+    <string name="context_message_size">حجم سياق الرسائل</string>
+    <string name="context_message_size_description">
+            الحد الأقصى لعدد الرسائل السابقة
+            المُدرجة في السياق.
+        </string>
+    <string name="stream_output">بث المخرجات</string>
+    <string name="stream_output_description">عرض الرد أثناء توليده.</string>
+    <string name="thinking_budget">ميزانية التفكير</string>
+    <string name="thinking_budget_description">
+                            يحدد الموارد الحسابية المستخدمة
+                            للرد.
+                        </string>
+    <string name="system_prompt">موجّه النظام</string>
+    <string name="prompt">موجّه..</string>
+    <string name="properties">الخصائص</string>
+    <string name="quick_messages">الرسائل السريعة</string>
+    <string name="quick_messages_description">ضبط اختصارات الرسائل السريعة.</string>
+    <string name="regular_expressions">التعبيرات النمطية</string>
+    <string name="regular_expressions_description">
+                            تعريف أنماط regex لتحويل
+                            الرسائل قبل الإرسال أو الاستقبال.
+                        </string>
+    <string name="headers">رؤوس الطلبات</string>
+    <string name="headers_description">
+                            هذه أزواج مفتاح-قيمة (key: value)
+                            تُضاف إلى رأس الطلب.
+                            تُستخدم عادةً لتوفير المصادقة
+                            (مثل مفاتيح API أو الرموز)،
+                            أو تحديد نوع المحتوى، أو تمرير
+                            بيانات وصفية عن الطلب أو العميل.
+                        </string>
+    <string name="bodies">جسم الطلبات</string>
+    <string name="bodies_description">
+                            يشير هذا إلى حمولة البيانات (هيكل
+                            JSON بصيغة key: value) المرسلة
+                            ضمن الطلب نفسه.
+                            إنها الوسيلة الرئيسية لإرسال
+                            المدخلات إلى نموذج AI.
+                            تُستخدم هذه التخصيصات عادةً لإضافة تفاصيل محددة.
+                        </string>
+    <string name="memory">الذاكرة</string>
+    <string name="memory_description">
+                            السماح للمساعد بتذكر الأدوار السابقة
+                            في المحادثة.
+                        </string>
+    <string name="chats_reference">مرجع المحادثات الأخيرة</string>
+    <string name="chats_reference_description">
+                        الرجوع إلى بيانات من محادثاتك الأخيرة
+                        للحصول على ردود سياقية أفضل.
+                        </string>
+    <string name="javascript">محرك JavaScript</string>
+    <string name="javascript_description">
+                            تنفيذ كود JavaScript باستخدام محرك
+                            QuickJS للحسابات والبرمجة النصية.
+                        </string>
+    <string name="reset">إعادة ضبط الإعدادات!</string>
+    <string name="providers">مزودو الخدمة</string>
+    <string name="ask">اسأل</string>
+    <string name="add_model"><![CDATA[<- أضف نموذج AI]]></string>
+    <string name="delete">حذف</string>
+    <string name="options">خيارات</string>
+    <string name="retitle">إعادة تسمية</string>
+    <string name="assistant">المساعد</string>
+    <string name="new_chat">محادثة جديدة</string>
+    <string name="files">الملفات</string>
+    <string name="audios">الملفات الصوتية</string>
+    <string name="videos">مقاطع الفيديو</string>
+    <string name="camera">الكاميرا</string>
+    <string name="pictures">الصور</string>
+    <string name="provider_settings">إعدادات المزود</string>
+    <string name="api_key">مفتاح API</string>
+    <string name="base_url">الرابط الأساسي</string>
+    <string name="model_name">اسم النموذج</string>
+    <string name="modalities">وسائط الإدخال والإخراج</string>
+    <string name="tools">الأدوات</string>
+    <string name="reasoning">الاستدلال</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">رصيد الحساب</string>
+    <string name="api_path">مسار API..</string>
+    <string name="json_key">مفتاح JSON..</string>
+    <string name="network_proxy">وكيل الشبكة</string>
+    <string name="host">المضيف..</string>
+    <string name="username_option">اسم المستخدم (اختياري)..</string>
+    <string name="pass_option">كلمة المرور (اختياري)..</string>
+    <string name="service_account">حساب الخدمة @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">المفتاح الخاص..</string>
+    <string name="location">الموقع..</string>
+    <string name="project_uid">معرّف المشروع UID..</string>
+    <string name="details">التفاصيل</string>
+    <string name="model_type">نوع النموذج</string>
+    <string name="input_modalities">وسائط الإدخال</string>
+    <string name="output_modalities">وسائط الإخراج</string>
+    <string name="abilities">القدرات</string>
+    <string name="provider_override">إضافة تجاوز للمزود</string>
+    <string name="provider_override_description">
+                            ضبط إعدادات مزود مخصصة لهذا
+                            النموذج المحدد.
+                            يستخدم هذا الخصائص المشتركة من
+                            المزود الرئيسي للنموذج.
+                        </string>
+    <string name="build_tools">أدوات البناء</string>
+    <string name="build_tools_description">
+                            هذه الأدوات مقدمة مباشرةً من
+                            API دون الحاجة إلى دعم التطبيق.
+                            هذه الميزة مدعومة حالياً
+                            من Gemini API فقط.
+                        </string>
+    <string name="google_search">بحث</string>
+    <string name="google_search_description">تفعيل تكامل Google Search</string>
+    <string name="url_context">سياق URL</string>
+    <string name="url_context_description">تفعيل معالجة سياق URL</string>
+    <string name="find">بحث</string>
+    <string name="replace">استبدال</string>
+    <string name="effecting_scopes">نطاقات التأثير</string>
+    <string name="user">مستخدم</string>
+    <string name="visual_only">مرئي فقط</string>
+    <string name="body">الجسم</string>
+    <string name="key">المفتاح</string>
+    <string name="value">القيمة</string>
+    <string name="header">رأس الطلب.</string>
+    <string name="reset_description">إعادة ضبط إعدادات المساعد إلى الوضع الافتراضي.</string>
+    <string name="save_changes">حفظ التغييرات؟</string>
+    <string name="save_changes_description">لديك تغييرات غير محفوظة. هل تريد حفظها قبل المغادرة؟</string>
+    <string name="dont_save">لا تحفظ</string>
+    <string name="save">حفظ</string>
+    <string name="links">الروابط</string>
+    <string name="reminders">التذكيرات</string>
+    <string name="priorities">الأولويات</string>
+    <string name="ai_chat">محادثة AI</string>
+    <string name="auto">تلقائي</string>
+    <string name="light">خفيف</string>
+    <string name="medium">متوسط</string>
+    <string name="heavy">ثقيل</string>
+    <string name="date">التاريخ</string>
+    <string name="time">الوقت</string>
+    <string name="date_and_time">التاريخ والوقت</string>
+    <string name="local">محلي</string>
+    <string name="timezone">المنطقة الزمنية</string>
+    <string name="system_version">إصدار النظام</string>
+    <string name="device_info">معلومات الجهاز</string>
+    <string name="battery_level">مستوى البطارية</string>
+    <string name="insert">إدراج</string>
+    <string name="confirm">تأكيد</string>
+    <string name="message">رسالة</string>
+    <string name="content">المحتوى</string>
+    <string name="today">اليوم</string>
+    <string name="tomorrow">غداً</string>
+    <string name="according_to_timing">وفقاً لـتوقيت</string>
+    <string name="untitled">بدون عنوان</string>
+    <string name="hue">تدرج اللون</string>
+    <string name="saturation">التشبع</string>
+    <string name="brightness">السطوع</string>
+    <string name="shades">الدرجات اللونية</string>
+    <string name="complementary">الألوان المتكاملة</string>
+</resources>

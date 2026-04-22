@@ -24,12 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import zouitel.neighborhood.ai.provider.Model
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 
@@ -85,8 +87,6 @@ internal fun ModelSwitcherPopup(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
-                                // Optionally show provider as subtitle if available on Model
-                                // Text(m.provider, style = MaterialTheme.typography.labelSmall, ...)
                             }
                             if (isSelected) {
                                 Icon(
@@ -115,7 +115,7 @@ internal fun ModelSwitcherPopup(
                     ) {
                         Icon(
                             painterResource(CommonIcons.PLUS),
-                            contentDescription = "add model",
+                            contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier
                                 .size(36.dp)
@@ -127,7 +127,7 @@ internal fun ModelSwitcherPopup(
                                 .padding(8.dp)
                         )
                         Text(
-                            text = "Add model",
+                            text = stringResource(R.string.add_model),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,

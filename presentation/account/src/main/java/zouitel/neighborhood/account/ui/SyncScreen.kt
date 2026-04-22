@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -45,6 +46,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.account.utils.DriveSignIn
+import zouitel.neighborhood.logic.R
 
 class SyncScreen: Screen {
     @Composable
@@ -62,6 +64,9 @@ class SyncScreen: Screen {
         val currentUser by syncModel.userState.collectAsState()
         val webClientId by remember(syncModel, syncModel::googleClientId).collectAsState()
 
+        val authenticationFailedResource = stringResource(R.string.firebase_authentication_failed)
+        val  signInFailedResource = stringResource(R.string.sign_in_failed)
+
         val signInLauncher = rememberLauncherForActivityResult(
             contract = StartActivityForResult()
         ) { result ->
@@ -74,20 +79,15 @@ class SyncScreen: Screen {
 
                     auth.signInWithCredential(credential)
                         .addOnSuccessListener {
-                            Log.d("SyncScreen", "Sign in successful: ${auth.currentUser?.email}")
-                            // ✅ FIXED: Don't call createDriveFolders here!
-                            // The AuthStateListener in SyncScreenModel will handle everything
                             isSigningIn = false
                         }
                         .addOnFailureListener { e ->
-                            Log.e("SyncScreen", "Sign in failed", e)
-                            errorState = "Firebase authentication failed: ${e.message}"
+                            errorState = "${authenticationFailedResource}: ${e.message}"
                             isSigningIn = false
                         }
                 }
             } catch (e: ApiException) {
-                Log.e("SyncScreen", "Google sign in failed", e)
-                errorState = "Google sign-in failed: ${e.localizedMessage}"
+                errorState = "${signInFailedResource}: ${e.localizedMessage}"
                 isSigningIn = false
             }
         }
@@ -106,7 +106,7 @@ class SyncScreen: Screen {
                 if (isSigningIn) {
                     CircularProgressIndicator()
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("Signing in, please wait...")
+                    Text(stringResource(R.string.please_wait))
                 } else if (currentUser != null) {
                     SignedIdDialog(
                         user = currentUser,
@@ -135,10 +135,9 @@ class SyncScreen: Screen {
 
     @Composable
     private fun SignInDialog(error: String?, onSignIn: () -> Unit) {
-        Text("Sign In to Sync", style = MaterialTheme.typography.titleLarge)
+        Text(stringResource(R.string.sync_title), style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            "Sign in with your Google Account to back up and sync your notes across all your devices.",
+        Text(stringResource(R.string.sync_description),
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
@@ -156,7 +155,7 @@ class SyncScreen: Screen {
 
     @Composable
     fun SignedIdDialog(user: FirebaseUser?, onSignOut: () -> Unit) {
-        Text("Current Account", style = MaterialTheme.typography.titleLarge)
+        Text(stringResource(R.string.current_account), style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -166,9 +165,8 @@ class SyncScreen: Screen {
                 ImageRequest.Builder(LocalContext.current).data(data = user?.photoUrl)
                     .apply(block = fun ImageRequest.Builder.() {
                         crossfade(true)
-                    }).build()
-                ,
-                "User Profile Picture",
+                    }).build(),
+                null,
                 Modifier
                     .size(65.dp)
                     .padding(5.dp)
@@ -176,11 +174,11 @@ class SyncScreen: Screen {
             )
             Column {
                 Text(
-                    text = user?.displayName ?: "No Name",
+                    text = user?.displayName ?: stringResource(R.string.no_name),
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = user?.email ?: "No Email",
+                    text = user?.email ?: stringResource(R.string.no_email),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -188,7 +186,7 @@ class SyncScreen: Screen {
         }
         Spacer(modifier = Modifier.height(24.dp))
         OutlinedButton(onClick = onSignOut) {
-            Text("Sign Out")
+            Text(stringResource(R.string.sign_out))
         }
     }
 

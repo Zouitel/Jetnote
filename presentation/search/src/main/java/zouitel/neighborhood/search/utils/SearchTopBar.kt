@@ -33,7 +33,7 @@ internal fun SearchTopBar(
             }) {
                 Icon(
                     painter = painterResource(CommonIcons.ARROW_LEFT),
-                    contentDescription = "button back"
+                    contentDescription = null
                 )
             }
         },

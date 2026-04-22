@@ -27,11 +27,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.ai.provider.Model
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.assistant.utils.SwipableModel
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -88,7 +90,7 @@ internal fun Models(
                             shape = CircleShape,
                             onClick = { columnHeight = Dp.Unspecified },
                             label = {
-                                Text("+${totalItemCount - shownItemCount} more")
+                                Text("+${totalItemCount - shownItemCount} ${stringResource(R.string.label_more)}")
                             },
                             colors = FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = CommonColors.prime,
@@ -104,7 +106,7 @@ internal fun Models(
                                 onClick = { columnHeight = 300.dp },
                                 label = {
                                     Text(
-                                        text = "less",
+                                        text = stringResource(R.string.label_less),
                                         color = MaterialTheme.colorScheme.onErrorContainer
                                     )
                                 },

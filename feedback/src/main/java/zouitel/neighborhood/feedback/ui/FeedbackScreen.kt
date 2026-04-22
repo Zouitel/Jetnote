@@ -1,4 +1,4 @@
-package zouitel.neighborhood.feedback
+package zouitel.neighborhood.feedback.ui
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -55,6 +55,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -62,15 +63,19 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import zouitel.neighborhood.ui.AnimatedCircleCheckbox
-import zouitel.neighborhood.ui.CommonColors
-import zouitel.neighborhood.ui.CommonIcons
-import zouitel.neighborhood.ui.CommonTextField
 import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.feedback.Label
+import zouitel.neighborhood.feedback.defaultLabels
+import zouitel.neighborhood.feedback.includeLog
+import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.ui.AnimatedCircleCheckbox
+import zouitel.neighborhood.ui.CommonColors
+import zouitel.neighborhood.ui.CommonIcons
+import zouitel.neighborhood.ui.CommonTextField
 
 class FeedbackScreen : Screen {
     @Composable
@@ -93,28 +98,32 @@ class FeedbackScreen : Screen {
         val toolTipState = rememberTooltipState(isPersistent = true)
         val labels = remember { mutableStateListOf<Label>() }
 
-        // Submission state tracking
         var isSubmitting by remember { mutableStateOf(false) }
         var submissionStage by remember { mutableStateOf("") }
 
-        // Check if user is authenticated
         val currentUser = remember { FirebaseAuth.getInstance().currentUser }
         val isAuthenticated = currentUser != null
 
-        // ✅ Observe both upload and submission status
         val uploadStatus by feedbackModel.uploadStatus.collectAsState()
         val submissionStatus by feedbackModel.submissionStatus.collectAsState()
 
-        // ✅ NEW: Handle upload completion during submission
+        val failedResource = stringResource(R.string.failed)
+        val uploadingScreenshotResource = stringResource(R.string.uploading_screenshot)
+        val creatingGithubIssueResource = stringResource(R.string.creating_github_issue)
+        val uploadFailedResource = stringResource(R.string.upload_failed)
+        val issueCreatedResource = stringResource(R.string.issue_created)
+
         LaunchedEffect(uploadStatus) {
             if (isSubmitting) {
                 when (uploadStatus) {
                     is FeedbackScreenModel.UploadStatus.Uploading -> {
-                        submissionStage = "Uploading screenshot..."
+                        submissionStage = uploadingScreenshotResource
                     }
+
                     is FeedbackScreenModel.UploadStatus.Success -> {
-                        submissionStage = "Creating GitHub issue..."
-                        val driveLink = (uploadStatus as FeedbackScreenModel.UploadStatus.Success).driveLink
+                        submissionStage = creatingGithubIssueResource
+                        val driveLink =
+                            (uploadStatus as FeedbackScreenModel.UploadStatus.Success).driveLink
 
                         // Submit the feedback with Drive link
                         feedbackModel.enqueueIssueProcessing(
@@ -126,8 +135,9 @@ class FeedbackScreen : Screen {
                             driveLink = driveLink
                         )
                     }
+
                     is FeedbackScreenModel.UploadStatus.Failed -> {
-                        submissionStage = "Upload failed, creating issue..."
+                        submissionStage = uploadFailedResource
 
                         // Submit without Drive link if upload failed
                         feedbackModel.enqueueIssueProcessing(
@@ -139,7 +149,9 @@ class FeedbackScreen : Screen {
                             driveLink = null
                         )
                     }
-                    else -> { /* Idle state */ }
+
+                    else -> { /* Idle state */
+                    }
                 }
             }
         }
@@ -148,11 +160,11 @@ class FeedbackScreen : Screen {
         LaunchedEffect(submissionStatus) {
             when (submissionStatus) {
                 is FeedbackScreenModel.SubmissionStatus.Submitting -> {
-                    submissionStage = "Creating GitHub issue..."
+                    submissionStage = creatingGithubIssueResource
                 }
+
                 is FeedbackScreenModel.SubmissionStatus.Success -> {
-                    val success = submissionStatus as FeedbackScreenModel.SubmissionStatus.Success
-                    submissionStage = "Issue created!"
+                    submissionStage = issueCreatedResource
 
                     // Wait briefly to show success message
                     delay(1000)
@@ -162,9 +174,10 @@ class FeedbackScreen : Screen {
                     feedbackModel.resetSubmissionState()
                     bottomNav.pop()
                 }
+
                 is FeedbackScreenModel.SubmissionStatus.Failed -> {
                     val failed = submissionStatus as FeedbackScreenModel.SubmissionStatus.Failed
-                    submissionStage = "Failed: ${failed.reason}"
+                    submissionStage = "${failedResource}: ${failed.reason}"
 
                     // Wait to show error
                     delay(3000)
@@ -173,7 +186,9 @@ class FeedbackScreen : Screen {
                     isSubmitting = false
                     feedbackModel.resetSubmissionState()
                 }
-                else -> { /* Idle */ }
+
+                else -> { /* Idle */
+                }
             }
         }
 
@@ -203,12 +218,10 @@ class FeedbackScreen : Screen {
                                     // Check if there's an image to upload
                                     if (imageUri.value != null && isAuthenticated) {
                                         // Start upload first
-                                        submissionStage = "Uploading screenshot..."
                                         feedbackModel.uploadScreenshotToDrive(imageUri.value!!)
                                         // LaunchedEffect will handle the rest
                                     } else {
                                         // No image or not authenticated, submit directly
-                                        submissionStage = "Creating GitHub issue..."
                                         feedbackModel.enqueueIssueProcessing(
                                             title = titleState.text.toString(),
                                             body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
@@ -242,7 +255,7 @@ class FeedbackScreen : Screen {
                             Spacer(modifier = Modifier.size(8.dp))
                             Text(submissionStage, style = MaterialTheme.typography.titleMedium)
                         } else {
-                            Text("Submit Feedback!", style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.submit_feedback), style = MaterialTheme.typography.titleMedium)
                         }
                     }
                 }
@@ -259,7 +272,7 @@ class FeedbackScreen : Screen {
                     CommonTextField(
                         state = titleState,
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = "Issue Title*",
+                        placeholder = stringResource(R.string.issue_title),
                         textSize = 23.sp,
                         textColor = MaterialTheme.colorScheme.onSurface,
                         imeAction = ImeAction.Next,
@@ -271,24 +284,25 @@ class FeedbackScreen : Screen {
                 }
 
                 item {
-                    ContextualFlowRow(defaultLabels.size) { index ->
+                    val defaults = defaultLabels()
+                    ContextualFlowRow(defaults.size) { index ->
                         InputChip(
-                            defaultLabels[index] in labels,
+                            defaults[index] in labels,
                             {
-                                if (labels.contains(defaultLabels[index])) {
-                                    labels.minusAssign(defaultLabels[index])
+                                if (labels.contains(defaults[index])) {
+                                    labels.minusAssign(defaults[index])
                                 } else {
-                                    labels.plusAssign(defaultLabels[index])
+                                    labels.plusAssign(defaults[index])
                                 }
                             },
                             {
-                                Text(defaultLabels[index].name)
+                                Text(defaults[index].name)
                             },
                             Modifier.padding(2.dp),
                             colors = InputChipDefaults.inputChipColors(
-                                selectedContainerColor = defaultLabels[index].color.copy(alpha = .3f),
+                                selectedContainerColor = defaults[index].color.copy(alpha = .3f),
                                 disabledSelectedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                                selectedLabelColor = defaultLabels[index].color,
+                                selectedLabelColor = defaults[index].color,
                                 disabledLabelColor = MaterialTheme.colorScheme.onSurface
                             )
                         )
@@ -302,7 +316,7 @@ class FeedbackScreen : Screen {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(220.dp),
-                            placeholder = "Issue Description(Optional)",
+                            placeholder = stringResource(R.string.issue_description),
                             textSize = 18.sp,
                             textColor = MaterialTheme.colorScheme.onSurface,
                             imeAction = ImeAction.Done,
@@ -336,7 +350,7 @@ class FeedbackScreen : Screen {
                                 imageUri.value != null -> {
                                     AsyncImage(
                                         model = imageUri.value,
-                                        contentDescription = "screenshot",
+                                        contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -344,28 +358,24 @@ class FeedbackScreen : Screen {
 
                                     if (isAuthenticated) {
                                         Text(
-                                            text = "✓ Screenshot selected",
+                                            text = stringResource(R.string.screenshot_selected),
                                             style = MaterialTheme.typography.bodySmall,
                                             color = Color(0xFF4CAF50)
                                         )
                                         Text(
-                                            text = "Will upload to Drive on submit",
+                                            text = stringResource(R.string.drive_submit),
                                             style = MaterialTheme.typography.bodySmall,
                                             modifier = Modifier.alpha(.6f)
                                         )
                                     } else {
                                         Text(
-                                            text = "✓ Screenshot selected",
+                                            text = stringResource(R.string.noAccount),
                                             style = MaterialTheme.typography.bodySmall,
                                             color = Color(0xFF4CAF50)
                                         )
-                                        Text(
-                                            text = "Will upload to GitHub on submit",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            modifier = Modifier.alpha(.6f)
-                                        )
                                     }
                                 }
+
                                 else -> {
                                     Icon(
                                         painter = painterResource(CommonIcons.PHOTO_CAPTURE),
@@ -379,21 +389,21 @@ class FeedbackScreen : Screen {
                                     Spacer(modifier = Modifier.height(16.dp))
 
                                     Text(
-                                        text = "Select a screenshot",
+                                        text = stringResource(R.string.select_screenshot),
                                         modifier = Modifier.alpha(.5f)
                                     )
 
                                     if (isAuthenticated) {
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text(
-                                            text = "Will upload to Drive on submit",
+                                            text = stringResource(R.string.drive_submit),
                                             style = MaterialTheme.typography.bodySmall,
                                             modifier = Modifier.alpha(.4f)
                                         )
                                     } else {
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text(
-                                            text = "Will upload to GitHub on submit",
+                                            text = stringResource(R.string.noAccount),
                                             style = MaterialTheme.typography.bodySmall,
                                             modifier = Modifier.alpha(.4f)
                                         )
@@ -411,10 +421,10 @@ class FeedbackScreen : Screen {
                         {
                             RichTooltip(
                                 title = {
-                                    Text(logsTitle, style = MaterialTheme.typography.titleMedium)
+                                    Text(stringResource(R.string.logs_title), style = MaterialTheme.typography.titleMedium)
                                 }
-                            ){
-                                Text(logsDescription)
+                            ) {
+                                Text(stringResource(R.string.logs_description))
                             }
                         },
                         toolTipState
@@ -432,7 +442,7 @@ class FeedbackScreen : Screen {
                             }
 
                             Text(
-                                text = "Include system logs?",
+                                text = stringResource(R.string.system_logs),
                                 textDecoration = TextDecoration.Underline,
                                 modifier = Modifier.clickable {
                                     scope.launch {

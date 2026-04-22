@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.stack.mutableStateStackOf
@@ -55,6 +56,7 @@ import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
@@ -106,6 +108,9 @@ class ArchiveScreen: Screen {
         val deletedNote = remember { mutableStateStackOf<Data>() }
         val snackbarState = remember { SnackbarHostState() }
 
+        val undoResource = stringResource(R.string.action_undo)
+        val isDeletedResource = stringResource(R.string.deleted)
+
         Scaffold(
             snackbarHost = {
                 SnackbarHost(hostState = snackbarState) { data ->
@@ -153,8 +158,8 @@ class ArchiveScreen: Screen {
 
                                 scope.launch {
                                     val snackbarResult = snackbarState.showSnackbar(
-                                        message = "${deletedNote.lastItemOrNull?.title} is deleted!",
-                                        actionLabel = "Undo"
+                                        message = "${deletedNote.lastItemOrNull?.title} $isDeletedResource",
+                                        actionLabel = undoResource
                                     )
                                     if (snackbarResult == SnackbarResult.ActionPerformed) {
                                         dataModel.sendAction(Action.Insert(deletedNote.lastItemOrNull ?: return@launch))

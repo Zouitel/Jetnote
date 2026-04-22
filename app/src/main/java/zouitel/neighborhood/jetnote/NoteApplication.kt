@@ -23,7 +23,7 @@ import org.koin.dsl.koinConfiguration
 import zouitel.neighborhood.bin.di.binModule
 import zouitel.neighborhood.database.di.databaseLazyModule
 import zouitel.neighborhood.datastore.di.datastoreLazyModule
-import zouitel.neighborhood.feedback.feedbackModule
+import zouitel.neighborhood.feedback.di.feedbackModule
 import zouitel.neighborhood.navigator.di.initializerLazyModule
 import zouitel.neighborhood.navigator.di.screensModule
 import zouitel.neighborhood.navigator.di.screensScreenModule

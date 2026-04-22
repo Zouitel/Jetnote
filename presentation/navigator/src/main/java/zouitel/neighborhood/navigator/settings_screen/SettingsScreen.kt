@@ -22,36 +22,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import coil.compose.AsyncImage
+import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.account.ui.SyncScreen
 import zouitel.neighborhood.assistant.model.Assistant
+import zouitel.neighborhood.assistant.ui.assistant.AssistantScreen
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
+import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
+import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.navigator.R
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
 import zouitel.neighborhood.navigator.utils.sound
 import zouitel.neighborhood.search.ui.SearchScreenModel
+import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonActivationItem
 import zouitel.neighborhood.ui.CommonColors
-import zouitel.neighborhood.ui.CommonConstants.DEFAULT_ORDER
 import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
-import zouitel.neighborhood.ui.CommonConstants.NAME_ORDER
-import zouitel.neighborhood.ui.CommonConstants.NEWEST_ORDER
-import zouitel.neighborhood.ui.CommonConstants.OLDEST_ORDER
-import zouitel.neighborhood.ui.CommonConstants.PRIORITY_ORDER
 import zouitel.neighborhood.ui.CommonTopAppBar
 import zouitel.neighborhood.ui.SettingsScreenModel
-import zouitel.neighborhood.tag.ui.TagScreenModel
-import coil.compose.AsyncImage
-import com.skydoves.cloudy.cloudy
-import zouitel.neighborhood.assistant.ui.assistant.AssistantScreen
-import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class SettingsScreen: Screen {
@@ -128,7 +124,7 @@ class SettingsScreen: Screen {
                             settingsModel = settingsModel,
                             drawerState = drawerState,
                             scrollBehavior = scrollBehavior,
-                            title = "Settings"
+                            title = stringResource(zouitel.neighborhood.logic.R.string.settings)
                         )
                     },
                     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -144,18 +140,12 @@ class SettingsScreen: Screen {
                     ) {
                         item {
                             NavigateItem(
-                                title = "Account Sync",
-                                description = """
-                                Enabling Google Drive account sync for
-                                this application allows you to
-                                seamlessly back up and synchronize
-                                your app data, such as notes and
-                                settings, this ensures that your data is safe.
-                            """.trimIndent(),
+                                title = stringResource(zouitel.neighborhood.logic.R.string.account_sync),
+                                description = stringResource(zouitel.neighborhood.logic.R.string.account_sync_description).trimIndent(),
                                 icon = {
                                     AsyncImage(
                                         model = R.drawable.google_drive,
-                                        contentDescription = "google drive"
+                                        contentDescription = null
                                     )
                                 }
                             ) {
@@ -165,16 +155,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             NavigateItem(
-                                title = "Assistant Configuration",
-                                description = """
-                                AI assistant is a software program
-                                powered by artificial intelligence designed
-                                to help you with a wide range of tasks in
-                                this application.
-                                These assistants understand and respond
-                                to natural language, allowing you to
-                                interact with them through image or text.
-                            """.trimIndent(),
+                                title = stringResource(zouitel.neighborhood.logic.R.string.assistant_configuration),
+                                description = stringResource(zouitel.neighborhood.logic.R.string.assistant_configuration_description).trimIndent(),
                                 icon = {
                                     AsyncImage(
                                         model = R.drawable.star,
@@ -188,15 +170,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             CommonActivationItem(
-                                title = "Dark Mode",
-                                description =  """
-                                This mode is a system-wide setting that 
-                                shifts the background scheme of your 
-                                Android app's UI to darker colors.
-                                It's designed to Reduce eye strain, improve 
-                                accessibility, save battery life, and 
-                                enhance user experience.
-                            """.trimIndent(),
+                                title = stringResource(zouitel.neighborhood.logic.R.string.dark_mode),
+                                description = stringResource(zouitel.neighborhood.logic.R.string.dark_mode_description).trimIndent(),
                                 checked = settings.darkTheme,
                                 icon = {
                                     AsyncImage(
@@ -213,18 +188,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             CommonActivationItem(
-                                "Sound Effect",
-                                """
-                                In the context of the Jetnote application,
-                                The "Sound Effect" feature provides
-                                auditory feedback to users when they
-                                interact with buttons and other UI
-                                elements.
-                                This is a common practice in
-                                mobile app development to make the
-                                user experience more interactive and
-                                engaging.
-                            """.trimIndent(),
+                                stringResource(zouitel.neighborhood.logic.R.string.sound_effect),
+                                stringResource(zouitel.neighborhood.logic.R.string.sound_effect_description).trimIndent(),
                                 null,
                                 settings.isSound,
                                 {
@@ -236,14 +201,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             NavigateItem(
-                                title = "Layouts",
-                                description = """
-                                Layouts are fundamental to organizing 
-                                and displaying content in your Android 
-                                applications.
-                                They define the structure and arrangement 
-                                of UI elements on the screen.
-                            """.trimIndent(),
+                                title = stringResource(zouitel.neighborhood.logic.R.string.layouts),
+                                description = stringResource(zouitel.neighborhood.logic.R.string.layouts_description).trimIndent(),
                             ) {
                                 bottomNav.show(LayoutScreen())
                             }
@@ -251,14 +210,14 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             SortesItem(
-                                "Sort Notes By",
+                                stringResource(zouitel.neighborhood.logic.R.string.sort_notes),
                                 null,
                                 listOf(
-                                    DEFAULT_ORDER,
-                                    NAME_ORDER,
-                                    OLDEST_ORDER,
-                                    NEWEST_ORDER,
-                                    PRIORITY_ORDER
+                                    stringResource(zouitel.neighborhood.logic.R.string.default_sort),
+                                    stringResource(zouitel.neighborhood.logic.R.string.name_sort),
+                                    stringResource(zouitel.neighborhood.logic.R.string.oldest_sort),
+                                    stringResource(zouitel.neighborhood.logic.R.string.newest_sort),
+                                    stringResource(zouitel.neighborhood.logic.R.string.priority_sort)
                                 ),
                                 settings.ordination
                             ) { order ->
@@ -269,15 +228,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             CommonActivationItem(
-                                "Zen Mode",
-                                """
-                                Zen mode (Full screen mode) is a display 
-                                setting in computing that allows an 
-                                application to occupy the entire screen, 
-                                hiding all other interface elements such as 
-                                toolbars, menus, and the operating 
-                                system's taskbar or menu bar. 
-                            """.trimIndent(),
+                                stringResource(zouitel.neighborhood.logic.R.string.zen_mode),
+                                stringResource(zouitel.neighborhood.logic.R.string.zen_mode_description).trimIndent(),
                                 null,
                                 settings.isZenMode,
                                 {
@@ -289,15 +241,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             CommonActivationItem(
-                                "Shake To Report",
-                                """
-                              It's a convenient feature that allows users 
-                              to initiate a feedback or bug reporting 
-                              process simply by physically shaking their 
-                              Android device. Instead of navigating 
-                              through multiple menus to find a "Send 
-                              Feedback" or "Report a Bug" option, 
-                            """.trimIndent(),
+                                stringResource(zouitel.neighborhood.logic.R.string.shake),
+                                stringResource(zouitel.neighborhood.logic.R.string.shake_description).trimIndent(),
                                 null,
                                 settings.isShakable,
                                 {
@@ -309,15 +254,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             CommonActivationItem(
-                                "Block Screenshots",
-                                """
-                                Screenshot blocking is a security measure 
-                                that prevents users from capturing 
-                                screenshots of your app's content.
-                                This is often used to protect sensitive 
-                                information, such as banking details, 
-                                personal data, or copyrighted material.
-                            """.trimIndent(),
+                                stringResource(zouitel.neighborhood.logic.R.string.block_screenshot),
+                                stringResource(zouitel.neighborhood.logic.R.string.block_screenshot_description).trimIndent(),
                                 null,
                                 settings.isScreenshot,
                                 {
@@ -329,15 +267,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             CommonActivationItem(
-                                title = "Lock Mode",
-                                description = """
-                                This feature enhances the security of your 
-                                app by requiring users to authenticate 
-                                before they can access its content.
-                                This is typically achieved using the
-                                device's built-in security features, such as
-                                fingerprint, PIN, or pattern unlock.
-                            """.trimIndent(),
+                                title = stringResource(zouitel.neighborhood.logic.R.string.lock_mode),
+                                description = stringResource(zouitel.neighborhood.logic.R.string.lock_mode_description).trimIndent(),
                                 icon = {
                                     AsyncImage(
                                         model = R.drawable.lock,
@@ -354,8 +285,8 @@ class SettingsScreen: Screen {
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
                             NavigateItem(
-                                title = "Licenses",
-                                description = "Public repositories on GitHub are often used to share open source software.",
+                                title = stringResource(zouitel.neighborhood.logic.R.string.licenses),
+                                description = stringResource(zouitel.neighborhood.logic.R.string.licenses_description).trimIndent(),
                                 icon = {
                                     AsyncImage(
                                         model = R.drawable.certificate,

@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -32,6 +33,7 @@ import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.rememberAutoHeightCacheStaggeredGrid
 
 class ProvidersScreen: Screen {
@@ -54,13 +56,13 @@ class ProvidersScreen: Screen {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    { Text("AI Providers") },
+                    { Text(stringResource(R.string.providers)) },
                     Modifier,
                     {
                         IconButton({
                             navigator?.pop()
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                         }
                     },
                     scrollBehavior = scrollBehavior

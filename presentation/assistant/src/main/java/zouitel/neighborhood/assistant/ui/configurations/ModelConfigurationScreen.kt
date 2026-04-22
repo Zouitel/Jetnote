@@ -3,7 +3,6 @@ package zouitel.neighborhood.assistant.ui.configurations
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.input.clearText
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -33,8 +30,6 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,9 +43,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,6 +54,9 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import coil.compose.AsyncImage
+import com.skydoves.cloudy.cloudy
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonPrimitive
 import zouitel.neighborhood.ai.provider.BuiltInTools
 import zouitel.neighborhood.ai.provider.CustomBody
 import zouitel.neighborhood.ai.provider.CustomHeader
@@ -66,24 +64,19 @@ import zouitel.neighborhood.ai.provider.Modality
 import zouitel.neighborhood.ai.provider.Model
 import zouitel.neighborhood.ai.provider.ModelAbility
 import zouitel.neighborhood.ai.provider.ModelType
-import zouitel.neighborhood.assistant.model.SheetContent
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
 import zouitel.neighborhood.assistant.ui.provider.ProviderScreenModel
 import zouitel.neighborhood.assistant.utils.AdditionalLayout
-import zouitel.neighborhood.assistant.utils.SheetLayout
-import zouitel.neighborhood.ui.CommonActivationItem
-import zouitel.neighborhood.ui.CommonColors
-import zouitel.neighborhood.ui.CommonIcons
-import zouitel.neighborhood.ui.SettingsScreenModel
-import com.skydoves.cloudy.cloudy
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonPrimitive
-import zouitel.neighborhood.assistant.model.Assistant
 import zouitel.neighborhood.assistant.utils.BodySheet
 import zouitel.neighborhood.assistant.utils.HeaderSheet
 import zouitel.neighborhood.assistant.utils.ResetSheet
 import zouitel.neighborhood.assistant.utils.SaveSheet
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.ui.CommonActivationItem
+import zouitel.neighborhood.ui.CommonColors
+import zouitel.neighborhood.ui.CommonIcons
+import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class ModelConfigurationScreen(val model: Model): Screen {
@@ -109,10 +102,8 @@ class ModelConfigurationScreen(val model: Model): Screen {
         val navigator = LocalNavigator.current
         val bottomNav = LocalBottomSheetNavigator.current
 
-//        var modelDetails by remember { mutableStateOf<Details?>(null) }
         LaunchedEffect(model.modelId) {
             providerModel.initProviderId(model.providerId)
-//            modelDetails = Details(model)
         }
 
         val providerOfModel by remember(providerModel, providerModel::observeById).collectAsState()
@@ -163,7 +154,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                                 navigator?.pop()
                             }
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                         }
                     },
                     scrollBehavior = scrollBehavior
@@ -189,7 +180,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
                     CommonActivationItem(
-                        "Details",
+                        stringResource(R.string.details),
                         null, null, null,
                         content = {
                             Details(model).Properties()
@@ -199,7 +190,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     Text(
-                        "Model type",
+                        stringResource(R.string.model_type),
                         Modifier.padding(horizontal = 8.dp),
                         fontSize = 19.sp
                     )
@@ -220,9 +211,9 @@ class ModelConfigurationScreen(val model: Model): Screen {
                                 Text(
                                     type.name,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    maxLines = 1,                    // ← Prevent wrapping
-                                    softWrap = false,                // ← Force single line
-                                    overflow = TextOverflow.Ellipsis // ← Add ellipsis if too long
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis
                                 )
                             }
                         }
@@ -236,7 +227,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                             .cloudy(enabled = currentModel.type != ModelType.CHAT)
                     ) {
                         Text(
-                            "Input Modalities",
+                            stringResource(R.string.input_modalities),
                             fontSize = 19.sp
                         )
                         MultiChoiceSegmentedButtonRow(space = (-9).dp) {
@@ -281,7 +272,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                             .cloudy(enabled = currentModel.type != ModelType.CHAT)
                     ) {
                         Text(
-                            "Output Modalities",
+                            stringResource(R.string.output_modalities),
                             fontSize = 19.sp
                         )
                         MultiChoiceSegmentedButtonRow(space = (-9).dp) {
@@ -329,7 +320,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                             .cloudy(enabled = currentModel.type != ModelType.CHAT)
                     ) {
                         Text(
-                            "Abilities",
+                            stringResource(R.string.abilities),
                             fontSize = 19.sp
                         )
                         MultiChoiceSegmentedButtonRow(space = (-9).dp) {
@@ -369,13 +360,8 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Add provider override",
-                        """
-                            Configure custom provider settings for this
-                            specific model.
-                            This do use common properties from the
-                            main provider of the model.
-                        """.trimIndent(),
+                        stringResource(R.string.provider_override),
+                        stringResource(R.string.provider_override_description).trimIndent(),
                         null,
                         currentModel.providerOverwrite != null,
                         {
@@ -388,16 +374,8 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
-                        "Headers",
-                        """
-                            These are key-value pairs (name: value)
-                            that are added to the request's header
-                            block.
-                            They are typically used for providing
-                            authentication (like API keys or tokens),
-                            specifying the content type, or passing
-                            metadata about the request or client.
-                        """.trimIndent(),
+                        stringResource(R.string.headers),
+                        stringResource(R.string.headers_description).trimIndent(),
                         currentModel.customHeaders.toTypedArray(),
                         { headerSheet = true },
                         {
@@ -439,15 +417,8 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 }
                 item {
                     AdditionalLayout(
-                        "Bodies",
-                        """
-                            This refers to the data payload (key: value
-                            JSON structure) sent within the request
-                            itself.
-                            It is the primary means of sending
-                            inputs to the AI model.
-                            These customizations are typically used to add specific.
-                        """.trimIndent(),
+                        stringResource(R.string.bodies),
+                        stringResource(R.string.bodies_description).trimIndent(),
                         currentModel.customBodies.toTypedArray(),
                         { bodySheet = true },
                         {
@@ -491,13 +462,8 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Build Tools",
-                        """
-                            Those tools are directly provided by the
-                            API without requiring app support.
-                            This feature is supported by Gemini API
-                            only right now.
-                        """.trimIndent(),
+                        stringResource(R.string.build_tools),
+                        stringResource(R.string.build_tools_description).trimIndent(),
                         null,
                         null
                     )
@@ -505,12 +471,12 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
                     CommonActivationItem(
-                        "Search",
-                        "Enable Google Search integration",
+                        stringResource(R.string.google_search),
+                        stringResource(R.string.google_search_description),
                         {
                             AsyncImage(
                                 "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/google-color.png",
-                                "google logo",
+                                null,
                                 Modifier.size(27.dp)
                             )
                         },
@@ -535,8 +501,8 @@ class ModelConfigurationScreen(val model: Model): Screen {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
                     CommonActivationItem(
-                        "URL Context",
-                        "Enable URL context processing",
+                        stringResource(R.string.url_context),
+                        stringResource(R.string.url_context_description),
                         null,
                         BuiltInTools.UrlContext in currentModel.tools,
                         {
@@ -574,7 +540,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                             )
                         ) {
                             Text(
-                                "Reset ${currentModel.displayName}!",
+                                "${stringResource(R.string.reset)} ${currentModel.displayName}!",
                                 style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis

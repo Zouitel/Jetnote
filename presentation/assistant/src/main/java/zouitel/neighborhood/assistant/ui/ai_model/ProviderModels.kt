@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -207,7 +208,7 @@ internal fun ModelsList(
                                 contentColor = CommonColors.prime
                             )
                         ) {
-                            Text("Load More")
+                            Text(stringResource(zouitel.neighborhood.logic.R.string.load_more))
                         }
                     }
                 }
@@ -238,7 +239,7 @@ private fun AddModels(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Available Models: ${loadedModels.size}",
+            text = "${stringResource(zouitel.neighborhood.logic.R.string.available_models)}: ${loadedModels.size}",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )

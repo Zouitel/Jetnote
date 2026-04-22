@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.ui.CommonConfirm
 import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
@@ -42,6 +43,7 @@ import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
 import zouitel.neighborhood.workspace.ui.features.layout.DateLayout
 import zouitel.neighborhood.workspace.ui.features.layout.TimeLayout
 import org.koin.compose.koinInject
+import zouitel.neighborhood.logic.R
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -165,8 +167,8 @@ fun ReminderSheet(
                     },
                     label = {
                         when (index) {
-                            0 -> Text("Today")
-                            1 -> Text("Tomorrow")
+                            0 -> Text(stringResource(R.string.today))
+                            1 -> Text(stringResource(R.string.tomorrow))
                             2 -> Text(dayFormat.format(Date(calendar.timeInMillis.plus(2.days.inWholeMilliseconds))))
                             3 -> Text(dayFormat.format(Date(calendar.timeInMillis.plus(3.days.inWholeMilliseconds))))
                         }
@@ -204,7 +206,7 @@ fun ReminderSheet(
         item {
             Text(
                 modifier = Modifier.padding(start = 20.dp, top = 15.dp),
-                text = "According to ${country(context).getOrThrow()} time.",
+                text = "${stringResource(R.string.according_to_timing)} ${country(context).getOrThrow()}.",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
             )

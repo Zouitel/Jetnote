@@ -34,30 +34,32 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 import kotlinx.datetime.toLocalDateTime
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.workspace.model.Data
 
 private fun dayIconFor(dayOfWeek: DayOfWeek): Int = when (dayOfWeek) {
-    DayOfWeek.SATURDAY  -> CommonIcons.SATURDAY
-    DayOfWeek.SUNDAY    -> CommonIcons.SUNDAY
-    DayOfWeek.MONDAY    -> CommonIcons.MONDAY
-    DayOfWeek.TUESDAY   -> CommonIcons.TUESDAY
+    DayOfWeek.SATURDAY -> CommonIcons.SATURDAY
+    DayOfWeek.SUNDAY -> CommonIcons.SUNDAY
+    DayOfWeek.MONDAY -> CommonIcons.MONDAY
+    DayOfWeek.TUESDAY -> CommonIcons.TUESDAY
     DayOfWeek.WEDNESDAY -> CommonIcons.WEDNESDAY
-    DayOfWeek.THURSDAY  -> CommonIcons.THURSDAY
-    DayOfWeek.FRIDAY    -> CommonIcons.FRIDAY
+    DayOfWeek.THURSDAY -> CommonIcons.THURSDAY
+    DayOfWeek.FRIDAY -> CommonIcons.FRIDAY
 }
 
 @Composable
 internal fun NoteDates(data: Data) {
-    val createdLocal  = data.date.toLocalDateTime(TimeZone.currentSystemDefault())
-    val editedLocal   = data.lastEdit.toLocalDateTime(TimeZone.currentSystemDefault())
+    val createdLocal = data.date.toLocalDateTime(TimeZone.currentSystemDefault())
+    val editedLocal = data.lastEdit.toLocalDateTime(TimeZone.currentSystemDefault())
 
     Row(
         modifier = Modifier
@@ -67,7 +69,7 @@ internal fun NoteDates(data: Data) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         DateChip(
-            label = "Created",
+            label = stringResource(R.string.created),
             icon = dayIconFor(createdLocal.dayOfWeek),
             formattedDate = createdLocal.format(formatter),
             relativeTime = data.date.toRelativeTime(),
@@ -75,7 +77,7 @@ internal fun NoteDates(data: Data) {
             modifier = Modifier.weight(1f)
         )
         DateChip(
-            label = "Edited",
+            label = stringResource(R.string.edited),
             icon = dayIconFor(editedLocal.dayOfWeek),
             formattedDate = editedLocal.format(formatter),
             relativeTime = data.lastEdit.toRelativeTime(),

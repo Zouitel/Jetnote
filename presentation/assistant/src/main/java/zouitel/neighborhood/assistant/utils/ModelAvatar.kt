@@ -46,7 +46,7 @@ fun Avatar(isLoading: Boolean, logo: String?, modelName: String, onClick: () -> 
         } else {
             AsyncImage(
                 logo,
-                "avatar",
+                null,
                 modifier = Modifier.size(30.dp)
             )
         }

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -80,7 +81,7 @@ fun CommonConfirm(onConfirm: () -> Unit) {
             )
         ) {
             Text(
-                text = "Confirm",
+                text = stringResource(zouitel.neighborhood.logic.R.string.confirm),
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -111,7 +112,7 @@ fun CommonInsert(enable: Boolean = true, onConfirm: () -> Unit) {
             enabled = enable
         ) {
             Text(
-                text = "Insert",
+                text = stringResource(zouitel.neighborhood.logic.R.string.insert),
                 style = MaterialTheme.typography.bodyLarge
             )
         }

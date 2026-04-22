@@ -1,4 +1,4 @@
-package zouitel.neighborhood.feedback
+package zouitel.neighborhood.feedback.di
 
 import zouitel.neighborhood.feedback.Contents.GITHUB_TOKEN
 import io.ktor.client.HttpClient
@@ -13,6 +13,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.worker
 import org.koin.androidx.workmanager.dsl.workerOf
 import org.koin.dsl.module
+import zouitel.neighborhood.feedback.ui.FeedbackScreenModel
+import zouitel.neighborhood.feedback.worker.FeedbackUploadWorker
+import zouitel.neighborhood.feedback.worker.FeedbackWorker
 
 val feedbackModule = module {
     // ScreenModel

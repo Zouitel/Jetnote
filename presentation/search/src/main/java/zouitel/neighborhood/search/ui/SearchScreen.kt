@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
@@ -69,6 +70,7 @@ import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.workspace.model.MediaType
 
 class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
@@ -112,6 +114,10 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
         val tasks = remember(notes) { notes.filter { it.data.tasks.isNotEmpty() } }
         val audios = remember(notes) { notes.filter { it.data.audios.isNotEmpty() } }
         val reminders = remember(notes) { notes.filter { it.data.reminders.isNotEmpty() } }
+        val searchWithinResource = stringResource(R.string.search_within)
+        val propertyResource = stringResource(R.string.priority)
+        val mediaResource = stringResource(R.string.media)
+        val colourResource = stringResource(R.string.colour)
 
         val notesByPriority by remember(searchModel, searchModel::notesByPriority).collectAsState()
         val notesColors = remember(notes) {
@@ -251,8 +257,17 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                             .fillMaxSize()
                     ) {
                         item {
+                            val labels = listOf(
+                                stringResource(R.string.links),
+                                stringResource(R.string.reminders),
+                                stringResource(R.string.audios),
+                                stringResource(R.string.tasks),
+                                stringResource(R.string.medias),
+                                stringResource(R.string.priorities)
+                            )
+
                             Text(
-                                text = "Types",
+                                text = stringResource(R.string.types),
                                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(horizontal = 10.dp)
@@ -281,7 +296,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                     },
                                     label = {
                                         Text(
-                                            text = type.title,
+                                            text = labels[index],
                                             style = MaterialTheme.typography.labelSmall
                                         )
                                     },
@@ -304,7 +319,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                         if (tags.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Tags",
+                                    text = stringResource(R.string.tags),
                                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(horizontal = 10.dp)
@@ -320,7 +335,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                         selected = true,
                                         onClick = {
                                             searchModel.updateSearchType(SearchTypes.Tag(tag.label))
-                                            searchModel.updateSearchTitle("Search within \"${tag.label}\"")
+                                            searchModel.updateSearchTitle("$searchWithinResource \"${tag.label}\"")
                                         },
                                         label = {
                                             Text(
@@ -347,7 +362,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                         if (notes.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Priority",
+                                    text = stringResource(R.string.priority),
                                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(horizontal = 10.dp)
@@ -356,13 +371,20 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                     modifier = Modifier.padding(horizontal = 10.dp),
                                     horizontalArrangement = Arrangement.Absolute.Left
                                 ) {
+                                    val priorities = listOf(
+                                        stringResource(R.string.non_priority),
+                                        stringResource(R.string.low_priority),
+                                        stringResource(R.string.medium_priority),
+                                        stringResource(R.string.high_priority),
+                                        stringResource(R.string.urgent_priority),
+                                    )
                                     prioritiesList
                                         .filter { it.isAvailable(notes) }
-                                        .map { property ->
+                                        .forEachIndexed { index, property ->
                                             Column {
                                                 IconButton({
                                                     searchModel.updateSearchType(SearchTypes.Properties(property.index))
-                                                    searchModel.updateSearchTitle("Search within \"${property.name}\" property")
+                                                    searchModel.updateSearchTitle("$searchWithinResource \"${property.name}\" $propertyResource")
                                                 }) {
                                                     Icon(
                                                         painter = painterResource(CIRCLE),
@@ -371,7 +393,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                                     )
                                                 }
                                                 Text(
-                                                    text = property.name,
+                                                    text = priorities[index],
                                                     fontStyle = MaterialTheme.typography.labelSmall.fontStyle,
                                                     color = Color(property.color).copy(alpha = .5f)
                                                 )
@@ -385,7 +407,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                         if (notesImages.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Medias",
+                                    text = stringResource(R.string.medias),
                                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(horizontal = 10.dp)
@@ -398,14 +420,14 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                     val uri = notesImages[index]
                                     AsyncImage(
                                         model = uri,
-                                        contentDescription = "image item",
+                                        contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
                                             .size(80.dp)
                                             .clip(CircleShape)
                                             .clickable {
                                                 searchModel.updateSearchType(SearchTypes.Image(uri))
-                                                searchModel.updateSearchTitle("Search within image.")
+                                                searchModel.updateSearchTitle("$searchWithinResource $mediaResource.")
                                             }
                                     )
                                 }
@@ -415,7 +437,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                         if (notes.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Colors",
+                                    text = stringResource(R.string.colours),
                                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(start = 10.dp)
@@ -427,7 +449,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                     val color = notesColors[index]
                                     IconButton({
                                         searchModel.updateSearchType(SearchTypes.Color(color))
-                                        searchModel.updateSearchTitle("Search within color.")
+                                        searchModel.updateSearchTitle("$searchWithinResource $colourResource.")
                                     }) {
                                         if (color == MaterialTheme.colorScheme.surface.toArgb()) {
                                             Icon(

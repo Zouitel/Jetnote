@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import zouitel.neighborhood.domain.utils.Action
@@ -32,6 +33,7 @@ import zouitel.neighborhood.ui.CommonIcons.CROSS_CIRCLE_18
 import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.logic.R
 
 @Composable
 internal fun HashTagLayout(
@@ -44,6 +46,8 @@ internal fun HashTagLayout(
     val deletedTags = remember { mutableStateListOf<Pair<Tag, Int>>() }
     var jobCounter by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+    val deletedResource = stringResource(R.string.deleted)
+    val undoResource = stringResource(R.string.action_undo)
 
     FlowRow(Modifier.padding(horizontal = 8.dp)){
         tags.fastForEachIndexed { index, _ ->
@@ -62,8 +66,8 @@ internal fun HashTagLayout(
                             scope.launch {
                                 snackbarHostState.currentSnackbarData?.dismiss()
                                 val result = snackbarHostState.showSnackbar(
-                                    message = "${tagToDelete.label} deleted",
-                                    actionLabel = "Undo",
+                                    message = "${tagToDelete.label} $deletedResource",
+                                    actionLabel = undoResource,
                                     duration = SnackbarDuration.Long
                                 )
 

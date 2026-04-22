@@ -1,4 +1,4 @@
-package zouitel.neighborhood.feedback
+package zouitel.neighborhood.feedback.models
 
 import kotlinx.serialization.Serializable
 

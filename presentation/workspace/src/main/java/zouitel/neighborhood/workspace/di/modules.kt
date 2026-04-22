@@ -15,8 +15,8 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.worker
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
-import zouitel.neighborhood.feedback.FeedbackScreen
-import zouitel.neighborhood.feedback.FeedbackSheetScreen
+import zouitel.neighborhood.feedback.ui.FeedbackScreen
+import zouitel.neighborhood.feedback.ui.FeedbackSheetScreen
 import zouitel.neighborhood.workspace.ui.features.OCRScreenModel
 
 val workplaceModule = module {

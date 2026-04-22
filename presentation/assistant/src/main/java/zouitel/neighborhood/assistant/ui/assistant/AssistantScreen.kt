@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -86,7 +87,8 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonPrimitive
-import zouitel.neighborhood.assistant.R
+import zouitel.neighborhood.assistant.R as AR
+import zouitel.neighborhood.logic.R as LR
 import zouitel.neighborhood.feedback.reportable
 import kotlin.collections.minus
 import kotlin.collections.plus
@@ -143,6 +145,9 @@ class AssistantScreen(val assistant: Assistant?): Screen {
         var resetSheet by remember { mutableStateOf(false) }
         var saveSheet by remember { mutableStateOf(false) }
 
+        val deletedResource = stringResource(LR.string.deleted)
+        val undoResource = stringResource(LR.string.action_undo)
+
         val currentAssistant = remember(assistant) {
             mutableStateOf(
                 assistant?.copy(systemPrompt = promptState.text.toString()) ?: Assistant()
@@ -173,7 +178,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Assistant Settings") },
+                    title = { Text(stringResource(LR.string.assistant_settings)) },
                     navigationIcon = {
                         IconButton({
                             if (hasUnsavedChanges) {
@@ -182,7 +187,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                 navigator?.pop()
                             }
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                         }
                     },
                     scrollBehavior = scrollBehavior
@@ -211,7 +216,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
             ) {
                 item {
                     AdditionalLayout(
-                        "AI Models",
+                        stringResource(LR.string.ai_models),
                         null,
                         emptyArray<Unit>(),
                         {
@@ -237,8 +242,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         scope.launch {
                             snackbarState.currentSnackbarData?.dismiss()
                             val result = snackbarState.showSnackbar(
-                                message = "${modelPair?.first?.displayName} deleted",
-                                actionLabel = "Undo",
+                                message = "${modelPair?.first?.displayName} $deletedResource",
+                                actionLabel = undoResource,
                                 duration = SnackbarDuration.Long
                             )
 
@@ -254,15 +259,11 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Learning Mode",
-                        """
-                    To predict an output for new, unseen data
-                    based on the patterns learned from the
-                    labeled examples.
-                """.trimIndent(),
+                        stringResource(LR.string.learning_mode),
+                        stringResource(LR.string.learning_mode_description).trimIndent(),
                         {
                             AsyncImage(
-                                R.drawable.creative_brain,
+                                AR.drawable.creative_brain,
                                 null,
                                 contentScale = ContentScale.Crop
                             )
@@ -277,11 +278,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Temperature",
-                        """
-           Controls the randomness of the output.
-           Higher values are more creative.
-           """.trimIndent(),
+                        stringResource(LR.string.temperature),
+                        stringResource(LR.string.temperature_description).trimIndent(),
                         null,
                         checked = currentAssistant.value.temperature != null,
                         onChecked = {
@@ -325,7 +323,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                     valueRange = 0f..2f,
                                     enabled = currentAssistant.value.temperature != null,
                                     colors = SliderDefaults.colors(
-                                        thumbColor = Color.Companion.White,
+                                        thumbColor = Color.White,
                                         activeTrackColor = CommonColors.prime
                                     ),
                                     modifier = Modifier
@@ -339,11 +337,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Top P",
-                        """
-            Controls which tokens are considered for
-            output.
-            """.trimIndent(),
+                        stringResource(LR.string.top_p),
+                        stringResource(LR.string.top_p_description).trimIndent(),
                         null,
                         checked = currentAssistant.value.topP != null,
                         onChecked = {
@@ -397,11 +392,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Context message size",
-                        """
-            Maximum number of previous messages
-            to include in the context.
-        """.trimIndent(),
+                        stringResource(LR.string.context_message_size),
+                        stringResource(LR.string.context_message_size_description).trimIndent(),
                         null,
                         null,
                         content = {
@@ -445,8 +437,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Stream output",
-                        "Display response as it's being generated.",
+                        stringResource(LR.string.stream_output),
+                        stringResource(LR.string.stream_output_description),
                         null,
                         currentAssistant.value.streamOutput,
                         {
@@ -458,11 +450,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item {
                     ChooserItem(
                         currentAssistant,
-                        "Thinking budget",
-                        """
-                            Limits the computational resources used
-                            for the response.
-                        """.trimIndent(),
+                        stringResource(LR.string.thinking_budget),
+                        stringResource(LR.string.thinking_budget_description).trimIndent(),
                         currentAssistant.value.thinkingBudget != null
                     ) {
                         currentAssistant.value = if (it) {
@@ -474,10 +463,23 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 }
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
-                    val promptsEntries = remember { systemPrompts.entries.toList() }
+                    val systemPrompts =
+                        linkedMapOf(
+                            stringResource(LR.string.date) to "{{cur_date}}",
+                            stringResource(LR.string.time) to "{{cur_time}}",
+                            stringResource(LR.string.date_and_time) to "{{cur_datetime}}",
+                            stringResource(LR.string.model_name) to "{{model_name}}",
+                            stringResource(LR.string.local) to "{{local}}",
+                            stringResource(LR.string.timezone) to "{{timezone}}",
+                            stringResource(LR.string.system_version) to "{{system_version}}",
+                            stringResource(LR.string.device_info) to "{{device_info}}",
+                            stringResource(LR.string.battery_level) to "{{battery_level}}"
+                        )
+
+                    val promptsEntries = remember(systemPrompts) { systemPrompts.entries.toList() }
 
                     CommonActivationItem(
-                        "System prompt",
+                        stringResource(LR.string.system_prompt),
                         null,
                         null,
                         null,
@@ -485,15 +487,15 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             CommonTextField(
                                 state = promptState,
                                 modifier = Modifier.heightIn(220.dp),
-                                placeholder = "Prompt.."
+                                placeholder = stringResource(LR.string.prompt)
                             )
-                            Text("Properties:")
+                            Text("${stringResource(LR.string.properties)}:")
                             ContextualFlowRow(systemPrompts.size) { index ->
                                 val (budgetKey, itemValue) = promptsEntries[index]
                                 ElevatedAssistChip(
                                     { promptState.edit { append(itemValue) } },
                                     { Text(budgetKey) },
-                                    Modifier.Companion.padding(horizontal = 3.dp)
+                                    Modifier.padding(horizontal = 3.dp)
                                 )
                             }
                         }
@@ -502,8 +504,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
-                        "Quick messages",
-                        "Configure quick message shortcuts.",
+                        stringResource(LR.string.quick_messages),
+                        stringResource(LR.string.quick_messages_description),
                         currentAssistant.value.quickMessages.toTypedArray(),
                         {
                             quickMessageSheet = true
@@ -522,8 +524,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             scope.launch {
                                 snackbarState.currentSnackbarData?.dismiss()
                                 val result = snackbarState.showSnackbar(
-                                    message = "${pair?.first?.title} deleted",
-                                    actionLabel = "Undo",
+                                    message = "${pair?.first?.title} $deletedResource",
+                                    actionLabel = undoResource,
                                     duration = SnackbarDuration.Long
                                 )
 
@@ -548,11 +550,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
-                        "Regular expressions",
-                        """
-                            Define regex patterns to transform
-                            messages before sending/receiving.
-                        """.trimIndent(),
+                        stringResource(LR.string.regular_expressions),
+                        stringResource(LR.string.regular_expressions_description).trimIndent(),
                         currentAssistant.value.regexes.toTypedArray(),
                         {
                             messageRegexSheet = true
@@ -571,8 +570,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             scope.launch {
                                 snackbarState.currentSnackbarData?.dismiss()
                                 val result = snackbarState.showSnackbar(
-                                    message = "${pair?.first?.name} deleted",
-                                    actionLabel = "Undo",
+                                    message = "${pair?.first?.name} $deletedResource",
+                                    actionLabel = undoResource,
                                     duration = SnackbarDuration.Long
                                 )
 
@@ -597,16 +596,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
-                        "Headers",
-                        """
-                            These are key-value pairs (modelId: value)
-                            that are added to the request's header
-                            block.
-                            They are typically used for providing
-                            authentication (like API keys or tokens),
-                            specifying the content type, or passing
-                            metadata about the request or client.
-                        """.trimIndent(),
+                        stringResource(LR.string.headers),
+                        stringResource(LR.string.headers_description).trimIndent(),
                         currentAssistant.value.customHeaders.toTypedArray(),
                         { headerSheet = true },
                         {
@@ -623,8 +614,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             scope.launch {
                                 snackbarState.currentSnackbarData?.dismiss()
                                 val result = snackbarState.showSnackbar(
-                                    message = "${pair?.first?.name} deleted",
-                                    actionLabel = "Undo",
+                                    message = "${pair?.first?.name} $deletedResource",
+                                    actionLabel = undoResource,
                                     duration = SnackbarDuration.Long
                                 )
 
@@ -649,15 +640,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     AdditionalLayout(
-                        "Bodies",
-                        """
-                            This refers to the data payload (key: value
-                            JSON structure) sent within the request
-                            itself.
-                            It is the primary means of sending
-                            inputs to the AI model.
-                            These customizations are typically used to add specific.
-                        """.trimIndent(),
+                        stringResource(LR.string.bodies),
+                        stringResource(LR.string.bodies_description).trimIndent(),
                         currentAssistant.value.customBodies.toTypedArray(),
                         { bodySheet = true },
                         {
@@ -674,8 +658,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             scope.launch {
                                 snackbarState.currentSnackbarData?.dismiss()
                                 val result = snackbarState.showSnackbar(
-                                    message = "${pair?.first?.key} deleted",
-                                    actionLabel = "Undo",
+                                    message = "${pair?.first?.key} $deletedResource",
+                                    actionLabel = undoResource,
                                     duration = SnackbarDuration.Long
                                 )
 
@@ -700,11 +684,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Memory",
-                        """
-                            Allow the assistant to remember previous
-                            turns in the conversation.
-                        """.trimIndent(),
+                        stringResource(LR.string.memory) ,
+                        stringResource(LR.string.memory_description).trimIndent(),
                         null,
                         currentAssistant.value.enableMemory,
                         { currentAssistant.value = currentAssistant.value.copy(enableMemory = it) }
@@ -713,11 +694,8 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Recent Chats Reference",
-                        """
-                        Reference data from your recent chats for
-                        better contextual responses.    
-                        """.trimIndent(),
+                        stringResource(LR.string.chats_reference),
+                        stringResource(LR.string.chats_reference_description).trimIndent(),
                         null,
                         currentAssistant.value.enableRecentChatsReference,
                         {
@@ -729,13 +707,10 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "JavaScript engine",
-                        """
-                            Execute JavaScript code with QuickJS
-                            engine for calculations and scripting.
-                        """.trimIndent(),
+                        stringResource(LR.string.javascript),
+                        stringResource(LR.string.javascript_description).trimIndent(),
                         {
-                            Image(painterResource(R.drawable.js), null)
+                            Image(painterResource(AR.drawable.js), null)
                         },
                         currentAssistant.value.localTools.contains(LocalToolOption.JavascriptEngine),
                         {
@@ -770,7 +745,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                             )
                         ) {
                             Text(
-                                "Reset Settings!",
+                                stringResource(LR.string.reset),
                                 style = MaterialTheme.typography.titleLarge
                             )
                         }
@@ -855,16 +830,4 @@ class AssistantScreen(val assistant: Assistant?): Screen {
             }
         }
     }
-
-    private val systemPrompts = hashMapOf(
-        "Date" to "{{cur_date}}",
-        "Time" to "{{cur_time}}",
-        "Date and Time" to "{{cur_datetime}}",
-        "Model Name" to "{{model_name}}",
-        "Local" to "{{local}}",
-        "Timezone" to "{{timezone}}",
-        "System Version" to "{{system_version}}",
-        "Device Info" to "{{device_info}}",
-        "Battery Level" to "{{battery_level}}"
-    )
 }

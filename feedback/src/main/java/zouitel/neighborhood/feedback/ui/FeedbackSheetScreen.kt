@@ -1,4 +1,4 @@
-package zouitel.neighborhood.feedback
+package zouitel.neighborhood.feedback.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontSynthesis
@@ -32,6 +33,7 @@ import zouitel.neighborhood.ui.CommonBottomSheet
 import zouitel.neighborhood.ui.CommonColors
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
+import zouitel.neighborhood.logic.R
 
 data class FeedbackSheetScreen(val background: Int? = null): Screen {
     @Composable
@@ -46,14 +48,14 @@ data class FeedbackSheetScreen(val background: Int? = null): Screen {
                 fontSynthesis = FontSynthesis.Style,
                 fontSize = 25.sp
             )) {
-                appendLine("Did you find an issue?")
+                appendLine(stringResource(R.string.find_an_issue))
             }
             appendLine()
             withStyle(SpanStyle(
                 color = Color.LightGray,
                 fontSize = 17.sp
             )) {
-                appendLine("Don't forget to take a screenshot.")
+                appendLine(stringResource(R.string.take_a_screenshot))
             }
         }
 
@@ -70,8 +72,8 @@ data class FeedbackSheetScreen(val background: Int? = null): Screen {
                     .heightIn(200.dp)
             ) {
                 AsyncImage(
-                    R.drawable.shake,
-                    contentDescription = "Shake",
+                    zouitel.neighborhood.feedback.R.drawable.shake,
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(top = 50.dp, bottom = 50.dp)
                         .sizeIn(maxWidth = 100.dp, maxHeight = 100.dp)
@@ -100,7 +102,7 @@ data class FeedbackSheetScreen(val background: Int? = null): Screen {
                     )
                 ) {
                     Text(
-                        text = "Report an issue!",
+                        text = stringResource(R.string.report_an_issue),
                         style = MaterialTheme.typography.titleMedium
                     )
                 }

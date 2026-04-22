@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,7 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsList
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): Screen {
@@ -106,7 +108,7 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
             topBar = {
                 TopAppBar(
                     {
-                        Text("Provider Settings")
+                        Text(stringResource(R.string.provider_settings))
                     },
                     navigationIcon = {
                         IconButton({
@@ -116,7 +118,7 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
                                 navigator?.pop()
                             }
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                         }
                     },
                     actions = {
@@ -156,7 +158,7 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     Text(
-                        "Api key",
+                        stringResource(R.string.api_key),
                         Modifier.padding(horizontal = 8.dp),
                         fontSize = 19.sp,
                         fontWeight = FontWeight.Bold
@@ -196,7 +198,7 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
                 }
                 item {
                     Text(
-                        "Base URL",
+                        stringResource(R.string.base_url),
                         Modifier.padding(horizontal = 8.dp),
                         fontSize = 19.sp,
                         fontWeight = FontWeight.Bold

@@ -106,7 +106,7 @@ class GitHubImageUploader(
      * Alternative: Get raw.githubusercontent.com URL
      * This is more reliable for displaying in GitHub issues
      */
-    fun getRawUrl(path: String): String {
-        return "https://raw.githubusercontent.com/$repoOwner/$repoName/$branch/$path"
-    }
+//    fun getRawUrl(path: String): String {
+//        return "https://raw.githubusercontent.com/$repoOwner/$repoName/$branch/$path"
+//    }
 }

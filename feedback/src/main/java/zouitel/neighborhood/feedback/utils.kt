@@ -2,7 +2,10 @@ package zouitel.neighborhood.feedback
 
 import android.annotation.SuppressLint
 import android.os.Build
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import zouitel.neighborhood.logic.R
 
 @SuppressLint("HardwareIds")
 internal fun includeLog(): String {
@@ -47,16 +50,13 @@ internal fun includeLog(): String {
     }
 }
 
-internal val defaultLabels = arrayOf(
-    Label("Bug", Color.Red),
-    Label("Feature", Color.Cyan),
-    Label("Invalid", Color.Yellow),
-    Label("Question", Color.Green),
-    Label("Security", Color.Red)
+@Composable
+fun defaultLabels() = arrayOf(
+    Label(stringResource(R.string.label_bug), Color.Red),
+    Label(stringResource(R.string.label_feature), Color.Cyan),
+    Label(stringResource(R.string.label_invalid), Color.Yellow),
+    Label(stringResource(R.string.label_question), Color.Green),
+    Label(stringResource(R.string.label_security), Color.Red)
 )
 
 class Label(val name: String, val color: Color)
-
-val logsTitle = "\uD83D\uDC1E Android System Logs (Logcat) in a Feedback Report"
-val logsDescription = """Android system logs are a time-stamped stream of messages from the operating system, the kernel.
-    | When a user encounters an issue (like an app crash, freeze, or unexpected behavior), the logs capture the events leading up to and including the problem, providing developers with the context needed for diagnosis.""".trimMargin()

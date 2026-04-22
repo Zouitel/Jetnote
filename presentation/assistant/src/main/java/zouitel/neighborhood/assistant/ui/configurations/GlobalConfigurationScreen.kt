@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +60,7 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsList
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI): Screen  {
@@ -129,7 +131,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
             topBar = {
                 TopAppBar(
                     {
-                        Text("Provider Settings")
+                        Text(stringResource(R.string.provider_settings))
                     },
                     navigationIcon = {
                         IconButton({
@@ -139,7 +141,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 navigator?.pop()
                             }
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                         }
                     },
                     actions = {
@@ -179,7 +181,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     Text(
-                        "Api key",
+                        stringResource(R.string.api_key),
                         Modifier.padding(horizontal = 8.dp),
                         fontSize = 19.sp,
                         fontWeight = FontWeight.Bold
@@ -219,7 +221,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                 }
                 item {
                     Text(
-                        "Base URL",
+                        stringResource(R.string.base_url),
                         Modifier.padding(horizontal = 8.dp),
                         fontSize = 19.sp,
                         fontWeight = FontWeight.Bold
@@ -234,7 +236,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Response API",
+                        stringResource(R.string.response_api),
                         "",
                         null,
                         currentProvider.useResponseApi,
@@ -244,7 +246,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Account balance",
+                        stringResource(R.string.account_balance),
                         "",
                         null,
                         currentProvider.balanceOption.enabled,
@@ -259,7 +261,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                     .fillMaxWidth()
                                     .padding(vertical = 10.dp)
                                     .cloudy(enabled = currentProvider.balanceOption.enabled.not()),
-                                "API path..",
+                                stringResource(R.string.api_path),
                                 currentProvider.balanceOption.enabled
                             )
                             CommonTextField(
@@ -271,7 +273,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                     .fillMaxWidth()
                                     .padding(vertical = 10.dp)
                                     .cloudy(enabled = currentProvider.balanceOption.enabled.not()),
-                                "Json key..",
+                                stringResource(R.string.json_key),
                                 currentProvider.balanceOption.enabled
                             )
                         }
@@ -280,7 +282,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Network proxy",
+                        stringResource(R.string.network_proxy),
                         "",
                         null,
                         currentProvider.proxy.enabled,
@@ -298,7 +300,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Host.."
+                            stringResource(R.string.host)
                         )
 
                         BasicTextField(
@@ -332,7 +334,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Username (Optional).."
+                            stringResource(R.string.username_option)
                         )
 
                         CommonTextField(
@@ -343,7 +345,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Password (Optional).."
+                            stringResource(R.string.pass_option)
                         )
                     }
                 }

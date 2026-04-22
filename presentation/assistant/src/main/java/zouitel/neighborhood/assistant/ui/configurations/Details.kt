@@ -20,13 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import zouitel.neighborhood.ai.provider.Modality
 import zouitel.neighborhood.ai.provider.Model
 import zouitel.neighborhood.ai.provider.ModelAbility
-import zouitel.neighborhood.assistant.R
+import zouitel.neighborhood.assistant.R as AR
+import zouitel.neighborhood.logic.R as LR
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 
@@ -40,7 +42,7 @@ class Details(val currentMode: Model) {
             label = {
                 if (showKey) {
                     Text(
-                        "Modalities",
+                        stringResource(LR.string.modalities),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -95,15 +97,12 @@ class Details(val currentMode: Model) {
                 label = {
                     if (showKey) {
                         Text(
-                            "Tools",
+                            stringResource(LR.string.tools),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     } else {
-                        Image(
-                            painterResource(R.drawable.tools),
-                            "tools"
-                        )
+                        Image(painterResource(AR.drawable.tools), null)
                     }
                 },
                 shape = MaterialTheme.shapes.large,
@@ -126,15 +125,12 @@ class Details(val currentMode: Model) {
                 label = {
                     if (showKey) {
                         Text(
-                            "Reasoning",
+                            stringResource(LR.string.reasoning),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     } else {
-                        Image(
-                            painterResource(R.drawable.deep_learning),
-                            "reasoning"
-                        )
+                        Image(painterResource(AR.drawable.deep_learning), null)
                     }
                 },
                 shape = MaterialTheme.shapes.large,
@@ -155,7 +151,7 @@ class Details(val currentMode: Model) {
             onClick = { showKey = !showKey },
             label = {
                     Text(
-                        if (showKey) "Model name" else model.displayName,
+                        if (showKey) stringResource(LR.string.model_name) else model.displayName,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

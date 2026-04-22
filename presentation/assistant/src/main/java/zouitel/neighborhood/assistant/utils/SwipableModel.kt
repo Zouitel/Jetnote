@@ -80,7 +80,7 @@ fun SwipableModel(
             ) {
                 Icon(
                     painter = painterResource(CommonIcons.PENCIL),
-                    contentDescription = "edit"
+                    contentDescription = null
                 )
             }
 
@@ -102,7 +102,7 @@ fun SwipableModel(
             ) {
                 Icon(
                     painter = painterResource(CommonIcons.TRASH),
-                    contentDescription = "delete"
+                    contentDescription = null
                 )
             }
 

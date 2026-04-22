@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.core.content.FileProvider
@@ -56,6 +57,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.permissions.PermissionResult
 import zouitel.neighborhood.permissions.PermissionScreenModel
 import zouitel.neighborhood.ui.CommonBottomSheet
@@ -84,7 +86,6 @@ import zouitel.neighborhood.workspace.ui.utils.PrioritySlider
 import zouitel.neighborhood.workspace.ui.utils.getImageDisplayName
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreenModel
 import java.io.File
-import java.io.FileOutputStream
 import kotlin.random.Random
 
 data class OptionsScreen(
@@ -98,7 +99,6 @@ data class OptionsScreen(
         Options(
             getScreenModel(),
             getScreenModel(),
-            getScreenModel(),
             getScreenModel()
         )
     }
@@ -107,8 +107,7 @@ data class OptionsScreen(
     private fun Options(
         settingsModel: SettingsScreenModel,
         workspaceModel: WorkplaceScreenModel,
-        permissionsModel: PermissionScreenModel,
-        OCRModel: OCRScreenModel
+        permissionsModel: PermissionScreenModel
     ) {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
@@ -125,6 +124,14 @@ data class OptionsScreen(
         val reminderSheetState = rememberModalBottomSheetState(true)
         val showReminderSheet = remember { mutableStateOf(false) }
         val sound by lazy { SoundEffect() }
+
+        val lowResource = stringResource(R.string.low_priority)
+        val mediumResource = stringResource(R.string.medium_priority)
+        val highResource = stringResource(R.string.high_priority)
+        val urgentResource = stringResource(R.string.urgent_priority)
+        val nonResource = stringResource(R.string.non_priority)
+        val failedToSaveDocumentResource = stringResource(R.string.failed_to_save_document)
+        val permissionDeniedResource = stringResource(R.string.permission_denied)
 
         // ── Document picker ───────────────────────────────────────────────────
         val documentLauncher = rememberLauncherForActivityResult(
@@ -168,8 +175,7 @@ data class OptionsScreen(
 
                 if (destPath == null) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Failed to save document.", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, failedToSaveDocumentResource, Toast.LENGTH_SHORT).show()
                     }
                     bottomNav.hide()
                     return@launch
@@ -300,7 +306,7 @@ data class OptionsScreen(
             LazyColumn(modifier = Modifier.navigationBarsPadding()) {
 
                 item {
-                    CommonOptionItem(name = "Gallery", icon = GALLERY) {
+                    CommonOptionItem(name = stringResource(R.string.gallery), icon = GALLERY) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             galleryLauncher.launch(
@@ -313,13 +319,13 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Audio", icon = WAVEFORM) {
+                    CommonOptionItem(name = stringResource(R.string.audio), icon = WAVEFORM) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.STORAGE).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
                                     ).show()
 
                                     is PermissionResult.Error -> Toast.makeText(
@@ -334,13 +340,13 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Take Photo", icon = CAMERA) {
+                    CommonOptionItem(name = stringResource(R.string.take_photo), icon = CAMERA) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
                                     ).show()
 
                                     is PermissionResult.Error -> Toast.makeText(
@@ -359,13 +365,13 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Video Capture", icon = VIDEO_CAMERA) {
+                    CommonOptionItem(name = stringResource(R.string.video_capture), icon = VIDEO_CAMERA) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
                                     ).show()
 
                                     is PermissionResult.Error -> Toast.makeText(
@@ -387,13 +393,13 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Recorder", icon = MIC) {
+                    CommonOptionItem(name = stringResource(R.string.recorder), icon = MIC) {
                         scope.launch {
                             permissionsModel.requestPermission(Permission.RECORD_AUDIO)
                                 .collectLatest {
                                     when (it) {
                                         PermissionResult.Denied -> Toast.makeText(
-                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                            context, permissionDeniedResource, Toast.LENGTH_SHORT
                                         ).show()
 
                                         is PermissionResult.Error -> Toast.makeText(
@@ -412,7 +418,7 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Document", icon = DOCUMENT) {
+                    CommonOptionItem(name = stringResource(R.string.document), icon = DOCUMENT) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                         documentLauncher.launch(
                             arrayOf(
@@ -430,33 +436,33 @@ data class OptionsScreen(
                 }
 
                 item {
-                    CommonOptionItem(name = "Scanner", icon = CommonIcons.DOCUMENT_SCANNER) {
+                    CommonOptionItem(name = stringResource(R.string.scanner), icon = CommonIcons.DOCUMENT_SCANNER) {
                         navigator.push(OCRScreen(noteId = data.value.uid, data = data))
                     }
                 }
 
                 item {
-                    CommonOptionItem(name = "Tags", icon = TAGS) {
+                    CommonOptionItem(name = stringResource(R.string.tags), icon = TAGS) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                         bottomNav.show(tagsScreen)
                     }
                 }
 
                 item {
-                    CommonOptionItem(name = "Tasks", icon = LIST_CHECK) {
+                    CommonOptionItem(name = stringResource(R.string.tasks), icon = LIST_CHECK) {
                         sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                         bottomNav.show(AddTaskScreen(null, data))
                     }
                 }
 
                 item {
-                    CommonOptionItem(name = "Reminder", icon = BELL) {
+                    CommonOptionItem(name = stringResource(R.string.reminder), icon = BELL) {
                         scope.launch {
                             permissionsModel.requestPermission(Permission.REMOTE_NOTIFICATION)
                                 .collect {
                                     when (it) {
                                         PermissionResult.Denied -> Toast.makeText(
-                                            context, "Permission is Denied!", Toast.LENGTH_SHORT
+                                            context, permissionDeniedResource, Toast.LENGTH_SHORT
                                         ).show()
 
                                         is PermissionResult.Error -> Toast.makeText(
@@ -476,10 +482,18 @@ data class OptionsScreen(
 
                 item {
                     val currentPriority = Priorities.entries[data.value.priority]
-                    val priorityPair = getPriority(data.value.priority)
+                    val priority = when(Priorities.entries[data.value.priority].priority) {
+                        "low" -> stringResource(R.string.low_priority)
+                        "normal" -> stringResource(R.string.medium_priority)
+                        "high" -> stringResource(R.string.high_priority)
+                        "urgent" -> stringResource(R.string.urgent_priority)
+                        else -> stringResource(R.string.non_priority)
+                    }
+                    val priorityPair = getPriority(data.value.priority, lowResource, mediumResource, highResource, urgentResource, nonResource)
+
                     Text(
-                        text = if (currentPriority == Priorities.NON) "Priority"
-                        else "Priority · ${currentPriority.priority}",
+                        text = if (currentPriority == Priorities.NON) stringResource(R.string.priority)
+                        else "${stringResource(R.string.priority)} · $priority",
                         modifier = Modifier.padding(20.dp, 15.dp),
                         style = MaterialTheme.typography.labelLarge,
                         color = if (currentPriority == Priorities.NON)
@@ -617,11 +631,18 @@ data class OptionsScreen(
         }
     }
 
-    fun getPriority(priority: Int) = when (priority) {
-        1 -> Pair("Low", 0xff32cd32)
-        2 -> Pair("Medium", 0xffffef00)
-        3 -> Pair("High", 0xffffa500)
-        4 -> Pair("Urgent", 0xffff2800)
-        else -> Pair("Non", 0xffc0c0c0)
+    fun getPriority(
+        priority: Int,
+        low: String,
+        medium: String,
+        high: String,
+        urgent: String,
+        non: String
+    ) = when (priority) {
+        1 -> Pair(low, 0xff32cd32)
+        2 -> Pair(medium, 0xffffef00)
+        3 -> Pair(high, 0xffffa500)
+        4 -> Pair(urgent, 0xffff2800)
+        else -> Pair(non, 0xffc0c0c0)
     }
 }

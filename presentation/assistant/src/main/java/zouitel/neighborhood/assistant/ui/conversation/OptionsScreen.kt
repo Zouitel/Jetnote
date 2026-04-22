@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
@@ -45,6 +46,7 @@ import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.camera.CAMERA
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import zouitel.neighborhood.logic.R
 import java.io.File
 import kotlin.uuid.Uuid
 
@@ -115,18 +117,18 @@ internal fun Options(provider: ProviderSetting?, inputState: ChatInputState) {
         }
 
         Item(
-            "Pictures",
+            stringResource(R.string.pictures),
             {
                 Icon(painterResource(CommonIcons.PICTURE_36), null)
             }
-        )
-        {
+        ){
             imagePickerLauncher.launch("image/*")
         }
     }
 
     @Composable
     private fun Item(text: String, icon: @Composable RowScope.() -> Unit, onClick: () -> Unit) {
+
         Column(
             Modifier.padding(15.dp, 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -231,7 +233,7 @@ internal fun Options(provider: ProviderSetting?, inputState: ChatInputState) {
         }
 
         Item(
-            "Camera",
+            stringResource(R.string.camera),
             {
                 Icon(painterResource(CommonIcons.CAMERA_36), null)
             }
@@ -270,7 +272,7 @@ internal fun Options(provider: ProviderSetting?, inputState: ChatInputState) {
         }
 
         Item(
-            "Videos",
+            stringResource(R.string.videos),
             {
                 Icon(painterResource(CommonIcons.FILM_36), null)
             }
@@ -291,7 +293,7 @@ internal fun Options(provider: ProviderSetting?, inputState: ChatInputState) {
         }
 
         Item(
-            "Audios",
+            stringResource(R.string.audios),
             {
                 Icon(painterResource(CommonIcons.WAVEFORM_36), null)
             }
@@ -373,7 +375,7 @@ internal fun Options(provider: ProviderSetting?, inputState: ChatInputState) {
             }
 
         Item(
-            "Files",
+            stringResource(R.string.files),
             {
                 Icon(painterResource(CommonIcons.DOCUMENT), null)
             }

@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -82,6 +83,7 @@ import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -229,7 +231,7 @@ data class WorkplaceScreen(
                             .fillMaxWidth()
                             .heightIn(55.dp)
                             .focusRequester(focus),
-                        placeholder = "Title",
+                        placeholder = stringResource(R.string.title),
                         textSize = MaterialTheme.typography.headlineMedium.fontSize,
                         textColor = Color(currentData.value.textColor ?: defaultTextColor),
                         imeAction = ImeAction.Next,
@@ -249,7 +251,7 @@ data class WorkplaceScreen(
                             .fillMaxWidth()
                             .heightIn(50.dp),
                         textSize = MaterialTheme.typography.titleLarge.fontSize,
-                        placeholder = "Note",
+                        placeholder = stringResource(R.string.note),
                         textColor = Color(currentData.value.textColor ?: defaultTextColor)
                     ) {
                         workplaceModel.handleContentReceiver(currentData, it)

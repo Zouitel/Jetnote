@@ -13,6 +13,7 @@ dependencies {
     //Models.
     implementation(projects.domain)
     implementation(projects.common.ui)
+    implementation(projects.common.logic)
 
     //Ktor.
     implementation(libs.ktor.client.core)

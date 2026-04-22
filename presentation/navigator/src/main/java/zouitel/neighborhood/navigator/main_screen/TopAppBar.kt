@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
@@ -33,6 +34,7 @@ import zouitel.neighborhood.ui.CommonRow
 import zouitel.neighborhood.ui.Open_Drawer
 import zouitel.neighborhood.ui.SettingsScreenModel
 import coil.compose.AsyncImage
+import zouitel.neighborhood.logic.R
 
 @Composable
 internal fun MainTopAppBar(
@@ -63,7 +65,7 @@ internal fun MainTopAppBar(
         },
         title = {
             Text(
-                text = "Search in notes..",
+                text = stringResource(R.string.search_in_notes),
                 style = MaterialTheme.typography.bodyLarge
             )
         },
@@ -72,7 +74,7 @@ internal fun MainTopAppBar(
                 Row {
                     AsyncImage(
                         model = it.photoUrl,
-                        contentDescription = "account photo",
+                        contentDescription = null,
                         modifier = Modifier
                             .clip(CircleShape)
                             .sizeIn(maxHeight = 35.dp, maxWidth = 35.dp)

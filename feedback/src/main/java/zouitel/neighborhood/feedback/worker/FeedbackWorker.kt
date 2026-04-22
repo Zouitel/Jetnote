@@ -1,7 +1,6 @@
-package zouitel.neighborhood.feedback
+package zouitel.neighborhood.feedback.worker
 
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.WorkerThread
@@ -20,6 +19,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
 import kotlinx.coroutines.delay
+import zouitel.neighborhood.feedback.models.FeedbackRequest
+import zouitel.neighborhood.feedback.models.FeedbackResponse
+import zouitel.neighborhood.feedback.GitHubImageUploader
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FeedbackWorker(
     private val context: Context,
@@ -239,8 +244,8 @@ class FeedbackWorker(
      */
     private fun getCurrentTimestamp(): String {
         return try {
-            val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", java.util.Locale.US)
-            sdf.format(java.util.Date())
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US)
+            sdf.format(Date())
         } catch (e: Exception) {
             "Unknown"
         }

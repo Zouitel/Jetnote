@@ -80,7 +80,7 @@ import kotlinx.coroutines.launch
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.navigator.settings_screen.SettingsScreen
-import zouitel.neighborhood.search.R
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonIcons.SETTINGS
 import zouitel.neighborhood.ui.CommonIcons.SPARKLES
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList

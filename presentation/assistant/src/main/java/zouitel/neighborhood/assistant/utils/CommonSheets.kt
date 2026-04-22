@@ -1,7 +1,6 @@
 package zouitel.neighborhood.assistant.utils
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,18 +25,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.ai.provider.CustomBody
 import zouitel.neighborhood.ai.provider.CustomHeader
-import zouitel.neighborhood.ai.provider.Model
-import zouitel.neighborhood.assistant.R
 import zouitel.neighborhood.assistant.model.AssistantAffectScope
 import zouitel.neighborhood.assistant.model.AssistantRegex
 import zouitel.neighborhood.assistant.model.QuickMessage
@@ -48,8 +45,8 @@ import zouitel.neighborhood.ui.CommonConfirm
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonInsert
 import zouitel.neighborhood.ui.CommonTextField
-import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonPrimitive
+import zouitel.neighborhood.logic.R
 
 @Composable
 fun SheetLayout(
@@ -87,7 +84,7 @@ internal fun QuickMessageSheet(
     var message by remember { mutableStateOf(quickMessage) }
     ModalBottomSheet(onClose) {
         Text(
-            "Message.",
+            stringResource(R.string.message),
             Modifier.padding(10.dp, 20.dp),
             style = MaterialTheme.typography.titleLarge
         )
@@ -95,13 +92,13 @@ internal fun QuickMessageSheet(
             message.title,
             { message = message.copy(title = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Title"
+            stringResource(R.string.title)
         )
         CommonTextField(
             message.content,
             { message = message.copy(content = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Content"
+            stringResource(R.string.content)
         )
         CommonInsert(message.title.isNotEmpty() && message.content.isNotEmpty()) {
             onDone(message)
@@ -127,7 +124,7 @@ internal fun MessageRegexSheet(
             Arrangement.SpaceBetween
         ) {
             Text(
-                "Regex.",
+                "Regex",
                 style = MaterialTheme.typography.titleLarge
             )
             Switch(
@@ -145,24 +142,24 @@ internal fun MessageRegexSheet(
             currentRegex.name,
             { currentRegex = currentRegex.copy(name = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Name"
+            stringResource(R.string.name_sort).uppercase()
         )
         CommonTextField(
             currentRegex.findRegex,
             { currentRegex = currentRegex.copy(findRegex = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Find"
+            stringResource(R.string.find)
         )
         CommonTextField(
             currentRegex.replaceString,
             { currentRegex = currentRegex.copy(replaceString = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Replace",
+            stringResource(R.string.replace),
             textColor = MaterialTheme.colorScheme.error
         )
 
         Text(
-            "Effecting scopes:",
+            stringResource(R.string.effecting_scopes),
             Modifier.padding(8.dp, 20.dp),
             style = MaterialTheme.typography.bodyLarge
         )
@@ -195,7 +192,7 @@ internal fun MessageRegexSheet(
                     }
 
                     Text(
-                        "assistant",
+                        stringResource(R.string.assistant).lowercase(),
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 }
@@ -228,7 +225,7 @@ internal fun MessageRegexSheet(
                     }
 
                     Text(
-                        "user",
+                        stringResource(R.string.user),
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 }
@@ -251,7 +248,7 @@ internal fun MessageRegexSheet(
                 }
 
                 Text(
-                    "visual only",
+                    stringResource(R.string.visual_only),
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
@@ -268,28 +265,6 @@ internal fun MessageRegexSheet(
     }
 }
 
-//@Composable
-//internal fun ModelsListSheet(
-//    models: List<Model>,
-//    onClose: () -> Unit,
-//    onClick: (String) -> Unit
-//) {
-//    val scope = rememberCoroutineScope()
-//
-//    ModalBottomSheet(onClose) {
-//        for (model in models) {
-//            Button({
-//                scope.launch {
-//                    onClick(model.modelId)
-//                    onClose()
-//                }
-//            }) {
-//                Text(model.displayName)
-//            }
-//        }
-//    }
-//}
-
 @Composable
 internal fun BodySheet(
         currentBody: CustomBody,
@@ -300,18 +275,22 @@ internal fun BodySheet(
         var value by remember { mutableStateOf(currentBody.value.toString().removeSurrounding("\"")) }
 
         ModalBottomSheet(onClose) {
-            Text("Body.", Modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.body),
+                Modifier.padding(8.dp),
+                style = MaterialTheme.typography.titleLarge
+            )
             CommonTextField(
                 key,
                 { key = it },
                 Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                "Key"
+                stringResource(R.string.key)
             )
             CommonTextField(
                 value,
                 { value = it },
                 Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                "\"Value\""
+                "\"${stringResource(R.string.value)}\""
             )
             CommonInsert(key.isNotEmpty() && value.isNotEmpty()) {
                 onDone(currentBody.copy(key = key, value = JsonPrimitive(value)))
@@ -328,18 +307,18 @@ internal fun HeaderSheet(
 ) {
     var header by remember { mutableStateOf(currentHeader) }
     ModalBottomSheet(onClose) {
-        Text("Header.", Modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
+        Text(stringResource(R.string.header), Modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge)
         CommonTextField(
             header.name,
             { header = header.copy(name = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Name"
+            stringResource(R.string.name_sort).uppercase()
         )
         CommonTextField(
             header.value,
             { header = header.copy(value = it) },
             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-            "Value"
+            stringResource(R.string.value)
         )
         CommonInsert(header.name.isNotEmpty() && header.value.isNotEmpty()) {
             onDone(header)
@@ -355,7 +334,7 @@ internal fun ResetSheet(
 ) {
     ModalBottomSheet(onClose) {
         CommonActivationItem(
-            "Reset the assistant settings to default mode.",
+            stringResource(R.string.reset_description),
             null,
             null,
             null,
@@ -384,14 +363,14 @@ internal fun SaveSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Save changes?",
+                text = stringResource(R.string.save_changes),
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
 
             Text(
-                text = "You have unsaved changes. Would you like to save them before leaving?",
+                text = stringResource(R.string.save_changes_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -413,7 +392,7 @@ internal fun SaveSheet(
                         contentColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text("Don't Save")
+                    Text(stringResource(R.string.dont_save))
                 }
 
                 Button(
@@ -427,7 +406,7 @@ internal fun SaveSheet(
                         contentColor = Color.White
                     )
                 ) {
-                    Text("Save")
+                    Text(stringResource(R.string.save))
                 }
             }
 

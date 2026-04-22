@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
@@ -66,10 +67,6 @@ import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.search.utils.SelectionTopBar
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonConstants
-import zouitel.neighborhood.ui.CommonConstants.NAME_ORDER
-import zouitel.neighborhood.ui.CommonConstants.NEWEST_ORDER
-import zouitel.neighborhood.ui.CommonConstants.OLDEST_ORDER
-import zouitel.neighborhood.ui.CommonConstants.PRIORITY_ORDER
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
@@ -160,10 +157,10 @@ class MainScreen: Screen {
 
         val notes =
             when (settings.ordination) {
-                NAME_ORDER -> mainModel.observeNames.collectAsState()
-                OLDEST_ORDER -> mainModel.observeOldest.collectAsState()
-                NEWEST_ORDER -> mainModel.observeNewest.collectAsState()
-                PRIORITY_ORDER -> mainModel.observePriorities.collectAsState()
+                stringResource(zouitel.neighborhood.logic.R.string.name_sort) -> mainModel.observeNames.collectAsState()
+                stringResource(zouitel.neighborhood.logic.R.string.oldest_sort) -> mainModel.observeOldest.collectAsState()
+                stringResource(zouitel.neighborhood.logic.R.string.newest_sort) -> mainModel.observeNewest.collectAsState()
+                stringResource(zouitel.neighborhood.logic.R.string.priority_sort) -> mainModel.observePriorities.collectAsState()
                 else -> mainModel.observeDefaults.collectAsState()
             }
         val topAppBarState = rememberTopAppBarState()

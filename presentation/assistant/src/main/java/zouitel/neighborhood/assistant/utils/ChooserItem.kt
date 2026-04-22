@@ -33,9 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.assistant.model.Assistant
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 
@@ -49,7 +51,13 @@ fun ChooserItem(
     onChecked: (Boolean) -> Unit = {},
 ) {
     val isVisible = remember { mutableStateOf(false) }
-    val budgetEntries = remember { thinkingBudgets.entries.toList() }
+    val budgetEntries = mapOf(
+        -1 to stringResource(R.string.auto),
+        1024 to stringResource(R.string.light),
+        16000 to stringResource(R.string.medium),
+        32000 to stringResource(R.string.heavy)
+    )
+    val budgetEntriesList = remember(budgetEntries) { budgetEntries.entries.toList() }
 
     Column(
         modifier = Modifier
@@ -100,10 +108,11 @@ fun ChooserItem(
 
         ContextualFlowRow(
             modifier = Modifier.animateContentSize(),
-            itemCount = budgetEntries.size
+            itemCount = 4
         ) { index ->
+
             val toolTipState = rememberTooltipState(isPersistent = true)
-            val (budgetKey, itemValue) = budgetEntries[index]
+            val (budgetKey, itemValue) = budgetEntriesList[index]
 
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberRichTooltipPositionProvider(),
@@ -146,5 +155,3 @@ fun ChooserItem(
         }
     }
 }
-
-private val thinkingBudgets = mapOf(-1 to "auto", 1024 to "light", 16000 to "medium", 32000 to "heavy")

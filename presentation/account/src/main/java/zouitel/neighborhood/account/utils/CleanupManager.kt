@@ -43,7 +43,7 @@ class DriveCleanupScreenModel(context: Context) {
     fun schedulePeriodicCleanup() {
         val networkConstraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true) // Don't drain battery in background
+            .setRequiresBatteryNotLow(true)
             .build()
 
         // Runs once every 7 days
@@ -53,7 +53,7 @@ class DriveCleanupScreenModel(context: Context) {
 
         workManager.enqueueUniquePeriodicWork(
             "weekly_cloud_cleanup",
-            ExistingPeriodicWorkPolicy.KEEP, // If already scheduled, leave it alone
+            ExistingPeriodicWorkPolicy.KEEP,
             periodicCloudCleanup
         )
     }

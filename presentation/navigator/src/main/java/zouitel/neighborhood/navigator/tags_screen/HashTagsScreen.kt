@@ -68,6 +68,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -131,7 +132,9 @@ class HashTagsScreen: Screen {
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
         val scope = rememberCoroutineScope()
-        var placeholderText by remember { mutableStateOf("Tag..") }
+        val tagResource = stringResource(zouitel.neighborhood.logic.R.string.tag_placeholder)
+        val tagCannotBeEmptyResource = stringResource(zouitel.neighborhood.logic.R.string.tag_cannot_be_empty)
+        var placeholderText by remember { mutableStateOf(tagResource) }
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
@@ -174,7 +177,7 @@ class HashTagsScreen: Screen {
                             settingsModel = settingsModel,
                             drawerState = drawerState,
                             scrollBehavior = scrollBehavior,
-                            title = "Tags"
+                            title = stringResource(zouitel.neighborhood.logic.R.string.screen_tags)
                         )
                     },
                     bottomBar = {
@@ -236,10 +239,10 @@ class HashTagsScreen: Screen {
                                     val inputTag = textFieldState.text.toString().trim()
 
                                     if (inputTag.isEmpty()) {
-                                        placeholderText = "Tag cannot be empty!"
+                                        placeholderText = tagCannotBeEmptyResource
                                         scope.launch {
                                             delay(3000)
-                                            placeholderText = "Tag.."
+                                            placeholderText = tagResource
                                         }
                                     } else {
                                         tagModel.sendAction(

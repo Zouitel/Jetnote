@@ -1,4 +1,4 @@
-package zouitel.neighborhood.feedback
+package zouitel.neighborhood.feedback.ui
 
 import android.app.Application
 import android.net.Uri
@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.feedback.worker.FeedbackUploadWorker
+import zouitel.neighborhood.feedback.worker.FeedbackWorker
 import java.util.UUID
 
 class FeedbackScreenModel(application: Application) : ScreenModel {
@@ -55,8 +57,8 @@ class FeedbackScreenModel(application: Application) : ScreenModel {
                 val fileName = "feedback_screenshot_${System.currentTimeMillis()}.png"
 
                 val inputData = workDataOf(
-                    FeedbackUploadWorker.KEY_SCREENSHOT_URI to screenshotUri.toString(),
-                    FeedbackUploadWorker.KEY_SCREENSHOT_NAME to fileName
+                    FeedbackUploadWorker.Companion.KEY_SCREENSHOT_URI to screenshotUri.toString(),
+                    FeedbackUploadWorker.Companion.KEY_SCREENSHOT_NAME to fileName
                 )
 
                 val constraints = Constraints.Builder()
@@ -97,8 +99,8 @@ class FeedbackScreenModel(application: Application) : ScreenModel {
                             Log.d("FeedbackScreenModel", "Drive upload running...")
                         }
                         WorkInfo.State.SUCCEEDED -> {
-                            val driveLink = workInfo.outputData.getString(FeedbackUploadWorker.KEY_DRIVE_LINK)
-                            val fileId = workInfo.outputData.getString(FeedbackUploadWorker.KEY_FILE_ID)
+                            val driveLink = workInfo.outputData.getString(FeedbackUploadWorker.Companion.KEY_DRIVE_LINK)
+                            val fileId = workInfo.outputData.getString(FeedbackUploadWorker.Companion.KEY_FILE_ID)
 
                             if (driveLink != null && fileId != null) {
                                 _uploadStatus.value = UploadStatus.Success(driveLink, fileId)

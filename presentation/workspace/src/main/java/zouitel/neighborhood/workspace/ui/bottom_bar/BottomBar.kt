@@ -64,6 +64,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import zouitel.neighborhood.workspace.R
 import kotlin.math.abs
 
@@ -82,6 +83,7 @@ internal fun BottomBar(
     val bottomNav = LocalBottomSheetNavigator.current
     val sound by lazy { SoundEffect() }
     val auth = FirebaseAuth.getInstance()
+    val untitledResource = stringResource(zouitel.neighborhood.logic.R.string.untitled)
 
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
@@ -136,7 +138,7 @@ internal fun BottomBar(
                                 Action.Insert(
                                     data.value.copy(
                                         userUid = auth.uid.toString(),
-                                        title = titleState?.text.toString().ifEmpty { "Untitled" },
+                                        title = titleState?.text.toString().ifEmpty { untitledResource },
                                         description = descriptionState?.text.toString(),
                                     )
                                 )
@@ -152,7 +154,7 @@ internal fun BottomBar(
                         }) {
                         Icon(
                             painter = painterResource(CommonIcons.CHECK),
-                            contentDescription = "add a note",
+                            contentDescription = null,
                             tint = Color.LightGray
                         )
                     }

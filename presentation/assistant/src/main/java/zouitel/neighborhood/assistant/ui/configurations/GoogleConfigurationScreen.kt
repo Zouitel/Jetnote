@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -49,7 +50,6 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.ai.provider.ProviderManager
 import zouitel.neighborhood.ai.provider.ProviderSetting
-import zouitel.neighborhood.assistant.R
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsScreenModel
 import zouitel.neighborhood.assistant.ui.provider.ProviderScreenModel
 import zouitel.neighborhood.assistant.utils.SaveSheet
@@ -61,6 +61,8 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsList
+import zouitel.neighborhood.assistant.R as AR
+import zouitel.neighborhood.logic.R as LR
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 data class GoogleConfigurationScreen(private val provider: ProviderSetting.Google): Screen {
@@ -121,7 +123,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
             topBar = {
                 TopAppBar(
                     {
-                        Text("Provider Settings")
+                        Text(stringResource(LR.string.provider_settings))
                     },
                     navigationIcon = {
                         IconButton({
@@ -131,7 +133,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                 navigator?.pop()
                             }
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                         }
                     },
                     actions = {
@@ -172,11 +174,11 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Vertex AI",
+                        stringResource(LR.string.vertex_ai),
                         "",
                         {
                             Image(
-                                painterResource(R.drawable.vertex_logo),
+                                painterResource(AR.drawable.vertex_logo),
                                 null,
                                 modifier = Modifier.size(32.dp)
                             )
@@ -189,28 +191,28 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                             currentProvider.serviceAccountEmail,
                             { currentProvider = currentProvider.copy(serviceAccountEmail = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Service account @email.com",
+                            stringResource(LR.string.service_account),
                             currentProvider.vertexAI
                         )
                         CommonTextField(
                             currentProvider.privateKey,
                             { currentProvider = currentProvider.copy(privateKey = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Private key..",
+                            stringResource(LR.string.private_key),
                             currentProvider.vertexAI
                         )
                         CommonTextField(
                             currentProvider.location,
                             { currentProvider = currentProvider.copy(location = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Location..",
+                            stringResource(LR.string.location),
                             currentProvider.vertexAI
                         )
                         CommonTextField(
                             currentProvider.projectId,
                             { currentProvider = currentProvider.copy(projectId = it) },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Project UID..",
+                            stringResource(LR.string.project_uid),
                             currentProvider.vertexAI
                         )
                     }
@@ -219,7 +221,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                 item {
                     Column(Modifier.cloudy(enabled = currentProvider.vertexAI)) {
                         Text(
-                            "Api key",
+                            stringResource(LR.string.api_key),
                             Modifier.padding(horizontal = 8.dp),
                             fontSize = 19.sp,
                             fontWeight = FontWeight.Bold
@@ -276,7 +278,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
                     CommonActivationItem(
-                        "Network proxy",
+                        stringResource(LR.string.network_proxy),
                         "",
                         null,
                         currentProvider.proxy.enabled,
@@ -330,7 +332,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Username (Optional)..",
+                            stringResource(LR.string.username_option),
                             currentProvider.proxy.enabled
                         )
 
@@ -342,7 +344,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            "Password (Optional)..",
+                            stringResource(LR.string.pass_option),
                             currentProvider.proxy.enabled
                         )
                     }

@@ -26,8 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.ai.provider.Model
@@ -40,15 +39,8 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
-
-class ModelsScreen: Screen {
-    @Composable
-    override fun Content() {
-        FullModels(getScreenModel(), getScreenModel(), getScreenModel())
-    }
-
-}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -70,6 +62,9 @@ fun FullModels(
     val deletedModel = remember { mutableStateListOf<Pair<Model, Int>>() }
     val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
+    val deletedResource = stringResource(R.string.deleted)
+    val undoResource = stringResource(R.string.action_undo)
+
     Scaffold(
         Modifier
             .fillMaxSize()
@@ -82,15 +77,15 @@ fun FullModels(
                     IconButton({
                         navigator?.pop()
                     }) {
-                        Icon(painterResource(CommonIcons.ARROW_LEFT), "go back")
+                        Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                     }
                 },
-                title = { Text("AI Models") },
+                title = { Text(stringResource(R.string.ai_models)) },
                 actions = {
                     IconButton({
                         navigator?.push(ProvidersScreen())
                     }) {
-                        Icon(painterResource(CommonIcons.PLUS), "add model")
+                        Icon(painterResource(CommonIcons.PLUS), null)
                     }
                 },
                 scrollBehavior = scrollBehavior
@@ -130,8 +125,8 @@ fun FullModels(
                         scope.launch {
                             snackbarState.currentSnackbarData?.dismiss()
                             val result = snackbarState.showSnackbar(
-                                message = "${modelPair?.first?.displayName} deleted",
-                                actionLabel = "Undo",
+                                message = "${modelPair?.first?.displayName} $deletedResource",
+                                actionLabel = undoResource,
                                 duration = SnackbarDuration.Long
                             )
 

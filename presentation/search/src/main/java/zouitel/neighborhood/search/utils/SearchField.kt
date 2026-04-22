@@ -16,8 +16,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_TXT
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.ui.CommonIcons.CROSS_SMALL
 import zouitel.neighborhood.ui.CommonTextField
@@ -43,7 +45,7 @@ internal fun SearchField(searchModel: SearchScreenModel) {
             modifier = Modifier
                 .fillMaxWidth(.8f)
                 .focusRequester(focusRequester),
-            placeholder = "Search in notes..",
+            placeholder = stringResource(R.string.search_in_notes),
             imeAction = ImeAction.Search,
             keyboardActions = KeyboardActions {
                 keyboardController?.hide()

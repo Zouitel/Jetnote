@@ -11,12 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.assistant.model.Assistant
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreen
 import zouitel.neighborhood.assistant.ui.provider.ProvidersScreen
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonIcons
 
 @Composable
@@ -36,7 +38,7 @@ internal fun ChatActionsMenu(
         offset = DpOffset((-20).dp, 0.dp)
     ) {
         DropdownMenuItem(
-            { Text("New Chat", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.new_chat), style = MaterialTheme.typography.bodyLarge) },
             {
                 expanded.value = false
                 navigator?.push(ChatScreen(true))
@@ -48,7 +50,7 @@ internal fun ChatActionsMenu(
         )
         HorizontalDivider()
         DropdownMenuItem(
-            { Text("Assistant", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.assistant), style = MaterialTheme.typography.bodyLarge) },
             {
                 expanded.value = false
                 navigator?.push(AssistantScreen(assistant))
@@ -59,7 +61,7 @@ internal fun ChatActionsMenu(
             }
         )
         DropdownMenuItem(
-            { Text("Providers", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.providers), style = MaterialTheme.typography.bodyLarge) },
             { navigator?.push(ProvidersScreen()) },
             Modifier.padding(horizontal = 10.dp),
             {
@@ -67,7 +69,7 @@ internal fun ChatActionsMenu(
             }
         )
         DropdownMenuItem(
-            { Text("Retitle", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.retitle), style = MaterialTheme.typography.bodyLarge) },
             onRetitle,
             Modifier.padding(horizontal = 10.dp),
             {
@@ -77,7 +79,7 @@ internal fun ChatActionsMenu(
         DropdownMenuItem(
             {
                 Text(
-                    text = "Options",
+                    text = stringResource(R.string.options),
                     style = MaterialTheme.typography.bodyLarge
                 )
             },
@@ -94,7 +96,7 @@ internal fun ChatActionsMenu(
         DropdownMenuItem(
             {
                 Text(
-                    text = "Delete",
+                    text =stringResource(R.string.delete),
                     color = MaterialTheme.colorScheme.errorContainer,
                     style = MaterialTheme.typography.bodyLarge
                 )
