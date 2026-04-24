@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">ノート</string>
+    <string name="screen_chat">AIチャット</string>
+    <string name="screen_tags">タグ</string>
+    <string name="screen_settings">設定</string>
+    <string name="screen_archive">アーカイブ</string>
+    <string name="screen_about">アプリについて</string>
+    <string name="screen_feedback">フィードバック</string>
+    <string name="share_app">このアプリをシェア</string>
+    <string name="label_more">もっと見る</string>
+    <string name="label_less">折りたたむ</string>
+    <string name="msg_deleted">削除済み</string>
+    <string name="action_undo">元に戻す</string>
+    <string name="tag_placeholder">タグ..</string>
+    <string name="tag_cannot_be_empty">タグを入力してください！</string>
+    <string name="archive">アーカイブ</string>
+    <string name="deleted">削除しました！</string>
+    <string name="erase_notes">ノートを消去しますか？</string>
+    <string name="confirm_erase_notes">"ゴミ箱内のすべてのノートが完全に削除されます。"</string>
+    <string name="search_in_notes">"ノートを検索.."</string>
+    <string name="select_layout">"レイアウトを選択"</string>
+    <string name="settings">"設定"</string>
+    <string name="account_sync">"アカウントの同期"</string>
+    <string name="account_sync_description">"
+                                このアプリのGoogleドライブアカウント同期を
+                                有効にすることで、ノートや設定などの
+                                アプリデータをシームレスにバックアップおよび
+                                同期でき、データの安全性が確保されます。
+        "</string>
+    <string name="assistant_configuration">"アシスタントの設定"</string>
+    <string name="assistant_configuration_description">"
+                                AIアシスタントは人工知能によって動作する
+                                ソフトウェアプログラムで、このアプリケーション
+                                での幅広いタスクをサポートします。
+                                これらのアシスタントは自然言語を理解して
+                                応答し、画像またはテキストを通じて
+                                対話することができます。
+                            "</string>
+    <string name="dark_mode">"ダークモード"</string>
+    <string name="dark_mode_description">"
+                                このモードはシステム全体の設定で、Android
+                                アプリのUIの背景配色をより暗い色に切り替えます。
+                                目の疲れを軽減し、アクセシビリティを改善し、
+                                バッテリー寿命を節約し、ユーザー体験を
+                                向上させるために設計されています。
+                            "</string>
+    <string name="sound_effect">"サウンドエフェクト"</string>
+    <string name="sound_effect_description">"
+                                Jetnoteアプリケーションにおいて、
+                                サウンドエフェクト機能は、ユーザーが
+                                ボタンやその他のUI要素を操作するときに
+                                聴覚的なフィードバックを提供します。
+                                これはモバイルアプリ開発における
+                                一般的な手法で、ユーザー体験を
+                                よりインタラクティブで魅力的にします。
+                            "</string>
+    <string name="layouts">"レイアウト"</string>
+    <string name="layouts_description">"
+                                レイアウトはAndroidアプリケーションで
+                                コンテンツを整理して表示するための
+                                基本的な要素です。画面上のUI要素の
+                                構造と配置を定義します。
+                            "</string>
+    <string name="sort_notes">"ノートを並べ替え"</string>
+    <string name="default_sort">"デフォルト"</string>
+    <string name="name_sort">"名前"</string>
+    <string name="oldest_sort">"古い順"</string>
+    <string name="newest_sort">"新しい順"</string>
+    <string name="priority_sort">"優先度"</string>
+    <string name="zen_mode">"禅モード"</string>
+    <string name="zen_mode_description">"
+                                禅モード（全画面モード）は、アプリケーションが
+                                画面全体を占有し、ツールバー、メニュー、
+                                OSのタスクバーやメニューバーなど、
+                                その他のインターフェース要素をすべて
+                                非表示にする表示設定です。
+                            "</string>
+    <string name="shake">"シェイクしてレポート"</string>
+    <string name="shake_description">"
+                              これは、Androidデバイスを物理的に
+                              振るだけで、フィードバックやバグレポートの
+                              プロセスを開始できる便利な機能です。
+                              複数のメニューを移動してフィードバック送信や
+                              バグ報告オプションを探す必要がありません。
+                            "</string>
+    <string name="block_screenshot">"スクリーンショットをブロック"</string>
+    <string name="block_screenshot_description">"
+                                スクリーンショットブロックは、ユーザーが
+                                アプリのコンテンツをキャプチャするのを
+                                防ぐセキュリティ対策です。銀行情報、
+                                個人データ、著作権で保護されたコンテンツ
+                                などの機密情報を保護するためによく使用されます。
+                            "</string>
+    <string name="lock_mode">"ロックモード"</string>
+    <string name="lock_mode_description">"
+                                この機能は、ユーザーがコンテンツに
+                                アクセスする前に認証を要求することで、
+                                アプリのセキュリティを強化します。
+                                これは通常、指紋、PIN、パターンロック
+                                などのデバイスの組み込みセキュリティ
+                                機能を使用して実現されます。
+                            "</string>
+    <string name="licenses">"ライセンス"</string>
+    <string name="licenses_description">"
+                                    これらのライセンスは、各著作者の
+                                    配布要件に準拠し、ソフトウェアの
+                                    アーキテクチャに関する透明性を
+                                    提供するためにここに含まれています。
+                                    "</string>
+    <string name="title">"タイトル"</string>
+    <string name="note">"ノート"</string>
+    <string name="failed_to_save_document">"ドキュメントの保存に失敗しました。"</string>
+    <string name="gallery">"ギャラリー"</string>
+    <string name="audio">音声</string>
+    <string name="permission_denied">権限が拒否されました！</string>
+    <string name="take_photo">写真を撮る</string>
+    <string name="video_capture">動画撮影</string>
+    <string name="recorder">レコーダー</string>
+    <string name="document">ドキュメント</string>
+    <string name="scanner">スキャナー</string>
+    <string name="tasks">タスク</string>
+    <string name="tags">タグ</string>
+    <string name="reminder">リマインダー</string>
+    <string name="priority">優先度</string>
+    <string name="low_priority">低</string>
+    <string name="medium_priority">中</string>
+    <string name="high_priority">高</string>
+    <string name="urgent_priority">緊急</string>
+    <string name="non_priority">なし</string>
+    <string name="created">作成日</string>
+    <string name="edited">編集日</string>
+    <string name="types">種類</string>
+    <string name="media">メディア</string>
+    <string name="medias">メディア</string>
+    <string name="colour">色</string>
+    <string name="colours">カラー</string>
+    <string name="search_within">内を検索</string>
+    <string name="issue_title">問題のタイトル*</string>
+    <string name="issue_description">問題の説明（任意）</string>
+    <string name="noAccount">アカウントなしでサインイン</string>
+    <string name="screenshot_selected">✓ スクリーンショット選択済み</string>
+    <string name="drive_submit">送信時にドライブにアップロードされます</string>
+    <string name="select_screenshot">スクリーンショットを選択</string>
+    <string name="system_logs">システムログを含める？</string>
+    <string name="find_an_issue">問題を発見しましたか？</string>
+    <string name="take_a_screenshot">スクリーンショットを忘れずに撮影してください。</string>
+    <string name="report_an_issue">問題を報告！</string>
+    <string name="bug">バグ</string>
+    <string name="logs_title">\\uD83D\\uDCiE フィードバックレポートのAndroidシステムログ（Logcat）</string>
+    <string name="logs_description">Androidシステムログは、OSとカーネルからのタイムスタンプ付きメッセージのストリームです。\n    | ユーザーが問題（アプリのクラッシュ、フリーズ、予期しない動作など）に遭遇すると、ログは問題が発生するまでのイベントをキャプチャし、開発者に診断のためのコンテキストを提供します。</string>
+    <string name="label_bug">バグ</string>
+    <string name="label_feature">機能</string>
+    <string name="label_invalid">無効</string>
+    <string name="label_question">質問</string>
+    <string name="label_security">セキュリティ</string>
+    <string name="failed">失敗</string>
+    <string name="submit_feedback">フィードバックを送信！</string>
+    <string name="uploading_screenshot">スクリーンショットをアップロード中…</string>
+    <string name="creating_github_issue">GitHubのイシューを作成中…</string>
+    <string name="upload_faild">アップロード失敗…</string>
+    <string name="upload_failed">アップロード失敗…</string>
+    <string name="issue_crea">イシューが作成されました。</string>
+    <string name="issue_created">イシューが作成されました！</string>
+    <string name="log_out">ログアウト</string>
+    <string name="hi">こんにちは</string>
+    <string name="add_account">別のアカウントを追加</string>
+    <string name="manage_account">アカウントを管理</string>
+    <string name="upload_data">データをアップロード</string>
+    <string name="download_data">データをダウンロード</string>
+    <string name="firebase_authentication_failed">Firebase認証に失敗しました</string>
+    <string name="sign_in_failed">Googleサインインに失敗しました</string>
+    <string name="please_wait">サインイン中、しばらくお待ちください…</string>
+    <string name="sync_title">同期するにはサインイン</string>
+    <string name="sync_description">Googleアカウントでサインインして、すべてのデバイスでノートをバックアップおよび同期します。</string>
+    <string name="current_account">現在のアカウント</string>
+    <string name="no_name">名前なし</string>
+    <string name="no_email">メールなし</string>
+    <string name="sign_out">サインアウト</string>
+    <string name="sign_in_with_google">Googleでサインイン</string>
+    <string name="ai_models">AIモデル</string>
+    <string name="load_more">もっと読み込む</string>
+    <string name="available_models">利用可能なモデル</string>
+    <string name="assistant_settings">アシスタント設定</string>
+    <string name="learning_mode">学習モード</string>
+    <string name="learning_mode_description">"
+                    ラベル付きの例から学習したパターンに基づいて、
+                    新しい未知のデータの出力を予測します。
+                "</string>
+    <string name="temperat">温度</string>
+    <string name="temperature">温度</string>
+    <string name="temperature_description">"
+           出力のランダム性を制御します。
+           値が高いほど創造的になります。
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            出力に考慮するトークンを
+            制御します。
+            </string>
+    <string name="context_message_size">コンテキストメッセージサイズ</string>
+    <string name="context_message_size_description">
+            コンテキストに含める過去の
+            メッセージの最大数。
+        </string>
+    <string name="stream_output">ストリーム出力</string>
+    <string name="stream_output_description">生成中の応答をリアルタイムで表示します。</string>
+    <string name="thinking_budget">思考バジェット</string>
+    <string name="thinking_budget_description">
+                            応答に使用する計算リソースを
+                            制限します。
+                        </string>
+    <string name="system_prompt">システムプロンプト</string>
+    <string name="prompt">プロンプト..</string>
+    <string name="properties">プロパティ</string>
+    <string name="quick_messages">クイックメッセージ</string>
+    <string name="quick_messages_description">クイックメッセージのショートカットを設定します。</string>
+    <string name="regular_expressions">正規表現</string>
+    <string name="regular_expressions_description">
+                            送受信前にメッセージを変換するための
+                            正規表現パターンを定義します。
+                        </string>
+    <string name="headers">ヘッダー</string>
+    <string name="headers_description">
+                            リクエストのヘッダーブロックに追加される
+                            キーと値のペア（キー：値）です。
+                            通常、認証（APIキーやトークンなど）、
+                            コンテンツタイプの指定、またはリクエストや
+                            クライアントに関するメタデータの受け渡しに
+                            使用されます。
+                        </string>
+    <string name="bodies">ボディ</string>
+    <string name="bodies_description">
+                            リクエスト内で送信されるデータペイロード
+                            （キー：値のJSON構造）を指します。
+                            AIモデルへの入力を送信するための
+                            主要な手段です。これらのカスタマイズは
+                            通常、特定の設定を追加するために使用されます。
+                        </string>
+    <string name="memory">メモリ</string>
+    <string name="memory_description">
+                            アシスタントが会話の前のターンを
+                            記憶できるようにします。
+                        </string>
+    <string name="chats_reference">最近のチャット参照</string>
+    <string name="chats_reference_description">
+                        より良いコンテキスト応答のために
+                        最近のチャットのデータを参照します。
+                        </string>
+    <string name="javascript">JavaScriptエンジン</string>
+    <string name="javascript_description">
+                            計算とスクリプティングのためにQuickJS
+                            エンジンでJavaScriptコードを実行します。
+                        </string>
+    <string name="reset">設定をリセット！</string>
+    <string name="providers">プロバイダー</string>
+    <string name="ask">質問する</string>
+    <string name="add_model"><![CDATA[<- AIモデルを追加]]></string>
+    <string name="delete">削除</string>
+    <string name="options">オプション</string>
+    <string name="retitle">名前を変更</string>
+    <string name="assistant">アシスタント</string>
+    <string name="new_chat">新しいチャット</string>
+    <string name="files">ファイル</string>
+    <string name="audios">音声</string>
+    <string name="videos">動画</string>
+    <string name="camera">カメラ</string>
+    <string name="pictures">写真</string>
+    <string name="provider_settings">プロバイダー設定</string>
+    <string name="api_key">APIキー</string>
+    <string name="base_url">ベースURL</string>
+    <string name="model_name">モデル名</string>
+    <string name="modalities">モダリティ</string>
+    <string name="tools">ツール</string>
+    <string name="reasoning">推論</string>
+    <string name="respo">レスポンスAPI</string>
+    <string name="response_api">レスポンスAPI</string>
+    <string name="account_balance">アカウント残高</string>
+    <string name="api_path">APIパス..</string>
+    <string name="json_key">JSONキー..</string>
+    <string name="network_proxy">ネットワークプロキシ</string>
+    <string name="host">ホスト..</string>
+    <string name="username_option">ユーザー名（任意）..</string>
+    <string name="pass_option">パスワード（任意）..</string>
+    <string name="service_account">サービスアカウント @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">秘密鍵..</string>
+    <string name="location">場所..</string>
+    <string name="project_uid">プロジェクトUID..</string>
+    <string name="details">詳細</string>
+    <string name="model_type">モデルタイプ</string>
+    <string name="input_modalities">入力モダリティ</string>
+    <string name="output_modalities">出力モダリティ</string>
+    <string name="abilities">機能</string>
+    <string name="provider_override">プロバイダーオーバーライドを追加</string>
+    <string name="provider_override_description">
+                            この特定のモデルのカスタムプロバイダー設定を
+                            構成します。モデルのメインプロバイダーの
+                            共通プロパティを使用します。
+                        </string>
+    <string name="build_tools">ビルドツール</string>
+    <string name="build_tools_description">
+                            これらのツールはアプリのサポートを必要とせずに
+                            APIから直接提供されます。この機能は現在
+                            Gemini APIのみでサポートされています。
+                        </string>
+    <string name="google_search">検索</string>
+    <string name="google_search_description">Google検索連携を有効にする</string>
+    <string name="url_context">URLコンテキスト</string>
+    <string name="url_context_description">URLコンテキスト処理を有効にする</string>
+    <string name="find">検索</string>
+    <string name="replace">置換</string>
+    <string name="effecting_scopes">影響するスコープ</string>
+    <string name="user">ユーザー</string>
+    <string name="visual_only">視覚のみ</string>
+    <string name="body">ボディ</string>
+    <string name="key">キー</string>
+    <string name="value">値</string>
+    <string name="header">ヘッダー.</string>
+    <string name="reset_description">アシスタントの設定をデフォルトモードにリセットします。</string>
+    <string name="save_changes">変更を保存しますか？</string>
+    <string name="save_changes_description">未保存の変更があります。終了する前に保存しますか？</string>
+    <string name="dont_save">保存しない</string>
+    <string name="save">保存</string>
+    <string name="links">リンク</string>
+    <string name="reminders">リマインダー</string>
+    <string name="priorities">優先度</string>
+    <string name="ai_chat">AIチャット</string>
+    <string name="auto">自動</string>
+    <string name="light">軽量</string>
+    <string name="medium">中程度</string>
+    <string name="heavy">重量</string>
+    <string name="date">日付</string>
+    <string name="time">時刻</string>
+    <string name="date_and_time">日付と時刻</string>
+    <string name="local">ローカル</string>
+    <string name="timezone">タイムゾーン</string>
+    <string name="system_version">システムバージョン</string>
+    <string name="device_info">デバイス情報</string>
+    <string name="battery_level">バッテリーレベル</string>
+    <string name="insert">挿入</string>
+    <string name="confirm">確認</string>
+    <string name="message">メッセージ</string>
+    <string name="content">コンテンツ</string>
+    <string name="today">今日</string>
+    <string name="tomorrow">明日</string>
+    <string name="according_to_timing">タイミングに応じて</string>
+    <string name="untitled">無題</string>
+    <string name="hue">色相</string>
+    <string name="saturation">彩度</string>
+    <string name="brightness">明度</string>
+    <string name="shades">シェード</string>
+    <string name="complementary">補色</string>
+    <string name="task_placeholder">タスク..</string>
+    <string name="task_cannot_be_empty">タスクを入力してください！</string>
+    <string name="of">／</string>
+    <string name="something_wrong_with_file">ファイルに問題があります</string>
+    <string name="could_not_load_any_information">メディアファイルの情報を読み込めませんでした。</string>
+    <string name="no_file_path_provided">ファイルパスが指定されていません。</string>
+    <string name="security_error_processing_file">ファイル処理中にセキュリティエラーが発生しました</string>
+    <string name="an_unexpected_error_occurred">予期しないエラーが発生しました</string>
+    <string name="could_not_retrieve_any_information">この動画ファイルの情報を取得できませんでした。</string>
+    <string name="error_reading_metadata">メディアメタデータの読み込みエラー</string>
+    <string name="could_not_read_exif_data">EXIFデータを読み取れませんでした</string>
+    <string name="error_reading_basic_file_info">基本ファイル情報の読み込みエラー</string>
+    <string name="file_does_not_exist">ファイルが存在しません</string>
+    <string name="error">エラー</string>
+    <string name="loading_media_info">メディア情報を読み込み中…</string>
+    <string name="no_metadata_available_for_this_document">このドキュメントに利用可能なメタデータがありません。</string>
+    <string name="could_not_read_pdf_metadata">PDFメタデータを読み取れませんでした</string>
+    <string name="cannot_read_file">ファイルを読み取れません</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">画像のサイズをデコードできないか、無効な形式です。</string>
+    <string name="error_during_dimension_decoding">サイズのデコード中にエラーが発生しました</string>
+    <string name="error_reading_exif_data">EXIFデータの読み込みエラー</string>
+    <string name="duplicate">複製</string>
+    <string name="send">送信</string>
+    <string name="print">印刷</string>
+    <string name="cleaned">クリーン済み</string>
+    <string name="cleared">クリア済み</string>
+    <string name="media_deleted">メディアを削除しました！</string>
+    <string name="jotting">メモ</string>
+    <string name="appwidget_text">サンプル</string>
+    <string name="add_widget">ウィジェットを追加</string>
+    <string name="app_widget_description">これはアプリウィジェットの説明です</string>
+    <string name="quick_widget_description">これはクイックウィジェットのレイアウトです</string>
+    <string name="creator_widget_description">これはクリエイターレイアウトウィジェットです</string>
+    <string name="notes_list_description">これはノートリストです</string>
+    <string name="record_deleted">レコードを削除しました！</string>
+</resources>

@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -37,6 +38,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
+import zouitel.neighborhood.logic.R
 import java.io.File
 import java.io.FileInputStream
 import java.text.SimpleDateFormat
@@ -47,10 +49,20 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
     if (path == null) return
     val context = LocalContext.current
 
-    val settingsModel = koinInject<SettingsScreenModel>()
-    val settings by remember(settingsModel, settingsModel::observe).collectAsState()
     var imageProperties by remember { mutableStateOf<ImageProperties?>(null) }
     var isLoading by remember { mutableStateOf(false) }
+
+    val somethingWrongWithFileResource = stringResource(R.string.something_wrong_with_file)
+    val fileDoesNotExistResource = stringResource(R.string.file_does_not_exist)
+    val cannotReadFileResource = stringResource(R.string.cannot_read_file)
+    val errorReadingBasicFileInfoResource = stringResource(R.string.error_reading_basic_file_info)
+    val couldNotDecodeImageDimensions = stringResource(R.string.could_not_decode_image_dimensions_or_invalid_format)
+    val errorDuringDimensionDecodingResource = stringResource(R.string.error_during_dimension_decoding)
+    val errorReadingExifDataResource = stringResource(R.string.error_reading_exif_data)
+    val couldNotRetrieveAnyInformationResource = stringResource(R.string.could_not_retrieve_any_information)
+    val securityErrorProcessingFileResource = stringResource(R.string.security_error_processing_file)
+    val anUnexpectedErrorOccurredResource = stringResource(R.string.an_unexpected_error_occurred)
+
     val uri = runCatching {
         FileProvider.getUriForFile(context, "${context.packageName}.provider", File(path))
     }.getOrElse {
@@ -77,7 +89,7 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
                         mediaName = cursor.getString(nameIndex)
                     }
                 } catch (_: Exception) {
-                    return@withContext ImageProperties(error = "Something wrong with file: $uri")
+                    return@withContext ImageProperties(error = "$somethingWrongWithFileResource: $uri")
                 }
 
                 val mediaPath =
@@ -87,11 +99,11 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
 
                 // Check if file exists
                 if (!file.exists()) {
-                    return@withContext ImageProperties(error = "File does not exist: $uri")
+                    return@withContext ImageProperties(error = "$fileDoesNotExistResource: $uri")
                 }
 
                 if (!file.canRead()) {
-                    return@withContext ImageProperties(error = "Cannot read file: $uri")
+                    return@withContext ImageProperties(error = "$cannotReadFileResource: $uri")
                 }
 
                 // --- 1. Get basic file information ---
@@ -108,7 +120,7 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
                 } catch (e: Exception) {
                     currentImageProperties = currentImageProperties.copy(
                         error = (currentImageProperties.error
-                            ?: "") + "Error reading basic file info: ${e.message}\n"
+                            ?: "") + "$errorReadingBasicFileInfoResource: ${e.message}\n"
                     )
                 }
 
@@ -130,14 +142,14 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
                             } else {
                                 currentImageProperties.copy(
                                     error = (currentImageProperties.error
-                                        ?: "") + "Could not decode image dimensions or invalid format.\n",
+                                        ?: "") + "$couldNotDecodeImageDimensions\n",
                                 )
                             }
                     }
                 } catch (e: Exception) {
                     currentImageProperties = currentImageProperties.copy(
                         error = (currentImageProperties.error
-                            ?: "") + "Error during dimension decoding: ${e.message}\n",
+                            ?: "") + "$errorDuringDimensionDecodingResource: ${e.message}\n",
                     )
                 }
 
@@ -223,7 +235,7 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
                 } catch (e: Exception) {
                     currentImageProperties = currentImageProperties.copy(
                         error = (currentImageProperties.error
-                            ?: "") + "Error reading EXIF data: ${e.message}\n"
+                            ?: "") + "$errorReadingExifDataResource: ${e.message}\n"
                     )
                 }
 
@@ -241,15 +253,15 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
 
                 if (!hasUsefulInfo && currentImageProperties.error.isNullOrEmpty()) {
                     currentImageProperties = currentImageProperties.copy(
-                        error = "Could not retrieve any information for this image file."
+                        error = couldNotRetrieveAnyInformationResource
                     )
                 }
 
                 currentImageProperties
             } catch (e: SecurityException) {
-                ImageProperties(error = "Security error processing file: ${e.message}")
+                ImageProperties(error = "$securityErrorProcessingFileResource: ${e.message}")
             } catch (e: Exception) {
-                ImageProperties(error = "An unexpected error occurred: ${e.message}")
+                ImageProperties(error = "$anUnexpectedErrorOccurredResource: ${e.message}")
             }
         }
         imageProperties = loadedInfo
@@ -261,12 +273,12 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
         Column(Modifier.padding(horizontal = 8.dp)) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                Text("Loading image info...")
+                Text("${stringResource(R.string.something_wrong_with_file)}Loading image info...")
             } else {
                 // Display error if present
                 imageProperties?.error?.let { error ->
                     if (error.isNotBlank()) {
-                        Text("Error:", fontWeight = FontWeight.Bold, color = Color.Red)
+                        Text("${stringResource(R.string.something_wrong_with_file)}Error:", fontWeight = FontWeight.Bold, color = Color.Red)
                         Text(error, color = Color.Red)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -339,9 +351,9 @@ fun ImageDetails(path: String?, onClose:() -> Unit) {
                     }
                 } ?: run {
                     if (uri != null) {
-                        Text("Could not load any information for the image file.")
+                        Text(stringResource(R.string.could_not_load_any_information))
                     } else {
-                        Text("No file path provided.")
+                        Text(stringResource(R.string.no_file_path_provided))
                     }
                 }
             }

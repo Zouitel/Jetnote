@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Notas</string>
+    <string name="screen_chat">Chat IA</string>
+    <string name="screen_tags">Tags</string>
+    <string name="screen_settings">Configurações</string>
+    <string name="screen_archive">Arquivo</string>
+    <string name="screen_about">Sobre</string>
+    <string name="screen_feedback">Feedback</string>
+    <string name="share_app">Compartilhar Este App</string>
+    <string name="label_more">mais</string>
+    <string name="label_less">menos</string>
+    <string name="msg_deleted">excluído</string>
+    <string name="action_undo">Desfazer</string>
+    <string name="tag_placeholder">Tag..</string>
+    <string name="tag_cannot_be_empty">A tag não pode estar vazia!</string>
+    <string name="archive">Arquivo</string>
+    <string name="deleted">excluído!</string>
+    <string name="erase_notes">Apagar Notas?</string>
+    <string name="confirm_erase_notes">"Todas as notas na lixeira serão excluídas permanentemente."</string>
+    <string name="search_in_notes">"Pesquisar nas notas.."</string>
+    <string name="select_layout">"Selecionar layout"</string>
+    <string name="settings">"Configurações"</string>
+    <string name="account_sync">"Sincronização de Conta"</string>
+    <string name="account_sync_description">"
+                                Ativar a sincronização com o Google Drive
+                                neste aplicativo permite que você faça
+                                backup e sincronize seus dados, como notas
+                                e configurações, de forma integrada,
+                                garantindo que suas informações estejam seguras.
+        "</string>
+    <string name="assistant_configuration">"Configuração do Assistente"</string>
+    <string name="assistant_configuration_description">"
+                                O assistente de IA é um programa de software
+                                desenvolvido com inteligência artificial
+                                para ajudá-lo em uma ampla gama de tarefas
+                                neste aplicativo.
+                                Esses assistentes entendem e respondem à
+                                linguagem natural, permitindo que você interaja
+                                com eles por meio de imagem ou texto.
+                            "</string>
+    <string name="dark_mode">"Modo Escuro"</string>
+    <string name="dark_mode_description">"
+                                Este modo é uma configuração de todo o sistema
+                                que altera o esquema de fundo da interface do
+                                seu aplicativo Android para cores mais escuras.
+                                Foi projetado para reduzir o cansaço visual,
+                                melhorar a acessibilidade, economizar bateria
+                                e aprimorar a experiência do usuário.
+                            "</string>
+    <string name="sound_effect">"Efeito Sonoro"</string>
+    <string name="sound_effect_description">"
+                                No contexto do aplicativo Jetnote,
+                                o recurso 'Efeito Sonoro' fornece feedback
+                                auditivo aos usuários ao interagirem com
+                                botões e outros elementos da interface.
+                                Esta é uma prática comum no desenvolvimento
+                                de aplicativos móveis para tornar a experiência
+                                do usuário mais interativa e envolvente.
+                            "</string>
+    <string name="layouts">"Layouts"</string>
+    <string name="layouts_description">"
+                                Os layouts são fundamentais para organizar
+                                e exibir conteúdo em seus aplicativos Android.
+                                Eles definem a estrutura e o arranjo dos
+                                elementos da interface na tela.
+                            "</string>
+    <string name="sort_notes">"Ordenar Notas"</string>
+    <string name="default_sort">"padrão"</string>
+    <string name="name_sort">"nome"</string>
+    <string name="oldest_sort">"mais antigo"</string>
+    <string name="newest_sort">"mais recente"</string>
+    <string name="priority_sort">"prioridade"</string>
+    <string name="zen_mode">"Modo Zen"</string>
+    <string name="zen_mode_description">"
+                                O modo Zen (tela cheia) é uma configuração
+                                de exibição que permite que um aplicativo
+                                ocupe toda a tela, ocultando todos os outros
+                                elementos da interface, como barras de ferramentas,
+                                menus e a barra de tarefas do sistema operacional.
+                            "</string>
+    <string name="shake">"Agitar para Reportar"</string>
+    <string name="shake_description">"
+                              É um recurso conveniente que permite aos usuários
+                              iniciar um processo de feedback ou reporte de bug
+                              simplesmente agitando fisicamente seu dispositivo Android.
+                              Em vez de navegar por vários menus para encontrar
+                              a opção 'Enviar Feedback' ou 'Reportar um Bug'.
+                            "</string>
+    <string name="block_screenshot">"Bloquear Captura de Tela"</string>
+    <string name="block_screenshot_description">"
+                                O bloqueio de captura de tela é uma medida
+                                de segurança que impede os usuários de capturar
+                                screenshots do conteúdo do seu aplicativo.
+                                Frequentemente utilizado para proteger informações
+                                sensíveis, como dados bancários, dados pessoais
+                                ou material protegido por direitos autorais.
+                            "</string>
+    <string name="lock_mode">"Modo de Bloqueio"</string>
+    <string name="lock_mode_description">"
+                                Este recurso aumenta a segurança do seu
+                                aplicativo exigindo que os usuários se
+                                autentiquem antes de acessar o conteúdo.
+                                Isso geralmente é feito usando os recursos
+                                de segurança integrados do dispositivo, como
+                                impressão digital, PIN ou padrão de desbloqueio.
+                            "</string>
+    <string name="licenses">"Licenças"</string>
+    <string name="licenses_description">"
+                                    Estas licenças estão incluídas para cumprir
+                                    os requisitos de distribuição dos respectivos
+                                    autores e para fornecer transparência sobre
+                                    a arquitetura do software.
+                                    "</string>
+    <string name="title">"Título"</string>
+    <string name="note">"Nota"</string>
+    <string name="failed_to_save_document">"Falha ao salvar o documento."</string>
+    <string name="gallery">"Galeria"</string>
+    <string name="audio">Áudio</string>
+    <string name="permission_denied">Permissão Negada!</string>
+    <string name="take_photo">Tirar Foto</string>
+    <string name="video_capture">Gravar Vídeo</string>
+    <string name="recorder">Gravador</string>
+    <string name="document">Documento</string>
+    <string name="scanner">Scanner</string>
+    <string name="tasks">Tarefas</string>
+    <string name="tags">Tags</string>
+    <string name="reminder">Lembrete</string>
+    <string name="priority">Prioridade</string>
+    <string name="low_priority">Baixa</string>
+    <string name="medium_priority">Média</string>
+    <string name="high_priority">Alta</string>
+    <string name="urgent_priority">Urgente</string>
+    <string name="non_priority">Nenhuma</string>
+    <string name="created">Criado</string>
+    <string name="edited">Editado</string>
+    <string name="types">Tipos</string>
+    <string name="media">Mídia</string>
+    <string name="medias">Mídias</string>
+    <string name="colour">Cor</string>
+    <string name="colours">Cores</string>
+    <string name="search_within">Pesquisar em</string>
+    <string name="issue_title">Título do Problema*</string>
+    <string name="issue_description">Descrição do Problema (Opcional)</string>
+    <string name="noAccount">Entrar sem Conta</string>
+    <string name="screenshot_selected">✓ Captura de tela selecionada</string>
+    <string name="drive_submit">Será enviado ao Drive ao submeter</string>
+    <string name="select_screenshot">Selecionar uma captura de tela</string>
+    <string name="system_logs">Incluir logs do sistema?</string>
+    <string name="find_an_issue">Encontrou algum problema?</string>
+    <string name="take_a_screenshot">Não se esqueça de tirar uma captura de tela.</string>
+    <string name="report_an_issue">Reportar um problema!</string>
+    <string name="bug">Bug</string>
+    <string name="logs_title">\\uD83D\\uDCiE Logs do Sistema Android (Logcat) em um Relatório de Feedback</string>
+    <string name="logs_description">Os logs do sistema Android são um fluxo de mensagens com carimbo de data/hora do sistema operacional e do kernel.\n    | Quando um usuário encontra um problema (como travamento, congelamento ou comportamento inesperado de um app), os logs registram os eventos que antecederam e incluíram o problema, fornecendo aos desenvolvedores o contexto necessário para o diagnóstico.</string>
+    <string name="label_bug">Bug</string>
+    <string name="label_feature">Funcionalidade</string>
+    <string name="label_invalid">Inválido</string>
+    <string name="label_question">Pergunta</string>
+    <string name="label_security">Segurança</string>
+    <string name="failed">Falhou</string>
+    <string name="submit_feedback">Enviar Feedback!</string>
+    <string name="uploading_screenshot">Enviando captura de tela…</string>
+    <string name="creating_github_issue">Criando issue no GitHub…</string>
+    <string name="upload_faild">Falha no envio…</string>
+    <string name="upload_failed">Falha no envio…</string>
+    <string name="issue_crea">Issue criada.</string>
+    <string name="issue_created">Issue criada!</string>
+    <string name="log_out">Sair</string>
+    <string name="hi">Olá</string>
+    <string name="add_account">Adicionar Outra Conta</string>
+    <string name="manage_account">Gerenciar Conta</string>
+    <string name="upload_data">Enviar Dados</string>
+    <string name="download_data">Baixar Dados</string>
+    <string name="firebase_authentication_failed">Falha na autenticação do Firebase</string>
+    <string name="sign_in_failed">Falha no login com o Google</string>
+    <string name="please_wait">Entrando, por favor aguarde…</string>
+    <string name="sync_title">Entre para Sincronizar</string>
+    <string name="sync_description">Entre com sua conta do Google para fazer backup e sincronizar suas notas em todos os seus dispositivos.</string>
+    <string name="current_account">Conta Atual</string>
+    <string name="no_name">Sem Nome</string>
+    <string name="no_email">Sem E-mail</string>
+    <string name="sign_out">Sair</string>
+    <string name="sign_in_with_google">Entrar com o Google</string>
+    <string name="ai_models">Modelos de IA</string>
+    <string name="load_more">Carregar Mais</string>
+    <string name="available_models">Modelos Disponíveis</string>
+    <string name="assistant_settings">Configurações do Assistente</string>
+    <string name="learning_mode">Modo de Aprendizado</string>
+    <string name="learning_mode_description">"
+                    Prever uma saída para dados novos e não vistos
+                    com base nos padrões aprendidos a partir dos
+                    exemplos rotulados.
+                "</string>
+    <string name="temperat">Temperatura</string>
+    <string name="temperature">Temperatura</string>
+    <string name="temperature_description">"
+           Controla a aleatoriedade da saída.
+           Valores mais altos resultam em respostas mais criativas.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Controla quais tokens são considerados para
+            a saída.
+            </string>
+    <string name="context_message_size">Tamanho do Contexto de Mensagem</string>
+    <string name="context_message_size_description">
+            Número máximo de mensagens anteriores
+            a incluir no contexto.
+        </string>
+    <string name="stream_output">Saída em stream</string>
+    <string name="stream_output_description">Exibe a resposta enquanto está sendo gerada.</string>
+    <string name="thinking_budget">Orçamento de raciocínio</string>
+    <string name="thinking_budget_description">
+                            Limita os recursos computacionais usados
+                            para a resposta.
+                        </string>
+    <string name="system_prompt">Prompt do sistema</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Propriedades</string>
+    <string name="quick_messages">Mensagens rápidas</string>
+    <string name="quick_messages_description">Configure atalhos de mensagens rápidas.</string>
+    <string name="regular_expressions">Expressões regulares</string>
+    <string name="regular_expressions_description">
+                            Defina padrões regex para transformar
+                            mensagens antes de enviar/receber.
+                        </string>
+    <string name="headers">Cabeçalhos</string>
+    <string name="headers_description">
+                            São pares chave-valor (chave: valor)
+                            adicionados ao bloco de cabeçalho da requisição.
+                            Normalmente usados para fornecer autenticação
+                            (como chaves de API ou tokens), especificar o
+                            tipo de conteúdo ou transmitir metadados sobre
+                            a requisição ou o cliente.
+                        </string>
+    <string name="bodies">Corpo</string>
+    <string name="bodies_description">
+                            Refere-se ao payload de dados (estrutura JSON
+                            de chave: valor) enviado dentro da própria requisição.
+                            É o principal meio de enviar entradas ao modelo de IA.
+                            Essas personalizações são normalmente usadas para
+                            adicionar itens específicos.
+                        </string>
+    <string name="memory">Memória</string>
+    <string name="memory_description">
+                            Permite que o assistente lembre os turnos
+                            anteriores da conversa.
+                        </string>
+    <string name="chats_reference">Referência de Chats Recentes</string>
+    <string name="chats_reference_description">
+                        Referencia dados dos seus chats recentes para
+                        respostas mais contextuais.
+                        </string>
+    <string name="javascript">Motor JavaScript</string>
+    <string name="javascript_description">
+                            Execute código JavaScript com o motor QuickJS
+                            para cálculos e scripts.
+                        </string>
+    <string name="reset">Redefinir Configurações!</string>
+    <string name="providers">Provedores</string>
+    <string name="ask">Perguntar</string>
+    <string name="add_model"><![CDATA[<- Adicionar modelo de IA]]></string>
+    <string name="delete">Excluir</string>
+    <string name="options">Opções</string>
+    <string name="retitle">Renomear</string>
+    <string name="assistant">Assistente</string>
+    <string name="new_chat">Novo Chat</string>
+    <string name="files">Arquivos</string>
+    <string name="audios">Áudios</string>
+    <string name="videos">Vídeos</string>
+    <string name="camera">Câmera</string>
+    <string name="pictures">Imagens</string>
+    <string name="provider_settings">Configurações do Provedor</string>
+    <string name="api_key">Chave de API</string>
+    <string name="base_url">URL Base</string>
+    <string name="model_name">Nome do Modelo</string>
+    <string name="modalities">Modalidades</string>
+    <string name="tools">Ferramentas</string>
+    <string name="reasoning">Raciocínio</string>
+    <string name="respo">API de Resposta</string>
+    <string name="response_api">API de Resposta</string>
+    <string name="account_balance">Saldo da Conta</string>
+    <string name="api_path">Caminho da API..</string>
+    <string name="json_key">Chave Json..</string>
+    <string name="network_proxy">Proxy de Rede</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Usuário (Opcional)..</string>
+    <string name="pass_option">Senha (Opcional)..</string>
+    <string name="service_account">Conta de serviço @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Chave privada..</string>
+    <string name="location">Localização..</string>
+    <string name="project_uid">UID do Projeto..</string>
+    <string name="details">Detalhes</string>
+    <string name="model_type">Tipo de Modelo</string>
+    <string name="input_modalities">Modalidades de Entrada</string>
+    <string name="output_modalities">Modalidades de Saída</string>
+    <string name="abilities">Capacidades</string>
+    <string name="provider_override">Adicionar substituição de provedor</string>
+    <string name="provider_override_description">
+                            Configure configurações de provedor personalizadas
+                            para este modelo específico.
+                            Utiliza propriedades comuns do provedor
+                            principal do modelo.
+                        </string>
+    <string name="build_tools">Ferramentas de Build</string>
+    <string name="build_tools_description">
+                            Essas ferramentas são fornecidas diretamente
+                            pela API sem necessidade de suporte do app.
+                            Este recurso é suportado apenas pela API do Gemini
+                            no momento.
+                        </string>
+    <string name="google_search">Pesquisar</string>
+    <string name="google_search_description">Ativar integração com o Google Search</string>
+    <string name="url_context">Contexto de URL</string>
+    <string name="url_context_description">Ativar processamento de contexto de URL</string>
+    <string name="find">Encontrar</string>
+    <string name="replace">Substituir</string>
+    <string name="effecting_scopes">Escopos de aplicação</string>
+    <string name="user">usuário</string>
+    <string name="visual_only">somente visual</string>
+    <string name="body">Corpo</string>
+    <string name="key">chave</string>
+    <string name="value">Valor</string>
+    <string name="header">Cabeçalho.</string>
+    <string name="reset_description">Redefinir as configurações do assistente para o modo padrão.</string>
+    <string name="save_changes">Salvar alterações?</string>
+    <string name="save_changes_description">Você tem alterações não salvas. Deseja salvá-las antes de sair?</string>
+    <string name="dont_save">Não Salvar</string>
+    <string name="save">Salvar</string>
+    <string name="links">Links</string>
+    <string name="reminders">Lembretes</string>
+    <string name="priorities">Prioridades</string>
+    <string name="ai_chat">Chat IA</string>
+    <string name="auto">automático</string>
+    <string name="light">leve</string>
+    <string name="medium">médio</string>
+    <string name="heavy">pesado</string>
+    <string name="date">data</string>
+    <string name="time">hora</string>
+    <string name="date_and_time">data e hora</string>
+    <string name="local">local</string>
+    <string name="timezone">fuso horário</string>
+    <string name="system_version">versão do sistema</string>
+    <string name="device_info">informações do dispositivo</string>
+    <string name="battery_level">nível de bateria</string>
+    <string name="insert">Inserir</string>
+    <string name="confirm">Confirmar</string>
+    <string name="message">Mensagem</string>
+    <string name="content">Conteúdo</string>
+    <string name="today">Hoje</string>
+    <string name="tomorrow">Amanhã</string>
+    <string name="according_to_timing">De acordo com o horário</string>
+    <string name="untitled">Sem título</string>
+    <string name="hue">Matiz</string>
+    <string name="saturation">Saturação</string>
+    <string name="brightness">Brilho</string>
+    <string name="shades">Tons</string>
+    <string name="complementary">Complementar</string>
+    <string name="task_placeholder">Tarefa..</string>
+    <string name="task_cannot_be_empty">A tarefa não pode estar vazia!</string>
+    <string name="of">de</string>
+    <string name="something_wrong_with_file">Algo errado com o arquivo</string>
+    <string name="could_not_load_any_information">Não foi possível carregar informações do arquivo de mídia.</string>
+    <string name="no_file_path_provided">Nenhum caminho de arquivo fornecido.</string>
+    <string name="security_error_processing_file">Erro de segurança ao processar o arquivo</string>
+    <string name="an_unexpected_error_occurred">Ocorreu um erro inesperado</string>
+    <string name="could_not_retrieve_any_information">Não foi possível recuperar informações deste arquivo de vídeo.</string>
+    <string name="error_reading_metadata">Erro ao ler metadados de mídia</string>
+    <string name="could_not_read_exif_data">Não foi possível ler dados EXIF</string>
+    <string name="error_reading_basic_file_info">Erro ao ler informações básicas do arquivo</string>
+    <string name="file_does_not_exist">O arquivo não existe</string>
+    <string name="error">Erro</string>
+    <string name="loading_media_info">Carregando informações de mídia…</string>
+    <string name="no_metadata_available_for_this_document">Nenhum metadado disponível para este documento.</string>
+    <string name="could_not_read_pdf_metadata">Não foi possível ler os metadados do PDF</string>
+    <string name="cannot_read_file">Não é possível ler o arquivo</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Não foi possível decodificar as dimensões da imagem ou formato inválido.</string>
+    <string name="error_during_dimension_decoding">Erro durante a decodificação das dimensões</string>
+    <string name="error_reading_exif_data">Erro ao ler dados EXIF</string>
+    <string name="duplicate">Duplicar</string>
+    <string name="send">Enviar</string>
+    <string name="print">Imprimir</string>
+    <string name="cleaned">Limpo</string>
+    <string name="cleared">Apagado</string>
+    <string name="media_deleted">mídia excluída!</string>
+    <string name="jotting">Anotando</string>
+    <string name="appwidget_text">EXEMPLO</string>
+    <string name="add_widget">Adicionar widget</string>
+    <string name="app_widget_description">Esta é uma descrição do widget do app</string>
+    <string name="quick_widget_description">Este é um layout de widget rápido</string>
+    <string name="creator_widget_description">Este é um widget de layout criador</string>
+    <string name="notes_list_description">Esta é uma lista de notas</string>
+    <string name="record_deleted">registro excluído!</string>
+</resources>

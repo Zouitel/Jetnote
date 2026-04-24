@@ -37,11 +37,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.ui.CommonBottomSheet
@@ -81,6 +83,8 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
         val fieldState = rememberTextFieldState(uiState.currentLabel)
         val focusRequester by lazy { FocusRequester() }
         val scope = rememberCoroutineScope()
+        val tagResource = stringResource(zouitel.neighborhood.logic.R.string.tag_placeholder)
+        val tagCannotBeEmptyResource = stringResource(zouitel.neighborhood.logic.R.string.tag_cannot_be_empty)
         var placeholder by remember { mutableStateOf("Tag..") }
 
         LaunchedEffect(Unit) {
@@ -186,10 +190,10 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
                         val inputTag = fieldState.text.toString().trim()
 
                         if (inputTag.isEmpty()) {
-                            placeholder = "Tag cannot be empty!"
+                            placeholder = tagCannotBeEmptyResource
                             scope.launch {
-                                kotlinx.coroutines.delay(3000)
-                                placeholder = "Tag.."
+                                delay(3000)
+                                placeholder = tagResource
                             }
                         } else {
                             tagModel.sendAction(

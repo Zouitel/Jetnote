@@ -242,7 +242,9 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
         val snackbarState = remember { SnackbarHostState() }
         val jobCounter = remember { mutableIntStateOf(0) }
         val deletedChat = remember { mutableStateListOf<Pair<Conversation, Int>>() }
-        val showModelSwitcher = remember { mutableStateOf(false) }   // NEW
+        val showModelSwitcher = remember { mutableStateOf(false) }
+        val clearedResource = stringResource(R.string.cleared)
+        val undoResource = stringResource(R.string.action_undo)
 
         // Load model logo
         LaunchedEffect(model) {
@@ -363,8 +365,8 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                                 scope.launch {
                                     snackbarState.currentSnackbarData?.dismiss()
                                     val result = snackbarState.showSnackbar(
-                                        message = "${conversation?.title?.ifBlank { "Chat" }} cleared",
-                                        actionLabel = "Undo",
+                                        message = "${conversation?.title?.ifBlank { "Chat" }} $clearedResource",
+                                        actionLabel = undoResource,
                                         duration = SnackbarDuration.Long
                                     )
 
@@ -458,8 +460,6 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                             }
                         },
                         {
-//                            navigator?.push(ModelsScreen())
-//                            modelsSheet.value = true
                             navigator?.push(ProvidersScreen())
                         },
                         {

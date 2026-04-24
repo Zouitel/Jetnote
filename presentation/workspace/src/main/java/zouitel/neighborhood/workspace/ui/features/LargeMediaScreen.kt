@@ -47,6 +47,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -59,6 +60,7 @@ import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.launch
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.print.printDocumentFromUri
 import zouitel.neighborhood.print.printImageFromUri
 import zouitel.neighborhood.ui.CommonIcons.MENU_DOTS
@@ -101,10 +103,9 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
 
         var imageDetailsSheet by remember { mutableStateOf(false) }
         var videoDetailsSheet by remember { mutableStateOf(false) }
-        var documentDetailsSheet by remember { mutableStateOf(false) }  // ← new
-
-        val currentMedia = data.value.medias.getOrNull(pagerState.currentPage)
-        val isCurrentDocument = currentMedia?.type == MediaType.DOCUMENT
+        var documentDetailsSheet by remember { mutableStateOf(false) }
+        val mediaDeletedResource = stringResource(R.string.media_deleted)
+        val undoResource = stringResource(R.string.action_undo)
 
         Scaffold(
             snackbarHost = {
@@ -123,8 +124,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .reportable(settings.isShakable)
                 .cloudy(
-                    enabled = imageDetailsSheet || videoDetailsSheet ||
-                            menuExpanded.value || documentDetailsSheet   // ← added
+                    enabled = imageDetailsSheet || videoDetailsSheet || menuExpanded.value || documentDetailsSheet
                 )
                 .background(
                     try {
@@ -138,7 +138,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                 TopAppBar(
                     navigationIcon = {
                         Text(
-                            text = "${pagerState.currentPage.inc()} of ${pagerState.pageCount}",
+                            text = "${pagerState.currentPage.inc()} ${stringResource(R.string.of)} ${pagerState.pageCount}",
                             fontSize = 19.sp,
                             modifier = Modifier.padding(20.dp)
                         )
@@ -193,7 +193,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 scope.launch {
                                     snackbarState.currentSnackbarData?.dismiss()
                                     val result = snackbarState.showSnackbar(
-                                        "media deleted", "Undo", true, SnackbarDuration.Long
+                                        mediaDeletedResource, undoResource, true, SnackbarDuration.Long
                                     )
                                     if (result == SnackbarResult.ActionPerformed) {
                                         data.value = data.value.copy(
@@ -220,15 +220,13 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                         .fillMaxSize()
                         .padding(paddingValues)
                         .pointerInput(Unit) {
-                            // Swipe up → details sheet for every media type, including documents.
-                            // Swipe down → dismiss LargeMediaScreen.
                             detectVerticalDragGestures { change, dragAmount ->
                                 change.consume()
                                 if (dragAmount < -20) {
                                     when (data.value.medias.getOrNull(pagerState.currentPage)?.type) {
                                         MediaType.VIDEO -> videoDetailsSheet = true
                                         MediaType.IMAGE -> imageDetailsSheet = true
-                                        MediaType.DOCUMENT -> documentDetailsSheet = true  // ← new
+                                        MediaType.DOCUMENT -> documentDetailsSheet = true
                                         null -> Unit
                                     }
                                 }

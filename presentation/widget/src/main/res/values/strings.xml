@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
-    <string name="quick_widget_description">This is a quick widget layout</string>
-    <string name="creator_widget_description">This is creator layout widget</string>
-    <string name="notes_list_description">This is a notes list</string>
-</resources>

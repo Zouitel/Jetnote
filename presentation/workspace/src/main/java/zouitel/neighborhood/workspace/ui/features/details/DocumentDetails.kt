@@ -23,12 +23,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.artifex.mupdf.fitz.Document
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.SettingsScreenModel
 import java.io.File
@@ -52,12 +54,13 @@ import java.util.Locale
 fun DocumentDetails(path: String?, onClose: () -> Unit) {
     if (path == null) return
 
-    val settingsModel = koinInject<SettingsScreenModel>()
-    val settings by remember(settingsModel, settingsModel::observe).collectAsState()
-
     var docProperties by remember { mutableStateOf<DocumentProperties?>(null) }
     var isLoading     by remember { mutableStateOf(false) }
 
+    val fileDoesNotExistResource = stringResource(R.string.file_does_not_exist)
+    val couldNotReadPdfMetadataResource = stringResource(R.string.could_not_read_pdf_metadata)
+    val securityErrorProcessingFileResource = stringResource(R.string.security_error_processing_file)
+    val anUnexpectedErrorOccurredResource = stringResource(R.string.an_unexpected_error_occurred)
     // ── Load all metadata on IO ───────────────────────────────────────────────
     LaunchedEffect(path) {
         isLoading     = true
@@ -71,7 +74,7 @@ fun DocumentDetails(path: String?, onClose: () -> Unit) {
 
                 if (!file.exists()) {
                     return@withContext DocumentProperties(
-                        error = "File does not exist: $path"
+                        error = "$fileDoesNotExistResource: $path"
                     )
                 }
 
@@ -118,14 +121,14 @@ fun DocumentDetails(path: String?, onClose: () -> Unit) {
                     // We still have the basic file info, so this is non-fatal.
                     props = props.copy(
                         error = if (mime?.contains("pdf") == true)
-                            "Could not read PDF metadata: ${e.message}" else null
+                            "$couldNotReadPdfMetadataResource: ${e.message}" else null
                     )
                 }
 
             } catch (e: SecurityException) {
-                props = props.copy(error = "Security error: ${e.message}")
+                props = props.copy(error = "$securityErrorProcessingFileResource: ${e.message}")
             } catch (e: Exception) {
-                props = props.copy(error = "Unexpected error: ${e.message}")
+                props = props.copy(error = "$anUnexpectedErrorOccurredResource: ${e.message}")
             }
 
             props
@@ -144,12 +147,12 @@ fun DocumentDetails(path: String?, onClose: () -> Unit) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
-                    Text("Loading document info…")
+                    Text(stringResource(R.string.loading_media_info))
                 }
 
                 docProperties?.error != null && !docProperties!!.isValidInfo -> {
                     // Fatal error — nothing useful to show
-                    Text("Error:", fontWeight = FontWeight.Bold, color = Color.Red)
+                    Text(stringResource(R.string.error), fontWeight = FontWeight.Bold, color = Color.Red)
                     Text(docProperties!!.error!!, color = Color.Red)
                 }
 
@@ -158,7 +161,7 @@ fun DocumentDetails(path: String?, onClose: () -> Unit) {
 
                     // ── Non-fatal error banner ────────────────────────────────
                     if (!props.error.isNullOrBlank()) {
-                        Text("Note:", fontWeight = FontWeight.Bold, color = Color.Red)
+                        Text("${stringResource(R.string.something_wrong_with_file)}Note:", fontWeight = FontWeight.Bold, color = Color.Red)
                         Text(props.error, color = Color.Red)
                         Spacer(Modifier.height(8.dp))
                     }
@@ -214,13 +217,11 @@ fun DocumentDetails(path: String?, onClose: () -> Unit) {
                             )
                         }
                     } else {
-                        Text("No metadata available for this document.")
+                        Text(stringResource(R.string.no_metadata_available_for_this_document))
                     }
                 }
-
-                else -> Text("No file path provided.")
+                else -> Text(stringResource(R.string.no_file_path_provided))
             }
-
             Spacer(Modifier.height(16.dp))
         }
     }

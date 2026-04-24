@@ -118,6 +118,8 @@ fun NavigationDrawer(
     val deletedChats = remember { mutableStateListOf<Pair<Conversation, Int>>() }
     val deletedTags = remember { mutableStateListOf<Pair<Tag, Int>>() }
     val (lazyListState, height) = rememberAutoHeightCacheLazyList()
+    val deletedResource = stringResource(R.string.delete)
+    val undoResource = stringResource(R.string.action_undo)
 
     // Get current screen from navigator and map to AppScreen
     val currentScreenFromNavigator by remember {
@@ -336,8 +338,8 @@ fun NavigationDrawer(
                                             scope.launch {
                                                 snackbarState.currentSnackbarData?.dismiss()
                                                 val result = snackbarState.showSnackbar(
-                                                    message = "${chatPair?.first?.title} deleted",
-                                                    actionLabel = "Undo",
+                                                    message = "${chatPair?.first?.title} $deletedResource",
+                                                    actionLabel = undoResource,
                                                     duration = SnackbarDuration.Long
                                                 )
 
@@ -494,8 +496,8 @@ fun NavigationDrawer(
                                             scope.launch {
                                                 snackbarState.currentSnackbarData?.dismiss()
                                                 val result = snackbarState.showSnackbar(
-                                                    message = "${tagPair?.first?.label} deleted",
-                                                    actionLabel = "Undo",
+                                                    message = "${tagPair?.first?.label} $deletedResource",
+                                                    actionLabel = undoResource,
                                                     duration = SnackbarDuration.Long
                                                 )
 

@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -37,6 +38,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
+import zouitel.neighborhood.logic.R
 import java.io.File
 import java.io.FileInputStream
 import java.text.SimpleDateFormat
@@ -48,10 +50,18 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
     if (path == null) return
     val context = LocalContext.current
 
-    val settingsModel = koinInject<SettingsScreenModel>()
-    val settings by remember(settingsModel, settingsModel::observe).collectAsState()
     var videoProperties by remember { mutableStateOf<VideoProperties?>(null) }
     var isLoading by remember { mutableStateOf(false) }
+
+    val somethingWrongWithFileResource = stringResource(R.string.something_wrong_with_file)
+    val fileDoesNotExistResource = stringResource(R.string.file_does_not_exist)
+    val errorReadingBasicFileInfoResource = stringResource(R.string.error_reading_basic_file_info)
+    val couldNotReadExifDataResource = stringResource(R.string.could_not_read_exif_data)
+    val errorReadingMetadataResource = stringResource(R.string.error_reading_metadata)
+    val couldNotRetrieveAnyInformationResource = stringResource(R.string.could_not_retrieve_any_information)
+    val securityErrorProcessingFileResource = stringResource(R.string.security_error_processing_file)
+    val anUnexpectedErrorOccurredResource = stringResource(R.string.an_unexpected_error_occurred)
+
     val uri = runCatching {
         FileProvider.getUriForFile(context, "${context.packageName}.provider", File(path))
     }.getOrElse {
@@ -78,7 +88,7 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
                         mediaName = cursor.getString(nameIndex)
                     }
                 } catch (_: Exception) {
-                    return@withContext VideoProperties(error = "Something wrong with file: $uri")
+                    return@withContext VideoProperties(error = "$somethingWrongWithFileResource: $uri")
                 }
 
                 val mediaPath = Environment.DIRECTORY_MOVIES?.let { context.getExternalFilesDir(it) }
@@ -87,7 +97,7 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
 
                 // Check if file exists
                 if (!file.exists()) {
-                    return@withContext VideoProperties(error = "File does not exist: $uri",)
+                    return@withContext VideoProperties(error = "$fileDoesNotExistResource: $uri")
                 }
 
                 if (!file.canRead()) {
@@ -104,8 +114,7 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
                     )
                 } catch (e: Exception) {
                     currentVideoProperties = currentVideoProperties.copy(
-                        error = (currentVideoProperties.error ?: "") + "Error reading basic file info: ${e.message}\n",
-                    )
+                        error = (currentVideoProperties.error ?: "") + "$errorReadingBasicFileInfoResource: ${e.message}\n")
                 }
 
                 // --- 2. Get EXIF NotificationData using ExifInterface ---
@@ -132,7 +141,7 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
                 } catch (e: Exception) {
                     // EXIF reading might fail for many video files, this is normal
                     currentVideoProperties = currentVideoProperties.copy(
-                        error = (currentVideoProperties.error ?: "") + "Could not read EXIF data (normal for most video files): ${e.message}\n",
+                        error = (currentVideoProperties.error ?: "") + "$couldNotReadExifDataResource: ${e.message}\n",
                     )
                 }
 
@@ -169,7 +178,7 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
                     retriever.release()
                 } catch (e: Exception) {
                     currentVideoProperties = currentVideoProperties.copy(
-                        error = (currentVideoProperties.error ?: "") + "Error reading video metadata: ${e.message}\n",
+                        error = (currentVideoProperties.error ?: "") + "$errorReadingMetadataResource: ${e.message}\n",
                     )
                 }
 
@@ -190,16 +199,16 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
 
                 if (!hasUsefulInfo && currentVideoProperties.error.isNullOrEmpty()) {
                     currentVideoProperties = currentVideoProperties.copy(
-                        error = "Could not retrieve any information for this video file.",
+                        error = couldNotRetrieveAnyInformationResource
                     )
                 }
 
                 currentVideoProperties
 
             } catch (e: SecurityException) {
-                VideoProperties(error = "Security error processing file: ${e.message}",)
+                VideoProperties(error = "$securityErrorProcessingFileResource: ${e.message}")
             } catch (e: Exception) {
-                VideoProperties(error = "An unexpected error occurred: ${e.message}",)
+                VideoProperties(error = "$anUnexpectedErrorOccurredResource: ${e.message}")
             }
         }
         videoProperties = loadedInfo
@@ -211,12 +220,12 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
         Column(Modifier.padding(horizontal = 8.dp)) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                Text("Loading video info...")
+                Text(stringResource(R.string.loading_media_info))
             } else {
                 // Display error if present
                 videoProperties?.error?.let { error ->
                     if (error.isNotBlank()) {
-                        Text("Error:", fontWeight = FontWeight.Bold, color = Color.Red)
+                        Text("${stringResource(R.string.error)}:", fontWeight = FontWeight.Bold, color = Color.Red)
                         Text(error, color = Color.Red)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -282,9 +291,9 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
                     }
                 } ?: run {
                     if (uri != null) {
-                        Text("Could not load any information for the video file.")
+                        Text(stringResource(R.string.could_not_load_any_information))
                     } else {
-                        Text("No file path provided.")
+                        Text(stringResource(R.string.no_file_path_provided))
                     }
                 }
             }

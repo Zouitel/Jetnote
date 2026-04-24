@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import androidx.core.graphics.drawable.IconCompat
 import zouitel.neighborhood.jotting.JottingActivity
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonIcons
 
 fun quickPhoto(context: Context): ShortcutInfo {
@@ -12,8 +13,8 @@ fun quickPhoto(context: Context): ShortcutInfo {
     intent.action = Intent.ACTION_VIEW
     intent.putExtra("quick_photo", true)
     return ShortcutInfo.Builder(context, "photo")
-        .setShortLabel("Quick Photo")
-        .setLongLabel("Quick Photo")
+        .setShortLabel(context.getString(R.string.take_photo))
+        .setLongLabel(context.getString(R.string.take_photo))
         .setIcon(IconCompat.createWithResource(context, CommonIcons.CAMERA).toIcon(context))
         .setIntent(intent)
         .build()

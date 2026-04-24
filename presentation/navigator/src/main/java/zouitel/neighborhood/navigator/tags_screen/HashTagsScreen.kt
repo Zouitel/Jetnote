@@ -64,9 +64,11 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -120,6 +122,7 @@ class HashTagsScreen: Screen {
     ) {
         val keyboardManager = LocalFocusManager.current
         val bottomNav = LocalBottomSheetNavigator.current
+        val haptic = LocalHapticFeedback.current
 
         val uiState by remember(tagModel, tagModel::uiState).collectAsState()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -239,6 +242,7 @@ class HashTagsScreen: Screen {
                                     val inputTag = textFieldState.text.toString().trim()
 
                                     if (inputTag.isEmpty()) {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                         placeholderText = tagCannotBeEmptyResource
                                         scope.launch {
                                             delay(3000)

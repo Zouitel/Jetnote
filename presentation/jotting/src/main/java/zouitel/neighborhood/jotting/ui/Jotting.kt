@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import zouitel.neighborhood.audio.model.Audio
@@ -78,6 +79,7 @@ import dev.icerock.moko.permissions.camera.CAMERA
 import dev.icerock.moko.permissions.microphone.RECORD_AUDIO
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.getAverageColorFromImage
 import java.io.File
 import kotlin.random.Random
@@ -131,6 +133,12 @@ fun Jotting(
     val textColor = contentColorFor(MaterialTheme.colorScheme.surface).toArgb()
     val textColorState = rememberSaveable { mutableIntStateOf(textColor) }
 
+    val permissionDeniedResource = stringResource(R.string.permission_denied)
+    val untitledResource = stringResource(R.string.untitled)
+    val mediaDeletedResource = stringResource(R.string.media_deleted)
+    val recordDeletedResource = stringResource(R.string.record_deleted)
+    val undoResource = stringResource(R.string.action_undo)
+
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(200)
         focus.requestFocus()
@@ -159,7 +167,7 @@ fun Jotting(
             Screens.RECORD_SCREEN -> {
                 permissionsModel.requestPermission(Permission.RECORD_AUDIO).collect {
                     when (it) {
-                        PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                        PermissionResult.Denied -> Toast.makeText(context, permissionDeniedResource, Toast.LENGTH_SHORT).show()
                         is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                         PermissionResult.Granted -> showRecorderSheet.value = true
                         PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
@@ -170,7 +178,7 @@ fun Jotting(
                 scope.launch {
                     permissionsModel.requestPermission(Permission.CAMERA).collect {
                         when (it) {
-                            PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                            PermissionResult.Denied -> Toast.makeText(context, permissionDeniedResource, Toast.LENGTH_SHORT).show()
                             is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                             PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
                             PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
@@ -214,13 +222,13 @@ fun Jotting(
                     scope.launch {
                         snackBarHostState.currentSnackbarData?.dismiss()
                         val result = snackBarHostState.showSnackbar(
-                            message = "media deleted",
-                            actionLabel = "Undo",
+                            message = mediaDeletedResource,
+                            actionLabel = undoResource,
                             duration = SnackbarDuration.Long
                         )
                         if (result == SnackbarResult.ActionPerformed) {
                             data.value = data.value.copy(
-                                medias = data.value.medias.plusElement(mediaPair!!.first)
+                                medias = data.value.medias.plusElement(mediaPair.first)
                             )
                         }
                         deletedMedias.remove(mediaPair)
@@ -240,7 +248,7 @@ fun Jotting(
                         CommonTextField(
                             state = descriptionState,
                             modifier = Modifier.focusRequester(focus),
-                            placeholder = "Note",
+                            placeholder = stringResource(R.string.note),
                             textColor = MaterialTheme.colorScheme.onSurface
                         ) {
                             workplaceModel.handleContentReceiver(data, it)
@@ -260,13 +268,13 @@ fun Jotting(
                             scope.launch {
                                 snackBarHostState.currentSnackbarData?.dismiss()
                                 val result = snackBarHostState.showSnackbar(
-                                    message = "record deleted",
-                                    actionLabel = "Undo",
+                                    message = recordDeletedResource,
+                                    actionLabel = undoResource,
                                     duration = SnackbarDuration.Long
                                 )
                                 if (result == SnackbarResult.ActionPerformed) {
                                     data.value = data.value.copy(
-                                        audios = data.value.audios.plusElement(audioPair!!.first)
+                                        audios = data.value.audios.plusElement(audioPair.first)
                                     )
                                 }
                                 deletedAudios.remove(audioPair)
@@ -299,7 +307,7 @@ fun Jotting(
                                 keyboard?.hide()
                                 permissionsModel.requestPermission(Permission.RECORD_AUDIO).collect {
                                     when (it) {
-                                        PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                        PermissionResult.Denied -> Toast.makeText(context, permissionDeniedResource, Toast.LENGTH_SHORT).show()
                                         is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                                         PermissionResult.Granted -> showRecorderSheet.value = true
                                         PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
@@ -319,7 +327,7 @@ fun Jotting(
                             scope.launch {
                                 permissionsModel.requestPermission(Permission.CAMERA).collect {
                                     when (it) {
-                                        PermissionResult.Denied -> Toast.makeText(context, "Permission is Denied!", Toast.LENGTH_SHORT).show()
+                                        PermissionResult.Denied -> Toast.makeText(context, permissionDeniedResource, Toast.LENGTH_SHORT).show()
                                         is PermissionResult.Error -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                                         PermissionResult.Granted -> cameraLauncher.launch(getPictureUri())
                                         PermissionResult.PermanentlyDenied -> permissionsModel.permissionDeniedHandle(snackBarHostState)
@@ -340,7 +348,7 @@ fun Jotting(
                                 Action.Insert(
                                     data.value.copy(
                                         uid = data.value.uid,
-                                        title = "Untitled",
+                                        title = untitledResource,
                                         description = descriptionState.text.toString(),
                                         background = backgroundColorState.intValue,
                                         textColor = textColorState.intValue

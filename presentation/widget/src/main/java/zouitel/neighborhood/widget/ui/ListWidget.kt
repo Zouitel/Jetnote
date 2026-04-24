@@ -116,13 +116,13 @@ class ListWidget: GlanceAppWidget(), Screen {
                     fontSize = 18.sp,
                 ),
                 maxLines = 1,
-                modifier = GlanceModifier.Companion.padding(7.dp)
+                modifier = GlanceModifier.padding(7.dp)
             )
 
             Row(
-                verticalAlignment = Alignment.Companion.CenterVertically,
-                horizontalAlignment = Alignment.Companion.CenterHorizontally,
-                modifier = GlanceModifier.Companion.fillMaxWidth().wrapContentWidth()
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = GlanceModifier.fillMaxWidth().wrapContentWidth()
                     .padding(bottom = 7.dp)
             ) {
                 priority(note.priority).let {
@@ -133,7 +133,7 @@ class ListWidget: GlanceAppWidget(), Screen {
                             color = ColorProvider(it.color),
                             fontSize = 15.sp,
                         ),
-                        modifier = GlanceModifier.Companion.padding(6.dp)
+                        modifier = GlanceModifier.padding(6.dp)
                     )
                 }
 
@@ -144,14 +144,14 @@ class ListWidget: GlanceAppWidget(), Screen {
                             color = GlanceTheme.colors.surfaceVariant,
                             fontSize = 24.sp
                         ),
-                        modifier = GlanceModifier.Companion.padding(start = 6.dp, end = 6.dp)
+                        modifier = GlanceModifier.padding(start = 6.dp, end = 6.dp)
                     )
 
                     Image(
                         provider = ImageProvider(CommonIcons.WAVEFORM_18),
                         contentDescription = null,
-                        colorFilter = ColorFilter.Companion.tint(GlanceTheme.colors.onSurface),
-                        modifier = GlanceModifier.Companion.size(16.dp)
+                        colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface),
+                        modifier = GlanceModifier.size(16.dp)
                     )
                     if (audiosCount > 1) {
                         Text(
@@ -171,13 +171,13 @@ class ListWidget: GlanceAppWidget(), Screen {
                             color = GlanceTheme.colors.surfaceVariant,
                             fontSize = 24.sp
                         ),
-                        modifier = GlanceModifier.Companion.padding(start = 6.dp, end = 6.dp)
+                        modifier = GlanceModifier.padding(start = 6.dp, end = 6.dp)
                     )
                     Image(
                         provider = ImageProvider(CommonIcons.BELL_RING_18),
                         contentDescription = null,
-                        colorFilter = ColorFilter.Companion.tint(GlanceTheme.colors.onSurface),
-                        modifier = GlanceModifier.Companion.size(16.dp)
+                        colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface),
+                        modifier = GlanceModifier.size(16.dp)
                     )
                     if (remindersCount > 1) {
                         Text(
@@ -197,13 +197,13 @@ class ListWidget: GlanceAppWidget(), Screen {
                             color = GlanceTheme.colors.surfaceVariant,
                             fontSize = 24.sp
                         ),
-                        modifier = GlanceModifier.Companion.padding(start = 6.dp, end = 6.dp)
+                        modifier = GlanceModifier.padding(start = 6.dp, end = 6.dp)
                     )
                     Image(
                         provider = ImageProvider(CommonIcons.HASTAG),
                         contentDescription = null,
-                        colorFilter = ColorFilter.Companion.tint(GlanceTheme.colors.onSurface),
-                        modifier = GlanceModifier.Companion.size(15.dp)
+                        colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface),
+                        modifier = GlanceModifier.size(15.dp)
                     )
                     Text(
                         text = it.label,
@@ -247,7 +247,7 @@ class ListWidget: GlanceAppWidget(), Screen {
             LinearProgressIndicator(
                 progress = 1f,
                 color = GlanceTheme.colors.surfaceVariant,
-                modifier = GlanceModifier.Companion
+                modifier = GlanceModifier
                     .fillMaxWidth()
                     .height(5.dp)
                     .background(GlanceTheme.colors.surface)
@@ -276,8 +276,8 @@ class ListWidget: GlanceAppWidget(), Screen {
             Image(
                 provider = ImageProvider(iconRes),
                 contentDescription = null, // Consider adding meaningful descriptions
-                colorFilter = ColorFilter.Companion.tint(GlanceTheme.colors.onSurface),
-                modifier = GlanceModifier.Companion.size(if (label != null) 15.dp else 16.dp) // Adjust size if needed
+                colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface),
+                modifier = GlanceModifier.size(if (label != null) 15.dp else 16.dp) // Adjust size if needed
             )
             label?.let {
                 Text(

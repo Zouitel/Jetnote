@@ -483,10 +483,10 @@ data class OptionsScreen(
                 item {
                     val currentPriority = Priorities.entries[data.value.priority]
                     val priority = when(Priorities.entries[data.value.priority].priority) {
-                        "low" -> stringResource(R.string.low_priority)
-                        "normal" -> stringResource(R.string.medium_priority)
-                        "high" -> stringResource(R.string.high_priority)
-                        "urgent" -> stringResource(R.string.urgent_priority)
+                        "Low" -> stringResource(R.string.low_priority)
+                        "Medium" -> stringResource(R.string.medium_priority)
+                        "High" -> stringResource(R.string.high_priority)
+                        "Urgent" -> stringResource(R.string.urgent_priority)
                         else -> stringResource(R.string.non_priority)
                     }
                     val priorityPair = getPriority(data.value.priority, lowResource, mediumResource, highResource, urgentResource, nonResource)

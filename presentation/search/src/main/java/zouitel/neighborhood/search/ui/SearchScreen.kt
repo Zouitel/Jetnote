@@ -277,6 +277,14 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                 modifier = Modifier.padding(horizontal = 10.dp)
                             ) { index ->
                                 val type = typesList[index]
+                                val typeTitles = listOf(
+                                    stringResource(R.string.links),
+                                    stringResource(R.string.reminders),
+                                    stringResource(R.string.audios),
+                                    stringResource(R.string.tasks),
+                                    stringResource(R.string.medias),
+                                    stringResource(R.string.priorities)
+                                )
                                 FilterChip(
                                     selected = false,
                                     enabled = type.isAvailable(
@@ -292,7 +300,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                     ),
                                     onClick = {
                                             searchModel.updateSearchType(type.types)
-                                            searchModel.updateSearchTitle(type.title)
+                                            searchModel.updateSearchTitle(typeTitles[index])
                                     },
                                     label = {
                                         Text(
@@ -376,7 +384,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                         stringResource(R.string.low_priority),
                                         stringResource(R.string.medium_priority),
                                         stringResource(R.string.high_priority),
-                                        stringResource(R.string.urgent_priority),
+                                        stringResource(R.string.urgent_priority)
                                     )
                                     prioritiesList
                                         .filter { it.isAvailable(notes) }
@@ -384,7 +392,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                             Column {
                                                 IconButton({
                                                     searchModel.updateSearchType(SearchTypes.Properties(property.index))
-                                                    searchModel.updateSearchTitle("$searchWithinResource \"${property.name}\" $propertyResource")
+                                                    searchModel.updateSearchTitle("$searchWithinResource $propertyResource \"${priorities[property.index]}\"")
                                                 }) {
                                                     Icon(
                                                         painter = painterResource(CIRCLE),
@@ -393,7 +401,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                                     )
                                                 }
                                                 Text(
-                                                    text = priorities[index],
+                                                    text = priorities[property.index],
                                                     fontStyle = MaterialTheme.typography.labelSmall.fontStyle,
                                                     color = Color(property.color).copy(alpha = .5f)
                                                 )

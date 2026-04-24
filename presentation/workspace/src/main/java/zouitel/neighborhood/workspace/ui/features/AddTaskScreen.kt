@@ -30,10 +30,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.ui.CommonBottomSheet
 import zouitel.neighborhood.ui.CommonTextField
@@ -58,7 +60,9 @@ class AddTaskScreen(val currentTask: Task?, val currentData: MutableState<Data>)
         var currentTask by remember { mutableStateOf<Task?>(currentTask) }
         val fieldState = rememberTextFieldState(currentTask?.item ?: "")
         val focusRequester = remember { FocusRequester() }
-        var placeholder by remember { mutableStateOf("Task..") }
+        val taskResource = stringResource(zouitel.neighborhood.logic.R.string.task_placeholder)
+        val taskCannotBeEmptyResource = stringResource(zouitel.neighborhood.logic.R.string.task_cannot_be_empty)
+        var placeholder by remember { mutableStateOf(taskResource) }
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(currentData.value.uid) {
@@ -82,10 +86,10 @@ class AddTaskScreen(val currentTask: Task?, val currentData: MutableState<Data>)
 
                     if (inputTask.isEmpty()) {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        placeholder = "Task cannot be empty!"
+                        placeholder = taskCannotBeEmptyResource
                         scope.launch {
-                            kotlinx.coroutines.delay(3000)
-                            placeholder = "Task.."
+                            delay(3000)
+                            placeholder = taskResource
                         }
                     } else {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)

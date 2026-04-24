@@ -11,8 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonIcons
 
 @Composable
@@ -31,7 +33,7 @@ internal fun MediaActionsMenu(
         offset = DpOffset((-20).dp, 0.dp)
     ) {
         DropdownMenuItem(
-            { Text("Details", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.details), style = MaterialTheme.typography.bodyLarge) },
             {
                 onDetails()
                 expanded.value = false
@@ -43,7 +45,7 @@ internal fun MediaActionsMenu(
         )
         HorizontalDivider()
         DropdownMenuItem(
-            { Text("Duplicate", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.duplicate), style = MaterialTheme.typography.bodyLarge) },
             {
                 onDuplicate()
                 expanded.value = false
@@ -54,7 +56,7 @@ internal fun MediaActionsMenu(
             }
         )
         DropdownMenuItem(
-            { Text("Send", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.send), style = MaterialTheme.typography.bodyLarge) },
             {
                 onSend()
                 expanded.value = false
@@ -64,7 +66,7 @@ internal fun MediaActionsMenu(
                 Icon(painterResource(CommonIcons.PAPER_PLANE_TOP), null)
             }        )
         DropdownMenuItem(
-            { Text("Print", style = MaterialTheme.typography.bodyLarge) },
+            { Text(stringResource(R.string.print), style = MaterialTheme.typography.bodyLarge) },
             {
                 onPrint()
                 expanded.value = false
@@ -77,7 +79,7 @@ internal fun MediaActionsMenu(
         DropdownMenuItem(
             {
                 Text(
-                    text = "Delete",
+                    text = stringResource(R.string.delete),
                     color = MaterialTheme.colorScheme.errorContainer,
                     style = MaterialTheme.typography.bodyLarge
                 )

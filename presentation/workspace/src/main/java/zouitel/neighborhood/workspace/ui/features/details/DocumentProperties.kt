@@ -30,21 +30,21 @@ data class DocumentProperties(
     // Only non-null / non-blank values are included; the sheet renders them as chips.
 
     fun properties(): Map<String, String?> = buildMap {
-        extension?.uppercase(Locale.getDefault())?.let       { put("Type",        it) }
-        mimeType?.let                                         { put("MIME",        it) }
-        sizeBytes?.let                                        { put("Size",        formatBytes(it)) }
-        pageCount?.let                                        { put("Pages",       it.toString()) }
-        metaTitle?.takeIf   { it.isNotBlank() }?.let         { put("Title",       it) }
-        metaAuthor?.takeIf  { it.isNotBlank() }?.let         { put("Author",      it) }
-        metaSubject?.takeIf { it.isNotBlank() }?.let         { put("Subject",     it) }
-        metaKeywords?.takeIf{ it.isNotBlank() }?.let         { put("Keywords",    it) }
-        metaCreator?.takeIf { it.isNotBlank() }?.let         { put("Creator",     it) }
-        metaProducer?.takeIf{ it.isNotBlank() }?.let         { put("Producer",    it) }
-        metaFormat?.takeIf  { it.isNotBlank() }?.let         { put("Format",      it) }
+        extension?.uppercase(Locale.getDefault())?.let { put("Type", it) }
+        mimeType?.let { put("MIME", it) }
+        sizeBytes?.let { put("Size", formatBytes(it)) }
+        pageCount?.let { put("Pages", it.toString()) }
+        metaTitle?.takeIf { it.isNotBlank() }?.let { put("Title", it) }
+        metaAuthor?.takeIf { it.isNotBlank() }?.let { put("Author", it) }
+        metaSubject?.takeIf { it.isNotBlank() }?.let { put("Subject", it) }
+        metaKeywords?.takeIf { it.isNotBlank() }?.let { put("Keywords", it) }
+        metaCreator?.takeIf { it.isNotBlank() }?.let { put("Creator", it) }
+        metaProducer?.takeIf { it.isNotBlank() }?.let { put("Producer", it) }
+        metaFormat?.takeIf { it.isNotBlank() }?.let { put("Format", it) }
         metaEncryption?.takeIf { it.isNotBlank() && it != "None" }
-                                                   ?.let    { put("Encryption",  it) }
-        metaCreationDate?.takeIf { it.isNotBlank() }?.let   { put("Created",     formatPdfDate(it)) }
-        metaModDate?.takeIf      { it.isNotBlank() }?.let   { put("Modified",    formatPdfDate(it)) }
+            ?.let { put("Encryption", it) }
+        metaCreationDate?.takeIf { it.isNotBlank() }?.let { put("Created", formatPdfDate(it)) }
+        metaModDate?.takeIf { it.isNotBlank() }?.let { put("Modified", formatPdfDate(it)) }
     }.filterValues { !it.isNullOrBlank() }
 }
 

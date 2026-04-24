@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import androidx.core.graphics.drawable.IconCompat
 import zouitel.neighborhood.jotting.JottingActivity
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonIcons
 
 fun quickRecord(context: Context): ShortcutInfo {
@@ -12,8 +13,8 @@ fun quickRecord(context: Context): ShortcutInfo {
     intent.action = Intent.ACTION_VIEW
     intent.putExtra("quick_record", true)
     return ShortcutInfo.Builder(context, "record")
-        .setShortLabel("Quick Record")
-        .setLongLabel("Quick Record")
+        .setShortLabel(context.getString(R.string.recorder))
+        .setLongLabel(context.getString(R.string.recorder))
         .setIcon(IconCompat.createWithResource(context, CommonIcons.MIC_18).toIcon(context))
         .setIntent(intent)
         .build()

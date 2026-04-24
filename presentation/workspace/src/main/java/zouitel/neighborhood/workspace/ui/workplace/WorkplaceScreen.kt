@@ -314,6 +314,9 @@ data class WorkplaceScreen(
         var orderedList = currentData.value.tasks.sortedBy { it.isDone }
 
         items(orderedList, key = { it.id }) { task ->
+            val deleteResource = stringResource(R.string.delete)
+            val undoResource = stringResource(R.string.action_undo)
+
             Spacer(modifier = Modifier.height(3.dp))
             TaskItem(
                 currentData = currentData,
@@ -334,8 +337,8 @@ data class WorkplaceScreen(
                     scope.launch {
                         snackbarState.currentSnackbarData?.dismiss()
                         val result = snackbarState.showSnackbar(
-                            message = "${taskPair?.first?.item} deleted",
-                            actionLabel = "Undo",
+                            message = "${taskPair?.first?.item} $deleteResource",
+                            actionLabel = undoResource,
                             duration = SnackbarDuration.Long
                         )
 
@@ -363,6 +366,9 @@ data class WorkplaceScreen(
         jobCounter: MutableIntState
     ) {
         item {
+            val deleteResource = stringResource(R.string.delete)
+            val undoResource = stringResource(R.string.action_undo)
+
             ContextualFlowRow(
                 itemCount = filteredTags.size,
                 modifier = Modifier
@@ -398,8 +404,8 @@ data class WorkplaceScreen(
                                     scope.launch {
                                         snackbarHostState.currentSnackbarData?.dismiss()
                                         val result = snackbarHostState.showSnackbar(
-                                            message = "${filteredTags.getOrNull(index)?.label} deleted",
-                                            actionLabel = "Undo",
+                                            message = "${filteredTags.getOrNull(index)?.label} $deleteResource",
+                                            actionLabel = undoResource,
                                             duration = SnackbarDuration.Long
                                         )
 

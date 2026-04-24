@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">메모</string>
+    <string name="screen_chat">AI 채팅</string>
+    <string name="screen_tags">태그</string>
+    <string name="screen_settings">설정</string>
+    <string name="screen_archive">보관함</string>
+    <string name="screen_about">정보</string>
+    <string name="screen_feedback">피드백</string>
+    <string name="share_app">이 앱 공유하기</string>
+    <string name="label_more">더 보기</string>
+    <string name="label_less">접기</string>
+    <string name="msg_deleted">삭제됨</string>
+    <string name="action_undo">실행 취소</string>
+    <string name="tag_placeholder">태그..</string>
+    <string name="tag_cannot_be_empty">태그를 입력해주세요!</string>
+    <string name="archive">보관함</string>
+    <string name="deleted">삭제됨!</string>
+    <string name="erase_notes">메모를 지울까요?</string>
+    <string name="confirm_erase_notes">"휴지통에 있는 모든 메모가 영구적으로 삭제됩니다."</string>
+    <string name="search_in_notes">"메모 검색.."</string>
+    <string name="select_layout">"레이아웃 선택"</string>
+    <string name="settings">"설정"</string>
+    <string name="account_sync">"계정 동기화"</string>
+    <string name="account_sync_description">"
+                                이 앱에서 Google 드라이브 계정 동기화를
+                                활성화하면 메모 및 설정과 같은
+                                앱 데이터를 원활하게 백업하고
+                                동기화할 수 있으며,
+                                데이터를 안전하게 보호합니다.
+        "</string>
+    <string name="assistant_configuration">"어시스턴트 설정"</string>
+    <string name="assistant_configuration_description">"
+                                AI 어시스턴트는 인공지능으로 구동되는
+                                소프트웨어 프로그램으로, 이 앱에서
+                                다양한 작업을 도와드립니다.
+                                자연어를 이해하고 응답하며,
+                                이미지 또는 텍스트를 통해
+                                상호작용할 수 있습니다.
+                            "</string>
+    <string name="dark_mode">"다크 모드"</string>
+    <string name="dark_mode_description">"
+                                이 모드는 시스템 전체 설정으로,
+                                Android 앱 UI의 배경 색상을
+                                어두운 색상으로 전환합니다.
+                                눈의 피로를 줄이고, 접근성을 향상시키며,
+                                배터리 수명을 절약하고
+                                사용자 경험을 개선하도록 설계되었습니다.
+                            "</string>
+    <string name="sound_effect">"효과음"</string>
+    <string name="sound_effect_description">"
+                                Jetnote 앱에서 '효과음' 기능은
+                                버튼 및 기타 UI 요소와 상호작용할 때
+                                사용자에게 청각적 피드백을 제공합니다.
+                                이는 사용자 경험을 더욱
+                                인터랙티브하고 흥미롭게 만드는
+                                모바일 앱 개발의 일반적인 방식입니다.
+                            "</string>
+    <string name="layouts">"레이아웃"</string>
+    <string name="layouts_description">"
+                                레이아웃은 Android 앱에서
+                                콘텐츠를 구성하고 표시하는 데
+                                기본적인 역할을 합니다.
+                                화면에서 UI 요소의 구조와
+                                배치를 정의합니다.
+                            "</string>
+    <string name="sort_notes">"메모 정렬"</string>
+    <string name="default_sort">"기본"</string>
+    <string name="name_sort">"이름"</string>
+    <string name="oldest_sort">"오래된 순"</string>
+    <string name="newest_sort">"최신 순"</string>
+    <string name="priority_sort">"우선순위"</string>
+    <string name="zen_mode">"집중 모드"</string>
+    <string name="zen_mode_description">"
+                                집중 모드(전체 화면 모드)는
+                                앱이 전체 화면을 차지하도록 하는
+                                디스플레이 설정으로, 툴바, 메뉴,
+                                운영체제의 작업표시줄 등
+                                모든 인터페이스 요소를 숨깁니다.
+                            "</string>
+    <string name="shake">"흔들어 신고하기"</string>
+    <string name="shake_description">"
+                              기기를 물리적으로 흔드는 것만으로
+                              피드백 또는 버그 신고 프로세스를
+                              시작할 수 있는 편리한 기능입니다.
+                              여러 메뉴를 탐색하여 '피드백 보내기' 또는
+                              '버그 신고' 옵션을 찾는 대신
+                              간편하게 사용할 수 있습니다.
+                            "</string>
+    <string name="block_screenshot">"스크린샷 차단"</string>
+    <string name="block_screenshot_description">"
+                                스크린샷 차단은 사용자가 앱 콘텐츠의
+                                스크린샷을 캡처하지 못하도록 하는
+                                보안 조치입니다.
+                                주로 은행 정보, 개인 데이터,
+                                저작권 보호 자료 등
+                                민감한 정보를 보호하는 데 사용됩니다.
+                            "</string>
+    <string name="lock_mode">"잠금 모드"</string>
+    <string name="lock_mode_description">"
+                                이 기능은 사용자가 앱 콘텐츠에
+                                접근하기 전에 인증을 요구하여
+                                앱 보안을 강화합니다.
+                                일반적으로 지문, PIN, 패턴 잠금 해제 등
+                                기기의 내장 보안 기능을 통해 구현됩니다.
+                            "</string>
+    <string name="licenses">"라이선스"</string>
+    <string name="licenses_description">"
+                                    이 라이선스들은 각 저작자의
+                                    배포 요건을 준수하고,
+                                    소프트웨어 구조에 대한
+                                    투명성을 제공하기 위해 포함되었습니다.
+                                    "</string>
+    <string name="title">"제목"</string>
+    <string name="note">"메모"</string>
+    <string name="failed_to_save_document">"문서 저장에 실패했습니다."</string>
+    <string name="gallery">"갤러리"</string>
+    <string name="audio">오디오</string>
+    <string name="permission_denied">권한이 거부되었습니다!</string>
+    <string name="take_photo">사진 촬영</string>
+    <string name="video_capture">동영상 촬영</string>
+    <string name="recorder">녹음기</string>
+    <string name="document">문서</string>
+    <string name="scanner">스캐너</string>
+    <string name="tasks">할 일</string>
+    <string name="tags">태그</string>
+    <string name="reminder">알림</string>
+    <string name="priority">우선순위</string>
+    <string name="low_priority">낮음</string>
+    <string name="medium_priority">보통</string>
+    <string name="high_priority">높음</string>
+    <string name="urgent_priority">긴급</string>
+    <string name="non_priority">없음</string>
+    <string name="created">생성됨</string>
+    <string name="edited">편집됨</string>
+    <string name="types">유형</string>
+    <string name="media">미디어</string>
+    <string name="medias">미디어 목록</string>
+    <string name="colour">색상</string>
+    <string name="colours">색상 목록</string>
+    <string name="search_within">검색 범위</string>
+    <string name="issue_title">문제 제목*</string>
+    <string name="issue_description">문제 설명 (선택사항)</string>
+    <string name="noAccount">계정 없이 로그인</string>
+    <string name="screenshot_selected">✓ 스크린샷 선택됨</string>
+    <string name="drive_submit">제출 시 드라이브에 업로드됩니다</string>
+    <string name="select_screenshot">스크린샷 선택</string>
+    <string name="system_logs">시스템 로그를 포함할까요?</string>
+    <string name="find_an_issue">문제를 발견하셨나요?</string>
+    <string name="take_a_screenshot">스크린샷 캡처를 잊지 마세요.</string>
+    <string name="report_an_issue">문제 신고하기!</string>
+    <string name="bug">버그</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android 시스템 로그 (Logcat) - 피드백 보고서</string>
+    <string name="logs_description">Android 시스템 로그는 운영 체제 및 커널에서 발생하는 타임스탬프가 있는 메시지 스트림입니다.\n    | 사용자가 앱 충돌, 멈춤, 예상치 못한 동작 등의 문제를 겪을 때, 로그는 문제 발생 전후의 이벤트를 기록하여 개발자가 진단에 필요한 컨텍스트를 파악할 수 있도록 합니다.</string>
+    <string name="label_bug">버그</string>
+    <string name="label_feature">기능</string>
+    <string name="label_invalid">유효하지 않음</string>
+    <string name="label_question">질문</string>
+    <string name="label_security">보안</string>
+    <string name="failed">실패</string>
+    <string name="submit_feedback">피드백 제출!</string>
+    <string name="uploading_screenshot">스크린샷 업로드 중…</string>
+    <string name="creating_github_issue">GitHub 이슈 생성 중…</string>
+    <string name="upload_faild">업로드 실패…</string>
+    <string name="upload_failed">업로드 실패…</string>
+    <string name="issue_crea">이슈가 생성되었습니다.</string>
+    <string name="issue_created">이슈가 생성되었습니다!</string>
+    <string name="log_out">로그아웃</string>
+    <string name="hi">안녕하세요</string>
+    <string name="add_account">다른 계정 추가</string>
+    <string name="manage_account">계정 관리</string>
+    <string name="upload_data">데이터 업로드</string>
+    <string name="download_data">데이터 다운로드</string>
+    <string name="firebase_authentication_failed">Firebase 인증에 실패했습니다</string>
+    <string name="sign_in_failed">Google 로그인에 실패했습니다</string>
+    <string name="please_wait">로그인 중, 잠시만 기다려주세요…</string>
+    <string name="sync_title">동기화를 위해 로그인하세요</string>
+    <string name="sync_description">Google 계정으로 로그인하여 모든 기기에서 메모를 백업하고 동기화하세요.</string>
+    <string name="current_account">현재 계정</string>
+    <string name="no_name">이름 없음</string>
+    <string name="no_email">이메일 없음</string>
+    <string name="sign_out">로그아웃</string>
+    <string name="sign_in_with_google">Google로 로그인</string>
+    <string name="ai_models">AI 모델</string>
+    <string name="load_more">더 불러오기</string>
+    <string name="available_models">사용 가능한 모델</string>
+    <string name="assistant_settings">어시스턴트 설정</string>
+    <string name="learning_mode">학습 모드</string>
+    <string name="learning_mode_description">"
+                    레이블이 지정된 예시에서 학습한 패턴을 기반으로
+                    새롭고 처음 보는 데이터에 대한
+                    출력값을 예측합니다.
+                "</string>
+    <string name="temperat">온도</string>
+    <string name="temperature">온도</string>
+    <string name="temperature_description">"
+           출력의 무작위성을 조절합니다.
+           값이 높을수록 더 창의적인 결과가 나옵니다.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            출력에 고려되는 토큰을 조절합니다.
+            </string>
+    <string name="context_message_size">컨텍스트 메시지 크기</string>
+    <string name="context_message_size_description">
+            컨텍스트에 포함할 이전 메시지의
+            최대 개수입니다.
+        </string>
+    <string name="stream_output">스트림 출력</string>
+    <string name="stream_output_description">생성되는 동안 응답을 실시간으로 표시합니다.</string>
+    <string name="thinking_budget">사고 예산</string>
+    <string name="thinking_budget_description">
+                            응답에 사용되는 컴퓨팅 자원을
+                            제한합니다.
+                        </string>
+    <string name="system_prompt">시스템 프롬프트</string>
+    <string name="prompt">프롬프트..</string>
+    <string name="properties">속성</string>
+    <string name="quick_messages">빠른 메시지</string>
+    <string name="quick_messages_description">빠른 메시지 단축키를 설정합니다.</string>
+    <string name="regular_expressions">정규 표현식</string>
+    <string name="regular_expressions_description">
+                            메시지 송수신 전에 변환할
+                            정규식 패턴을 정의합니다.
+                        </string>
+    <string name="headers">헤더</string>
+    <string name="headers_description">
+                            요청의 헤더 블록에 추가되는
+                            키-값 쌍(key: value)입니다.
+                            주로 API 키 또는 토큰과 같은 인증 정보 제공,
+                            콘텐츠 유형 지정, 요청 또는 클라이언트에 대한
+                            메타데이터 전달에 사용됩니다.
+                        </string>
+    <string name="bodies">본문</string>
+    <string name="bodies_description">
+                            요청 내에 전송되는 데이터 페이로드
+                            (key: value JSON 구조)를 의미합니다.
+                            AI 모델에 입력값을 전달하는
+                            주요 수단입니다.
+                            특정 항목을 추가하기 위해 사용됩니다.
+                        </string>
+    <string name="memory">메모리</string>
+    <string name="memory_description">
+                            어시스턴트가 대화의 이전 내용을
+                            기억할 수 있도록 허용합니다.
+                        </string>
+    <string name="chats_reference">최근 채팅 참조</string>
+    <string name="chats_reference_description">
+                        더 나은 문맥 응답을 위해
+                        최근 채팅 데이터를 참조합니다.
+                        </string>
+    <string name="javascript">JavaScript 엔진</string>
+    <string name="javascript_description">
+                            계산 및 스크립팅을 위해
+                            QuickJS 엔진으로 JavaScript 코드를 실행합니다.
+                        </string>
+    <string name="reset">설정 초기화!</string>
+    <string name="providers">제공업체</string>
+    <string name="ask">질문</string>
+    <string name="add_model"><![CDATA[<- AI 모델 추가]]></string>
+    <string name="delete">삭제</string>
+    <string name="options">옵션</string>
+    <string name="retitle">제목 변경</string>
+    <string name="assistant">어시스턴트</string>
+    <string name="new_chat">새 채팅</string>
+    <string name="files">파일</string>
+    <string name="audios">오디오</string>
+    <string name="videos">동영상</string>
+    <string name="camera">카메라</string>
+    <string name="pictures">사진</string>
+    <string name="provider_settings">제공업체 설정</string>
+    <string name="api_key">API 키</string>
+    <string name="base_url">기본 URL</string>
+    <string name="model_name">모델 이름</string>
+    <string name="modalities">모달리티</string>
+    <string name="tools">도구</string>
+    <string name="reasoning">추론</string>
+    <string name="respo">응답 API</string>
+    <string name="response_api">응답 API</string>
+    <string name="account_balance">계정 잔액</string>
+    <string name="api_path">API 경로..</string>
+    <string name="json_key">Json 키..</string>
+    <string name="network_proxy">네트워크 프록시</string>
+    <string name="host">호스트..</string>
+    <string name="username_option">사용자 이름 (선택사항)..</string>
+    <string name="pass_option">비밀번호 (선택사항)..</string>
+    <string name="service_account">서비스 계정 @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">개인 키..</string>
+    <string name="location">위치..</string>
+    <string name="project_uid">프로젝트 UID..</string>
+    <string name="details">세부 정보</string>
+    <string name="model_type">모델 유형</string>
+    <string name="input_modalities">입력 모달리티</string>
+    <string name="output_modalities">출력 모달리티</string>
+    <string name="abilities">기능</string>
+    <string name="provider_override">제공업체 재정의 추가</string>
+    <string name="provider_override_description">
+                            이 특정 모델에 대한
+                            사용자 지정 제공업체 설정을 구성합니다.
+                            모델의 기본 제공업체에서
+                            공통 속성을 사용합니다.
+                        </string>
+    <string name="build_tools">빌드 도구</string>
+    <string name="build_tools_description">
+                            이 도구들은 앱 지원 없이
+                            API에서 직접 제공됩니다.
+                            현재 Gemini API에서만 지원되는 기능입니다.
+                        </string>
+    <string name="google_search">검색</string>
+    <string name="google_search_description">Google 검색 통합 활성화</string>
+    <string name="url_context">URL 컨텍스트</string>
+    <string name="url_context_description">URL 컨텍스트 처리 활성화</string>
+    <string name="find">찾기</string>
+    <string name="replace">바꾸기</string>
+    <string name="effecting_scopes">적용 범위</string>
+    <string name="user">사용자</string>
+    <string name="visual_only">시각 전용</string>
+    <string name="body">본문</string>
+    <string name="key">키</string>
+    <string name="value">값</string>
+    <string name="header">헤더.</string>
+    <string name="reset_description">어시스턴트 설정을 기본 모드로 초기화합니다.</string>
+    <string name="save_changes">변경사항을 저장할까요?</string>
+    <string name="save_changes_description">저장하지 않은 변경사항이 있습니다. 떠나기 전에 저장하시겠습니까?</string>
+    <string name="dont_save">저장 안 함</string>
+    <string name="save">저장</string>
+    <string name="links">링크</string>
+    <string name="reminders">알림 목록</string>
+    <string name="priorities">우선순위 목록</string>
+    <string name="ai_chat">AI 채팅</string>
+    <string name="auto">자동</string>
+    <string name="light">가벼움</string>
+    <string name="medium">보통</string>
+    <string name="heavy">무거움</string>
+    <string name="date">날짜</string>
+    <string name="time">시간</string>
+    <string name="date_and_time">날짜 및 시간</string>
+    <string name="local">로컬</string>
+    <string name="timezone">시간대</string>
+    <string name="system_version">시스템 버전</string>
+    <string name="device_info">기기 정보</string>
+    <string name="battery_level">배터리 수준</string>
+    <string name="insert">삽입</string>
+    <string name="confirm">확인</string>
+    <string name="message">메시지</string>
+    <string name="content">내용</string>
+    <string name="today">오늘</string>
+    <string name="tomorrow">내일</string>
+    <string name="according_to_timing">시간에 따라</string>
+    <string name="untitled">제목 없음</string>
+    <string name="hue">색조</string>
+    <string name="saturation">채도</string>
+    <string name="brightness">밝기</string>
+    <string name="shades">음영</string>
+    <string name="complementary">보색</string>
+    <string name="task_placeholder">할 일..</string>
+    <string name="task_cannot_be_empty">할 일을 입력해주세요!</string>
+    <string name="of">중</string>
+    <string name="something_wrong_with_file">파일에 문제가 있습니다</string>
+    <string name="could_not_load_any_information">미디어 파일 정보를 불러올 수 없습니다.</string>
+    <string name="no_file_path_provided">파일 경로가 제공되지 않았습니다.</string>
+    <string name="security_error_processing_file">파일 처리 중 보안 오류 발생</string>
+    <string name="an_unexpected_error_occurred">예기치 않은 오류가 발생했습니다</string>
+    <string name="could_not_retrieve_any_information">이 동영상 파일의 정보를 가져올 수 없습니다.</string>
+    <string name="error_reading_metadata">미디어 메타데이터 읽기 오류</string>
+    <string name="could_not_read_exif_data">EXIF 데이터를 읽을 수 없습니다</string>
+    <string name="error_reading_basic_file_info">기본 파일 정보 읽기 오류</string>
+    <string name="file_does_not_exist">파일이 존재하지 않습니다</string>
+    <string name="error">오류</string>
+    <string name="loading_media_info">미디어 정보 불러오는 중…</string>
+    <string name="no_metadata_available_for_this_document">이 문서에 사용 가능한 메타데이터가 없습니다.</string>
+    <string name="could_not_read_pdf_metadata">PDF 메타데이터를 읽을 수 없습니다</string>
+    <string name="cannot_read_file">파일을 읽을 수 없습니다</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">이미지 크기를 디코딩할 수 없거나 잘못된 형식입니다.</string>
+    <string name="error_during_dimension_decoding">크기 디코딩 중 오류 발생</string>
+    <string name="error_reading_exif_data">EXIF 데이터 읽기 오류</string>
+    <string name="duplicate">복제</string>
+    <string name="send">전송</string>
+    <string name="print">인쇄</string>
+    <string name="cleaned">정리됨</string>
+    <string name="cleared">지워짐</string>
+    <string name="media_deleted">미디어 삭제됨!</string>
+    <string name="jotting">메모 중</string>
+    <string name="appwidget_text">예시</string>
+    <string name="add_widget">위젯 추가</string>
+    <string name="app_widget_description">앱 위젯 설명입니다</string>
+    <string name="quick_widget_description">빠른 위젯 레이아웃입니다</string>
+    <string name="creator_widget_description">크리에이터 레이아웃 위젯입니다</string>
+    <string name="notes_list_description">메모 목록입니다</string>
+    <string name="record_deleted">기록 삭제됨!</string>
+</resources>
