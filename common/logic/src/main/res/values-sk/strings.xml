@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Poznámky</string>
+    <string name="screen_chat">AI Chat</string>
+    <string name="screen_tags">Štítky</string>
+    <string name="screen_settings">Nastavenia</string>
+    <string name="screen_archive">Archív</string>
+    <string name="screen_about">O aplikácii</string>
+    <string name="screen_feedback">Spätná väzba</string>
+    <string name="share_app">Zdieľať túto aplikáciu</string>
+    <string name="label_more">viac</string>
+    <string name="label_less">menej</string>
+    <string name="msg_deleted">zmazané</string>
+    <string name="action_undo">Späť</string>
+    <string name="tag_placeholder">Štítok..</string>
+    <string name="tag_cannot_be_empty">Štítok nemôže byť prázdny!</string>
+    <string name="archive">Archív</string>
+    <string name="deleted">zmazané!</string>
+    <string name="erase_notes">Vymazať poznámky?</string>
+    <string name="confirm_erase_notes">"Všetky poznámky v koši budú natrvalo vymazané."</string>
+    <string name="search_in_notes">"Hľadať v poznámkach.."</string>
+    <string name="select_layout">"Vybrať rozloženie"</string>
+    <string name="settings">"Nastavenia"</string>
+    <string name="account_sync">"Synchronizácia účtu"</string>
+    <string name="account_sync_description">"
+                                Povolenie synchronizácie účtu Google Drive
+                                pre túto aplikáciu vám umožňuje bez problémov
+                                zálohovať a synchronizovať údaje aplikácie,
+                                ako sú poznámky a nastavenia,
+                                čím sa zaistí bezpečnosť vašich dát.
+        "</string>
+    <string name="assistant_configuration">"Konfigurácia asistenta"</string>
+    <string name="assistant_configuration_description">"
+                                AI asistent je softvérový program
+                                poháňaný umelou inteligenciou, navrhnutý
+                                na pomoc s množstvom úloh v tejto aplikácii.
+                                Títo asistenti rozumejú prirodzenému jazyku
+                                a reagujú naň, čo vám umožňuje
+                                komunikovať s nimi prostredníctvom
+                                obrázka alebo textu.
+                            "</string>
+    <string name="dark_mode">"Tmavý režim"</string>
+    <string name="dark_mode_description">"
+                                Tento režim je celosystémové nastavenie,
+                                ktoré prepína farebnú schému pozadia
+                                rozhrania aplikácie Android na tmavšie farby.
+                                Je navrhnutý na zníženie únavy očí,
+                                zlepšenie dostupnosti, úsporu batérie
+                                a zlepšenie používateľského zážitku.
+                            "</string>
+    <string name="sound_effect">"Zvukový efekt"</string>
+    <string name="sound_effect_description">"
+                                V kontexte aplikácie Jetnote funkcia
+                                \'Zvukový efekt\' poskytuje používateľom
+                                zvukovú spätnú väzbu pri interakcii
+                                s tlačidlami a inými prvkami rozhrania.
+                                Ide o bežnú prax pri vývoji mobilných
+                                aplikácií, aby bol používateľský zážitok
+                                interaktívnejší a pútavejší.
+                            "</string>
+    <string name="layouts">"Rozloženia"</string>
+    <string name="layouts_description">"
+                                Rozloženia sú základom pre organizovanie
+                                a zobrazovanie obsahu v aplikáciách Android.
+                                Definujú štruktúru a usporiadanie prvkov
+                                rozhrania na obrazovke.
+                            "</string>
+    <string name="sort_notes">"Zoradiť poznámky"</string>
+    <string name="default_sort">"predvolené"</string>
+    <string name="name_sort">"podľa názvu"</string>
+    <string name="oldest_sort">"najstaršie"</string>
+    <string name="newest_sort">"najnovšie"</string>
+    <string name="priority_sort">"priorita"</string>
+    <string name="zen_mode">"Zen režim"</string>
+    <string name="zen_mode_description">"
+                                Zen režim (režim celej obrazovky) je
+                                nastavenie displeja, ktoré umožňuje
+                                aplikácii zabrať celú obrazovku, pričom
+                                skryje všetky ostatné prvky rozhrania,
+                                ako sú panely nástrojov, ponuky a panel
+                                úloh operačného systému.
+                            "</string>
+    <string name="shake">"Zatraste pre nahlásenie"</string>
+    <string name="shake_description">"
+                              Je to praktická funkcia, ktorá umožňuje
+                              používateľom spustiť proces spätnej väzby
+                              alebo hlásenia chýb jednoduchým fyzickým
+                              zatrasením zariadenia Android. Namiesto
+                              prechádzania cez viaceré ponuky hľadajúc
+                              \'Odoslať spätnú väzbu\' alebo
+                              \'Nahlásiť chybu\'.
+                            "</string>
+    <string name="block_screenshot">"Blokovať snímku obrazovky"</string>
+    <string name="block_screenshot_description">"
+                                Blokovanie snímok obrazovky je
+                                bezpečnostné opatrenie, ktoré bráni
+                                používateľom zachytiť snímky obsahu
+                                vašej aplikácie. Často sa používa na
+                                ochranu citlivých informácií, ako sú
+                                bankové údaje, osobné dáta alebo
+                                materiál chránený autorskými právami.
+                            "</string>
+    <string name="lock_mode">"Režim uzamknutia"</string>
+    <string name="lock_mode_description">"
+                                Táto funkcia zvyšuje bezpečnosť aplikácie
+                                tým, že vyžaduje overenie totožnosti
+                                pred prístupom k obsahu. Dosahuje sa to
+                                pomocou vstavaných bezpečnostných funkcií
+                                zariadenia, ako sú odtlačok prsta, PIN
+                                alebo vzor odomknutia.
+                            "</string>
+    <string name="licenses">"Licencie"</string>
+    <string name="licenses_description">"
+                                    Tieto licencie sú zahrnuté na splnenie
+                                    distribučných požiadaviek príslušných
+                                    autorov a na zabezpečenie transparentnosti
+                                    týkajúcej sa architektúry softvéru.
+                                    "</string>
+    <string name="title">"Názov"</string>
+    <string name="note">"Poznámka"</string>
+    <string name="failed_to_save_document">"Uloženie dokumentu zlyhalo."</string>
+    <string name="gallery">"Galéria"</string>
+    <string name="audio">Zvuk</string>
+    <string name="permission_denied">Povolenie zamietnuté!</string>
+    <string name="take_photo">Odfotiť</string>
+    <string name="video_capture">Nahrať video</string>
+    <string name="recorder">Rekordér</string>
+    <string name="document">Dokument</string>
+    <string name="scanner">Skener</string>
+    <string name="tasks">Úlohy</string>
+    <string name="tags">Štítky</string>
+    <string name="reminder">Pripomienka</string>
+    <string name="priority">Priorita</string>
+    <string name="low_priority">Nízka</string>
+    <string name="medium_priority">Stredná</string>
+    <string name="high_priority">Vysoká</string>
+    <string name="urgent_priority">Naliehavá</string>
+    <string name="non_priority">Žiadna</string>
+    <string name="created">Vytvorené</string>
+    <string name="edited">Upravené</string>
+    <string name="types">Typy</string>
+    <string name="media">Médiá</string>
+    <string name="medias">Mediálne súbory</string>
+    <string name="colour">Farba</string>
+    <string name="colours">Farby</string>
+    <string name="search_within">Hľadať v</string>
+    <string name="issue_title">Názov problému*</string>
+    <string name="issue_description">Popis problému (voliteľné)</string>
+    <string name="noAccount">Prihlásiť sa bez účtu</string>
+    <string name="screenshot_selected">✓ Snímka obrazovky vybraná</string>
+    <string name="drive_submit">Po odoslaní sa nahrá na Drive</string>
+    <string name="select_screenshot">Vybrať snímku obrazovky</string>
+    <string name="system_logs">Zahrnúť systémové záznamy?</string>
+    <string name="find_an_issue">Našli ste problém?</string>
+    <string name="take_a_screenshot">Nezabudnite urobiť snímku obrazovky.</string>
+    <string name="report_an_issue">Nahlásiť problém!</string>
+    <string name="bug">Chyba</string>
+    <string name="logs_title">\\uD83D\\uDCiE Systémové záznamy Android (Logcat) v správe spätnej väzby</string>
+    <string name="logs_description">Systémové záznamy Android sú prúd správ s časovou pečiatkou z operačného systému a jadra.\n    | Keď používateľ narazí na problém (pád aplikácie, zmrazenie alebo neočakávané správanie), záznamy zachytia udalosti okolo problému a poskytnú vývojárom potrebný kontext pre diagnostiku.</string>
+    <string name="label_bug">Chyba</string>
+    <string name="label_feature">Funkcia</string>
+    <string name="label_invalid">Neplatné</string>
+    <string name="label_question">Otázka</string>
+    <string name="label_security">Bezpečnosť</string>
+    <string name="failed">Zlyhalo</string>
+    <string name="submit_feedback">Odoslať spätnú väzbu!</string>
+    <string name="uploading_screenshot">Nahrávanie snímky obrazovky…</string>
+    <string name="creating_github_issue">Vytváranie GitHub problému…</string>
+    <string name="upload_faild">Nahrávanie zlyhalo…</string>
+    <string name="upload_failed">Nahrávanie zlyhalo…</string>
+    <string name="issue_crea">Problém vytvorený.</string>
+    <string name="issue_created">Problém vytvorený!</string>
+    <string name="log_out">Odhlásiť sa</string>
+    <string name="hi">Ahoj</string>
+    <string name="add_account">Pridať ďalší účet</string>
+    <string name="manage_account">Spravovať účet</string>
+    <string name="upload_data">Nahrať dáta</string>
+    <string name="download_data">Stiahnuť dáta</string>
+    <string name="firebase_authentication_failed">Overenie Firebase zlyhalo</string>
+    <string name="sign_in_failed">Prihlásenie cez Google zlyhalo</string>
+    <string name="please_wait">Prihlasovanie, počkajte prosím…</string>
+    <string name="sync_title">Prihláste sa pre synchronizáciu</string>
+    <string name="sync_description">Prihláste sa pomocou účtu Google a zálohujte a synchronizujte poznámky na všetkých zariadeniach.</string>
+    <string name="current_account">Aktuálny účet</string>
+    <string name="no_name">Bez mena</string>
+    <string name="no_email">Bez e-mailu</string>
+    <string name="sign_out">Odhlásiť sa</string>
+    <string name="sign_in_with_google">Prihlásiť sa cez Google</string>
+    <string name="ai_models">AI modely</string>
+    <string name="load_more">Načítať viac</string>
+    <string name="available_models">Dostupné modely</string>
+    <string name="assistant_settings">Nastavenia asistenta</string>
+    <string name="learning_mode">Režim učenia</string>
+    <string name="learning_mode_description">"
+                    Predpovedanie výstupu pre nové, nevidené dáta
+                    na základe vzorov naučených z označených príkladov.
+                "</string>
+    <string name="temperat">Teplota</string>
+    <string name="temperature">Teplota</string>
+    <string name="temperature_description">"
+           Kontroluje náhodnosť výstupu.
+           Vyššie hodnoty sú kreatívnejšie.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Kontroluje, ktoré tokeny sa berú do úvahy pre výstup.
+            </string>
+    <string name="context_message_size">Veľkosť kontextových správ</string>
+    <string name="context_message_size_description">
+            Maximálny počet predchádzajúcich správ
+            zahrnutých do kontextu.
+        </string>
+    <string name="stream_output">Streamovaný výstup</string>
+    <string name="stream_output_description">Zobrazovať odpoveď počas jej generovania.</string>
+    <string name="thinking_budget">Rozpočet na premýšľanie</string>
+    <string name="thinking_budget_description">
+                            Obmedzuje výpočtové zdroje
+                            použité na odpoveď.
+                        </string>
+    <string name="system_prompt">Systémová výzva</string>
+    <string name="prompt">Výzva..</string>
+    <string name="properties">Vlastnosti</string>
+    <string name="quick_messages">Rýchle správy</string>
+    <string name="quick_messages_description">Nastaviť skratky pre rýchle správy.</string>
+    <string name="regular_expressions">Regulárne výrazy</string>
+    <string name="regular_expressions_description">
+                            Definovať vzory regex na transformáciu
+                            správ pred odoslaním/prijímaním.
+                        </string>
+    <string name="headers">Hlavičky</string>
+    <string name="headers_description">
+                            Sú to páry kľúč-hodnota pridané do bloku
+                            hlavičiek požiadavky. Používajú sa na
+                            overenie totožnosti, určenie typu obsahu
+                            alebo prenos metadát o požiadavke.
+                        </string>
+    <string name="bodies">Telá</string>
+    <string name="bodies_description">
+                            Odkazuje na dátovú záťaž (JSON štruktúra)
+                            odoslanú v rámci požiadavky. Je to primárny
+                            spôsob odosielania vstupov do AI modelu.
+                        </string>
+    <string name="memory">Pamäť</string>
+    <string name="memory_description">
+                            Umožniť asistentovi pamätať si predchádzajúce
+                            časti konverzácie.
+                        </string>
+    <string name="chats_reference">Odkaz na nedávne chaty</string>
+    <string name="chats_reference_description">
+                        Odkazovať na dáta z nedávnych chatov
+                        pre lepšie kontextové odpovede.
+                        </string>
+    <string name="javascript">JavaScript engine</string>
+    <string name="javascript_description">
+                            Spúšťať JavaScript kód pomocou QuickJS engine
+                            pre výpočty a skriptovanie.
+                        </string>
+    <string name="reset">Resetovať nastavenia!</string>
+    <string name="providers">Poskytovatelia</string>
+    <string name="ask">Opýtať sa</string>
+    <string name="add_model"><![CDATA[<- Pridať AI model]]></string>
+    <string name="delete">Zmazať</string>
+    <string name="options">Možnosti</string>
+    <string name="retitle">Premenovať</string>
+    <string name="assistant">Asistent</string>
+    <string name="new_chat">Nový chat</string>
+    <string name="files">Súbory</string>
+    <string name="audios">Zvukové súbory</string>
+    <string name="videos">Videá</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Obrázky</string>
+    <string name="provider_settings">Nastavenia poskytovateľa</string>
+    <string name="api_key">API kľúč</string>
+    <string name="base_url">Základná URL</string>
+    <string name="model_name">Názov modelu</string>
+    <string name="modalities">Modality</string>
+    <string name="tools">Nástroje</string>
+    <string name="reasoning">Uvažovanie</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Zostatok účtu</string>
+    <string name="api_path">API cesta..</string>
+    <string name="json_key">Json kľúč..</string>
+    <string name="network_proxy">Sieťový proxy</string>
+    <string name="host">Hostiteľ..</string>
+    <string name="username_option">Používateľské meno (voliteľné)..</string>
+    <string name="pass_option">Heslo (voliteľné)..</string>
+    <string name="service_account">Servisný účet @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Súkromný kľúč..</string>
+    <string name="location">Umiestnenie..</string>
+    <string name="project_uid">UID projektu..</string>
+    <string name="details">Podrobnosti</string>
+    <string name="model_type">Typ modelu</string>
+    <string name="input_modalities">Vstupné modality</string>
+    <string name="output_modalities">Výstupné modality</string>
+    <string name="abilities">Schopnosti</string>
+    <string name="provider_override">Pridať prepísanie poskytovateľa</string>
+    <string name="provider_override_description">
+                            Nakonfigurovať vlastné nastavenia poskytovateľa
+                            pre tento konkrétny model.
+                            Využíva spoločné vlastnosti hlavného
+                            poskytovateľa modelu.
+                        </string>
+    <string name="build_tools">Nástroje na zostavenie</string>
+    <string name="build_tools_description">
+                            Tieto nástroje sú poskytované priamo
+                            rozhraním API bez nutnosti podpory aplikácie.
+                            Táto funkcia je momentálne podporovaná
+                            iba rozhraním Gemini API.
+                        </string>
+    <string name="google_search">Hľadať</string>
+    <string name="google_search_description">Povoliť integráciu s Google Search</string>
+    <string name="url_context">URL kontext</string>
+    <string name="url_context_description">Povoliť spracovanie URL kontextu</string>
+    <string name="find">Nájsť</string>
+    <string name="replace">Nahradiť</string>
+    <string name="effecting_scopes">Rozsahy účinku</string>
+    <string name="user">používateľ</string>
+    <string name="visual_only">len vizuálne</string>
+    <string name="body">Telo</string>
+    <string name="key">kľúč</string>
+    <string name="value">Hodnota</string>
+    <string name="header">Hlavička.</string>
+    <string name="reset_description">Resetovať nastavenia asistenta na predvolený režim.</string>
+    <string name="save_changes">Uložiť zmeny?</string>
+    <string name="save_changes_description">Máte neuložené zmeny. Chcete ich uložiť pred odchodom?</string>
+    <string name="dont_save">Neukladať</string>
+    <string name="save">Uložiť</string>
+    <string name="links">Odkazy</string>
+    <string name="reminders">Pripomienky</string>
+    <string name="priorities">Priority</string>
+    <string name="ai_chat">AI chat</string>
+    <string name="auto">automaticky</string>
+    <string name="light">ľahký</string>
+    <string name="medium">stredný</string>
+    <string name="heavy">ťažký</string>
+    <string name="date">dátum</string>
+    <string name="time">čas</string>
+    <string name="date_and_time">dátum a čas</string>
+    <string name="local">lokálne</string>
+    <string name="timezone">časové pásmo</string>
+    <string name="system_version">verzia systému</string>
+    <string name="device_info">informácie o zariadení</string>
+    <string name="battery_level">úroveň batérie</string>
+    <string name="insert">Vložiť</string>
+    <string name="confirm">Potvrdiť</string>
+    <string name="message">Správa</string>
+    <string name="content">Obsah</string>
+    <string name="today">Dnes</string>
+    <string name="tomorrow">Zajtra</string>
+    <string name="according_to_timing">Podľa načasovania</string>
+    <string name="untitled">Bez názvu</string>
+    <string name="hue">Odtieň</string>
+    <string name="saturation">Sýtosť</string>
+    <string name="brightness">Jas</string>
+    <string name="shades">Tiene</string>
+    <string name="complementary">Komplementárna</string>
+    <string name="task_placeholder">Úloha..</string>
+    <string name="task_cannot_be_empty">Úloha nemôže byť prázdna!</string>
+    <string name="of">z</string>
+    <string name="something_wrong_with_file">Niečo nie je v poriadku so súborom</string>
+    <string name="could_not_load_any_information">Nepodarilo sa načítať informácie o mediálnom súbore.</string>
+    <string name="no_file_path_provided">Nebola zadaná cesta k súboru.</string>
+    <string name="security_error_processing_file">Bezpečnostná chyba pri spracovaní súboru</string>
+    <string name="an_unexpected_error_occurred">Vyskytla sa neočakávaná chyba</string>
+    <string name="could_not_retrieve_any_information">Nepodarilo sa získať informácie pre tento video súbor.</string>
+    <string name="error_reading_metadata">Chyba pri čítaní metadát médií</string>
+    <string name="could_not_read_exif_data">Nepodarilo sa prečítať dáta EXIF</string>
+    <string name="error_reading_basic_file_info">Chyba pri čítaní základných informácií súboru</string>
+    <string name="file_does_not_exist">Súbor neexistuje</string>
+    <string name="error">Chyba</string>
+    <string name="loading_media_info">Načítavanie informácií o médiách…</string>
+    <string name="no_metadata_available_for_this_document">Pre tento dokument nie sú k dispozícii žiadne metadáta.</string>
+    <string name="could_not_read_pdf_metadata">Nepodarilo sa prečítať metadáta PDF</string>
+    <string name="cannot_read_file">Súbor nie je možné prečítať</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Nepodarilo sa dekódovať rozmery obrázka alebo neplatný formát.</string>
+    <string name="error_during_dimension_decoding">Chyba pri dekódovaní rozmerov</string>
+    <string name="error_reading_exif_data">Chyba pri čítaní dát EXIF</string>
+    <string name="duplicate">Duplikovať</string>
+    <string name="send">Odoslať</string>
+    <string name="print">Tlačiť</string>
+    <string name="cleaned">Vyčistené</string>
+    <string name="cleared">Vymazané</string>
+    <string name="media_deleted">médiá zmazané!</string>
+    <string name="jotting">Zapisovanie</string>
+    <string name="appwidget_text">PRÍKLAD</string>
+    <string name="add_widget">Pridať widget</string>
+    <string name="app_widget_description">Toto je popis widgetu aplikácie</string>
+    <string name="quick_widget_description">Toto je rýchle rozloženie widgetu</string>
+    <string name="creator_widget_description">Toto je widget rozloženia tvorcu</string>
+    <string name="notes_list_description">Toto je zoznam poznámok</string>
+    <string name="record_deleted">záznam zmazaný!</string>
+</resources>

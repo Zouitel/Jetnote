@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Užrašai</string>
+    <string name="screen_chat">AI Pokalbis</string>
+    <string name="screen_tags">Žymės</string>
+    <string name="screen_settings">Nustatymai</string>
+    <string name="screen_archive">Archyvas</string>
+    <string name="screen_about">Apie</string>
+    <string name="screen_feedback">Atsiliepimai</string>
+    <string name="share_app">Dalintis šia programėle</string>
+    <string name="label_more">daugiau</string>
+    <string name="label_less">mažiau</string>
+    <string name="msg_deleted">ištrinta</string>
+    <string name="action_undo">Atšaukti</string>
+    <string name="tag_placeholder">Žymė..</string>
+    <string name="tag_cannot_be_empty">Žymė negali būti tuščia!</string>
+    <string name="archive">Archyvas</string>
+    <string name="deleted">ištrinta!</string>
+    <string name="erase_notes">Ištrinti užrašus?</string>
+    <string name="confirm_erase_notes">"Visi šiukšliadėžėje esantys užrašai bus ištrinti visam laikui."</string>
+    <string name="search_in_notes">"Ieškoti užrašuose.."</string>
+    <string name="select_layout">"Pasirinkti išdėstymą"</string>
+    <string name="settings">"Nustatymai"</string>
+    <string name="account_sync">"Paskyros sinchronizacija"</string>
+    <string name="account_sync_description">"
+                                Įjungus Google Drive paskyros
+                                sinchronizaciją šioje programėlėje,
+                                galėsite sklandžiai kurti atsargines
+                                kopijas ir sinchronizuoti programėlės
+                                duomenis, pvz., užrašus ir nustatymus,
+                                užtikrinant duomenų saugumą.
+        "</string>
+    <string name="assistant_configuration">"Asistento konfigūracija"</string>
+    <string name="assistant_configuration_description">"
+                                AI asistentas yra dirbtinio intelekto
+                                valdoma programinė įranga, sukurta
+                                padėti jums atlikti įvairias užduotis
+                                šioje programėlėje.
+                                Šie asistentai supranta ir atsako į
+                                natūralią kalbą, leidžiant jums su
+                                jais bendrauti per vaizdą ar tekstą.
+                            "</string>
+    <string name="dark_mode">"Tamsus režimas"</string>
+    <string name="dark_mode_description">"
+                                Šis režimas yra visos sistemos nustatymas,
+                                kuris pakeičia jūsų Android programėlės
+                                vartotojo sąsajos fono spalvų schemą į
+                                tamsesnes spalvas. Jis skirtas mažinti
+                                akių nuovargį, pagerinti prieinamumą,
+                                taupyti bateriją ir pagerinti
+                                vartotojo patirtį.
+                            "</string>
+    <string name="sound_effect">"Garso efektas"</string>
+    <string name="sound_effect_description">"
+                                Jetnote programėlės kontekste \'Garso
+                                efekto\' funkcija teikia garsinį
+                                grįžtamąjį ryšį vartotojams, kai jie
+                                sąveikauja su mygtukais ir kitais
+                                sąsajos elementais. Tai įprasta
+                                mobiliųjų programėlių kūrimo praktika,
+                                siekiant padaryti vartotojo patirtį
+                                interaktyvesnę ir patrauklesnę.
+                            "</string>
+    <string name="layouts">"Išdėstymai"</string>
+    <string name="layouts_description">"
+                                Išdėstymai yra pagrindiniai turiniui
+                                organizuoti ir rodyti Android
+                                programėlėse. Jie apibrėžia sąsajos
+                                elementų struktūrą ir išdėstymą
+                                ekrane.
+                            "</string>
+    <string name="sort_notes">"Rūšiuoti užrašus"</string>
+    <string name="default_sort">"numatytasis"</string>
+    <string name="name_sort">"pavadinimas"</string>
+    <string name="oldest_sort">"seniausi"</string>
+    <string name="newest_sort">"naujausiai"</string>
+    <string name="priority_sort">"prioritetas"</string>
+    <string name="zen_mode">"Zen režimas"</string>
+    <string name="zen_mode_description">"
+                                Zen režimas (viso ekrano režimas) yra
+                                ekrano nustatymas, leidžiantis programėlei
+                                užimti visą ekraną, paslėpiant visus
+                                kitus sąsajos elementus, pvz.,
+                                įrankių juostas, meniu ir OS užduočių
+                                juostą.
+                            "</string>
+    <string name="shake">"Papurtyti, kad praneštumėte"</string>
+    <string name="shake_description">"
+                              Patogi funkcija, leidžianti vartotojams
+                              inicijuoti atsiliepimų ar klaidų
+                              pranešimo procesą tiesiog fiziškai
+                              papurčius Android įrenginį. Vietoj to,
+                              kad naršytumėte per kelis meniu ieškodami
+                              \'Siųsti atsiliepimą\' arba
+                              \'Pranešti apie klaidą\'.
+                            "</string>
+    <string name="block_screenshot">"Blokuoti ekrano kopiją"</string>
+    <string name="block_screenshot_description">"
+                                Ekrano kopijų blokavimas yra saugumo
+                                priemonė, neleidžianti vartotojams
+                                daryti jūsų programėlės turinio ekrano
+                                kopijų. Dažnai naudojama siekiant
+                                apsaugoti jautrią informaciją, pvz.,
+                                bankininkystės duomenis, asmeninius
+                                duomenis ar autorių teisėmis saugomą
+                                medžiagą.
+                            "</string>
+    <string name="lock_mode">"Užrakinimo režimas"</string>
+    <string name="lock_mode_description">"
+                                Ši funkcija pagerina jūsų programėlės
+                                saugumą, reikalaujant vartotojų
+                                autentifikuotis prieš pasiekiant turinį.
+                                Tai paprastai pasiekiama naudojant
+                                įrenginio integruotas saugumo funkcijas,
+                                pvz., pirštų atspaudą, PIN kodą arba
+                                atrakinimo šabloną.
+                            "</string>
+    <string name="licenses">"Licencijos"</string>
+    <string name="licenses_description">"
+                                    Šios licencijos įtrauktos čia, siekiant
+                                    laikytis atitinkamų autorių platinimo
+                                    reikalavimų ir užtikrinti skaidrumą
+                                    dėl programinės įrangos architektūros.
+                                    "</string>
+    <string name="title">"Pavadinimas"</string>
+    <string name="note">"Užrašas"</string>
+    <string name="failed_to_save_document">"Nepavyko išsaugoti dokumento."</string>
+    <string name="gallery">"Galerija"</string>
+    <string name="audio">Garsas</string>
+    <string name="permission_denied">Leidimas atmestas!</string>
+    <string name="take_photo">Fotografuoti</string>
+    <string name="video_capture">Įrašyti vaizdo įrašą</string>
+    <string name="recorder">Įrašytuvas</string>
+    <string name="document">Dokumentas</string>
+    <string name="scanner">Skaitytuvas</string>
+    <string name="tasks">Užduotys</string>
+    <string name="tags">Žymės</string>
+    <string name="reminder">Priminimas</string>
+    <string name="priority">Prioritetas</string>
+    <string name="low_priority">Žemas</string>
+    <string name="medium_priority">Vidutinis</string>
+    <string name="high_priority">Aukštas</string>
+    <string name="urgent_priority">Skubus</string>
+    <string name="non_priority">Nėra</string>
+    <string name="created">Sukurta</string>
+    <string name="edited">Redaguota</string>
+    <string name="types">Tipai</string>
+    <string name="media">Medija</string>
+    <string name="medias">Medijos failai</string>
+    <string name="colour">Spalva</string>
+    <string name="colours">Spalvos</string>
+    <string name="search_within">Ieškoti viduje</string>
+    <string name="issue_title">Problemos pavadinimas*</string>
+    <string name="issue_description">Problemos aprašymas (neprivaloma)</string>
+    <string name="noAccount">Prisijungti be paskyros</string>
+    <string name="screenshot_selected">✓ Ekrano kopija pasirinkta</string>
+    <string name="drive_submit">Bus įkelta į Drive pateikiant</string>
+    <string name="select_screenshot">Pasirinkti ekrano kopiją</string>
+    <string name="system_logs">Įtraukti sistemos žurnalus?</string>
+    <string name="find_an_issue">Ar radote problemą?</string>
+    <string name="take_a_screenshot">Nepamirškite padaryti ekrano kopijos.</string>
+    <string name="report_an_issue">Pranešti apie problemą!</string>
+    <string name="bug">Klaida</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android sistemos žurnalai (Logcat) atsiliepimų ataskaitoje</string>
+    <string name="logs_description">Android sistemos žurnalai yra laiko žyma pažymėtų pranešimų srautas iš operacinės sistemos ir branduolio.\n    | Kai vartotojas susiduria su problema (programėlės gedimas, užšalimas ar netikėtas elgesys), žurnalai fiksuoja įvykius prieš ir problemos metu, suteikdami kūrėjams reikalingą kontekstą diagnostikai.</string>
+    <string name="label_bug">Klaida</string>
+    <string name="label_feature">Funkcija</string>
+    <string name="label_invalid">Netinkamas</string>
+    <string name="label_question">Klausimas</string>
+    <string name="label_security">Saugumas</string>
+    <string name="failed">Nepavyko</string>
+    <string name="submit_feedback">Pateikti atsiliepimą!</string>
+    <string name="uploading_screenshot">Įkeliama ekrano kopija…</string>
+    <string name="creating_github_issue">Kuriama GitHub problema…</string>
+    <string name="upload_faild">Įkėlimas nepavyko…</string>
+    <string name="upload_failed">Įkėlimas nepavyko…</string>
+    <string name="issue_crea">Problema sukurta.</string>
+    <string name="issue_created">Problema sukurta!</string>
+    <string name="log_out">Atsijungti</string>
+    <string name="hi">Sveiki</string>
+    <string name="add_account">Pridėti kitą paskyrą</string>
+    <string name="manage_account">Tvarkyti paskyrą</string>
+    <string name="upload_data">Įkelti duomenis</string>
+    <string name="download_data">Atsisiųsti duomenis</string>
+    <string name="firebase_authentication_failed">Firebase autentifikacija nepavyko</string>
+    <string name="sign_in_failed">Prisijungimas su Google nepavyko</string>
+    <string name="please_wait">Prisijungiama, prašome palaukti…</string>
+    <string name="sync_title">Prisijunkite sinchronizuoti</string>
+    <string name="sync_description">Prisijunkite su savo Google paskyra, kad sukurtumėte atsargines kopijas ir sinchronizuotumėte užrašus visuose įrenginiuose.</string>
+    <string name="current_account">Dabartinė paskyra</string>
+    <string name="no_name">Nėra vardo</string>
+    <string name="no_email">Nėra el. pašto</string>
+    <string name="sign_out">Atsijungti</string>
+    <string name="sign_in_with_google">Prisijungti su Google</string>
+    <string name="ai_models">AI modeliai</string>
+    <string name="load_more">Įkelti daugiau</string>
+    <string name="available_models">Galimi modeliai</string>
+    <string name="assistant_settings">Asistento nustatymai</string>
+    <string name="learning_mode">Mokymosi režimas</string>
+    <string name="learning_mode_description">"
+                    Numatyti išvestį naujiems, nematytiems duomenims,
+                    remiantis modeliais, išmoktais iš
+                    pažymėtų pavyzdžių.
+                "</string>
+    <string name="temperat">Temperatūra</string>
+    <string name="temperature">Temperatūra</string>
+    <string name="temperature_description">"
+           Valdo išvesties atsitiktinumą.
+           Aukštesnės reikšmės yra kūrybiškesnės.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Valdo, kurie žetonai laikomi tinkamais išvesčiai.
+            </string>
+    <string name="context_message_size">Konteksto pranešimų dydis</string>
+    <string name="context_message_size_description">
+            Maksimalus ankstesnių pranešimų skaičius,
+            kurį reikia įtraukti į kontekstą.
+        </string>
+    <string name="stream_output">Srautinė išvestis</string>
+    <string name="stream_output_description">Rodyti atsakymą jo generavimo metu.</string>
+    <string name="thinking_budget">Mąstymo biudžetas</string>
+    <string name="thinking_budget_description">
+                            Riboja skaičiavimo išteklius,
+                            naudojamus atsakymui.
+                        </string>
+    <string name="system_prompt">Sistemos raginimas</string>
+    <string name="prompt">Raginimas..</string>
+    <string name="properties">Savybės</string>
+    <string name="quick_messages">Greiti pranešimai</string>
+    <string name="quick_messages_description">Konfigūruoti greitų pranešimų sparčiuosius klavišus.</string>
+    <string name="regular_expressions">Reguliariosios išraiškos</string>
+    <string name="regular_expressions_description">
+                            Apibrėžti regex šablonus pranešimams
+                            transformuoti prieš siunčiant/gaunant.
+                        </string>
+    <string name="headers">Antraštės</string>
+    <string name="headers_description">
+                            Tai rakto ir reikšmės poros, pridedamos
+                            prie užklausos antraštės bloko. Paprastai
+                            naudojamos autentifikacijai, turinio tipo
+                            nurodymui ar metaduomenų perdavimui
+                            apie užklausą.
+                        </string>
+    <string name="bodies">Turinio dalys</string>
+    <string name="bodies_description">
+                            Nurodo duomenų apkrovą (JSON struktūra),
+                            siunčiamą užklausoje. Tai pagrindinis
+                            būdas siųsti įvestis AI modeliui.
+                        </string>
+    <string name="memory">Atmintis</string>
+    <string name="memory_description">
+                            Leisti asistentui prisiminti ankstesnius
+                            pokalbio etapus.
+                        </string>
+    <string name="chats_reference">Nesenų pokalbių nuoroda</string>
+    <string name="chats_reference_description">
+                        Remtis duomenimis iš nesenų pokalbių, siekiant
+                        geresnių kontekstinių atsakymų.
+                        </string>
+    <string name="javascript">JavaScript variklis</string>
+    <string name="javascript_description">
+                            Vykdyti JavaScript kodą su QuickJS varikliu
+                            skaičiavimams ir scenarijams.
+                        </string>
+    <string name="reset">Iš naujo nustatyti parametrus!</string>
+    <string name="providers">Tiekėjai</string>
+    <string name="ask">Klausti</string>
+    <string name="add_model"><![CDATA[<- Pridėti AI modelį]]></string>
+    <string name="delete">Ištrinti</string>
+    <string name="options">Parinktys</string>
+    <string name="retitle">Pervadinti</string>
+    <string name="assistant">Asistentas</string>
+    <string name="new_chat">Naujas pokalbis</string>
+    <string name="files">Failai</string>
+    <string name="audios">Garso failai</string>
+    <string name="videos">Vaizdo įrašai</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Nuotraukos</string>
+    <string name="provider_settings">Tiekėjo nustatymai</string>
+    <string name="api_key">API raktas</string>
+    <string name="base_url">Bazinis URL</string>
+    <string name="model_name">Modelio pavadinimas</string>
+    <string name="modalities">Modalumai</string>
+    <string name="tools">Įrankiai</string>
+    <string name="reasoning">Samprotavimas</string>
+    <string name="respo">Atsakymo API</string>
+    <string name="response_api">Atsakymo API</string>
+    <string name="account_balance">Paskyros likutis</string>
+    <string name="api_path">API kelias..</string>
+    <string name="json_key">Json raktas..</string>
+    <string name="network_proxy">Tinklo tarpinis serveris</string>
+    <string name="host">Pagrindinis kompiuteris..</string>
+    <string name="username_option">Naudotojo vardas (neprivaloma)..</string>
+    <string name="pass_option">Slaptažodis (neprivaloma)..</string>
+    <string name="service_account">Paslaugos paskyra @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Privatus raktas..</string>
+    <string name="location">Vieta..</string>
+    <string name="project_uid">Projekto UID..</string>
+    <string name="details">Išsamiau</string>
+    <string name="model_type">Modelio tipas</string>
+    <string name="input_modalities">Įvesties modalumai</string>
+    <string name="output_modalities">Išvesties modalumai</string>
+    <string name="abilities">Gebėjimai</string>
+    <string name="provider_override">Pridėti tiekėjo perrašymą</string>
+    <string name="provider_override_description">
+                            Konfigūruoti pasirinktinius tiekėjo
+                            nustatymus šiam konkrečiam modeliui.
+                            Naudojamos bendros savybės iš pagrindinio
+                            modelio tiekėjo.
+                        </string>
+    <string name="build_tools">Kūrimo įrankiai</string>
+    <string name="build_tools_description">
+                            Šiuos įrankius tiesiogiai teikia API,
+                            nereikalaujant programėlės palaikymo.
+                            Šiuo metu ši funkcija palaikoma tik
+                            Gemini API.
+                        </string>
+    <string name="google_search">Ieškoti</string>
+    <string name="google_search_description">Įjungti Google paieškos integraciją</string>
+    <string name="url_context">URL kontekstas</string>
+    <string name="url_context_description">Įjungti URL konteksto apdorojimą</string>
+    <string name="find">Rasti</string>
+    <string name="replace">Pakeisti</string>
+    <string name="effecting_scopes">Paveikiamos sritys</string>
+    <string name="user">naudotojas</string>
+    <string name="visual_only">tik vizualinis</string>
+    <string name="body">Turinys</string>
+    <string name="key">raktas</string>
+    <string name="value">Reikšmė</string>
+    <string name="header">Antraštė.</string>
+    <string name="reset_description">Iš naujo nustatyti asistento parametrus į numatytąjį režimą.</string>
+    <string name="save_changes">Išsaugoti pakeitimus?</string>
+    <string name="save_changes_description">Turite neišsaugotų pakeitimų. Ar norite juos išsaugoti prieš išeidami?</string>
+    <string name="dont_save">Neišsaugoti</string>
+    <string name="save">Išsaugoti</string>
+    <string name="links">Nuorodos</string>
+    <string name="reminders">Priminimai</string>
+    <string name="priorities">Prioritetai</string>
+    <string name="ai_chat">AI pokalbis</string>
+    <string name="auto">automatinis</string>
+    <string name="light">lengvas</string>
+    <string name="medium">vidutinis</string>
+    <string name="heavy">sunkus</string>
+    <string name="date">data</string>
+    <string name="time">laikas</string>
+    <string name="date_and_time">data ir laikas</string>
+    <string name="local">vietinis</string>
+    <string name="timezone">laiko juosta</string>
+    <string name="system_version">sistemos versija</string>
+    <string name="device_info">įrenginio informacija</string>
+    <string name="battery_level">baterijos lygis</string>
+    <string name="insert">Įterpti</string>
+    <string name="confirm">Patvirtinti</string>
+    <string name="message">Pranešimas</string>
+    <string name="content">Turinys</string>
+    <string name="today">Šiandien</string>
+    <string name="tomorrow">Rytoj</string>
+    <string name="according_to_timing">Pagal laiką</string>
+    <string name="untitled">Be pavadinimo</string>
+    <string name="hue">Atspalvis</string>
+    <string name="saturation">Sodrumas</string>
+    <string name="brightness">Ryškumas</string>
+    <string name="shades">Šešėliai</string>
+    <string name="complementary">Papildantis</string>
+    <string name="task_placeholder">Užduotis..</string>
+    <string name="task_cannot_be_empty">Užduotis negali būti tuščia!</string>
+    <string name="of">iš</string>
+    <string name="something_wrong_with_file">Su failu kažkas negerai</string>
+    <string name="could_not_load_any_information">Nepavyko įkelti informacijos apie medijos failą.</string>
+    <string name="no_file_path_provided">Nenurodytas failo kelias.</string>
+    <string name="security_error_processing_file">Saugumo klaida apdorojant failą</string>
+    <string name="an_unexpected_error_occurred">Įvyko netikėta klaida</string>
+    <string name="could_not_retrieve_any_information">Nepavyko gauti informacijos apie šį vaizdo failą.</string>
+    <string name="error_reading_metadata">Klaida skaitant medijos metaduomenis</string>
+    <string name="could_not_read_exif_data">Nepavyko perskaityti EXIF duomenų</string>
+    <string name="error_reading_basic_file_info">Klaida skaitant pagrindinę failo informaciją</string>
+    <string name="file_does_not_exist">Failas neegzistuoja</string>
+    <string name="error">Klaida</string>
+    <string name="loading_media_info">Įkeliama medijos informacija…</string>
+    <string name="no_metadata_available_for_this_document">Šiam dokumentui nėra galimų metaduomenų.</string>
+    <string name="could_not_read_pdf_metadata">Nepavyko perskaityti PDF metaduomenų</string>
+    <string name="cannot_read_file">Nepavyksta perskaityti failo</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Nepavyko iššifruoti vaizdo matmenų arba netinkamas formatas.</string>
+    <string name="error_during_dimension_decoding">Klaida iššifruojant matmenis</string>
+    <string name="error_reading_exif_data">Klaida skaitant EXIF duomenis</string>
+    <string name="duplicate">Dubliuoti</string>
+    <string name="send">Siųsti</string>
+    <string name="print">Spausdinti</string>
+    <string name="cleaned">Išvalyta</string>
+    <string name="cleared">Ištrinta</string>
+    <string name="media_deleted">medija ištrinta!</string>
+    <string name="jotting">Užrašinėjama</string>
+    <string name="appwidget_text">PAVYZDYS</string>
+    <string name="add_widget">Pridėti valdiklį</string>
+    <string name="app_widget_description">Tai programėlės valdiklio aprašymas</string>
+    <string name="quick_widget_description">Tai greito valdiklio išdėstymas</string>
+    <string name="creator_widget_description">Tai kūrėjo išdėstymo valdiklis</string>
+    <string name="notes_list_description">Tai užrašų sąrašas</string>
+    <string name="record_deleted">įrašas ištrintas!</string>
+</resources>

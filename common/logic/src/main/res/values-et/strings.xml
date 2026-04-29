@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Märkmed</string>
+    <string name="screen_chat">AI Vestlus</string>
+    <string name="screen_tags">Sildid</string>
+    <string name="screen_settings">Seaded</string>
+    <string name="screen_archive">Arhiiv</string>
+    <string name="screen_about">Teave</string>
+    <string name="screen_feedback">Tagasiside</string>
+    <string name="share_app">Jaga seda rakendust</string>
+    <string name="label_more">rohkem</string>
+    <string name="label_less">vähem</string>
+    <string name="msg_deleted">kustutatud</string>
+    <string name="action_undo">Võta tagasi</string>
+    <string name="tag_placeholder">Silt..</string>
+    <string name="tag_cannot_be_empty">Silt ei tohi olla tühi!</string>
+    <string name="archive">Arhiiv</string>
+    <string name="deleted">kustutatud!</string>
+    <string name="erase_notes">Kustuta märkmed?</string>
+    <string name="confirm_erase_notes">"Kõik prügikastis olevad märkmed kustutatakse jäädavalt."</string>
+    <string name="search_in_notes">"Otsi märkmetest.."</string>
+    <string name="select_layout">"Vali paigutus"</string>
+    <string name="settings">"Seaded"</string>
+    <string name="account_sync">"Konto sünkroonimine"</string>
+    <string name="account_sync_description">"
+                                Google Drive\'i konto sünkroonimise
+                                lubamine selles rakenduses võimaldab
+                                teil rakenduse andmeid, nagu märkmed
+                                ja seaded, sujuvalt varundada ja
+                                sünkroonida, tagades andmete turvalisuse.
+        "</string>
+    <string name="assistant_configuration">"Assistendi seadistamine"</string>
+    <string name="assistant_configuration_description">"
+                                AI assistent on tehisintellektil põhinev
+                                tarkvaraprogramm, mis on loodud aitama
+                                teid selles rakenduses mitmesuguste
+                                ülesannetega. Need assistendid mõistavad
+                                ja vastavad loomulikus keeles, võimaldades
+                                teil nendega suhelda pildi või teksti kaudu.
+                            "</string>
+    <string name="dark_mode">"Tume režiim"</string>
+    <string name="dark_mode_description">"
+                                See režiim on süsteemiülene seade, mis
+                                lülitab teie Androidi rakenduse kasutajaliidese
+                                taustavärvid tumedamateks.
+                                See on loodud silmade väsimuse vähendamiseks,
+                                juurdepääsetavuse parandamiseks,
+                                aku säästmiseks ja kasutajakogemuse
+                                parandamiseks.
+                            "</string>
+    <string name="sound_effect">"Heliefekt"</string>
+    <string name="sound_effect_description">"
+                                Jetnote\'i rakenduse kontekstis pakub
+                                \'Heliefekti\' funktsioon kasutajatele
+                                heli tagasisidet, kui nad suhtlevad
+                                nuppude ja muude kasutajaliidese elementidega.
+                                See on mobiilirakenduste arenduses tavaline
+                                tava, mis muudab kasutajakogemuse
+                                interaktiivsemaks ja kaasahaaravamaks.
+                            "</string>
+    <string name="layouts">"Paigutused"</string>
+    <string name="layouts_description">"
+                                Paigutused on Androidi rakenduste sisu
+                                korraldamisel ja kuvamisel põhimõttelise
+                                tähtsusega. Need määravad ekraanil
+                                kasutajaliidese elementide struktuuri
+                                ja paigutuse.
+                            "</string>
+    <string name="sort_notes">"Sordi märkmed"</string>
+    <string name="default_sort">"vaikimisi"</string>
+    <string name="name_sort">"nime järgi"</string>
+    <string name="oldest_sort">"vanimad"</string>
+    <string name="newest_sort">"uusimad"</string>
+    <string name="priority_sort">"prioriteet"</string>
+    <string name="zen_mode">"Zen-režiim"</string>
+    <string name="zen_mode_description">"
+                                Zen-režiim (täisekraanirežiim) on
+                                kuvarisseade, mis võimaldab rakendusel
+                                täita kogu ekraani, peites kõik muud
+                                liideseelemendid, nagu tööriistaribad,
+                                menüüd ja operatsioonisüsteemi tegumiriba.
+                            "</string>
+    <string name="shake">"Raputa, et teavitada"</string>
+    <string name="shake_description">"
+                              See on mugav funktsioon, mis võimaldab
+                              kasutajatel käivitada tagasiside või
+                              veateate protsess lihtsalt Androidi seadet
+                              füüsiliselt raputades. Selle asemel, et
+                              navigeerida läbi mitme menüü, et leida
+                              \'Saada tagasisidet\' või \'Teata veast\'.
+                            "</string>
+    <string name="block_screenshot">"Blokeeri ekraanipilt"</string>
+    <string name="block_screenshot_description">"
+                                Ekraanipiltide blokeerimine on
+                                turvameede, mis takistab kasutajatel
+                                rakenduse sisu ekraanipilte teha.
+                                Seda kasutatakse sageli tundliku teabe,
+                                nagu pangaandmed, isikuandmed või
+                                autoriõigusega kaitstud materjal,
+                                kaitsmiseks.
+                            "</string>
+    <string name="lock_mode">"Lukustusrežiim"</string>
+    <string name="lock_mode_description">"
+                                See funktsioon tugevdab rakenduse
+                                turvalisust, nõudes kasutajatelt
+                                enne sisu juurdepääsu autentimist.
+                                Seda saavutatakse tavaliselt seadme
+                                sisseehitatud turvafunktsioonide abil,
+                                nagu sõrmejälg, PIN-kood või muster.
+                            "</string>
+    <string name="licenses">"Litsentsid"</string>
+    <string name="licenses_description">"
+                                    Need litsentsid on lisatud, et täita
+                                    vastavate autorite levitamisnõudeid
+                                    ja tagada läbipaistvus tarkvara
+                                    arhitektuuri osas.
+                                    "</string>
+    <string name="title">"Pealkiri"</string>
+    <string name="note">"Märkus"</string>
+    <string name="failed_to_save_document">"Dokumendi salvestamine ebaõnnestus."</string>
+    <string name="gallery">"Galerii"</string>
+    <string name="audio">Heli</string>
+    <string name="permission_denied">Luba on keelatud!</string>
+    <string name="take_photo">Tee foto</string>
+    <string name="video_capture">Salvesta video</string>
+    <string name="recorder">Salvesti</string>
+    <string name="document">Dokument</string>
+    <string name="scanner">Skanner</string>
+    <string name="tasks">Ülesanded</string>
+    <string name="tags">Sildid</string>
+    <string name="reminder">Meeldetuletus</string>
+    <string name="priority">Prioriteet</string>
+    <string name="low_priority">Madal</string>
+    <string name="medium_priority">Keskmine</string>
+    <string name="high_priority">Kõrge</string>
+    <string name="urgent_priority">Kiireloomuline</string>
+    <string name="non_priority">Puudub</string>
+    <string name="created">Loodud</string>
+    <string name="edited">Muudetud</string>
+    <string name="types">Tüübid</string>
+    <string name="media">Meedia</string>
+    <string name="medias">Meediafailid</string>
+    <string name="colour">Värv</string>
+    <string name="colours">Värvid</string>
+    <string name="search_within">Otsi seest</string>
+    <string name="issue_title">Probleemi pealkiri*</string>
+    <string name="issue_description">Probleemi kirjeldus (valikuline)</string>
+    <string name="noAccount">Logi sisse ilma kontota</string>
+    <string name="screenshot_selected">✓ Ekraanipilt valitud</string>
+    <string name="drive_submit">Laaditakse Drive\'i üles esitamisel</string>
+    <string name="select_screenshot">Vali ekraanipilt</string>
+    <string name="system_logs">Kaasa süsteemilogid?</string>
+    <string name="find_an_issue">Kas leidsid probleemi?</string>
+    <string name="take_a_screenshot">Ära unusta ekraanipilti teha.</string>
+    <string name="report_an_issue">Teata probleemist!</string>
+    <string name="bug">Viga</string>
+    <string name="logs_title">\\uD83D\\uDCiE Androidi süsteemilogid (Logcat) tagasisidearuandes</string>
+    <string name="logs_description">Androidi süsteemilogid on ajatemplitega sõnumivoog operatsioonisüsteemist ja kernelist.\n    | Kui kasutaja kohtab probleemi (rakenduse krahh, külmumine või ootamatu käitumine), salvestavad logid probleemiga seotud sündmused, pakkudes arendajatele diagnoosimiseks vajalikku konteksti.</string>
+    <string name="label_bug">Viga</string>
+    <string name="label_feature">Funktsioon</string>
+    <string name="label_invalid">Vigane</string>
+    <string name="label_question">Küsimus</string>
+    <string name="label_security">Turvalisus</string>
+    <string name="failed">Ebaõnnestus</string>
+    <string name="submit_feedback">Esita tagasiside!</string>
+    <string name="uploading_screenshot">Ekraanipildi üleslaadimine…</string>
+    <string name="creating_github_issue">GitHub\'i probleemi loomine…</string>
+    <string name="upload_faild">Üleslaadimine ebaõnnestus…</string>
+    <string name="upload_failed">Üleslaadimine ebaõnnestus…</string>
+    <string name="issue_crea">Probleem loodud.</string>
+    <string name="issue_created">Probleem loodud!</string>
+    <string name="log_out">Logi välja</string>
+    <string name="hi">Tere</string>
+    <string name="add_account">Lisa teine konto</string>
+    <string name="manage_account">Halda kontot</string>
+    <string name="upload_data">Laadi andmed üles</string>
+    <string name="download_data">Laadi andmed alla</string>
+    <string name="firebase_authentication_failed">Firebase\'i autentimine ebaõnnestus</string>
+    <string name="sign_in_failed">Google\'iga sisselogimine ebaõnnestus</string>
+    <string name="please_wait">Sisselogimine, palun oota…</string>
+    <string name="sync_title">Logi sisse sünkroonimiseks</string>
+    <string name="sync_description">Logi sisse oma Google kontoga, et varundada ja sünkroonida märkmed kõigis seadmetes.</string>
+    <string name="current_account">Praegune konto</string>
+    <string name="no_name">Nimi puudub</string>
+    <string name="no_email">E-post puudub</string>
+    <string name="sign_out">Logi välja</string>
+    <string name="sign_in_with_google">Logi sisse Google\'iga</string>
+    <string name="ai_models">AI mudelid</string>
+    <string name="load_more">Laadi rohkem</string>
+    <string name="available_models">Saadaolevad mudelid</string>
+    <string name="assistant_settings">Assistendi seaded</string>
+    <string name="learning_mode">Õpirežiim</string>
+    <string name="learning_mode_description">"
+                    Ennustada väljundit uute, nägemata andmete jaoks
+                    märgistatud näidetest õpitud mustrite põhjal.
+                "</string>
+    <string name="temperat">Temperatuur</string>
+    <string name="temperature">Temperatuur</string>
+    <string name="temperature_description">"
+           Juhib väljundi juhuslikkust.
+           Kõrgemad väärtused on loovamad.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Juhib, milliseid märke kaalutakse väljundi jaoks.
+            </string>
+    <string name="context_message_size">Kontekstsõnumite suurus</string>
+    <string name="context_message_size_description">
+            Maksimaalne arv eelmisi sõnumeid,
+            mis kaasatakse konteksti.
+        </string>
+    <string name="stream_output">Voogedastuse väljund</string>
+    <string name="stream_output_description">Kuva vastus selle genereerimisel.</string>
+    <string name="thinking_budget">Mõtlemise eelarve</string>
+    <string name="thinking_budget_description">
+                            Piirab vastuse jaoks kasutatavaid
+                            arvutusressursse.
+                        </string>
+    <string name="system_prompt">Süsteemiviip</string>
+    <string name="prompt">Viip..</string>
+    <string name="properties">Omadused</string>
+    <string name="quick_messages">Kiirsõnumid</string>
+    <string name="quick_messages_description">Seadista kiirsõnumite otseteid.</string>
+    <string name="regular_expressions">Regulaaravaldised</string>
+    <string name="regular_expressions_description">
+                            Määratle regex-mustrid sõnumite
+                            teisendamiseks enne saatmist/vastuvõtmist.
+                        </string>
+    <string name="headers">Päised</string>
+    <string name="headers_description">
+                            Need on võti-väärtuse paarid (võti: väärtus),
+                            mis lisatakse päringu päiseplokki.
+                            Neid kasutatakse tavaliselt autentimise
+                            tagamiseks (nt API võtmed või märgid),
+                            sisutüübi määramiseks või päringu
+                            metaandmete edastamiseks.
+                        </string>
+    <string name="bodies">Kehad</string>
+    <string name="bodies_description">
+                            See viitab andmekoormusele (võti: väärtus
+                            JSON-struktuur), mis saadetakse päringu sees.
+                            See on peamine viis sisendite saatmiseks
+                            AI mudelile.
+                        </string>
+    <string name="memory">Mälu</string>
+    <string name="memory_description">
+                            Luba assistendil mäletada vestluse
+                            eelmisi voore.
+                        </string>
+    <string name="chats_reference">Hiljutiste vestluste viide</string>
+    <string name="chats_reference_description">
+                        Viita hiljutiste vestluste andmetele
+                        parema kontekstuaalse vastuse saamiseks.
+                        </string>
+    <string name="javascript">JavaScripti mootor</string>
+    <string name="javascript_description">
+                            Käivita JavaScripti koodi QuickJS mootoriga
+                            arvutuste ja skriptimise jaoks.
+                        </string>
+    <string name="reset">Lähtesta seaded!</string>
+    <string name="providers">Teenusepakkujad</string>
+    <string name="ask">Küsi</string>
+    <string name="add_model"><![CDATA[<- Lisa AI mudel]]></string>
+    <string name="delete">Kustuta</string>
+    <string name="options">Valikud</string>
+    <string name="retitle">Nimeta ümber</string>
+    <string name="assistant">Assistent</string>
+    <string name="new_chat">Uus vestlus</string>
+    <string name="files">Failid</string>
+    <string name="audios">Helifailid</string>
+    <string name="videos">Videod</string>
+    <string name="camera">Kaamera</string>
+    <string name="pictures">Pildid</string>
+    <string name="provider_settings">Teenusepakkuja seaded</string>
+    <string name="api_key">API võti</string>
+    <string name="base_url">Baas-URL</string>
+    <string name="model_name">Mudeli nimi</string>
+    <string name="modalities">Modaalsused</string>
+    <string name="tools">Tööriistad</string>
+    <string name="reasoning">Arutlus</string>
+    <string name="respo">Vastuse API</string>
+    <string name="response_api">Vastuse API</string>
+    <string name="account_balance">Konto saldo</string>
+    <string name="api_path">API tee..</string>
+    <string name="json_key">JSON võti..</string>
+    <string name="network_proxy">Võrguproksid</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Kasutajanimi (valikuline)..</string>
+    <string name="pass_option">Parool (valikuline)..</string>
+    <string name="service_account">Teenusekonto @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Privaatvõti..</string>
+    <string name="location">Asukoht..</string>
+    <string name="project_uid">Projekti UID..</string>
+    <string name="details">Üksikasjad</string>
+    <string name="model_type">Mudeli tüüp</string>
+    <string name="input_modalities">Sisendi modaalsused</string>
+    <string name="output_modalities">Väljundi modaalsused</string>
+    <string name="abilities">Võimed</string>
+    <string name="provider_override">Lisa teenusepakkuja alistamine</string>
+    <string name="provider_override_description">
+                            Seadista selle konkreetse mudeli jaoks
+                            kohandatud teenusepakkuja seaded.
+                            Kasutab mudeli põhiteenusepakkuja
+                            ühiseid omadusi.
+                        </string>
+    <string name="build_tools">Ehitustööriistad</string>
+    <string name="build_tools_description">
+                            Need tööriistad pakub API otse,
+                            ilma rakenduse toeta.
+                            Praegu toetab seda funktsiooni ainult
+                            Gemini API.
+                        </string>
+    <string name="google_search">Otsing</string>
+    <string name="google_search_description">Luba Google\'i otsingu integreerimine</string>
+    <string name="url_context">URL-i kontekst</string>
+    <string name="url_context_description">Luba URL-i konteksti töötlemine</string>
+    <string name="find">Otsi</string>
+    <string name="replace">Asenda</string>
+    <string name="effecting_scopes">Mõjutatavad ulatused</string>
+    <string name="user">kasutaja</string>
+    <string name="visual_only">ainult visuaalne</string>
+    <string name="body">Keha</string>
+    <string name="key">võti</string>
+    <string name="value">Väärtus</string>
+    <string name="header">Päis.</string>
+    <string name="reset_description">Lähtesta assistendi seaded vaikerežiimi.</string>
+    <string name="save_changes">Salvesta muudatused?</string>
+    <string name="save_changes_description">Teil on salvestamata muudatusi. Kas soovite need enne lahkumist salvestada?</string>
+    <string name="dont_save">Ära salvesta</string>
+    <string name="save">Salvesta</string>
+    <string name="links">Lingid</string>
+    <string name="reminders">Meeldetuletused</string>
+    <string name="priorities">Prioriteedid</string>
+    <string name="ai_chat">AI vestlus</string>
+    <string name="auto">automaatne</string>
+    <string name="light">kerge</string>
+    <string name="medium">keskmine</string>
+    <string name="heavy">raske</string>
+    <string name="date">kuupäev</string>
+    <string name="time">aeg</string>
+    <string name="date_and_time">kuupäev ja kellaaeg</string>
+    <string name="local">kohalik</string>
+    <string name="timezone">ajavöönd</string>
+    <string name="system_version">süsteemi versioon</string>
+    <string name="device_info">seadme teave</string>
+    <string name="battery_level">aku tase</string>
+    <string name="insert">Sisesta</string>
+    <string name="confirm">Kinnita</string>
+    <string name="message">Sõnum</string>
+    <string name="content">Sisu</string>
+    <string name="today">Täna</string>
+    <string name="tomorrow">Homme</string>
+    <string name="according_to_timing">Ajastuse järgi</string>
+    <string name="untitled">Pealkirjata</string>
+    <string name="hue">Toon</string>
+    <string name="saturation">Küllastus</string>
+    <string name="brightness">Heledus</string>
+    <string name="shades">Varjundid</string>
+    <string name="complementary">Täiendav</string>
+    <string name="task_placeholder">Ülesanne..</string>
+    <string name="task_cannot_be_empty">Ülesanne ei tohi olla tühi!</string>
+    <string name="of">kohta</string>
+    <string name="something_wrong_with_file">Failiga on midagi valesti</string>
+    <string name="could_not_load_any_information">Meediafaili kohta ei saanud teavet laadida.</string>
+    <string name="no_file_path_provided">Failiteed ei ole esitatud.</string>
+    <string name="security_error_processing_file">Turvatõrge faili töötlemisel</string>
+    <string name="an_unexpected_error_occurred">Ilmnes ootamatu tõrge</string>
+    <string name="could_not_retrieve_any_information">Selle videofaili kohta ei saanud teavet hankida.</string>
+    <string name="error_reading_metadata">Tõrge meedia metaandmete lugemisel</string>
+    <string name="could_not_read_exif_data">EXIF-andmeid ei saanud lugeda</string>
+    <string name="error_reading_basic_file_info">Tõrge faili põhiteabe lugemisel</string>
+    <string name="file_does_not_exist">Fail ei ole olemas</string>
+    <string name="error">Tõrge</string>
+    <string name="loading_media_info">Meediateabe laadimine…</string>
+    <string name="no_metadata_available_for_this_document">Selle dokumendi jaoks pole metaandmeid saadaval.</string>
+    <string name="could_not_read_pdf_metadata">PDF-i metaandmeid ei saanud lugeda</string>
+    <string name="cannot_read_file">Faili ei saa lugeda</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Pildi mõõtmeid ei saanud dekodeerida või formaat on vigane.</string>
+    <string name="error_during_dimension_decoding">Tõrge mõõtmete dekodeerimisel</string>
+    <string name="error_reading_exif_data">Tõrge EXIF-andmete lugemisel</string>
+    <string name="duplicate">Dubleeri</string>
+    <string name="send">Saada</string>
+    <string name="print">Prindi</string>
+    <string name="cleaned">Puhastatud</string>
+    <string name="cleared">Kustutatud</string>
+    <string name="media_deleted">meedia kustutatud!</string>
+    <string name="jotting">Märkimine</string>
+    <string name="appwidget_text">NÄIDE</string>
+    <string name="add_widget">Lisa vidin</string>
+    <string name="app_widget_description">See on rakenduse vidina kirjeldus</string>
+    <string name="quick_widget_description">See on kiirvidinapaigutus</string>
+    <string name="creator_widget_description">See on looja paigutuse vidin</string>
+    <string name="notes_list_description">See on märkmete loend</string>
+    <string name="record_deleted">kirje kustutatud!</string>
+</resources>

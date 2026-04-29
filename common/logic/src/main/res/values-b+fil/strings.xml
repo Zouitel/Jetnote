@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Mga Tala</string>
+    <string name="screen_chat">AI Chat</string>
+    <string name="screen_tags">Mga Tag</string>
+    <string name="screen_settings">Mga Setting</string>
+    <string name="screen_archive">Arkibo</string>
+    <string name="screen_about">Tungkol Sa</string>
+    <string name="screen_feedback">Feedback</string>
+    <string name="share_app">Ibahagi ang App na Ito</string>
+    <string name="label_more">higit pa</string>
+    <string name="label_less">mas kaunti</string>
+    <string name="msg_deleted">nabura</string>
+    <string name="action_undo">I-undo</string>
+    <string name="tag_placeholder">Tag..</string>
+    <string name="tag_cannot_be_empty">Hindi maaaring walang laman ang tag!</string>
+    <string name="archive">Arkibo</string>
+    <string name="deleted">nabura!</string>
+    <string name="erase_notes">Burahin ang mga Tala?</string>
+    <string name="confirm_erase_notes">"Ang lahat ng tala sa basurahan ay permanenteng mabubura."</string>
+    <string name="search_in_notes">"Maghanap sa mga tala.."</string>
+    <string name="select_layout">"Pumili ng layout"</string>
+    <string name="settings">"Mga Setting"</string>
+    <string name="account_sync">"Pag-sync ng Account"</string>
+    <string name="account_sync_description">"
+                                Ang pag-enable ng Google Drive account sync
+                                para sa app na ito ay nagbibigay-daan sa iyong
+                                i-backup at i-sync nang maayos ang data ng app,
+                                tulad ng mga tala at setting, upang matiyak
+                                na ligtas ang iyong data.
+        "</string>
+    <string name="assistant_configuration">"Konfigurasyong ng Assistant"</string>
+    <string name="assistant_configuration_description">"
+                                Ang AI assistant ay isang software program
+                                na pinapagana ng artificial intelligence,
+                                na dinisenyo upang tulungan ka sa malawak
+                                na hanay ng mga gawain sa app na ito.
+                                Naiintindihan at tumutugon ang mga assistant
+                                sa natural na wika, na nagbibigay-daan sa iyong
+                                makipag-ugnayan sa kanila sa pamamagitan
+                                ng larawan o teksto.
+                            "</string>
+    <string name="dark_mode">"Dark Mode"</string>
+    <string name="dark_mode_description">"
+                                Ang mode na ito ay isang setting na
+                                pang-buong sistema na nagbabago ng
+                                background color scheme ng UI ng iyong
+                                Android app sa mas madilim na mga kulay.
+                                Dinisenyo upang bawasan ang pagkapagod
+                                ng mata, mapabuti ang accessibility,
+                                makatipid ng baterya, at mapahusay ang
+                                karanasan ng gumagamit.
+                            "</string>
+    <string name="sound_effect">"Sound Effect"</string>
+    <string name="sound_effect_description">"
+                                Sa konteksto ng Jetnote app, ang feature
+                                na \'Sound Effect\' ay nagbibigay ng
+                                auditory feedback sa mga gumagamit kapag
+                                nakikipag-ugnayan sila sa mga button at
+                                iba pang mga elemento ng UI.
+                                Ito ay karaniwang gawi sa pagbuo ng
+                                mobile app upang gawing mas interactive
+                                at nakakaengganyo ang karanasan ng gumagamit.
+                            "</string>
+    <string name="layouts">"Mga Layout"</string>
+    <string name="layouts_description">"
+                                Ang mga layout ay pangunahin sa pag-oorganisa
+                                at pagpapakita ng nilalaman sa iyong mga
+                                Android app. Tinutukoy nila ang istraktura
+                                at kaayusan ng mga elemento ng UI sa screen.
+                            "</string>
+    <string name="sort_notes">"Ayusin ang mga Tala"</string>
+    <string name="default_sort">"default"</string>
+    <string name="name_sort">"pangalan"</string>
+    <string name="oldest_sort">"pinakamatanda"</string>
+    <string name="newest_sort">"pinakabago"</string>
+    <string name="priority_sort">"priyoridad"</string>
+    <string name="zen_mode">"Zen Mode"</string>
+    <string name="zen_mode_description">"
+                                Ang Zen mode (full screen mode) ay isang
+                                display setting na nagpapahintulot sa isang
+                                application na sakupin ang buong screen,
+                                itinatago ang lahat ng iba pang mga elemento
+                                ng interface tulad ng mga toolbar, menu, at
+                                taskbar ng operating system.
+                            "</string>
+    <string name="shake">"I-shake para Mag-ulat"</string>
+    <string name="shake_description">"
+                              Ito ay isang maginhawang feature na nagbibigay-
+                              daan sa mga gumagamit na simulan ang proseso
+                              ng feedback o pag-uulat ng bug sa pamamagitan
+                              ng pisikal na pag-shake ng kanilang Android device.
+                              Sa halip na mag-navigate sa maraming menu
+                              upang mahanap ang \'Magpadala ng Feedback\'
+                              o \'Mag-ulat ng Bug\'.
+                            "</string>
+    <string name="block_screenshot">"I-block ang Screenshot"</string>
+    <string name="block_screenshot_description">"
+                                Ang pag-block ng screenshot ay isang
+                                hakbang sa seguridad na pumipigil sa mga
+                                gumagamit na kumuha ng screenshot ng nilalaman
+                                ng iyong app. Madalas na ginagamit upang
+                                protektahan ang sensitibong impormasyon,
+                                tulad ng mga detalye ng banking, personal
+                                na data, o materyal na protektado ng copyright.
+                            "</string>
+    <string name="lock_mode">"Lock Mode"</string>
+    <string name="lock_mode_description">"
+                                Ang feature na ito ay nagpapahusay ng
+                                seguridad ng iyong app sa pamamagitan ng
+                                pag-aatas sa mga gumagamit na mag-authenticate
+                                bago ma-access ang nilalaman. Karaniwang
+                                natatamo ito gamit ang mga built-in na
+                                feature ng seguridad ng device, tulad ng
+                                fingerprint, PIN, o pattern unlock.
+                            "</string>
+    <string name="licenses">"Mga Lisensya"</string>
+    <string name="licenses_description">"
+                                    Ang mga lisensyang ito ay kasama dito
+                                    upang sumunod sa mga kinakailangan sa
+                                    pamamahagi ng kani-kanilang mga may-akda
+                                    at upang magbigay ng transparency tungkol
+                                    sa arkitektura ng software.
+                                    "</string>
+    <string name="title">"Pamagat"</string>
+    <string name="note">"Tala"</string>
+    <string name="failed_to_save_document">"Nabigo ang pag-save ng dokumento."</string>
+    <string name="gallery">"Gallery"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Tinanggihan ang Pahintulot!</string>
+    <string name="take_photo">Kumuha ng Larawan</string>
+    <string name="video_capture">Mag-record ng Video</string>
+    <string name="recorder">Recorder</string>
+    <string name="document">Dokumento</string>
+    <string name="scanner">Scanner</string>
+    <string name="tasks">Mga Gawain</string>
+    <string name="tags">Mga Tag</string>
+    <string name="reminder">Paalala</string>
+    <string name="priority">Priyoridad</string>
+    <string name="low_priority">Mababa</string>
+    <string name="medium_priority">Katamtaman</string>
+    <string name="high_priority">Mataas</string>
+    <string name="urgent_priority">Kagyat</string>
+    <string name="non_priority">Wala</string>
+    <string name="created">Nilikha</string>
+    <string name="edited">Na-edit</string>
+    <string name="types">Mga Uri</string>
+    <string name="media">Media</string>
+    <string name="medias">Mga File ng Media</string>
+    <string name="colour">Kulay</string>
+    <string name="colours">Mga Kulay</string>
+    <string name="search_within">Maghanap sa loob ng</string>
+    <string name="issue_title">Pamagat ng Isyu*</string>
+    <string name="issue_description">Paglalarawan ng Isyu (Opsyonal)</string>
+    <string name="noAccount">Mag-sign In Nang Walang Account</string>
+    <string name="screenshot_selected">✓ Napili ang screenshot</string>
+    <string name="drive_submit">Ia-upload sa Drive kapag naisumite</string>
+    <string name="select_screenshot">Pumili ng screenshot</string>
+    <string name="system_logs">Isama ang mga system log?</string>
+    <string name="find_an_issue">Nakahanap ka ba ng isyu?</string>
+    <string name="take_a_screenshot">Huwag kalimutang kumuha ng screenshot.</string>
+    <string name="report_an_issue">Mag-ulat ng isyu!</string>
+    <string name="bug">Bug</string>
+    <string name="logs_title">\\uD83D\\uDCiE Mga Android System Log (Logcat) sa Feedback Report</string>
+    <string name="logs_description">Ang mga Android system log ay isang stream ng mga timestamped na mensahe mula sa operating system at kernel.\n    | Kapag nakatagpo ang isang gumagamit ng isyu (tulad ng crash, pag-freeze, o hindi inaasahang gawi ng app), nire-record ng mga log ang mga pangyayari sa paligid ng problema, na nagbibigay sa mga developer ng kinakailangang konteksto para sa diagnosis.</string>
+    <string name="label_bug">Bug</string>
+    <string name="label_feature">Feature</string>
+    <string name="label_invalid">Hindi Wasto</string>
+    <string name="label_question">Tanong</string>
+    <string name="label_security">Seguridad</string>
+    <string name="failed">Nabigo</string>
+    <string name="submit_feedback">Isumite ang Feedback!</string>
+    <string name="uploading_screenshot">Ina-upload ang screenshot…</string>
+    <string name="creating_github_issue">Nililikha ang GitHub issue…</string>
+    <string name="upload_faild">Nabigong Mag-upload…</string>
+    <string name="upload_failed">Nabigong Mag-upload…</string>
+    <string name="issue_crea">Nilikha ang isyu.</string>
+    <string name="issue_created">Nilikha ang isyu!</string>
+    <string name="log_out">Mag-log Out</string>
+    <string name="hi">Kamusta</string>
+    <string name="add_account">Magdagdag ng Ibang Account</string>
+    <string name="manage_account">Pamahalaan ang Account</string>
+    <string name="upload_data">I-upload ang Data</string>
+    <string name="download_data">I-download ang Data</string>
+    <string name="firebase_authentication_failed">Nabigo ang Firebase authentication</string>
+    <string name="sign_in_failed">Nabigo ang pag-sign in sa Google</string>
+    <string name="please_wait">Nagsa-sign in, mangyaring maghintay…</string>
+    <string name="sync_title">Mag-sign In para I-sync</string>
+    <string name="sync_description">Mag-sign in gamit ang iyong Google Account upang i-backup at i-sync ang iyong mga tala sa lahat ng iyong device.</string>
+    <string name="current_account">Kasalukuyang Account</string>
+    <string name="no_name">Walang Pangalan</string>
+    <string name="no_email">Walang Email</string>
+    <string name="sign_out">Mag-sign Out</string>
+    <string name="sign_in_with_google">Mag-sign In gamit ang Google</string>
+    <string name="ai_models">Mga AI Model</string>
+    <string name="load_more">Mag-load pa</string>
+    <string name="available_models">Mga Available na Model</string>
+    <string name="assistant_settings">Mga Setting ng Assistant</string>
+    <string name="learning_mode">Learning Mode</string>
+    <string name="learning_mode_description">"
+                    Hulaan ang output para sa bago, hindi pa
+                    nakitang data batay sa mga pattern na natutunan
+                    mula sa mga may-label na halimbawa.
+                "</string>
+    <string name="temperat">Temperatura</string>
+    <string name="temperature">Temperatura</string>
+    <string name="temperature_description">"
+           Kinokontrol ang randomness ng output.
+           Mas mataas na mga halaga ay mas malikhain.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Kinokontrol kung aling mga token ang isinasaalang-alang para sa output.
+            </string>
+    <string name="context_message_size">Laki ng Context Message</string>
+    <string name="context_message_size_description">
+            Maximum na bilang ng mga nakaraang mensahe
+            na isasama sa konteksto.
+        </string>
+    <string name="stream_output">Stream output</string>
+    <string name="stream_output_description">Ipakita ang tugon habang ito ay nalilikha.</string>
+    <string name="thinking_budget">Thinking budget</string>
+    <string name="thinking_budget_description">
+                            Nililimitahan ang mga computational resource
+                            na ginagamit para sa tugon.
+                        </string>
+    <string name="system_prompt">System prompt</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Mga Katangian</string>
+    <string name="quick_messages">Mga Mabilis na Mensahe</string>
+    <string name="quick_messages_description">I-configure ang mga shortcut ng mabilis na mensahe.</string>
+    <string name="regular_expressions">Mga Regular Expression</string>
+    <string name="regular_expressions_description">
+                            Tukuyin ang mga regex pattern upang baguhin
+                            ang mga mensahe bago magpadala/tumanggap.
+                        </string>
+    <string name="headers">Mga Header</string>
+    <string name="headers_description">
+                            Ito ay mga pares ng key-value na idinaragdag
+                            sa header block ng kahilingan. Karaniwang
+                            ginagamit para sa authentication, pagtukoy ng
+                            uri ng nilalaman, o pagpapadala ng metadata
+                            tungkol sa kahilingan.
+                        </string>
+    <string name="bodies">Mga Body</string>
+    <string name="bodies_description">
+                            Tumutukoy ito sa data payload (JSON structure)
+                            na ipinapadala sa loob ng kahilingan.
+                            Ito ang pangunahing paraan ng pagpapadala
+                            ng mga input sa AI model.
+                        </string>
+    <string name="memory">Memorya</string>
+    <string name="memory_description">
+                            Payagan ang assistant na matandaan ang mga
+                            nakaraang bahagi ng pag-uusap.
+                        </string>
+    <string name="chats_reference">Sanggunian sa Kamakailang mga Chat</string>
+    <string name="chats_reference_description">
+                        I-reference ang data mula sa iyong mga kamakailang
+                        chat para sa mas magagandang contextual na tugon.
+                        </string>
+    <string name="javascript">JavaScript Engine</string>
+    <string name="javascript_description">
+                            Patakbuhin ang JavaScript code gamit ang
+                            QuickJS engine para sa mga kalkulasyon at scripting.
+                        </string>
+    <string name="reset">I-reset ang Mga Setting!</string>
+    <string name="providers">Mga Provider</string>
+    <string name="ask">Magtanong</string>
+    <string name="add_model"><![CDATA[<- Magdagdag ng AI model]]></string>
+    <string name="delete">Burahin</string>
+    <string name="options">Mga Opsyon</string>
+    <string name="retitle">Palitan ng Pangalan</string>
+    <string name="assistant">Assistant</string>
+    <string name="new_chat">Bagong Chat</string>
+    <string name="files">Mga File</string>
+    <string name="audios">Mga Audio</string>
+    <string name="videos">Mga Video</string>
+    <string name="camera">Camera</string>
+    <string name="pictures">Mga Larawan</string>
+    <string name="provider_settings">Mga Setting ng Provider</string>
+    <string name="api_key">API Key</string>
+    <string name="base_url">Base URL</string>
+    <string name="model_name">Pangalan ng Model</string>
+    <string name="modalities">Mga Modality</string>
+    <string name="tools">Mga Tool</string>
+    <string name="reasoning">Pangangatuwiran</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Balanse ng Account</string>
+    <string name="api_path">API Path..</string>
+    <string name="json_key">Json Key..</string>
+    <string name="network_proxy">Network Proxy</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Username (Opsyonal)..</string>
+    <string name="pass_option">Password (Opsyonal)..</string>
+    <string name="service_account">Service account @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Private key..</string>
+    <string name="location">Lokasyon..</string>
+    <string name="project_uid">Project UID..</string>
+    <string name="details">Mga Detalye</string>
+    <string name="model_type">Uri ng Model</string>
+    <string name="input_modalities">Mga Input Modality</string>
+    <string name="output_modalities">Mga Output Modality</string>
+    <string name="abilities">Mga Kakayahan</string>
+    <string name="provider_override">Magdagdag ng provider override</string>
+    <string name="provider_override_description">
+                            I-configure ang mga custom na setting ng
+                            provider para sa partikular na model na ito.
+                            Gumagamit ng mga karaniwang katangian mula
+                            sa pangunahing provider ng model.
+                        </string>
+    <string name="build_tools">Mga Build Tool</string>
+    <string name="build_tools_description">
+                            Ang mga tool na ito ay direktang ibinibigay
+                            ng API nang hindi nangangailangan ng suporta
+                            ng app. Ang feature na ito ay kasalukuyang
+                            sinusuportahan lamang ng Gemini API.
+                        </string>
+    <string name="google_search">Maghanap</string>
+    <string name="google_search_description">I-enable ang integrasyon ng Google Search</string>
+    <string name="url_context">URL Context</string>
+    <string name="url_context_description">I-enable ang pagproseso ng URL context</string>
+    <string name="find">Hanapin</string>
+    <string name="replace">Palitan</string>
+    <string name="effecting_scopes">Mga Apektadong Saklaw</string>
+    <string name="user">gumagamit</string>
+    <string name="visual_only">biswal lamang</string>
+    <string name="body">Body</string>
+    <string name="key">key</string>
+    <string name="value">Halaga</string>
+    <string name="header">Header.</string>
+    <string name="reset_description">I-reset ang mga setting ng assistant sa default na mode.</string>
+    <string name="save_changes">I-save ang mga pagbabago?</string>
+    <string name="save_changes_description">Mayroon kang mga hindi na-save na pagbabago. Gusto mo bang i-save ang mga ito bago umalis?</string>
+    <string name="dont_save">Huwag I-save</string>
+    <string name="save">I-save</string>
+    <string name="links">Mga Link</string>
+    <string name="reminders">Mga Paalala</string>
+    <string name="priorities">Mga Priyoridad</string>
+    <string name="ai_chat">AI Chat</string>
+    <string name="auto">awtomatiko</string>
+    <string name="light">magaan</string>
+    <string name="medium">katamtaman</string>
+    <string name="heavy">mabigat</string>
+    <string name="date">petsa</string>
+    <string name="time">oras</string>
+    <string name="date_and_time">petsa at oras</string>
+    <string name="local">lokal</string>
+    <string name="timezone">time zone</string>
+    <string name="system_version">bersyon ng sistema</string>
+    <string name="device_info">impormasyon ng device</string>
+    <string name="battery_level">antas ng baterya</string>
+    <string name="insert">Ilagay</string>
+    <string name="confirm">Kumpirmahin</string>
+    <string name="message">Mensahe</string>
+    <string name="content">Nilalaman</string>
+    <string name="today">Ngayon</string>
+    <string name="tomorrow">Bukas</string>
+    <string name="according_to_timing">Ayon sa timing</string>
+    <string name="untitled">Walang Pamagat</string>
+    <string name="hue">Hue</string>
+    <string name="saturation">Saturation</string>
+    <string name="brightness">Liwanag</string>
+    <string name="shades">Mga Lilim</string>
+    <string name="complementary">Complementary</string>
+    <string name="task_placeholder">Gawain..</string>
+    <string name="task_cannot_be_empty">Hindi maaaring walang laman ang gawain!</string>
+    <string name="of">ng</string>
+    <string name="something_wrong_with_file">May mali sa file</string>
+    <string name="could_not_load_any_information">Hindi ma-load ang impormasyon para sa media file.</string>
+    <string name="no_file_path_provided">Walang ibinigay na file path.</string>
+    <string name="security_error_processing_file">Error sa seguridad sa pagproseso ng file</string>
+    <string name="an_unexpected_error_occurred">Naganap ang hindi inaasahang error</string>
+    <string name="could_not_retrieve_any_information">Hindi ma-retrieve ang impormasyon para sa video file na ito.</string>
+    <string name="error_reading_metadata">Error sa pagbabasa ng media metadata</string>
+    <string name="could_not_read_exif_data">Hindi mabasa ang EXIF data</string>
+    <string name="error_reading_basic_file_info">Error sa pagbabasa ng basic file info</string>
+    <string name="file_does_not_exist">Hindi umiiral ang file</string>
+    <string name="error">Error</string>
+    <string name="loading_media_info">Naglo-load ng media info…</string>
+    <string name="no_metadata_available_for_this_document">Walang available na metadata para sa dokumentong ito.</string>
+    <string name="could_not_read_pdf_metadata">Hindi mabasa ang PDF metadata</string>
+    <string name="cannot_read_file">Hindi mabasa ang file</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Hindi ma-decode ang dimensions ng imahe o invalid na format.</string>
+    <string name="error_during_dimension_decoding">Error sa pag-decode ng dimensions</string>
+    <string name="error_reading_exif_data">Error sa pagbabasa ng EXIF data</string>
+    <string name="duplicate">Duplicate</string>
+    <string name="send">Ipadala</string>
+    <string name="print">I-print</string>
+    <string name="cleaned">Nalinis</string>
+    <string name="cleared">Nabura</string>
+    <string name="media_deleted">nabura ang media!</string>
+    <string name="jotting">Nagsusulat ng tala</string>
+    <string name="appwidget_text">HALIMBAWA</string>
+    <string name="add_widget">Magdagdag ng widget</string>
+    <string name="app_widget_description">Ito ay isang paglalarawan ng app widget</string>
+    <string name="quick_widget_description">Ito ay isang mabilis na widget layout</string>
+    <string name="creator_widget_description">Ito ay isang creator layout widget</string>
+    <string name="notes_list_description">Ito ay isang listahan ng mga tala</string>
+    <string name="record_deleted">nabura ang rekord!</string>
+</resources>

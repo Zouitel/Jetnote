@@ -61,10 +61,13 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import zouitel.neighborhood.workspace.R
 import kotlin.math.abs
 
@@ -95,68 +98,70 @@ internal fun BottomBar(
         Column(modifier = Modifier
             .background(Color.Black.copy(alpha = .6f))
         ) {
-            Row {
-                CommonRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .imePadding()
-                ) {
-                    IconButton(
-                        onClick = {
-                            sound.performSoundEffect(context, FOCUS_NAVIGATION, isSound)
-                            bottomNav.show(
-                                OptionsScreen(
-                                    data = data,
-                                    titleState = titleState,
-                                    descriptionState = descriptionState,
-                                )
-                            )
-                        }) {
-                        Icon(
-                            painter = painterResource(id = ADD),
-                            contentDescription = null,
-                            tint = Color.LightGray
-                        )
-                    }
-
-                    // undo
-                    UndoRedo(
-                        isSound = isSound,
-                        titleState = titleState,
-                        descriptionState = descriptionState
-                    )
-
-                    IconButton(
-                        onClick = {
-                            sound.performSoundEffect(
-                                context,
-                                CommonConstants.KEY_STANDARD,
-                                isSound
-                            )
-                            dataModel.sendAction(
-                                Action.Insert(
-                                    data.value.copy(
-                                        userUid = auth.uid.toString(),
-                                        title = titleState?.text.toString().ifEmpty { untitledResource },
-                                        description = descriptionState?.text.toString(),
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                Row {
+                    CommonRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .imePadding()
+                    ) {
+                        IconButton(
+                            onClick = {
+                                sound.performSoundEffect(context, FOCUS_NAVIGATION, isSound)
+                                bottomNav.show(
+                                    OptionsScreen(
+                                        data = data,
+                                        titleState = titleState,
+                                        descriptionState = descriptionState,
                                     )
                                 )
+                            }) {
+                            Icon(
+                                painter = painterResource(id = ADD),
+                                contentDescription = null,
+                                tint = Color.LightGray
                             )
-                            linkModel.urlsProcessing(data.value.uid, descriptionState?.text.toString())
-                            navigator?.items?.size?.let {
-                                if (it > 1) {
-                                    navigator.pop()
-                                } else {
-                                    (context as Activity).finishAfterTransition()
-                                }
-                            }
-                        }) {
-                        Icon(
-                            painter = painterResource(CommonIcons.CHECK),
-                            contentDescription = null,
-                            tint = Color.LightGray
+                        }
+
+                        // undo
+                        UndoRedo(
+                            isSound = isSound,
+                            titleState = titleState,
+                            descriptionState = descriptionState
                         )
+
+                        IconButton(
+                            onClick = {
+                                sound.performSoundEffect(
+                                    context,
+                                    CommonConstants.KEY_STANDARD,
+                                    isSound
+                                )
+                                dataModel.sendAction(
+                                    Action.Insert(
+                                        data.value.copy(
+                                            userUid = auth.uid.toString(),
+                                            title = titleState?.text.toString().ifEmpty { untitledResource },
+                                            description = descriptionState?.text.toString(),
+                                        )
+                                    )
+                                )
+                                linkModel.urlsProcessing(data.value.uid, descriptionState?.text.toString())
+                                navigator?.items?.size?.let {
+                                    if (it > 1) {
+                                        navigator.pop()
+                                    } else {
+                                        (context as Activity).finishAfterTransition()
+                                    }
+                                }
+                            }) {
+                            Icon(
+                                painter = painterResource(CommonIcons.CHECK),
+                                contentDescription = null,
+                                tint = Color.LightGray
+                            )
+                        }
                     }
                 }
             }

@@ -13,13 +13,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -55,18 +58,20 @@ class ProvidersScreen: Screen {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    { Text(stringResource(R.string.providers)) },
-                    Modifier,
-                    {
-                        IconButton({
-                            navigator?.pop()
-                        }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
-                        }
-                    },
-                    scrollBehavior = scrollBehavior
-                )
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    TopAppBar(
+                        { Text(stringResource(R.string.providers)) },
+                        Modifier,
+                        {
+                            IconButton({
+                                navigator?.pop()
+                            }) {
+                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                            }
+                        },
+                        scrollBehavior = scrollBehavior
+                    )
+                }
             },
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)

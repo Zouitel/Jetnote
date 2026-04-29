@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Ghi chú</string>
+    <string name="screen_chat">Chat AI</string>
+    <string name="screen_tags">Thẻ</string>
+    <string name="screen_settings">Cài đặt</string>
+    <string name="screen_archive">Kho lưu trữ</string>
+    <string name="screen_about">Giới thiệu</string>
+    <string name="screen_feedback">Phản hồi</string>
+    <string name="share_app">Chia sẻ ứng dụng này</string>
+    <string name="label_more">thêm</string>
+    <string name="label_less">thu gọn</string>
+    <string name="msg_deleted">đã xóa</string>
+    <string name="action_undo">Hoàn tác</string>
+    <string name="tag_placeholder">Thẻ..</string>
+    <string name="tag_cannot_be_empty">Thẻ không được để trống!</string>
+    <string name="archive">Kho lưu trữ</string>
+    <string name="deleted">đã xóa!</string>
+    <string name="erase_notes">Xóa ghi chú?</string>
+    <string name="confirm_erase_notes">"Tất cả ghi chú trong thùng rác sẽ bị xóa vĩnh viễn."</string>
+    <string name="search_in_notes">"Tìm kiếm trong ghi chú.."</string>
+    <string name="select_layout">"Chọn bố cục"</string>
+    <string name="settings">"Cài đặt"</string>
+    <string name="account_sync">"Đồng bộ tài khoản"</string>
+    <string name="account_sync_description">"
+                                Bật đồng bộ tài khoản Google Drive cho
+                                ứng dụng này giúp bạn dễ dàng sao lưu
+                                và đồng bộ dữ liệu ứng dụng, chẳng hạn
+                                như ghi chú và cài đặt, đảm bảo dữ liệu
+                                của bạn được an toàn.
+        "</string>
+    <string name="assistant_configuration">"Cấu hình trợ lý"</string>
+    <string name="assistant_configuration_description">"
+                                Trợ lý AI là chương trình phần mềm được
+                                hỗ trợ bởi trí tuệ nhân tạo, được thiết
+                                kế để giúp bạn thực hiện nhiều tác vụ
+                                trong ứng dụng này. Các trợ lý này hiểu
+                                và phản hồi ngôn ngữ tự nhiên, cho phép
+                                bạn tương tác với chúng qua hình ảnh
+                                hoặc văn bản.
+                            "</string>
+    <string name="dark_mode">"Chế độ tối"</string>
+    <string name="dark_mode_description">"
+                                Chế độ này là cài đặt toàn hệ thống
+                                chuyển màu nền giao diện ứng dụng Android
+                                sang màu tối hơn. Được thiết kế để giảm
+                                mỏi mắt, cải thiện khả năng truy cập,
+                                tiết kiệm pin và nâng cao trải nghiệm
+                                người dùng.
+                            "</string>
+    <string name="sound_effect">"Hiệu ứng âm thanh"</string>
+    <string name="sound_effect_description">"
+                                Trong bối cảnh ứng dụng Jetnote, tính
+                                năng hiệu ứng âm thanh cung cấp phản hồi
+                                âm thanh cho người dùng khi họ tương tác
+                                với các nút và phần tử giao diện khác.
+                                Đây là thực hành phổ biến trong phát
+                                triển ứng dụng di động để làm cho trải
+                                nghiệm người dùng trở nên tương tác và
+                                hấp dẫn hơn.
+                            "</string>
+    <string name="layouts">"Bố cục"</string>
+    <string name="layouts_description">"
+                                Bố cục là nền tảng để tổ chức và hiển
+                                thị nội dung trong các ứng dụng Android
+                                của bạn. Chúng xác định cấu trúc và sắp
+                                xếp các phần tử giao diện trên màn hình.
+                            "</string>
+    <string name="sort_notes">"Sắp xếp ghi chú"</string>
+    <string name="default_sort">"mặc định"</string>
+    <string name="name_sort">"tên"</string>
+    <string name="oldest_sort">"cũ nhất"</string>
+    <string name="newest_sort">"mới nhất"</string>
+    <string name="priority_sort">"ưu tiên"</string>
+    <string name="zen_mode">"Chế độ Zen"</string>
+    <string name="zen_mode_description">"
+                                Chế độ Zen (chế độ toàn màn hình) là
+                                cài đặt hiển thị cho phép ứng dụng chiếm
+                                toàn bộ màn hình, ẩn tất cả các phần tử
+                                giao diện khác như thanh công cụ, menu
+                                và thanh tác vụ của hệ điều hành.
+                            "</string>
+    <string name="shake">"Lắc để báo cáo"</string>
+    <string name="shake_description">"
+                              Đây là tính năng tiện lợi cho phép người
+                              dùng bắt đầu quy trình phản hồi hoặc báo
+                              cáo lỗi chỉ bằng cách lắc vật lý thiết
+                              bị Android của họ, thay vì điều hướng qua
+                              nhiều menu.
+                            "</string>
+    <string name="block_screenshot">"Chặn chụp màn hình"</string>
+    <string name="block_screenshot_description">"
+                                Chặn chụp màn hình là biện pháp bảo
+                                mật ngăn người dùng chụp màn hình nội
+                                dung ứng dụng của bạn. Thường được dùng
+                                để bảo vệ thông tin nhạy cảm như thông
+                                tin ngân hàng, dữ liệu cá nhân hoặc
+                                tài liệu có bản quyền.
+                            "</string>
+    <string name="lock_mode">"Chế độ khóa"</string>
+    <string name="lock_mode_description">"
+                                Tính năng này tăng cường bảo mật ứng
+                                dụng bằng cách yêu cầu người dùng xác
+                                thực trước khi truy cập nội dung. Điều
+                                này thường đạt được bằng cách sử dụng
+                                các tính năng bảo mật tích hợp của thiết
+                                bị, chẳng hạn như vân tay, mã PIN hoặc
+                                mở khóa bằng hình vẽ.
+                            "</string>
+    <string name="licenses">"Giấy phép"</string>
+    <string name="licenses_description">"
+                                    Các giấy phép này được đưa vào đây
+                                    để tuân thủ các yêu cầu phân phối
+                                    của các tác giả tương ứng và cung
+                                    cấp sự minh bạch về kiến trúc của
+                                    phần mềm.
+                                    "</string>
+    <string name="title">"Tiêu đề"</string>
+    <string name="note">"Ghi chú"</string>
+    <string name="failed_to_save_document">"Lưu tài liệu thất bại."</string>
+    <string name="gallery">"Thư viện"</string>
+    <string name="audio">Âm thanh</string>
+    <string name="permission_denied">Quyền truy cập bị từ chối!</string>
+    <string name="take_photo">Chụp ảnh</string>
+    <string name="video_capture">Quay video</string>
+    <string name="recorder">Máy ghi âm</string>
+    <string name="document">Tài liệu</string>
+    <string name="scanner">Máy quét</string>
+    <string name="tasks">Nhiệm vụ</string>
+    <string name="tags">Thẻ</string>
+    <string name="reminder">Nhắc nhở</string>
+    <string name="priority">Ưu tiên</string>
+    <string name="low_priority">Thấp</string>
+    <string name="medium_priority">Trung bình</string>
+    <string name="high_priority">Cao</string>
+    <string name="urgent_priority">Khẩn cấp</string>
+    <string name="non_priority">Không có</string>
+    <string name="created">Đã tạo</string>
+    <string name="edited">Đã chỉnh sửa</string>
+    <string name="types">Loại</string>
+    <string name="media">Phương tiện</string>
+    <string name="medias">Phương tiện</string>
+    <string name="colour">Màu sắc</string>
+    <string name="colours">Màu sắc</string>
+    <string name="search_within">Tìm kiếm trong</string>
+    <string name="issue_title">Tiêu đề vấn đề*</string>
+    <string name="issue_description">Mô tả vấn đề (Tùy chọn)</string>
+    <string name="noAccount">Đăng nhập không cần tài khoản</string>
+    <string name="screenshot_selected">✓ Đã chọn ảnh chụp màn hình</string>
+    <string name="drive_submit">Sẽ tải lên Drive khi gửi</string>
+    <string name="select_screenshot">Chọn ảnh chụp màn hình</string>
+    <string name="system_logs">Bao gồm nhật ký hệ thống?</string>
+    <string name="find_an_issue">Bạn đã tìm thấy vấn đề?</string>
+    <string name="take_a_screenshot">Đừng quên chụp ảnh màn hình.</string>
+    <string name="report_an_issue">Báo cáo vấn đề!</string>
+    <string name="bug">Lỗi</string>
+    <string name="logs_title">\\uD83D\\uDCiE Nhật ký hệ thống Android (Logcat) trong báo cáo phản hồi</string>
+    <string name="logs_description">Nhật ký hệ thống Android là luồng tin nhắn có dấu thời gian từ hệ điều hành và nhân.\n    | Khi người dùng gặp sự cố, nhật ký ghi lại các sự kiện dẫn đến sự cố, cung cấp cho nhà phát triển bối cảnh cần thiết để chẩn đoán.</string>
+    <string name="label_bug">Lỗi</string>
+    <string name="label_feature">Tính năng</string>
+    <string name="label_invalid">Không hợp lệ</string>
+    <string name="label_question">Câu hỏi</string>
+    <string name="label_security">Bảo mật</string>
+    <string name="failed">Thất bại</string>
+    <string name="submit_feedback">Gửi phản hồi!</string>
+    <string name="uploading_screenshot">Đang tải ảnh chụp màn hình…</string>
+    <string name="creating_github_issue">Đang tạo vấn đề GitHub…</string>
+    <string name="upload_faild">Tải lên thất bại…</string>
+    <string name="upload_failed">Tải lên thất bại…</string>
+    <string name="issue_crea">Đã tạo vấn đề.</string>
+    <string name="issue_created">Đã tạo vấn đề!</string>
+    <string name="log_out">Đăng xuất</string>
+    <string name="hi">Xin chào</string>
+    <string name="add_account">Thêm tài khoản khác</string>
+    <string name="manage_account">Quản lý tài khoản</string>
+    <string name="upload_data">Tải dữ liệu lên</string>
+    <string name="download_data">Tải dữ liệu xuống</string>
+    <string name="firebase_authentication_failed">Xác thực Firebase thất bại</string>
+    <string name="sign_in_failed">Đăng nhập Google thất bại</string>
+    <string name="please_wait">Đang đăng nhập, vui lòng chờ…</string>
+    <string name="sync_title">Đăng nhập để đồng bộ</string>
+    <string name="sync_description">Đăng nhập bằng tài khoản Google để sao lưu và đồng bộ ghi chú trên tất cả thiết bị của bạn.</string>
+    <string name="current_account">Tài khoản hiện tại</string>
+    <string name="no_name">Không có tên</string>
+    <string name="no_email">Không có email</string>
+    <string name="sign_out">Đăng xuất</string>
+    <string name="sign_in_with_google">Đăng nhập bằng Google</string>
+    <string name="ai_models">Mô hình AI</string>
+    <string name="load_more">Tải thêm</string>
+    <string name="available_models">Mô hình khả dụng</string>
+    <string name="assistant_settings">Cài đặt trợ lý</string>
+    <string name="learning_mode">Chế độ học</string>
+    <string name="learning_mode_description">"
+                    Dự đoán đầu ra cho dữ liệu mới, chưa từng thấy
+                    dựa trên các mẫu học được từ các ví dụ có nhãn.
+                "</string>
+    <string name="temperat">Nhiệt độ</string>
+    <string name="temperature">Nhiệt độ</string>
+    <string name="temperature_description">"
+           Kiểm soát tính ngẫu nhiên của đầu ra.
+           Giá trị cao hơn sẽ sáng tạo hơn.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">Kiểm soát các token nào được xem xét cho đầu ra.</string>
+    <string name="context_message_size">Kích thước tin nhắn ngữ cảnh</string>
+    <string name="context_message_size_description">Số lượng tối đa tin nhắn trước đó để đưa vào ngữ cảnh.</string>
+    <string name="stream_output">Đầu ra truyền trực tiếp</string>
+    <string name="stream_output_description">Hiển thị phản hồi khi đang được tạo.</string>
+    <string name="thinking_budget">Ngân sách suy nghĩ</string>
+    <string name="thinking_budget_description">Giới hạn tài nguyên tính toán được sử dụng cho phản hồi.</string>
+    <string name="system_prompt">Lệnh hệ thống</string>
+    <string name="prompt">Lệnh..</string>
+    <string name="properties">Thuộc tính</string>
+    <string name="quick_messages">Tin nhắn nhanh</string>
+    <string name="quick_messages_description">Cấu hình phím tắt tin nhắn nhanh.</string>
+    <string name="regular_expressions">Biểu thức chính quy</string>
+    <string name="regular_expressions_description">Xác định các mẫu regex để chuyển đổi tin nhắn trước khi gửi/nhận.</string>
+    <string name="headers">Tiêu đề</string>
+    <string name="headers_description">
+                            Đây là các cặp khóa-giá trị được thêm vào
+                            khối tiêu đề của yêu cầu. Thường được dùng
+                            để xác thực, chỉ định loại nội dung hoặc
+                            truyền siêu dữ liệu về yêu cầu.
+                        </string>
+    <string name="bodies">Nội dung</string>
+    <string name="bodies_description">
+                            Đề cập đến tải trọng dữ liệu (cấu trúc JSON
+                            khóa: giá trị) được gửi trong yêu cầu. Đây
+                            là phương tiện chính để gửi dữ liệu đầu vào
+                            cho mô hình AI.
+                        </string>
+    <string name="memory">Bộ nhớ</string>
+    <string name="memory_description">Cho phép trợ lý ghi nhớ các lượt trước trong cuộc trò chuyện.</string>
+    <string name="chats_reference">Tham chiếu trò chuyện gần đây</string>
+    <string name="chats_reference_description">Tham chiếu dữ liệu từ các cuộc trò chuyện gần đây để có phản hồi ngữ cảnh tốt hơn.</string>
+    <string name="javascript">Công cụ JavaScript</string>
+    <string name="javascript_description">Thực thi mã JavaScript với công cụ QuickJS để tính toán và viết script.</string>
+    <string name="reset">Đặt lại cài đặt!</string>
+    <string name="providers">Nhà cung cấp</string>
+    <string name="ask">Hỏi</string>
+    <string name="add_model"><![CDATA[<- Thêm mô hình AI]]></string>
+    <string name="delete">Xóa</string>
+    <string name="options">Tùy chọn</string>
+    <string name="retitle">Đổi tên</string>
+    <string name="assistant">Trợ lý</string>
+    <string name="new_chat">Cuộc trò chuyện mới</string>
+    <string name="files">Tệp</string>
+    <string name="audios">Âm thanh</string>
+    <string name="videos">Video</string>
+    <string name="camera">Camera</string>
+    <string name="pictures">Hình ảnh</string>
+    <string name="provider_settings">Cài đặt nhà cung cấp</string>
+    <string name="api_key">Khóa API</string>
+    <string name="base_url">URL cơ sở</string>
+    <string name="model_name">Tên mô hình</string>
+    <string name="modalities">Phương thức</string>
+    <string name="tools">Công cụ</string>
+    <string name="reasoning">Lập luận</string>
+    <string name="respo">API phản hồi</string>
+    <string name="response_api">API phản hồi</string>
+    <string name="account_balance">Số dư tài khoản</string>
+    <string name="api_path">Đường dẫn API..</string>
+    <string name="json_key">Khóa JSON..</string>
+    <string name="network_proxy">Proxy mạng</string>
+    <string name="host">Máy chủ..</string>
+    <string name="username_option">Tên người dùng (Tùy chọn)..</string>
+    <string name="pass_option">Mật khẩu (Tùy chọn)..</string>
+    <string name="service_account">Tài khoản dịch vụ @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Khóa riêng tư..</string>
+    <string name="location">Vị trí..</string>
+    <string name="project_uid">UID dự án..</string>
+    <string name="details">Chi tiết</string>
+    <string name="model_type">Loại mô hình</string>
+    <string name="input_modalities">Phương thức đầu vào</string>
+    <string name="output_modalities">Phương thức đầu ra</string>
+    <string name="abilities">Khả năng</string>
+    <string name="provider_override">Thêm ghi đè nhà cung cấp</string>
+    <string name="provider_override_description">Cấu hình cài đặt nhà cung cấp tùy chỉnh cho mô hình cụ thể này.</string>
+    <string name="build_tools">Công cụ xây dựng</string>
+    <string name="build_tools_description">Các công cụ này được cung cấp trực tiếp bởi API mà không cần hỗ trợ ứng dụng. Hiện chỉ được Gemini API hỗ trợ.</string>
+    <string name="google_search">Tìm kiếm</string>
+    <string name="google_search_description">Bật tích hợp Google Tìm kiếm</string>
+    <string name="url_context">Ngữ cảnh URL</string>
+    <string name="url_context_description">Bật xử lý ngữ cảnh URL</string>
+    <string name="find">Tìm</string>
+    <string name="replace">Thay thế</string>
+    <string name="effecting_scopes">Phạm vi bị ảnh hưởng</string>
+    <string name="user">người dùng</string>
+    <string name="visual_only">chỉ hình ảnh</string>
+    <string name="body">Nội dung</string>
+    <string name="key">khóa</string>
+    <string name="value">Giá trị</string>
+    <string name="header">Tiêu đề.</string>
+    <string name="reset_description">Đặt lại cài đặt trợ lý về chế độ mặc định.</string>
+    <string name="save_changes">Lưu thay đổi?</string>
+    <string name="save_changes_description">Bạn có các thay đổi chưa được lưu. Bạn có muốn lưu chúng trước khi rời đi không?</string>
+    <string name="dont_save">Không lưu</string>
+    <string name="save">Lưu</string>
+    <string name="links">Liên kết</string>
+    <string name="reminders">Nhắc nhở</string>
+    <string name="priorities">Ưu tiên</string>
+    <string name="ai_chat">Chat AI</string>
+    <string name="auto">tự động</string>
+    <string name="light">nhẹ</string>
+    <string name="medium">trung bình</string>
+    <string name="heavy">nặng</string>
+    <string name="date">ngày</string>
+    <string name="time">giờ</string>
+    <string name="date_and_time">ngày và giờ</string>
+    <string name="local">địa phương</string>
+    <string name="timezone">múi giờ</string>
+    <string name="system_version">phiên bản hệ thống</string>
+    <string name="device_info">thông tin thiết bị</string>
+    <string name="battery_level">mức pin</string>
+    <string name="insert">Chèn</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="message">Tin nhắn</string>
+    <string name="content">Nội dung</string>
+    <string name="today">Hôm nay</string>
+    <string name="tomorrow">Ngày mai</string>
+    <string name="according_to_timing">Theo thời gian</string>
+    <string name="untitled">Không có tiêu đề</string>
+    <string name="hue">Sắc độ</string>
+    <string name="saturation">Độ bão hòa</string>
+    <string name="brightness">Độ sáng</string>
+    <string name="shades">Bóng đổ</string>
+    <string name="complementary">Bổ sung</string>
+    <string name="task_placeholder">Nhiệm vụ..</string>
+    <string name="task_cannot_be_empty">Nhiệm vụ không được để trống!</string>
+    <string name="of">trong</string>
+    <string name="something_wrong_with_file">Có sự cố với tệp</string>
+    <string name="could_not_load_any_information">Không thể tải thông tin cho tệp phương tiện.</string>
+    <string name="no_file_path_provided">Không có đường dẫn tệp được cung cấp.</string>
+    <string name="security_error_processing_file">Lỗi bảo mật khi xử lý tệp</string>
+    <string name="an_unexpected_error_occurred">Đã xảy ra lỗi không mong đợi</string>
+    <string name="could_not_retrieve_any_information">Không thể lấy thông tin cho tệp video này.</string>
+    <string name="error_reading_metadata">Lỗi đọc siêu dữ liệu phương tiện</string>
+    <string name="could_not_read_exif_data">Không thể đọc dữ liệu EXIF</string>
+    <string name="error_reading_basic_file_info">Lỗi đọc thông tin tệp cơ bản</string>
+    <string name="file_does_not_exist">Tệp không tồn tại</string>
+    <string name="error">Lỗi</string>
+    <string name="loading_media_info">Đang tải thông tin phương tiện…</string>
+    <string name="no_metadata_available_for_this_document">Không có siêu dữ liệu nào cho tài liệu này.</string>
+    <string name="could_not_read_pdf_metadata">Không thể đọc siêu dữ liệu PDF</string>
+    <string name="cannot_read_file">Không thể đọc tệp</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Không thể giải mã kích thước hình ảnh hoặc định dạng không hợp lệ.</string>
+    <string name="error_during_dimension_decoding">Lỗi trong quá trình giải mã kích thước</string>
+    <string name="error_reading_exif_data">Lỗi đọc dữ liệu EXIF</string>
+    <string name="duplicate">Nhân đôi</string>
+    <string name="send">Gửi</string>
+    <string name="print">In</string>
+    <string name="cleaned">Đã làm sạch</string>
+    <string name="cleared">Đã xóa</string>
+    <string name="media_deleted">Phương tiện đã xóa!</string>
+    <string name="jotting">Ghi chép nhanh</string>
+    <string name="appwidget_text">VÍ DỤ</string>
+    <string name="add_widget">Thêm tiện ích</string>
+    <string name="app_widget_description">Đây là mô tả tiện ích ứng dụng</string>
+    <string name="quick_widget_description">Đây là bố cục tiện ích nhanh</string>
+    <string name="creator_widget_description">Đây là tiện ích bố cục người tạo</string>
+    <string name="notes_list_description">Đây là danh sách ghi chú</string>
+    <string name="record_deleted">Bản ghi đã xóa!</string>
+</resources>

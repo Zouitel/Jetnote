@@ -30,6 +30,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,8 +47,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -135,82 +138,84 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                 ),
             containerColor = Color.Transparent,
             topBar = {
-                TopAppBar(
-                    navigationIcon = {
-                        Text(
-                            text = "${pagerState.currentPage.inc()} ${stringResource(R.string.of)} ${pagerState.pageCount}",
-                            fontSize = 19.sp,
-                            modifier = Modifier.padding(20.dp)
-                        )
-                    },
-                    title = {},
-                    actions = {
-                        IconButton({ menuExpanded.value = true }) {
-                            Icon(painterResource(MENU_DOTS), contentDescription = null)
-                        }
-                        MediaActionsMenu(
-                            expanded = menuExpanded,
-                            onDuplicate = {
-                                data.value = data.value.copy(
-                                    medias = data.value.medias.plusElement(
-                                        data.value.medias[pagerState.currentPage]
-                                            .copy(id = Random.nextLong())
-                                    )
-                                )
-                            },
-                            onSend = {
-                                sendMedia(
-                                    context,
-                                    data.value.medias[pagerState.currentPage].uri.toUri()
-                                )
-                            },
-                            onPrint = {
-                                val media = data.value.medias[pagerState.currentPage]
-                                when (media.type) {
-                                    MediaType.DOCUMENT -> printDocumentFromUri(context, media.uri)
-                                    else -> printImageFromUri(context, media.uri)
-                                }
-                            },
-                            onDetails = {
-                                when (data.value.medias[pagerState.currentPage].type) {
-                                    MediaType.VIDEO -> videoDetailsSheet = true
-                                    MediaType.IMAGE -> imageDetailsSheet = true
-                                    MediaType.DOCUMENT -> documentDetailsSheet = true
-                                }
-                            },
-                            onDelete = {
-                                val currentJobId = jobCounter.intValue++
-                                deletedMedia.add(
-                                    Pair(data.value.medias[pagerState.currentPage], currentJobId)
-                                )
-                                val mediaPair =
-                                    deletedMedia.firstOrNull { it.second == currentJobId }
-                                data.value = data.value.copy(
-                                    medias = data.value.medias.minusElement(
-                                        mediaPair?.first ?: return@MediaActionsMenu
-                                    )
-                                )
-                                scope.launch {
-                                    snackbarState.currentSnackbarData?.dismiss()
-                                    val result = snackbarState.showSnackbar(
-                                        mediaDeletedResource, undoResource, true, SnackbarDuration.Long
-                                    )
-                                    if (result == SnackbarResult.ActionPerformed) {
-                                        data.value = data.value.copy(
-                                            medias = data.value.medias
-                                                .plusElement(mediaPair.first)
-                                        )
-                                    }
-                                    deletedMedia.remove(mediaPair)
-                                }
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    TopAppBar(
+                        navigationIcon = {
+                            Text(
+                                text = "${pagerState.currentPage.inc()} ${stringResource(R.string.of)} ${pagerState.pageCount}",
+                                fontSize = 19.sp,
+                                modifier = Modifier.padding(20.dp)
+                            )
+                        },
+                        title = {},
+                        actions = {
+                            IconButton({ menuExpanded.value = true }) {
+                                Icon(painterResource(MENU_DOTS), contentDescription = null)
                             }
-                        )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent
-                    ),
-                    scrollBehavior = scrollBehavior
-                )
+                            MediaActionsMenu(
+                                expanded = menuExpanded,
+                                onDuplicate = {
+                                    data.value = data.value.copy(
+                                        medias = data.value.medias.plusElement(
+                                            data.value.medias[pagerState.currentPage]
+                                                .copy(id = Random.nextLong())
+                                        )
+                                    )
+                                },
+                                onSend = {
+                                    sendMedia(
+                                        context,
+                                        data.value.medias[pagerState.currentPage].uri.toUri()
+                                    )
+                                },
+                                onPrint = {
+                                    val media = data.value.medias[pagerState.currentPage]
+                                    when (media.type) {
+                                        MediaType.DOCUMENT -> printDocumentFromUri(context, media.uri)
+                                        else -> printImageFromUri(context, media.uri)
+                                    }
+                                },
+                                onDetails = {
+                                    when (data.value.medias[pagerState.currentPage].type) {
+                                        MediaType.VIDEO -> videoDetailsSheet = true
+                                        MediaType.IMAGE -> imageDetailsSheet = true
+                                        MediaType.DOCUMENT -> documentDetailsSheet = true
+                                    }
+                                },
+                                onDelete = {
+                                    val currentJobId = jobCounter.intValue++
+                                    deletedMedia.add(
+                                        Pair(data.value.medias[pagerState.currentPage], currentJobId)
+                                    )
+                                    val mediaPair =
+                                        deletedMedia.firstOrNull { it.second == currentJobId }
+                                    data.value = data.value.copy(
+                                        medias = data.value.medias.minusElement(
+                                            mediaPair?.first ?: return@MediaActionsMenu
+                                        )
+                                    )
+                                    scope.launch {
+                                        snackbarState.currentSnackbarData?.dismiss()
+                                        val result = snackbarState.showSnackbar(
+                                            mediaDeletedResource, undoResource, true, SnackbarDuration.Long
+                                        )
+                                        if (result == SnackbarResult.ActionPerformed) {
+                                            data.value = data.value.copy(
+                                                medias = data.value.medias
+                                                    .plusElement(mediaPair.first)
+                                            )
+                                        }
+                                        deletedMedia.remove(mediaPair)
+                                    }
+                                }
+                            )
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent
+                        ),
+                        scrollBehavior = scrollBehavior
+                    )
+                }
             }
         ) { paddingValues ->
             Box {

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Glósur</string>
+    <string name="screen_chat">AI Spjall</string>
+    <string name="screen_tags">Merki</string>
+    <string name="screen_settings">Stillingar</string>
+    <string name="screen_archive">Safn</string>
+    <string name="screen_about">Um</string>
+    <string name="screen_feedback">Endurgjöf</string>
+    <string name="share_app">Deila þessum forrita</string>
+    <string name="label_more">meira</string>
+    <string name="label_less">minna</string>
+    <string name="msg_deleted">eytt</string>
+    <string name="action_undo">Afturkalla</string>
+    <string name="tag_placeholder">Merki..</string>
+    <string name="tag_cannot_be_empty">Merki má ekki vera tómt!</string>
+    <string name="archive">Safn</string>
+    <string name="deleted">eytt!</string>
+    <string name="erase_notes">Eyða glósum?</string>
+    <string name="confirm_erase_notes">"Allar glósur í ruslakörfunni verða þurrkaðar út að fullu."</string>
+    <string name="search_in_notes">"Leita í glósum.."</string>
+    <string name="select_layout">"Veldu útlit"</string>
+    <string name="settings">"Stillingar"</string>
+    <string name="account_sync">"Samstilling reiknings"</string>
+    <string name="account_sync_description">"
+                                Að virkja Google Drive reikningssamstillingu
+                                fyrir þetta forrit gerir þér kleift að
+                                geyma afrit og samstilla forritsgögn,
+                                eins og glósur og stillingar, á þægilegan
+                                hátt og tryggir öryggi gagnanna þinna.
+        "</string>
+    <string name="assistant_configuration">"Stilling aðstoðarmanns"</string>
+    <string name="assistant_configuration_description">"
+                                Gervigreindur aðstoðarmaður er hugbúnaðarforrit
+                                knúið af gervigreind, hannað til að hjálpa
+                                þér með fjölbreyttar verkefni í þessu forriti.
+                                Þessir aðstoðarmenn skilja og svara náttúrulegu
+                                máli, sem gerir þér kleift að eiga samskipti
+                                við þá í gegnum mynd eða texta.
+                            "</string>
+    <string name="dark_mode">"Dökkt ham"</string>
+    <string name="dark_mode_description">"
+                                Þetta ham er kerfisvíð stilling sem breytir
+                                bakgrunnslit Android-forritsins í dekkri liti.
+                                Það er hannað til að draga úr álagi á augu,
+                                bæta aðgengi, spara rafhlöðu og bæta
+                                upplifun notandans.
+                            "</string>
+    <string name="sound_effect">"Hljóðbrellur"</string>
+    <string name="sound_effect_description">"
+                                Í samhengi Jetnote-forritsins veitir
+                                \'Hljóðbrellur\' aðgerðin notendum
+                                hljóðlegar viðbrögð þegar þeir nota
+                                hnappa og önnur viðmótseiningar.
+                                Þetta er algeng venja í þróun farsímaforrita
+                                til að gera upplifun notandans meira
+                                gagnvirka og grípandi.
+                            "</string>
+    <string name="layouts">"Útlit"</string>
+    <string name="layouts_description">"
+                                Útlit eru grundvallandi til að skipuleggja
+                                og sýna efni í Android-forritunum þínum.
+                                Þau skilgreina uppbyggingu og fyrirkomulag
+                                viðmótseininga á skjánum.
+                            "</string>
+    <string name="sort_notes">"Raða glósum"</string>
+    <string name="default_sort">"sjálfgefið"</string>
+    <string name="name_sort">"nafn"</string>
+    <string name="oldest_sort">"elst"</string>
+    <string name="newest_sort">"nýjast"</string>
+    <string name="priority_sort">"forgangur"</string>
+    <string name="zen_mode">"Zen-ham"</string>
+    <string name="zen_mode_description">"
+                                Zen-hamur (heilskjáhamur) er skjástilling
+                                sem leyfir forriti að fylla allan skjáinn
+                                og fela allar aðrar viðmótseiningar eins
+                                og tækjastikur, valmyndir og verkefnastiku
+                                stýrikerfisins.
+                            "</string>
+    <string name="shake">"Hrista til að tilkynna"</string>
+    <string name="shake_description">"
+                              Þetta er þægileg eiginleiki sem gerir notendum
+                              kleift að hefja endurgjafar- eða villutilkynningarferli
+                              með því einfaldlega að hrista Android-tækið
+                              líkamlega. Í stað þess að fara í gegnum
+                              margar valmyndir til að finna \'Senda endurgjöf\'
+                              eða \'Tilkynna villu\'.
+                            "</string>
+    <string name="block_screenshot">"Loka fyrir skjámyndatöku"</string>
+    <string name="block_screenshot_description">"
+                                Lokun á skjámyndatöku er öryggisráðstöfun
+                                sem kemur í veg fyrir að notendur taki
+                                skjámyndir af efni forritsins.
+                                Þetta er oft notað til að vernda viðkvæmar
+                                upplýsingar, eins og bankagögn,
+                                persónuleg gögn eða höfundarréttarverndað efni.
+                            "</string>
+    <string name="lock_mode">"Læsingarhamur"</string>
+    <string name="lock_mode_description">"
+                                Þessi eiginleiki eykur öryggi forritsins
+                                með því að krefjast þess að notendur
+                                sanni á sér deili áður en þeir fá aðgang
+                                að efni þess. Þetta er venjulega gert með
+                                innbyggðum öryggisaðgerðum tækisins,
+                                eins og fingrafaralæsingu, PIN-kóða eða mynstri.
+                            "</string>
+    <string name="licenses">"Leyfi"</string>
+    <string name="licenses_description">"
+                                    Þessi leyfi eru með hér til að uppfylla
+                                    dreifingarskilyrði viðkomandi höfunda
+                                    og til að veita gagnsæi varðandi
+                                    uppbyggingu hugbúnaðarins.
+                                    "</string>
+    <string name="title">"Titill"</string>
+    <string name="note">"Glósa"</string>
+    <string name="failed_to_save_document">"Mistókst að vista skjalið."</string>
+    <string name="gallery">"Myndasafn"</string>
+    <string name="audio">Hljóð</string>
+    <string name="permission_denied">Leyfi synjað!</string>
+    <string name="take_photo">Taka mynd</string>
+    <string name="video_capture">Myndbandstaka</string>
+    <string name="recorder">Upptökutæki</string>
+    <string name="document">Skjal</string>
+    <string name="scanner">Skanni</string>
+    <string name="tasks">Verkefni</string>
+    <string name="tags">Merki</string>
+    <string name="reminder">Áminning</string>
+    <string name="priority">Forgangur</string>
+    <string name="low_priority">Lágur</string>
+    <string name="medium_priority">Miðlungs</string>
+    <string name="high_priority">Hár</string>
+    <string name="urgent_priority">Brýnt</string>
+    <string name="non_priority">Enginn</string>
+    <string name="created">Búið til</string>
+    <string name="edited">Breytt</string>
+    <string name="types">Tegundir</string>
+    <string name="media">Miðlar</string>
+    <string name="medias">Miðlaskrár</string>
+    <string name="colour">Litur</string>
+    <string name="colours">Litir</string>
+    <string name="search_within">Leita innan</string>
+    <string name="issue_title">Titill máls*</string>
+    <string name="issue_description">Lýsing máls (valkvætt)</string>
+    <string name="noAccount">Skrá sig inn án reiknings</string>
+    <string name="screenshot_selected">✓ Skjámynd valin</string>
+    <string name="drive_submit">Verður hlaðið upp á Drive við sendingu</string>
+    <string name="select_screenshot">Veldu skjámynd</string>
+    <string name="system_logs">Taka með kerfiskladda?</string>
+    <string name="find_an_issue">Fannstu vandamál?</string>
+    <string name="take_a_screenshot">Gleymdu ekki að taka skjámynd.</string>
+    <string name="report_an_issue">Tilkynna vandamál!</string>
+    <string name="bug">Villa</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android kerfiskladdar (Logcat) í endurgjafaskýrslu</string>
+    <string name="logs_description">Android kerfiskladdar eru tímastimplaður straumur skilaboða frá stýrikerfinu og kjarna.\n    | Þegar notandi lendir í vandamáli (eins og forritshrun, frystingu eða óvæntri hegðun) grípa kladdarnir atburðina sem leiddu til og innihéldu vandamálið, sem veitir þróunaraðilum samhengið sem þarf til greiningar.</string>
+    <string name="label_bug">Villa</string>
+    <string name="label_feature">Eiginleiki</string>
+    <string name="label_invalid">Ógilt</string>
+    <string name="label_question">Spurning</string>
+    <string name="label_security">Öryggi</string>
+    <string name="failed">Mistókst</string>
+    <string name="submit_feedback">Senda endurgjöf!</string>
+    <string name="uploading_screenshot">Hleður upp skjámynd…</string>
+    <string name="creating_github_issue">Bý til GitHub mál…</string>
+    <string name="upload_faild">Upphleðsla mistókst…</string>
+    <string name="upload_failed">Upphleðsla mistókst…</string>
+    <string name="issue_crea">Mál búið til.</string>
+    <string name="issue_created">Mál búið til!</string>
+    <string name="log_out">Skrá út</string>
+    <string name="hi">Halló</string>
+    <string name="add_account">Bæta við öðrum reikningi</string>
+    <string name="manage_account">Stjórna reikningi</string>
+    <string name="upload_data">Hlaða upp gögnum</string>
+    <string name="download_data">Sækja gögn</string>
+    <string name="firebase_authentication_failed">Firebase auðkenning mistókst</string>
+    <string name="sign_in_failed">Google innskráning mistókst</string>
+    <string name="please_wait">Skrái inn, vinsamlegast bíddu…</string>
+    <string name="sync_title">Skrá inn til að samstilla</string>
+    <string name="sync_description">Skráðu þig inn með Google reikningnum þínum til að taka afrit og samstilla glósur þínar á öllum tækjum þínum.</string>
+    <string name="current_account">Núverandi reikningur</string>
+    <string name="no_name">Ekkert nafn</string>
+    <string name="no_email">Engin netfang</string>
+    <string name="sign_out">Skrá út</string>
+    <string name="sign_in_with_google">Skrá inn með Google</string>
+    <string name="ai_models">Gervigreindarlíkön</string>
+    <string name="load_more">Hlaða meira</string>
+    <string name="available_models">Tiltæk líkön</string>
+    <string name="assistant_settings">Stillingar aðstoðarmanns</string>
+    <string name="learning_mode">Námsmáti</string>
+    <string name="learning_mode_description">"
+                    Spá fyrir um framleiðslu fyrir ný, óséð gögn
+                    byggð á mynstrum sem lærð voru úr merktu dæmunum.
+                "</string>
+    <string name="temperat">Hitastig</string>
+    <string name="temperature">Hitastig</string>
+    <string name="temperature_description">"
+           Stjórnar tilviljunarkenndum framleiðslu.
+           Hærri gildi eru skapandi.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Stjórnar hvaða tákn eru tekin til greina fyrir framleiðslu.
+            </string>
+    <string name="context_message_size">Stærð samhengisskilaboða</string>
+    <string name="context_message_size_description">
+            Hámarksfjöldi fyrri skilaboða til að taka með í samhengið.
+        </string>
+    <string name="stream_output">Straumframleiðsla</string>
+    <string name="stream_output_description">Sýna svar á meðan það er búið til.</string>
+    <string name="thinking_budget">Hugsanafjárhagsáætlun</string>
+    <string name="thinking_budget_description">
+                            Takmarkar reikniauðlindir sem notaðar eru
+                            fyrir svarið.
+                        </string>
+    <string name="system_prompt">Kerfisviðvörun</string>
+    <string name="prompt">Viðvörun..</string>
+    <string name="properties">Eiginleikar</string>
+    <string name="quick_messages">Skjótskilaboð</string>
+    <string name="quick_messages_description">Stilla flýtilykla skjótskilaboða.</string>
+    <string name="regular_expressions">Reglulegar segðir</string>
+    <string name="regular_expressions_description">
+                            Skilgreindu regex mynstur til að breyta
+                            skilaboðum áður en þau eru send/móttekin.
+                        </string>
+    <string name="headers">Hausar</string>
+    <string name="headers_description">
+                            Þetta eru lykil-gildis pör sem bætt er við
+                            hausbálk beiðninnar. Þau eru venjulega notuð
+                            til auðkenningar, til að tilgreina efnisgerð
+                            eða til að senda lýsigögn um beiðnina.
+                        </string>
+    <string name="bodies">Meginmál</string>
+    <string name="bodies_description">
+                            Þetta vísar til gagnafarms (lykill: gildi
+                            JSON uppbygging) sem sent er innan beiðninnar.
+                            Þetta er aðalfæran til að senda inntak til
+                            gervigreindarlíkansins.
+                        </string>
+    <string name="memory">Minni</string>
+    <string name="memory_description">
+                            Leyfðu aðstoðarmanninum að muna fyrri
+                            umræður í samtalinu.
+                        </string>
+    <string name="chats_reference">Nýleg spjallviðmið</string>
+    <string name="chats_reference_description">
+                        Vísa í gögn úr nýlegum spjallum þínum fyrir
+                        betri samhengisbundin svör.
+                        </string>
+    <string name="javascript">JavaScript vél</string>
+    <string name="javascript_description">
+                            Keyra JavaScript kóða með QuickJS vél
+                            fyrir útreikninga og forskriftun.
+                        </string>
+    <string name="reset">Endurstilla stillingar!</string>
+    <string name="providers">Þjónustuaðilar</string>
+    <string name="ask">Spyrja</string>
+    <string name="add_model"><![CDATA[<- Bæta við gervigreindarlíkani]]></string>
+    <string name="delete">Eyða</string>
+    <string name="options">Valkostur</string>
+    <string name="retitle">Endurnefna</string>
+    <string name="assistant">Aðstoðarmaður</string>
+    <string name="new_chat">Nýtt spjall</string>
+    <string name="files">Skrár</string>
+    <string name="audios">Hljóðskrár</string>
+    <string name="videos">Myndbönd</string>
+    <string name="camera">Myndavél</string>
+    <string name="pictures">Myndir</string>
+    <string name="provider_settings">Stillingar þjónustuaðila</string>
+    <string name="api_key">API lykill</string>
+    <string name="base_url">Grunnslóð</string>
+    <string name="model_name">Heiti líkans</string>
+    <string name="modalities">Möguleikar</string>
+    <string name="tools">Verkfæri</string>
+    <string name="reasoning">Rökhugsun</string>
+    <string name="respo">Svars API</string>
+    <string name="response_api">Svars API</string>
+    <string name="account_balance">Reikningsstaða</string>
+    <string name="api_path">API slóð..</string>
+    <string name="json_key">JSON lykill..</string>
+    <string name="network_proxy">Netmiðlari</string>
+    <string name="host">Gestgjafi..</string>
+    <string name="username_option">Notandanafn (valkvætt)..</string>
+    <string name="pass_option">Lykilorð (valkvætt)..</string>
+    <string name="service_account">Þjónustureikningur @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Einkalykill..</string>
+    <string name="location">Staðsetning..</string>
+    <string name="project_uid">Verkefnis UID..</string>
+    <string name="details">Upplýsingar</string>
+    <string name="model_type">Tegund líkans</string>
+    <string name="input_modalities">Inntaksmöguleikar</string>
+    <string name="output_modalities">Framleiðslumöguleikar</string>
+    <string name="abilities">Hæfileikar</string>
+    <string name="provider_override">Bæta við þjónustuaðilahnekki</string>
+    <string name="provider_override_description">
+                            Stilltu sérsniðnar þjónustuaðilastillingar
+                            fyrir þetta tiltekna líkan. Notar sameiginlegar
+                            eiginleika frá aðalþjónustuaðila líkansins.
+                        </string>
+    <string name="build_tools">Byggingarverkfæri</string>
+    <string name="build_tools_description">
+                            Þessi verkfæri eru veitt beint af API án þess
+                            að þarfnast forritastuðnings. Þessi eiginleiki
+                            er aðeins studdur af Gemini API eins og er.
+                        </string>
+    <string name="google_search">Leita</string>
+    <string name="google_search_description">Virkja Google leitarsamþættingu</string>
+    <string name="url_context">URL samhengi</string>
+    <string name="url_context_description">Virkja URL samhengisvinnslu</string>
+    <string name="find">Finna</string>
+    <string name="replace">Skipta út</string>
+    <string name="effecting_scopes">Áhrifasvið</string>
+    <string name="user">notandi</string>
+    <string name="visual_only">aðeins sjónrænt</string>
+    <string name="body">Meginmál</string>
+    <string name="key">lykill</string>
+    <string name="value">Gildi</string>
+    <string name="header">Haus.</string>
+    <string name="reset_description">Endurstilla stillingar aðstoðarmanns í sjálfgefið ham.</string>
+    <string name="save_changes">Vista breytingar?</string>
+    <string name="save_changes_description">Þú ert með óvistaðar breytingar. Viltu vista þær áður en þú ferð?</string>
+    <string name="dont_save">Ekki vista</string>
+    <string name="save">Vista</string>
+    <string name="links">Tenglar</string>
+    <string name="reminders">Áminningar</string>
+    <string name="priorities">Forgang</string>
+    <string name="ai_chat">AI Spjall</string>
+    <string name="auto">sjálfvirkt</string>
+    <string name="light">létt</string>
+    <string name="medium">miðlungs</string>
+    <string name="heavy">þungt</string>
+    <string name="date">dagsetning</string>
+    <string name="time">tími</string>
+    <string name="date_and_time">dagsetning og tími</string>
+    <string name="local">staðbundið</string>
+    <string name="timezone">tímabelti</string>
+    <string name="system_version">kerfisútgáfa</string>
+    <string name="device_info">tækjaupplýsingar</string>
+    <string name="battery_level">rafhlöðustig</string>
+    <string name="insert">Setja inn</string>
+    <string name="confirm">Staðfesta</string>
+    <string name="message">Skilaboð</string>
+    <string name="content">Efni</string>
+    <string name="today">Í dag</string>
+    <string name="tomorrow">Á morgun</string>
+    <string name="according_to_timing">Samkvæmt tímaröðun</string>
+    <string name="untitled">Án titils</string>
+    <string name="hue">Litatónn</string>
+    <string name="saturation">Mettun</string>
+    <string name="brightness">Birtustig</string>
+    <string name="shades">Skuggar</string>
+    <string name="complementary">Bótarefni</string>
+    <string name="task_placeholder">Verkefni..</string>
+    <string name="task_cannot_be_empty">Verkefni má ekki vera tómt!</string>
+    <string name="of">af</string>
+    <string name="something_wrong_with_file">Eitthvað er að með skrána</string>
+    <string name="could_not_load_any_information">Gat ekki hlaðið upplýsingum fyrir miðlaskrána.</string>
+    <string name="no_file_path_provided">Engin skráarslóð gefin upp.</string>
+    <string name="security_error_processing_file">Öryggisvillu við vinnslu skrár</string>
+    <string name="an_unexpected_error_occurred">Óvænt villa kom upp</string>
+    <string name="could_not_retrieve_any_information">Gat ekki sótt upplýsingar fyrir þessa myndbandsskrá.</string>
+    <string name="error_reading_metadata">Villa við lestur lýsigagna miðla</string>
+    <string name="could_not_read_exif_data">Gat ekki lesið EXIF gögn</string>
+    <string name="error_reading_basic_file_info">Villa við lestur grundvallarupplýsinga skrár</string>
+    <string name="file_does_not_exist">Skráin er ekki til</string>
+    <string name="error">Villa</string>
+    <string name="loading_media_info">Hleður miðlaupplýsingum…</string>
+    <string name="no_metadata_available_for_this_document">Engin lýsigögn tiltæk fyrir þetta skjal.</string>
+    <string name="could_not_read_pdf_metadata">Gat ekki lesið PDF lýsigögn</string>
+    <string name="cannot_read_file">Get ekki lesið skrána</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Gat ekki afkóðað myndmál eða ógilt snið.</string>
+    <string name="error_during_dimension_decoding">Villa við afkóðun mál</string>
+    <string name="error_reading_exif_data">Villa við lestur EXIF gagna</string>
+    <string name="duplicate">Tvítaka</string>
+    <string name="send">Senda</string>
+    <string name="print">Prenta</string>
+    <string name="cleaned">Hreinsað</string>
+    <string name="cleared">Þurrkað</string>
+    <string name="media_deleted">miðill eytt!</string>
+    <string name="jotting">Skrifa niður</string>
+    <string name="appwidget_text">DÆMI</string>
+    <string name="add_widget">Bæta við búnaði</string>
+    <string name="app_widget_description">Þetta er lýsing á forritabúnaði</string>
+    <string name="quick_widget_description">Þetta er skjótbúnaðarútlit</string>
+    <string name="creator_widget_description">Þetta er sköpunarútlitsbúnaður</string>
+    <string name="notes_list_description">Þetta er glósulisti</string>
+    <string name="record_deleted">skrá eytt!</string>
+</resources>

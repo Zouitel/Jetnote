@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,7 +34,9 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.audio.model.Audio
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
@@ -56,127 +59,129 @@ fun LargeAudioPlayer(playerModel: AudioScreenModel, item: Audio, onDelete: () ->
     val scope = rememberCoroutineScope()
     val maxSwipeDistance = -150f
 
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
-            horizontalArrangement = Arrangement.End
-        ) {
-            AnimatedVisibility(offsetX.value != 0f) {
-                IconButton(
-                    modifier = Modifier.padding(horizontal = 5.dp),
-                    onClick = {
-                        scope.launch {
-                            offsetX.animateTo(0f, tween(300))
-                            delay(100)
-                            onDelete()
-                        }
-                    },
-                    shape = MaterialTheme.shapes.extraLarge,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(CommonIcons.TRASH),
-                        contentDescription = "Delete"
-                    )
-                }
-            }
-        }
-        Card(
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 3.dp)
-                .graphicsLayer {
-                    translationX = offsetX.value
-                }
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+                horizontalArrangement = Arrangement.End
+            ) {
+                AnimatedVisibility(offsetX.value != 0f) {
+                    IconButton(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        onClick = {
                             scope.launch {
-                                if (offsetX.value < maxSwipeDistance / 2) {
-                                    offsetX.animateTo(maxSwipeDistance, tween(300))
-                                } else {
-                                    offsetX.animateTo(0f, tween(300))
-                                }
+                                offsetX.animateTo(0f, tween(300))
+                                delay(100)
+                                onDelete()
                             }
                         },
-                        onHorizontalDrag = { _, dragAmount ->
-                            scope.launch {
-                                val newOffset = (offsetX.value + dragAmount)
-                                    .coerceIn(maxSwipeDistance, 0f)
-                                offsetX.snapTo(newOffset)
+                        shape = MaterialTheme.shapes.extraLarge,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(CommonIcons.TRASH),
+                            contentDescription = "Delete"
+                        )
+                    }
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp, vertical = 3.dp)
+                    .graphicsLayer {
+                        translationX = offsetX.value
+                    }
+                    .pointerInput(Unit) {
+                        detectHorizontalDragGestures(
+                            onDragEnd = {
+                                scope.launch {
+                                    if (offsetX.value < maxSwipeDistance / 2) {
+                                        offsetX.animateTo(maxSwipeDistance, tween(300))
+                                    } else {
+                                        offsetX.animateTo(0f, tween(300))
+                                    }
+                                }
+                            },
+                            onHorizontalDrag = { _, dragAmount ->
+                                scope.launch {
+                                    val newOffset = (offsetX.value + dragAmount)
+                                        .coerceIn(maxSwipeDistance, 0f)
+                                    offsetX.snapTo(newOffset)
+                                }
                             }
-                        }
-                    )
-                }
-                .height(90.dp),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color(.6f, .6f, .6f, .1f)
-            )
-        ) {
-            Box {
-                playerModel.loadAudioThump(item.path)?.let {
-                    AsyncImage(
-                        model = it,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.matchParentSize()
-                    )
-                }
-                Column {
-                    Row {
-                        CommonRow(
-                            modifier = Modifier.background(Color(.6f, .6f, .6f, .5f))
-                                .height(60.dp)
-                        ) {
-                            IconButton({
-                                playerModel.initAudio(item)
-                                playerModel.playbackItemState(item)
-                            }) {
-                                Icon(
-                                    painter = painterResource(if (item.path == uiState.currentPath && uiState.isPlaying) PAUSE else PLAY),
-                                    null,
-                                    modifier = Modifier.padding(5.dp),
-                                    tint = Color.Companion.White
+                        )
+                    }
+                    .height(90.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(.6f, .6f, .6f, .1f)
+                )
+            ) {
+                Box {
+                    playerModel.loadAudioThump(item.path)?.let {
+                        AsyncImage(
+                            model = it,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.matchParentSize()
+                        )
+                    }
+                    Column {
+                        Row {
+                            CommonRow(
+                                modifier = Modifier.background(Color(.6f, .6f, .6f, .5f))
+                                    .height(60.dp)
+                            ) {
+                                IconButton({
+                                    playerModel.initAudio(item)
+                                    playerModel.playbackItemState(item)
+                                }) {
+                                    Icon(
+                                        painter = painterResource(if (item.path == uiState.currentPath && uiState.isPlaying) PAUSE else PLAY),
+                                        null,
+                                        modifier = Modifier.padding(5.dp),
+                                        tint = Color.Companion.White
+                                    )
+                                }
+                                Waveform(
+                                    modifier = Modifier.weight(1f),
+                                    amplitudes = item.amplitude.map { it.digitToInt() },
+                                    progress = if (item.path == uiState.currentPath) uiState.progress else 0f,
+                                    onProgressChange = { playerModel::updatePlaybackProgress },
+                                    waveformAlignment = WaveformAlignment.Center,
+                                    amplitudeType = AmplitudeType.Avg,
+                                    style = Fill,
+                                    progressBrush = Brush.horizontalGradient(
+                                        listOf(
+                                            Color(0xFF136FC3),
+                                            Color(0xFF76EF66)
+                                        )
+                                    ),
+                                    spikePadding = 3.dp,
+                                    spikeRadius = 3.dp,
+                                    spikeWidth = 3.dp,
                                 )
                             }
-                            Waveform(
-                                modifier = Modifier.weight(1f),
-                                amplitudes = item.amplitude.map { it.digitToInt() },
-                                progress = if (item.path == uiState.currentPath) uiState.progress else 0f,
-                                onProgressChange = { playerModel::updatePlaybackProgress },
-                                waveformAlignment = WaveformAlignment.Center,
-                                amplitudeType = AmplitudeType.Avg,
-                                style = Fill,
-                                progressBrush = Brush.horizontalGradient(
-                                    listOf(
-                                        Color(0xFF136FC3),
-                                        Color(0xFF76EF66)
-                                    )
-                                ),
-                                spikePadding = 3.dp,
-                                spikeRadius = 3.dp,
-                                spikeWidth = 3.dp,
-                            )
                         }
-                    }
-                    Row {
-                        CommonRow(
-                            modifier = Modifier
-                                .height(30.dp)
-                                .weight(1f)
-                                .background(Color(.6f, .6f, .6f, .5f))
+                        Row {
+                            CommonRow(
+                                modifier = Modifier
+                                    .height(30.dp)
+                                    .weight(1f)
+                                    .background(Color(.6f, .6f, .6f, .5f))
 
-                        ) {
-                            Text(text = item.nameWithoutFormat, color = Color.White)
+                            ) {
+                                Text(text = item.nameWithoutFormat, color = Color.White)
 
-                            Text(
-                                modifier = Modifier.padding(end = 10.dp),
-                                text = formatLong(item.duration),
-                                color = Color.White
-                            )
+                                Text(
+                                    modifier = Modifier.padding(end = 10.dp),
+                                    text = formatLong(item.duration),
+                                    color = Color.White
+                                )
+                            }
                         }
                     }
                 }

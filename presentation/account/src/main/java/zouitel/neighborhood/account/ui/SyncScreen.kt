@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -95,39 +98,41 @@ class SyncScreen: Screen {
         val gso = rememberGso(webClientId)
         val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
-        CommonBottomSheet(null) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                if (isSigningIn) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(stringResource(R.string.please_wait))
-                } else if (currentUser != null) {
-                    SignedIdDialog(
-                        user = currentUser,
-                        onSignOut = {
-                            scope.launch {
-                                auth.signOut()
-                                googleSignInClient.signOut()
-                                // State will update automatically via listener
-                            }.invokeOnCompletion {
-                                bottomNav.hide()
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            CommonBottomSheet(null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    if (isSigningIn) {
+                        CircularProgressIndicator()
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(stringResource(R.string.please_wait))
+                    } else if (currentUser != null) {
+                        SignedIdDialog(
+                            user = currentUser,
+                            onSignOut = {
+                                scope.launch {
+                                    auth.signOut()
+                                    googleSignInClient.signOut()
+                                    // State will update automatically via listener
+                                }.invokeOnCompletion {
+                                    bottomNav.hide()
+                                }
                             }
-                        }
-                    )
-                } else {
-                    SignInDialog(
-                        error = errorState,
-                        onSignIn = {
-                            errorState = null
-                            signInLauncher.launch(googleSignInClient.signInIntent)
-                        }
-                    )
+                        )
+                    } else {
+                        SignInDialog(
+                            error = errorState,
+                            onSignIn = {
+                                errorState = null
+                                signInLauncher.launch(googleSignInClient.signInIntent)
+                            }
+                        )
+                    }
                 }
             }
         }

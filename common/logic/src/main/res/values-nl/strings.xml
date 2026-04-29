@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Notities</string>
+    <string name="screen_chat">AI-chat</string>
+    <string name="screen_tags">Tags</string>
+    <string name="screen_settings">Instellingen</string>
+    <string name="screen_archive">Archief</string>
+    <string name="screen_about">Over</string>
+    <string name="screen_feedback">Feedback</string>
+    <string name="share_app">Deze app delen</string>
+    <string name="label_more">meer</string>
+    <string name="label_less">minder</string>
+    <string name="msg_deleted">verwijderd</string>
+    <string name="action_undo">Ongedaan maken</string>
+    <string name="tag_placeholder">Tag..</string>
+    <string name="tag_cannot_be_empty">Tag mag niet leeg zijn!</string>
+    <string name="archive">Archief</string>
+    <string name="deleted">verwijderd!</string>
+    <string name="erase_notes">Notities wissen?</string>
+    <string name="confirm_erase_notes">"Alle notities in de prullenbak worden definitief verwijderd."</string>
+    <string name="search_in_notes">"Zoeken in notities.."</string>
+    <string name="select_layout">"Indeling selecteren"</string>
+    <string name="settings">"Instellingen"</string>
+    <string name="account_sync">"Accountsynchronisatie"</string>
+    <string name="account_sync_description">"
+                                Het inschakelen van Google Drive-synchronisatie
+                                voor deze applicatie stelt u in staat uw
+                                app-gegevens, zoals notities en instellingen,
+                                naadloos te back-uppen en te synchroniseren,
+                                zodat uw gegevens veilig zijn.
+        "</string>
+    <string name="assistant_configuration">"Assistentconfiguratie"</string>
+    <string name="assistant_configuration_description">"
+                                De AI-assistent is een softwareprogramma
+                                aangedreven door kunstmatige intelligentie,
+                                ontworpen om u te helpen met een breed scala
+                                aan taken in deze applicatie.
+                                Deze assistenten begrijpen en reageren op
+                                natuurlijke taal, waardoor u via afbeelding
+                                of tekst met hen kunt communiceren.
+                            "</string>
+    <string name="dark_mode">"Donkere modus"</string>
+    <string name="dark_mode_description">"
+                                Deze modus is een systeembrede instelling
+                                die het achtergrondkleurenschema van uw
+                                Android-app-interface naar donkerdere kleuren
+                                verschuift. Het is ontworpen om oogvermoeidheid
+                                te verminderen, toegankelijkheid te verbeteren,
+                                batterij te besparen en de gebruikerservaring
+                                te verbeteren.
+                            "</string>
+    <string name="sound_effect">"Geluidseffect"</string>
+    <string name="sound_effect_description">"
+                                In de context van de Jetnote-applicatie
+                                biedt de functie \'Geluidseffect\' auditieve
+                                feedback aan gebruikers wanneer zij interactie
+                                hebben met knoppen en andere UI-elementen.
+                                Dit is een gangbare praktijk in de ontwikkeling
+                                van mobiele apps om de gebruikerservaring
+                                interactiever en boeiender te maken.
+                            "</string>
+    <string name="layouts">"Indelingen"</string>
+    <string name="layouts_description">"
+                                Indelingen zijn fundamenteel voor het
+                                organiseren en weergeven van inhoud in uw
+                                Android-applicaties. Ze definiëren de
+                                structuur en rangschikking van UI-elementen
+                                op het scherm.
+                            "</string>
+    <string name="sort_notes">"Notities sorteren"</string>
+    <string name="default_sort">"standaard"</string>
+    <string name="name_sort">"naam"</string>
+    <string name="oldest_sort">"oudste"</string>
+    <string name="newest_sort">"nieuwste"</string>
+    <string name="priority_sort">"prioriteit"</string>
+    <string name="zen_mode">"Zen-modus"</string>
+    <string name="zen_mode_description">"
+                                De zen-modus (volledig scherm) is een
+                                weergave-instelling waarmee een applicatie
+                                het volledige scherm kan innemen en alle
+                                andere interface-elementen verbergt, zoals
+                                werkbalken, menu\'s en de taakbalk van het
+                                besturingssysteem.
+                            "</string>
+    <string name="shake">"Schudden om te melden"</string>
+    <string name="shake_description">"
+                              Een handige functie waarmee gebruikers
+                              een feedback- of bugrapportageproces kunnen
+                              starten door hun Android-apparaat fysiek te
+                              schudden. In plaats van door meerdere menu\'s
+                              te navigeren om \'Feedback verzenden\' of
+                              \'Bug melden\' te vinden.
+                            "</string>
+    <string name="block_screenshot">"Schermafbeelding blokkeren"</string>
+    <string name="block_screenshot_description">"
+                                Het blokkeren van schermafbeeldingen is
+                                een beveiligingsmaatregel die voorkomt dat
+                                gebruikers schermafbeeldingen van de inhoud
+                                van uw app maken. Dit wordt vaak gebruikt
+                                om gevoelige informatie te beschermen,
+                                zoals bankgegevens, persoonlijke gegevens
+                                of auteursrechtelijk beschermd materiaal.
+                            "</string>
+    <string name="lock_mode">"Vergrendelmodus"</string>
+    <string name="lock_mode_description">"
+                                Deze functie verbetert de beveiliging van
+                                uw app door gebruikers te verplichten zich
+                                te verifiëren voordat ze toegang krijgen
+                                tot de inhoud. Dit wordt doorgaans bereikt
+                                met de ingebouwde beveiligingsfuncties van
+                                het apparaat, zoals vingerafdruk, PIN of
+                                patroonontgrendeling.
+                            "</string>
+    <string name="licenses">"Licenties"</string>
+    <string name="licenses_description">"
+                                    Deze licenties zijn hier opgenomen om
+                                    te voldoen aan de distributievereisten
+                                    van de respectieve auteurs en om
+                                    transparantie te bieden over de
+                                    architectuur van de software.
+                                    "</string>
+    <string name="title">"Titel"</string>
+    <string name="note">"Notitie"</string>
+    <string name="failed_to_save_document">"Document opslaan mislukt."</string>
+    <string name="gallery">"Galerij"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Toestemming geweigerd!</string>
+    <string name="take_photo">Foto maken</string>
+    <string name="video_capture">Video opnemen</string>
+    <string name="recorder">Recorder</string>
+    <string name="document">Document</string>
+    <string name="scanner">Scanner</string>
+    <string name="tasks">Taken</string>
+    <string name="tags">Tags</string>
+    <string name="reminder">Herinnering</string>
+    <string name="priority">Prioriteit</string>
+    <string name="low_priority">Laag</string>
+    <string name="medium_priority">Gemiddeld</string>
+    <string name="high_priority">Hoog</string>
+    <string name="urgent_priority">Urgent</string>
+    <string name="non_priority">Geen</string>
+    <string name="created">Aangemaakt</string>
+    <string name="edited">Bewerkt</string>
+    <string name="types">Typen</string>
+    <string name="media">Media</string>
+    <string name="medias">Mediabestanden</string>
+    <string name="colour">Kleur</string>
+    <string name="colours">Kleuren</string>
+    <string name="search_within">Zoeken in</string>
+    <string name="issue_title">Probleemtitel*</string>
+    <string name="issue_description">Probleembeschrijving (optioneel)</string>
+    <string name="noAccount">Inloggen zonder account</string>
+    <string name="screenshot_selected">✓ Schermafbeelding geselecteerd</string>
+    <string name="drive_submit">Wordt bij verzending geüpload naar Drive</string>
+    <string name="select_screenshot">Selecteer een schermafbeelding</string>
+    <string name="system_logs">Systeemlogboeken opnemen?</string>
+    <string name="find_an_issue">Heeft u een probleem gevonden?</string>
+    <string name="take_a_screenshot">Vergeet niet een schermafbeelding te maken.</string>
+    <string name="report_an_issue">Meld een probleem!</string>
+    <string name="bug">Bug</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android-systeemlogboeken (Logcat) in een feedbackrapport</string>
+    <string name="logs_description">Android-systeemlogboeken zijn een tijdgestempelde stroom berichten van het besturingssysteem en de kernel.\n    | Wanneer een gebruiker een probleem ondervindt (zoals een app-crash, bevriezing of onverwacht gedrag), leggen de logboeken de gebeurtenissen vast die leiden tot en met het probleem, zodat ontwikkelaars de context hebben die nodig is voor diagnose.</string>
+    <string name="label_bug">Bug</string>
+    <string name="label_feature">Functie</string>
+    <string name="label_invalid">Ongeldig</string>
+    <string name="label_question">Vraag</string>
+    <string name="label_security">Beveiliging</string>
+    <string name="failed">Mislukt</string>
+    <string name="submit_feedback">Feedback verzenden!</string>
+    <string name="uploading_screenshot">Schermafbeelding uploaden…</string>
+    <string name="creating_github_issue">GitHub-issue aanmaken…</string>
+    <string name="upload_faild">Uploaden mislukt…</string>
+    <string name="upload_failed">Uploaden mislukt…</string>
+    <string name="issue_crea">Issue aangemaakt.</string>
+    <string name="issue_created">Issue aangemaakt!</string>
+    <string name="log_out">Uitloggen</string>
+    <string name="hi">Hallo</string>
+    <string name="add_account">Ander account toevoegen</string>
+    <string name="manage_account">Account beheren</string>
+    <string name="upload_data">Gegevens uploaden</string>
+    <string name="download_data">Gegevens downloaden</string>
+    <string name="firebase_authentication_failed">Firebase-verificatie mislukt</string>
+    <string name="sign_in_failed">Google-aanmelding mislukt</string>
+    <string name="please_wait">Aanmelden, even geduld…</string>
+    <string name="sync_title">Aanmelden om te synchroniseren</string>
+    <string name="sync_description">Meld u aan met uw Google-account om uw notities op al uw apparaten te back-uppen en te synchroniseren.</string>
+    <string name="current_account">Huidig account</string>
+    <string name="no_name">Geen naam</string>
+    <string name="no_email">Geen e-mail</string>
+    <string name="sign_out">Uitloggen</string>
+    <string name="sign_in_with_google">Aanmelden met Google</string>
+    <string name="ai_models">AI-modellen</string>
+    <string name="load_more">Meer laden</string>
+    <string name="available_models">Beschikbare modellen</string>
+    <string name="assistant_settings">Assistent-instellingen</string>
+    <string name="learning_mode">Leermodus</string>
+    <string name="learning_mode_description">"
+                    Een uitvoer voorspellen voor nieuwe, ongeziene
+                    gegevens op basis van patronen die zijn geleerd
+                    uit de gelabelde voorbeelden.
+                "</string>
+    <string name="temperat">Temperatuur</string>
+    <string name="temperature">Temperatuur</string>
+    <string name="temperature_description">"
+           Bepaalt de willekeurigheid van de uitvoer.
+           Hogere waarden zijn creatiever.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Bepaalt welke tokens worden overwogen voor uitvoer.
+            </string>
+    <string name="context_message_size">Contextberichtgrootte</string>
+    <string name="context_message_size_description">
+            Maximum aantal vorige berichten dat
+            in de context wordt opgenomen.
+        </string>
+    <string name="stream_output">Streamuitvoer</string>
+    <string name="stream_output_description">Antwoord weergeven terwijl het wordt gegenereerd.</string>
+    <string name="thinking_budget">Denkbudget</string>
+    <string name="thinking_budget_description">
+                            Beperkt de rekenbronnen die worden gebruikt
+                            voor het antwoord.
+                        </string>
+    <string name="system_prompt">Systeemprompt</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Eigenschappen</string>
+    <string name="quick_messages">Snelle berichten</string>
+    <string name="quick_messages_description">Snelkoppelingen voor snelle berichten instellen.</string>
+    <string name="regular_expressions">Reguliere expressies</string>
+    <string name="regular_expressions_description">
+                            Definieer regex-patronen om berichten te
+                            transformeren voor verzending/ontvangst.
+                        </string>
+    <string name="headers">Headers</string>
+    <string name="headers_description">
+                            Dit zijn sleutel-waardeparen die worden
+                            toegevoegd aan het headerblok van het verzoek.
+                            Typisch gebruikt voor verificatie, het
+                            specificeren van het inhoudstype of het
+                            doorgeven van metadata.
+                        </string>
+    <string name="bodies">Bodys</string>
+    <string name="bodies_description">
+                            Dit verwijst naar de datapayload (sleutel:
+                            waarde JSON-structuur) die binnen het verzoek
+                            wordt verzonden. Het is het primaire middel
+                            om invoer naar het AI-model te sturen.
+                        </string>
+    <string name="memory">Geheugen</string>
+    <string name="memory_description">
+                            Sta de assistent toe vorige beurten in het
+                            gesprek te onthouden.
+                        </string>
+    <string name="chats_reference">Recente chatverwijzing</string>
+    <string name="chats_reference_description">
+                        Verwijs naar gegevens uit uw recente chats voor
+                        betere contextuele antwoorden.
+                        </string>
+    <string name="javascript">JavaScript-engine</string>
+    <string name="javascript_description">
+                            JavaScript-code uitvoeren met de QuickJS-engine
+                            voor berekeningen en scripting.
+                        </string>
+    <string name="reset">Instellingen resetten!</string>
+    <string name="providers">Providers</string>
+    <string name="ask">Vragen</string>
+    <string name="add_model"><![CDATA[<- AI-model toevoegen]]></string>
+    <string name="delete">Verwijderen</string>
+    <string name="options">Opties</string>
+    <string name="retitle">Hernoemen</string>
+    <string name="assistant">Assistent</string>
+    <string name="new_chat">Nieuwe chat</string>
+    <string name="files">Bestanden</string>
+    <string name="audios">Audio\'s</string>
+    <string name="videos">Video\'s</string>
+    <string name="camera">Camera</string>
+    <string name="pictures">Afbeeldingen</string>
+    <string name="provider_settings">Providerinstellingen</string>
+    <string name="api_key">API-sleutel</string>
+    <string name="base_url">Basis-URL</string>
+    <string name="model_name">Modelnaam</string>
+    <string name="modalities">Modaliteiten</string>
+    <string name="tools">Hulpmiddelen</string>
+    <string name="reasoning">Redenering</string>
+    <string name="respo">Respons-API</string>
+    <string name="response_api">Respons-API</string>
+    <string name="account_balance">Accountsaldo</string>
+    <string name="api_path">API-pad..</string>
+    <string name="json_key">Json-sleutel..</string>
+    <string name="network_proxy">Netwerkproxy</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Gebruikersnaam (optioneel)..</string>
+    <string name="pass_option">Wachtwoord (optioneel)..</string>
+    <string name="service_account">Serviceaccount @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Privésleutel..</string>
+    <string name="location">Locatie..</string>
+    <string name="project_uid">Project-UID..</string>
+    <string name="details">Details</string>
+    <string name="model_type">Modeltype</string>
+    <string name="input_modalities">Invoermodaliteiten</string>
+    <string name="output_modalities">Uitvoermodaliteiten</string>
+    <string name="abilities">Mogelijkheden</string>
+    <string name="provider_override">Provideroverschrijving toevoegen</string>
+    <string name="provider_override_description">
+                            Aangepaste providerinstellingen configureren
+                            voor dit specifieke model.
+                            Gebruikt gemeenschappelijke eigenschappen van
+                            de hoofdprovider van het model.
+                        </string>
+    <string name="build_tools">Bouwtools</string>
+    <string name="build_tools_description">
+                            Deze tools worden rechtstreeks door de API
+                            geleverd zonder app-ondersteuning te vereisen.
+                            Deze functie wordt momenteel alleen ondersteund
+                            door de Gemini API.
+                        </string>
+    <string name="google_search">Zoeken</string>
+    <string name="google_search_description">Google Search-integratie inschakelen</string>
+    <string name="url_context">URL-context</string>
+    <string name="url_context_description">URL-contextverwerking inschakelen</string>
+    <string name="find">Zoeken</string>
+    <string name="replace">Vervangen</string>
+    <string name="effecting_scopes">Toepassingsbereiken</string>
+    <string name="user">gebruiker</string>
+    <string name="visual_only">alleen visueel</string>
+    <string name="body">Body</string>
+    <string name="key">sleutel</string>
+    <string name="value">Waarde</string>
+    <string name="header">Header.</string>
+    <string name="reset_description">Assistent-instellingen terugzetten naar de standaardmodus.</string>
+    <string name="save_changes">Wijzigingen opslaan?</string>
+    <string name="save_changes_description">U heeft niet-opgeslagen wijzigingen. Wilt u deze opslaan voordat u vertrekt?</string>
+    <string name="dont_save">Niet opslaan</string>
+    <string name="save">Opslaan</string>
+    <string name="links">Links</string>
+    <string name="reminders">Herinneringen</string>
+    <string name="priorities">Prioriteiten</string>
+    <string name="ai_chat">AI-chat</string>
+    <string name="auto">automatisch</string>
+    <string name="light">licht</string>
+    <string name="medium">gemiddeld</string>
+    <string name="heavy">zwaar</string>
+    <string name="date">datum</string>
+    <string name="time">tijd</string>
+    <string name="date_and_time">datum en tijd</string>
+    <string name="local">lokaal</string>
+    <string name="timezone">tijdzone</string>
+    <string name="system_version">systeemversie</string>
+    <string name="device_info">apparaatinfo</string>
+    <string name="battery_level">batterijniveau</string>
+    <string name="insert">Invoegen</string>
+    <string name="confirm">Bevestigen</string>
+    <string name="message">Bericht</string>
+    <string name="content">Inhoud</string>
+    <string name="today">Vandaag</string>
+    <string name="tomorrow">Morgen</string>
+    <string name="according_to_timing">Volgens planning</string>
+    <string name="untitled">Naamloos</string>
+    <string name="hue">Tint</string>
+    <string name="saturation">Verzadiging</string>
+    <string name="brightness">Helderheid</string>
+    <string name="shades">Tinten</string>
+    <string name="complementary">Complementair</string>
+    <string name="task_placeholder">Taak..</string>
+    <string name="task_cannot_be_empty">Taak mag niet leeg zijn!</string>
+    <string name="of">van</string>
+    <string name="something_wrong_with_file">Er is iets mis met het bestand</string>
+    <string name="could_not_load_any_information">Kan geen informatie laden voor het mediabestand.</string>
+    <string name="no_file_path_provided">Geen bestandspad opgegeven.</string>
+    <string name="security_error_processing_file">Beveiligingsfout bij verwerken van bestand</string>
+    <string name="an_unexpected_error_occurred">Er is een onverwachte fout opgetreden</string>
+    <string name="could_not_retrieve_any_information">Kan geen informatie ophalen voor dit videobestand.</string>
+    <string name="error_reading_metadata">Fout bij lezen van mediametadata</string>
+    <string name="could_not_read_exif_data">Kan EXIF-gegevens niet lezen</string>
+    <string name="error_reading_basic_file_info">Fout bij lezen van basisbestandsinfo</string>
+    <string name="file_does_not_exist">Bestand bestaat niet</string>
+    <string name="error">Fout</string>
+    <string name="loading_media_info">Media-informatie laden…</string>
+    <string name="no_metadata_available_for_this_document">Geen metadata beschikbaar voor dit document.</string>
+    <string name="could_not_read_pdf_metadata">Kan PDF-metadata niet lezen</string>
+    <string name="cannot_read_file">Kan bestand niet lezen</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Kan afbeeldingsafmetingen niet decoderen of ongeldig formaat.</string>
+    <string name="error_during_dimension_decoding">Fout bij decoderen van afmetingen</string>
+    <string name="error_reading_exif_data">Fout bij lezen van EXIF-gegevens</string>
+    <string name="duplicate">Dupliceren</string>
+    <string name="send">Verzenden</string>
+    <string name="print">Afdrukken</string>
+    <string name="cleaned">Opgeschoond</string>
+    <string name="cleared">Gewist</string>
+    <string name="media_deleted">media verwijderd!</string>
+    <string name="jotting">Notities maken</string>
+    <string name="appwidget_text">VOORBEELD</string>
+    <string name="add_widget">Widget toevoegen</string>
+    <string name="app_widget_description">Dit is een app-widget beschrijving</string>
+    <string name="quick_widget_description">Dit is een snelle widget-indeling</string>
+    <string name="creator_widget_description">Dit is een maker-indeling widget</string>
+    <string name="notes_list_description">Dit is een notitielijst</string>
+    <string name="record_deleted">record verwijderd!</string>
+</resources>

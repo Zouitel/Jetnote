@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Note</string>
+    <string name="screen_chat">Chat AI</string>
+    <string name="screen_tags">Etichete</string>
+    <string name="screen_settings">Setări</string>
+    <string name="screen_archive">Arhivă</string>
+    <string name="screen_about">Despre</string>
+    <string name="screen_feedback">Feedback</string>
+    <string name="share_app">Distribuie această aplicație</string>
+    <string name="label_more">mai mult</string>
+    <string name="label_less">mai puțin</string>
+    <string name="msg_deleted">șters</string>
+    <string name="action_undo">Anulează</string>
+    <string name="tag_placeholder">Etichetă..</string>
+    <string name="tag_cannot_be_empty">Eticheta nu poate fi goală!</string>
+    <string name="archive">Arhivă</string>
+    <string name="deleted">șters!</string>
+    <string name="erase_notes">Ștergi notele?</string>
+    <string name="confirm_erase_notes">"Toate notele din coș vor fi șterse permanent."</string>
+    <string name="search_in_notes">"Caută în note.."</string>
+    <string name="select_layout">"Selectează aspectul"</string>
+    <string name="settings">"Setări"</string>
+    <string name="account_sync">"Sincronizare cont"</string>
+    <string name="account_sync_description">"
+                                Activarea sincronizării contului Google Drive
+                                pentru această aplicație vă permite să
+                                faceți backup și să sincronizați fără
+                                probleme datele aplicației, cum ar fi
+                                notele și setările, asigurând că
+                                datele dvs. sunt în siguranță.
+        "</string>
+    <string name="assistant_configuration">"Configurare asistent"</string>
+    <string name="assistant_configuration_description">"
+                                Asistentul AI este un program software
+                                alimentat de inteligența artificială,
+                                conceput pentru a vă ajuta cu o gamă
+                                largă de sarcini în această aplicație.
+                                Acești asistenți înțeleg și răspund la
+                                limbajul natural, permițându-vă să
+                                interacționați cu ei prin imagine sau text.
+                            "</string>
+    <string name="dark_mode">"Mod întunecat"</string>
+    <string name="dark_mode_description">"
+                                Acest mod este o setare la nivel de sistem
+                                care schimbă schema de fundal a interfeței
+                                aplicației Android în culori mai închise.
+                                Este conceput pentru a reduce oboseala
+                                ochilor, a îmbunătăți accesibilitatea,
+                                a economisi bateria și a îmbunătăți
+                                experiența utilizatorului.
+                            "</string>
+    <string name="sound_effect">"Efect sonor"</string>
+    <string name="sound_effect_description">"
+                                În contextul aplicației Jetnote,
+                                funcția \'Efect sonor\' oferă feedback
+                                auditiv utilizatorilor atunci când
+                                interacționează cu butoanele și alte
+                                elemente ale interfeței.
+                                Aceasta este o practică comună în
+                                dezvoltarea aplicațiilor mobile pentru
+                                a face experiența utilizatorului mai
+                                interactivă și mai captivantă.
+                            "</string>
+    <string name="layouts">"Aspecte"</string>
+    <string name="layouts_description">"
+                                Aspectele sunt fundamentale pentru
+                                organizarea și afișarea conținutului
+                                în aplicațiile Android.
+                                Ele definesc structura și aranjamentul
+                                elementelor de interfață pe ecran.
+                            "</string>
+    <string name="sort_notes">"Sortează notele"</string>
+    <string name="default_sort">"implicit"</string>
+    <string name="name_sort">"nume"</string>
+    <string name="oldest_sort">"cele mai vechi"</string>
+    <string name="newest_sort">"cele mai noi"</string>
+    <string name="priority_sort">"prioritate"</string>
+    <string name="zen_mode">"Modul Zen"</string>
+    <string name="zen_mode_description">"
+                                Modul Zen (ecran complet) este o setare
+                                de afișare care permite unei aplicații
+                                să ocupe întregul ecran, ascunzând toate
+                                celelalte elemente de interfață, cum ar fi
+                                barele de instrumente, meniurile și bara
+                                de activități a sistemului de operare.
+                            "</string>
+    <string name="shake">"Agită pentru a raporta"</string>
+    <string name="shake_description">"
+                              Este o funcție convenabilă care le permite
+                              utilizatorilor să inițieze un proces de
+                              feedback sau raportare a erorilor pur și
+                              simplu agitând fizic dispozitivul lor Android.
+                              În loc să navigați prin mai multe meniuri
+                              pentru a găsi \'Trimite feedback\' sau
+                              \'Raportează o eroare\'.
+                            "</string>
+    <string name="block_screenshot">"Blochează captura de ecran"</string>
+    <string name="block_screenshot_description">"
+                                Blocarea capturilor de ecran este o
+                                măsură de securitate care îi împiedică
+                                pe utilizatori să facă capturi de ecran
+                                ale conținutului aplicației dvs.
+                                Este adesea folosită pentru a proteja
+                                informații sensibile, cum ar fi detalii
+                                bancare, date personale sau material
+                                protejat prin drepturi de autor.
+                            "</string>
+    <string name="lock_mode">"Mod blocare"</string>
+    <string name="lock_mode_description">"
+                                Această funcție îmbunătățește securitatea
+                                aplicației dvs. cerând utilizatorilor să
+                                se autentifice înainte de a accesa conținutul.
+                                Aceasta se realizează de obicei folosind
+                                funcțiile de securitate încorporate ale
+                                dispozitivului, cum ar fi amprentă, PIN
+                                sau deblocare prin model.
+                            "</string>
+    <string name="licenses">"Licențe"</string>
+    <string name="licenses_description">"
+                                    Aceste licențe sunt incluse aici pentru
+                                    a respecta cerințele de distribuție ale
+                                    autorilor respectivi și pentru a oferi
+                                    transparență cu privire la arhitectura
+                                    software-ului.
+                                    "</string>
+    <string name="title">"Titlu"</string>
+    <string name="note">"Notă"</string>
+    <string name="failed_to_save_document">"Salvarea documentului a eșuat."</string>
+    <string name="gallery">"Galerie"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Permisiunea este refuzată!</string>
+    <string name="take_photo">Fă o fotografie</string>
+    <string name="video_capture">Înregistrare video</string>
+    <string name="recorder">Reportofon</string>
+    <string name="document">Document</string>
+    <string name="scanner">Scaner</string>
+    <string name="tasks">Sarcini</string>
+    <string name="tags">Etichete</string>
+    <string name="reminder">Memento</string>
+    <string name="priority">Prioritate</string>
+    <string name="low_priority">Scăzută</string>
+    <string name="medium_priority">Medie</string>
+    <string name="high_priority">Ridicată</string>
+    <string name="urgent_priority">Urgent</string>
+    <string name="non_priority">Fără</string>
+    <string name="created">Creat</string>
+    <string name="edited">Editat</string>
+    <string name="types">Tipuri</string>
+    <string name="media">Media</string>
+    <string name="medias">Fișiere media</string>
+    <string name="colour">Culoare</string>
+    <string name="colours">Culori</string>
+    <string name="search_within">Caută în</string>
+    <string name="issue_title">Titlul problemei*</string>
+    <string name="issue_description">Descrierea problemei (opțional)</string>
+    <string name="noAccount">Conectare fără cont</string>
+    <string name="screenshot_selected">✓ Captură de ecran selectată</string>
+    <string name="drive_submit">Va fi încărcat pe Drive la trimitere</string>
+    <string name="select_screenshot">Selectați o captură de ecran</string>
+    <string name="system_logs">Includeți jurnalele de sistem?</string>
+    <string name="find_an_issue">Ați găsit o problemă?</string>
+    <string name="take_a_screenshot">Nu uitați să faceți o captură de ecran.</string>
+    <string name="report_an_issue">Raportați o problemă!</string>
+    <string name="bug">Eroare</string>
+    <string name="logs_title">\\uD83D\\uDCiE Jurnalele sistemului Android (Logcat) în raportul de feedback</string>
+    <string name="logs_description">Jurnalele sistemului Android sunt un flux de mesaje cu marcaj temporal de la sistemul de operare și kernel.\n    | Când un utilizator întâmpină o problemă (cum ar fi o blocare, îngheț sau comportament neașteptat al aplicației), jurnalele înregistrează evenimentele din jurul problemei, oferind dezvoltatorilor contextul necesar pentru diagnosticare.</string>
+    <string name="label_bug">Eroare</string>
+    <string name="label_feature">Funcționalitate</string>
+    <string name="label_invalid">Invalid</string>
+    <string name="label_question">Întrebare</string>
+    <string name="label_security">Securitate</string>
+    <string name="failed">Eșuat</string>
+    <string name="submit_feedback">Trimite feedback!</string>
+    <string name="uploading_screenshot">Se încarcă captura de ecran…</string>
+    <string name="creating_github_issue">Se creează problema GitHub…</string>
+    <string name="upload_faild">Încărcare eșuată…</string>
+    <string name="upload_failed">Încărcare eșuată…</string>
+    <string name="issue_crea">Problemă creată.</string>
+    <string name="issue_created">Problemă creată!</string>
+    <string name="log_out">Deconectare</string>
+    <string name="hi">Bună</string>
+    <string name="add_account">Adaugă un alt cont</string>
+    <string name="manage_account">Gestionează contul</string>
+    <string name="upload_data">Încarcă datele</string>
+    <string name="download_data">Descarcă datele</string>
+    <string name="firebase_authentication_failed">Autentificarea Firebase a eșuat</string>
+    <string name="sign_in_failed">Conectarea cu Google a eșuat</string>
+    <string name="please_wait">Se conectează, vă rugăm așteptați…</string>
+    <string name="sync_title">Conectați-vă pentru sincronizare</string>
+    <string name="sync_description">Conectați-vă cu contul Google pentru a face backup și a sincroniza notele pe toate dispozitivele dvs.</string>
+    <string name="current_account">Contul curent</string>
+    <string name="no_name">Fără nume</string>
+    <string name="no_email">Fără email</string>
+    <string name="sign_out">Deconectare</string>
+    <string name="sign_in_with_google">Conectare cu Google</string>
+    <string name="ai_models">Modele AI</string>
+    <string name="load_more">Încarcă mai mult</string>
+    <string name="available_models">Modele disponibile</string>
+    <string name="assistant_settings">Setări asistent</string>
+    <string name="learning_mode">Mod de învățare</string>
+    <string name="learning_mode_description">"
+                    Prezicerea unui rezultat pentru date noi,
+                    nevăzute, bazat pe tiparele învățate
+                    din exemplele etichetate.
+                "</string>
+    <string name="temperat">Temperatură</string>
+    <string name="temperature">Temperatură</string>
+    <string name="temperature_description">"
+           Controlează aleatorietatea rezultatului.
+           Valori mai mari sunt mai creative.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Controlează ce token-uri sunt luate în considerare pentru rezultat.
+            </string>
+    <string name="context_message_size">Dimensiunea mesajelor de context</string>
+    <string name="context_message_size_description">
+            Numărul maxim de mesaje anterioare
+            incluse în context.
+        </string>
+    <string name="stream_output">Ieșire în flux</string>
+    <string name="stream_output_description">Afișează răspunsul pe măsură ce este generat.</string>
+    <string name="thinking_budget">Buget de gândire</string>
+    <string name="thinking_budget_description">
+                            Limitează resursele de calcul utilizate
+                            pentru răspuns.
+                        </string>
+    <string name="system_prompt">Prompt de sistem</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Proprietăți</string>
+    <string name="quick_messages">Mesaje rapide</string>
+    <string name="quick_messages_description">Configurați comenzi rapide pentru mesaje rapide.</string>
+    <string name="regular_expressions">Expresii regulate</string>
+    <string name="regular_expressions_description">
+                            Definiți tipare regex pentru a transforma
+                            mesajele înainte de trimitere/primire.
+                        </string>
+    <string name="headers">Anteturi</string>
+    <string name="headers_description">
+                            Acestea sunt perechi cheie-valoare adăugate
+                            blocului de antet al cererii. Sunt utilizate
+                            în mod tipic pentru autentificare, specificarea
+                            tipului de conținut sau transmiterea de
+                            metadate despre cerere.
+                        </string>
+    <string name="bodies">Corpuri</string>
+    <string name="bodies_description">
+                            Se referă la sarcina utilă de date
+                            (structură JSON) trimisă în cerere.
+                            Este mijlocul principal de trimitere a
+                            intrărilor către modelul AI.
+                        </string>
+    <string name="memory">Memorie</string>
+    <string name="memory_description">
+                            Permiteți asistentului să-și amintească
+                            turele anterioare din conversație.
+                        </string>
+    <string name="chats_reference">Referință chat-uri recente</string>
+    <string name="chats_reference_description">
+                        Referențiați datele din chat-urile recente
+                        pentru răspunsuri contextuale mai bune.
+                        </string>
+    <string name="javascript">Motor JavaScript</string>
+    <string name="javascript_description">
+                            Executați cod JavaScript cu motorul QuickJS
+                            pentru calcule și scripting.
+                        </string>
+    <string name="reset">Resetează setările!</string>
+    <string name="providers">Furnizori</string>
+    <string name="ask">Întreabă</string>
+    <string name="add_model"><![CDATA[<- Adaugă model AI]]></string>
+    <string name="delete">Șterge</string>
+    <string name="options">Opțiuni</string>
+    <string name="retitle">Redenumește</string>
+    <string name="assistant">Asistent</string>
+    <string name="new_chat">Chat nou</string>
+    <string name="files">Fișiere</string>
+    <string name="audios">Fișiere audio</string>
+    <string name="videos">Videoclipuri</string>
+    <string name="camera">Cameră</string>
+    <string name="pictures">Imagini</string>
+    <string name="provider_settings">Setări furnizor</string>
+    <string name="api_key">Cheie API</string>
+    <string name="base_url">URL de bază</string>
+    <string name="model_name">Numele modelului</string>
+    <string name="modalities">Modalități</string>
+    <string name="tools">Instrumente</string>
+    <string name="reasoning">Raționament</string>
+    <string name="respo">API de răspuns</string>
+    <string name="response_api">API de răspuns</string>
+    <string name="account_balance">Sold cont</string>
+    <string name="api_path">Cale API..</string>
+    <string name="json_key">Cheie Json..</string>
+    <string name="network_proxy">Proxy de rețea</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Nume de utilizator (opțional)..</string>
+    <string name="pass_option">Parolă (opțional)..</string>
+    <string name="service_account">Cont de serviciu @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Cheie privată..</string>
+    <string name="location">Locație..</string>
+    <string name="project_uid">UID proiect..</string>
+    <string name="details">Detalii</string>
+    <string name="model_type">Tipul modelului</string>
+    <string name="input_modalities">Modalități de intrare</string>
+    <string name="output_modalities">Modalități de ieșire</string>
+    <string name="abilities">Abilități</string>
+    <string name="provider_override">Adaugă suprareglare furnizor</string>
+    <string name="provider_override_description">
+                            Configurați setări personalizate ale
+                            furnizorului pentru acest model specific.
+                            Utilizează proprietăți comune de la
+                            furnizorul principal al modelului.
+                        </string>
+    <string name="build_tools">Instrumente de construcție</string>
+    <string name="build_tools_description">
+                            Aceste instrumente sunt furnizate direct
+                            de API fără a necesita suport din aplicație.
+                            Această funcție este acceptată momentan
+                            doar de Gemini API.
+                        </string>
+    <string name="google_search">Caută</string>
+    <string name="google_search_description">Activați integrarea cu Google Search</string>
+    <string name="url_context">Context URL</string>
+    <string name="url_context_description">Activați procesarea contextului URL</string>
+    <string name="find">Găsește</string>
+    <string name="replace">Înlocuiește</string>
+    <string name="effecting_scopes">Domenii de aplicare</string>
+    <string name="user">utilizator</string>
+    <string name="visual_only">numai vizual</string>
+    <string name="body">Corp</string>
+    <string name="key">cheie</string>
+    <string name="value">Valoare</string>
+    <string name="header">Antet.</string>
+    <string name="reset_description">Resetați setările asistentului la modul implicit.</string>
+    <string name="save_changes">Salvați modificările?</string>
+    <string name="save_changes_description">Aveți modificări nesalvate. Doriți să le salvați înainte de a pleca?</string>
+    <string name="dont_save">Nu salva</string>
+    <string name="save">Salvează</string>
+    <string name="links">Linkuri</string>
+    <string name="reminders">Mementouri</string>
+    <string name="priorities">Priorități</string>
+    <string name="ai_chat">Chat AI</string>
+    <string name="auto">automat</string>
+    <string name="light">ușor</string>
+    <string name="medium">mediu</string>
+    <string name="heavy">greu</string>
+    <string name="date">dată</string>
+    <string name="time">oră</string>
+    <string name="date_and_time">dată și oră</string>
+    <string name="local">local</string>
+    <string name="timezone">fus orar</string>
+    <string name="system_version">versiunea sistemului</string>
+    <string name="device_info">informații dispozitiv</string>
+    <string name="battery_level">nivelul bateriei</string>
+    <string name="insert">Inserează</string>
+    <string name="confirm">Confirmă</string>
+    <string name="message">Mesaj</string>
+    <string name="content">Conținut</string>
+    <string name="today">Astăzi</string>
+    <string name="tomorrow">Mâine</string>
+    <string name="according_to_timing">Conform programului</string>
+    <string name="untitled">Fără titlu</string>
+    <string name="hue">Nuanță</string>
+    <string name="saturation">Saturație</string>
+    <string name="brightness">Luminozitate</string>
+    <string name="shades">Umbre</string>
+    <string name="complementary">Complementar</string>
+    <string name="task_placeholder">Sarcină..</string>
+    <string name="task_cannot_be_empty">Sarcina nu poate fi goală!</string>
+    <string name="of">din</string>
+    <string name="something_wrong_with_file">Ceva în neregulă cu fișierul</string>
+    <string name="could_not_load_any_information">Nu s-au putut încărca informații pentru fișierul media.</string>
+    <string name="no_file_path_provided">Nu a fost furnizată nicio cale de fișier.</string>
+    <string name="security_error_processing_file">Eroare de securitate la procesarea fișierului</string>
+    <string name="an_unexpected_error_occurred">A apărut o eroare neașteptată</string>
+    <string name="could_not_retrieve_any_information">Nu s-au putut prelua informații pentru acest fișier video.</string>
+    <string name="error_reading_metadata">Eroare la citirea metadatelor media</string>
+    <string name="could_not_read_exif_data">Nu s-au putut citi datele EXIF</string>
+    <string name="error_reading_basic_file_info">Eroare la citirea informațiilor de bază ale fișierului</string>
+    <string name="file_does_not_exist">Fișierul nu există</string>
+    <string name="error">Eroare</string>
+    <string name="loading_media_info">Se încarcă informațiile media…</string>
+    <string name="no_metadata_available_for_this_document">Nu sunt disponibile metadate pentru acest document.</string>
+    <string name="could_not_read_pdf_metadata">Nu s-au putut citi metadatele PDF</string>
+    <string name="cannot_read_file">Fișierul nu poate fi citit</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Nu s-au putut decoda dimensiunile imaginii sau format invalid.</string>
+    <string name="error_during_dimension_decoding">Eroare la decodarea dimensiunilor</string>
+    <string name="error_reading_exif_data">Eroare la citirea datelor EXIF</string>
+    <string name="duplicate">Duplică</string>
+    <string name="send">Trimite</string>
+    <string name="print">Tipărește</string>
+    <string name="cleaned">Curățat</string>
+    <string name="cleared">Șters</string>
+    <string name="media_deleted">media ștearsă!</string>
+    <string name="jotting">Notare</string>
+    <string name="appwidget_text">EXEMPLU</string>
+    <string name="add_widget">Adaugă widget</string>
+    <string name="app_widget_description">Aceasta este o descriere a widget-ului aplicației</string>
+    <string name="quick_widget_description">Acesta este un aspect de widget rapid</string>
+    <string name="creator_widget_description">Acesta este un widget de aspect creator</string>
+    <string name="notes_list_description">Aceasta este o listă de note</string>
+    <string name="record_deleted">înregistrare ștearsă!</string>
+</resources>

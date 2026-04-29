@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Notater</string>
+    <string name="screen_chat">AI-chat</string>
+    <string name="screen_tags">Tagger</string>
+    <string name="screen_settings">Innstillinger</string>
+    <string name="screen_archive">Arkiv</string>
+    <string name="screen_about">Om</string>
+    <string name="screen_feedback">Tilbakemelding</string>
+    <string name="share_app">Del denne appen</string>
+    <string name="label_more">mer</string>
+    <string name="label_less">mindre</string>
+    <string name="msg_deleted">slettet</string>
+    <string name="action_undo">Angre</string>
+    <string name="tag_placeholder">Tagg..</string>
+    <string name="tag_cannot_be_empty">Taggen kan ikke være tom!</string>
+    <string name="archive">Arkiv</string>
+    <string name="deleted">slettet!</string>
+    <string name="erase_notes">Slette notater?</string>
+    <string name="confirm_erase_notes">"Alle notater i papirkurven vil bli permanent slettet."</string>
+    <string name="search_in_notes">"Søk i notater.."</string>
+    <string name="select_layout">"Velg layout"</string>
+    <string name="settings">"Innstillinger"</string>
+    <string name="account_sync">"Kontosynkronisering"</string>
+    <string name="account_sync_description">"
+                                Aktivering av Google Drive-kontosynkronisering
+                                for denne applikasjonen lar deg sikkerhets­kopiere
+                                og synkronisere appdata, som notater og
+                                innstillinger, på en sømløs måte,
+                                og sikrer at dataene dine er trygge.
+        "</string>
+    <string name="assistant_configuration">"Assistentkonfigurasjon"</string>
+    <string name="assistant_configuration_description">"
+                                AI-assistenten er et program drevet av
+                                kunstig intelligens, designet for å hjelpe
+                                deg med et bredt spekter av oppgaver i
+                                denne applikasjonen.
+                                Disse assistentene forstår og svarer på
+                                naturlig språk, slik at du kan samhandle
+                                med dem gjennom bilde eller tekst.
+                            "</string>
+    <string name="dark_mode">"Mørk modus"</string>
+    <string name="dark_mode_description">"
+                                Denne modusen er en systemomfattende
+                                innstilling som endrer bakgrunnsfargen
+                                i Android-appens brukergrensesnitt til
+                                mørkere farger.
+                                Den er utformet for å redusere øye­anstrengelse,
+                                forbedre tilgjengelighet, spare batteri
+                                og forbedre brukeropplevelsen.
+                            "</string>
+    <string name="sound_effect">"Lydeffekt"</string>
+    <string name="sound_effect_description">"
+                                I Jetnote-applikasjonen gir funksjonen
+                                \'Lydeffekt\' auditiv tilbakemelding til
+                                brukerne når de samhandler med knapper
+                                og andre UI-elementer.
+                                Dette er vanlig praksis innen mobilapp­utvikling
+                                for å gjøre brukeropplevelsen mer
+                                interaktiv og engasjerende.
+                            "</string>
+    <string name="layouts">"Layouter"</string>
+    <string name="layouts_description">"
+                                Layouter er grunnleggende for å organisere
+                                og vise innhold i Android-applikasjoner.
+                                De definerer strukturen og oppsettet av
+                                UI-elementer på skjermen.
+                            "</string>
+    <string name="sort_notes">"Sorter notater"</string>
+    <string name="default_sort">"standard"</string>
+    <string name="name_sort">"navn"</string>
+    <string name="oldest_sort">"eldste"</string>
+    <string name="newest_sort">"nyeste"</string>
+    <string name="priority_sort">"prioritet"</string>
+    <string name="zen_mode">"Zen-modus"</string>
+    <string name="zen_mode_description">"
+                                Zen-modus (fullskjerm) er en skjerm­innstilling
+                                som lar en applikasjon fylle hele skjermen
+                                og skjuler alle andre grensesnitt­elementer
+                                som verktøylinjer, menyer og operativ­systemets
+                                oppgavelinje.
+                            "</string>
+    <string name="shake">"Rist for å rapportere"</string>
+    <string name="shake_description">"
+                              Dette er en praktisk funksjon som lar brukere
+                              starte en tilbakemeldings- eller feilrapporterings­prosess
+                              ved å riste Android-enheten fysisk.
+                              I stedet for å navigere gjennom flere menyer
+                              for å finne \'Send tilbakemelding\' eller
+                              \'Rapporter en feil\'.
+                            "</string>
+    <string name="block_screenshot">"Blokker skjermbilde"</string>
+    <string name="block_screenshot_description">"
+                                Blokkering av skjermbilder er et sikkerhets­tiltak
+                                som hindrer brukere fra å ta skjermbilder
+                                av appens innhold.
+                                Det brukes ofte for å beskytte sensitiv
+                                informasjon, som bankdetaljer, persondata
+                                eller opphavsrettsbeskyttet materiale.
+                            "</string>
+    <string name="lock_mode">"Låsemodus"</string>
+    <string name="lock_mode_description">"
+                                Denne funksjonen forbedrer sikkerheten i
+                                appen din ved å kreve at brukere autentiserer
+                                seg før de kan få tilgang til innholdet.
+                                Dette oppnås vanligvis ved hjelp av enhetens
+                                innebygde sikkerhetsfunksjoner, som
+                                fingeravtrykk, PIN eller mønster­opplåsing.
+                            "</string>
+    <string name="licenses">"Lisenser"</string>
+    <string name="licenses_description">"
+                                    Disse lisensene er inkludert her for å
+                                    overholde distribusjonskravene til de
+                                    respektive forfatterne og for å gi
+                                    åpenhet om programmets arkitektur.
+                                    "</string>
+    <string name="title">"Tittel"</string>
+    <string name="note">"Notat"</string>
+    <string name="failed_to_save_document">"Lagring av dokumentet mislyktes."</string>
+    <string name="gallery">"Galleri"</string>
+    <string name="audio">Lyd</string>
+    <string name="permission_denied">Tillatelse nektet!</string>
+    <string name="take_photo">Ta bilde</string>
+    <string name="video_capture">Ta opp video</string>
+    <string name="recorder">Opptaker</string>
+    <string name="document">Dokument</string>
+    <string name="scanner">Skanner</string>
+    <string name="tasks">Oppgaver</string>
+    <string name="tags">Tagger</string>
+    <string name="reminder">Påminnelse</string>
+    <string name="priority">Prioritet</string>
+    <string name="low_priority">Lav</string>
+    <string name="medium_priority">Middels</string>
+    <string name="high_priority">Høy</string>
+    <string name="urgent_priority">Haster</string>
+    <string name="non_priority">Ingen</string>
+    <string name="created">Opprettet</string>
+    <string name="edited">Redigert</string>
+    <string name="types">Typer</string>
+    <string name="media">Medier</string>
+    <string name="medias">Mediefiler</string>
+    <string name="colour">Farge</string>
+    <string name="colours">Farger</string>
+    <string name="search_within">Søk innen</string>
+    <string name="issue_title">Problemtittel*</string>
+    <string name="issue_description">Problembeskrivelse (valgfritt)</string>
+    <string name="noAccount">Logg inn uten konto</string>
+    <string name="screenshot_selected">✓ Skjermbilde valgt</string>
+    <string name="drive_submit">Vil bli lastet opp til Drive ved innsending</string>
+    <string name="select_screenshot">Velg et skjermbilde</string>
+    <string name="system_logs">Inkluder systemlogger?</string>
+    <string name="find_an_issue">Fant du et problem?</string>
+    <string name="take_a_screenshot">Ikke glem å ta et skjermbilde.</string>
+    <string name="report_an_issue">Rapporter et problem!</string>
+    <string name="bug">Feil</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android-systemlogger (Logcat) i tilbakemeldingsrapport</string>
+    <string name="logs_description">Android-systemlogger er en tidsstemplet meldingsstrøm fra operativsystemet og kjernen.\n    | Når en bruker støter på et problem (som appkrasj, frysing eller uventet atferd), fanger loggene opp hendelsene rundt problemet og gir utviklere den nødvendige konteksten for diagnose.</string>
+    <string name="label_bug">Feil</string>
+    <string name="label_feature">Funksjon</string>
+    <string name="label_invalid">Ugyldig</string>
+    <string name="label_question">Spørsmål</string>
+    <string name="label_security">Sikkerhet</string>
+    <string name="failed">Mislyktes</string>
+    <string name="submit_feedback">Send tilbakemelding!</string>
+    <string name="uploading_screenshot">Laster opp skjermbilde…</string>
+    <string name="creating_github_issue">Oppretter GitHub-problem…</string>
+    <string name="upload_faild">Opplasting mislyktes…</string>
+    <string name="upload_failed">Opplasting mislyktes…</string>
+    <string name="issue_crea">Problem opprettet.</string>
+    <string name="issue_created">Problem opprettet!</string>
+    <string name="log_out">Logg ut</string>
+    <string name="hi">Hei</string>
+    <string name="add_account">Legg til en annen konto</string>
+    <string name="manage_account">Administrer konto</string>
+    <string name="upload_data">Last opp data</string>
+    <string name="download_data">Last ned data</string>
+    <string name="firebase_authentication_failed">Firebase-autentisering mislyktes</string>
+    <string name="sign_in_failed">Google-pålogging mislyktes</string>
+    <string name="please_wait">Logger inn, vennligst vent…</string>
+    <string name="sync_title">Logg inn for å synkronisere</string>
+    <string name="sync_description">Logg inn med Google-kontoen din for å sikkerhetskopiere og synkronisere notatene dine på alle enhetene dine.</string>
+    <string name="current_account">Gjeldende konto</string>
+    <string name="no_name">Intet navn</string>
+    <string name="no_email">Ingen e-post</string>
+    <string name="sign_out">Logg ut</string>
+    <string name="sign_in_with_google">Logg inn med Google</string>
+    <string name="ai_models">AI-modeller</string>
+    <string name="load_more">Last inn mer</string>
+    <string name="available_models">Tilgjengelige modeller</string>
+    <string name="assistant_settings">Assistentinnstillinger</string>
+    <string name="learning_mode">Læringsmodus</string>
+    <string name="learning_mode_description">"
+                    Forutsi et resultat for nye, usette data
+                    basert på mønstre lært fra de
+                    merkede eksemplene.
+                "</string>
+    <string name="temperat">Temperatur</string>
+    <string name="temperature">Temperatur</string>
+    <string name="temperature_description">"
+           Kontrollerer tilfeldigheten i utdata.
+           Høyere verdier er mer kreative.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Kontrollerer hvilke tokens som vurderes for utdata.
+            </string>
+    <string name="context_message_size">Kontekstmeldingsstørrelse</string>
+    <string name="context_message_size_description">
+            Maksimalt antall tidligere meldinger
+            som inkluderes i konteksten.
+        </string>
+    <string name="stream_output">Strømmeutdata</string>
+    <string name="stream_output_description">Vis svar mens det genereres.</string>
+    <string name="thinking_budget">Tenkebudsjett</string>
+    <string name="thinking_budget_description">
+                            Begrenser dataressursene som brukes
+                            til svaret.
+                        </string>
+    <string name="system_prompt">Systemprompt</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Egenskaper</string>
+    <string name="quick_messages">Hurtigmeldinger</string>
+    <string name="quick_messages_description">Konfigurer snarveier for hurtigmeldinger.</string>
+    <string name="regular_expressions">Regulære uttrykk</string>
+    <string name="regular_expressions_description">
+                            Definer regex-mønstre for å transformere
+                            meldinger før sending/mottak.
+                        </string>
+    <string name="headers">Overskrifter</string>
+    <string name="headers_description">
+                            Dette er nøkkel-verdi-par lagt til i
+                            forespørselens overskriftsblokk.
+                            Brukes typisk for autentisering,
+                            innholdstypespesifikasjon eller overføring
+                            av metadata om forespørselen.
+                        </string>
+    <string name="bodies">Kropper</string>
+    <string name="bodies_description">
+                            Refererer til datanyttelasten (JSON-struktur)
+                            sendt i forespørselen. Det er det primære
+                            middelet for å sende input til AI-modellen.
+                        </string>
+    <string name="memory">Minne</string>
+    <string name="memory_description">
+                            La assistenten huske tidligere
+                            samtale­runder.
+                        </string>
+    <string name="chats_reference">Referanse til nylige chatter</string>
+    <string name="chats_reference_description">
+                        Referer til data fra nylige chatter for
+                        bedre kontekstuelle svar.
+                        </string>
+    <string name="javascript">JavaScript-motor</string>
+    <string name="javascript_description">
+                            Kjør JavaScript-kode med QuickJS-motoren
+                            for beregninger og skripting.
+                        </string>
+    <string name="reset">Tilbakestill innstillinger!</string>
+    <string name="providers">Leverandører</string>
+    <string name="ask">Spør</string>
+    <string name="add_model"><![CDATA[<- Legg til AI-modell]]></string>
+    <string name="delete">Slett</string>
+    <string name="options">Alternativer</string>
+    <string name="retitle">Gi nytt navn</string>
+    <string name="assistant">Assistent</string>
+    <string name="new_chat">Ny chat</string>
+    <string name="files">Filer</string>
+    <string name="audios">Lydfiler</string>
+    <string name="videos">Videoer</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Bilder</string>
+    <string name="provider_settings">Leverandørinnstillinger</string>
+    <string name="api_key">API-nøkkel</string>
+    <string name="base_url">Basis-URL</string>
+    <string name="model_name">Modellnavn</string>
+    <string name="modalities">Modaliteter</string>
+    <string name="tools">Verktøy</string>
+    <string name="reasoning">Resonnement</string>
+    <string name="respo">Respons-API</string>
+    <string name="response_api">Respons-API</string>
+    <string name="account_balance">Kontosaldo</string>
+    <string name="api_path">API-sti..</string>
+    <string name="json_key">Json-nøkkel..</string>
+    <string name="network_proxy">Nettverksproxy</string>
+    <string name="host">Vert..</string>
+    <string name="username_option">Brukernavn (valgfritt)..</string>
+    <string name="pass_option">Passord (valgfritt)..</string>
+    <string name="service_account">Tjenestekonto @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Privat nøkkel..</string>
+    <string name="location">Sted..</string>
+    <string name="project_uid">Prosjekt-UID..</string>
+    <string name="details">Detaljer</string>
+    <string name="model_type">Modelltype</string>
+    <string name="input_modalities">Inngangsmodaliteter</string>
+    <string name="output_modalities">Utgangsmodaliteter</string>
+    <string name="abilities">Evner</string>
+    <string name="provider_override">Legg til leverandøroverstyring</string>
+    <string name="provider_override_description">
+                            Konfigurer egendefinerte leverandørinnstillinger
+                            for denne spesifikke modellen.
+                            Bruker felles egenskaper fra modellens
+                            primære leverandør.
+                        </string>
+    <string name="build_tools">Byggverktøy</string>
+    <string name="build_tools_description">
+                            Disse verktøyene leveres direkte av API-en
+                            uten å kreve appstøtte.
+                            Denne funksjonen støttes for øyeblikket
+                            bare av Gemini API.
+                        </string>
+    <string name="google_search">Søk</string>
+    <string name="google_search_description">Aktiver Google Søk-integrering</string>
+    <string name="url_context">URL-kontekst</string>
+    <string name="url_context_description">Aktiver URL-kontekstbehandling</string>
+    <string name="find">Finn</string>
+    <string name="replace">Erstatt</string>
+    <string name="effecting_scopes">Gjeldende omfang</string>
+    <string name="user">bruker</string>
+    <string name="visual_only">kun visuelt</string>
+    <string name="body">Kropp</string>
+    <string name="key">nøkkel</string>
+    <string name="value">Verdi</string>
+    <string name="header">Overskrift.</string>
+    <string name="reset_description">Tilbakestill assistent­innstillingene til standardmodus.</string>
+    <string name="save_changes">Lagre endringer?</string>
+    <string name="save_changes_description">Du har ulagrede endringer. Vil du lagre dem før du forlater?</string>
+    <string name="dont_save">Ikke lagre</string>
+    <string name="save">Lagre</string>
+    <string name="links">Koblinger</string>
+    <string name="reminders">Påminnelser</string>
+    <string name="priorities">Prioriteter</string>
+    <string name="ai_chat">AI-chat</string>
+    <string name="auto">automatisk</string>
+    <string name="light">lett</string>
+    <string name="medium">middels</string>
+    <string name="heavy">tung</string>
+    <string name="date">dato</string>
+    <string name="time">tid</string>
+    <string name="date_and_time">dato og tid</string>
+    <string name="local">lokal</string>
+    <string name="timezone">tidssone</string>
+    <string name="system_version">systemversjon</string>
+    <string name="device_info">enhetsinfo</string>
+    <string name="battery_level">batterinivå</string>
+    <string name="insert">Sett inn</string>
+    <string name="confirm">Bekreft</string>
+    <string name="message">Melding</string>
+    <string name="content">Innhold</string>
+    <string name="today">I dag</string>
+    <string name="tomorrow">I morgen</string>
+    <string name="according_to_timing">I henhold til tidspunkt</string>
+    <string name="untitled">Uten tittel</string>
+    <string name="hue">Fargetone</string>
+    <string name="saturation">Metning</string>
+    <string name="brightness">Lysstyrke</string>
+    <string name="shades">Nyanser</string>
+    <string name="complementary">Komplementær</string>
+    <string name="task_placeholder">Oppgave..</string>
+    <string name="task_cannot_be_empty">Oppgaven kan ikke være tom!</string>
+    <string name="of">av</string>
+    <string name="something_wrong_with_file">Noe er galt med filen</string>
+    <string name="could_not_load_any_information">Kunne ikke laste inn informasjon for mediefilen.</string>
+    <string name="no_file_path_provided">Ingen filbane angitt.</string>
+    <string name="security_error_processing_file">Sikkerhetsfeil ved behandling av fil</string>
+    <string name="an_unexpected_error_occurred">Det oppstod en uventet feil</string>
+    <string name="could_not_retrieve_any_information">Kunne ikke hente informasjon for denne videofilen.</string>
+    <string name="error_reading_metadata">Feil ved lesing av mediemetadata</string>
+    <string name="could_not_read_exif_data">Kunne ikke lese EXIF-data</string>
+    <string name="error_reading_basic_file_info">Feil ved lesing av grunnleggende filinformasjon</string>
+    <string name="file_does_not_exist">Filen eksisterer ikke</string>
+    <string name="error">Feil</string>
+    <string name="loading_media_info">Laster inn medieinformasjon…</string>
+    <string name="no_metadata_available_for_this_document">Ingen metadata tilgjengelig for dette dokumentet.</string>
+    <string name="could_not_read_pdf_metadata">Kunne ikke lese PDF-metadata</string>
+    <string name="cannot_read_file">Kan ikke lese filen</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Kunne ikke dekode bildedimensjoner eller ugyldig format.</string>
+    <string name="error_during_dimension_decoding">Feil under dekoding av dimensjoner</string>
+    <string name="error_reading_exif_data">Feil ved lesing av EXIF-data</string>
+    <string name="duplicate">Dupliser</string>
+    <string name="send">Send</string>
+    <string name="print">Skriv ut</string>
+    <string name="cleaned">Rengjort</string>
+    <string name="cleared">Tømt</string>
+    <string name="media_deleted">medier slettet!</string>
+    <string name="jotting">Noterer</string>
+    <string name="appwidget_text">EKSEMPEL</string>
+    <string name="add_widget">Legg til widget</string>
+    <string name="app_widget_description">Dette er en appwidget-beskrivelse</string>
+    <string name="quick_widget_description">Dette er et hurtigwidget-oppsett</string>
+    <string name="creator_widget_description">Dette er en oppretterlayout-widget</string>
+    <string name="notes_list_description">Dette er en notat­liste</string>
+    <string name="record_deleted">post slettet!</string>
+</resources>

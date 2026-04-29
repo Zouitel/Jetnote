@@ -32,6 +32,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -44,9 +45,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -144,21 +147,23 @@ class ModelConfigurationScreen(val model: Model): Screen {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(model.displayName, maxLines = 2, overflow = TextOverflow.Ellipsis) },
-                    navigationIcon = {
-                        IconButton({
-                            if (hasUnsavedChanges) {
-                                saveSheet = true
-                            } else {
-                                navigator?.pop()
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    TopAppBar(
+                        title = { Text(model.displayName, maxLines = 2, overflow = TextOverflow.Ellipsis) },
+                        navigationIcon = {
+                            IconButton({
+                                if (hasUnsavedChanges) {
+                                    saveSheet = true
+                                } else {
+                                    navigator?.pop()
+                                }
+                            }) {
+                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                             }
-                        }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
-                        }
-                    },
-                    scrollBehavior = scrollBehavior
-                )
+                        },
+                        scrollBehavior = scrollBehavior
+                    )
+                }
             },
             snackbarHost = {
                 SnackbarHost(snackbarState) { data ->

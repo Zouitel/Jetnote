@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Notlar</string>
+    <string name="screen_chat">AI Sohbet</string>
+    <string name="screen_tags">Etiketler</string>
+    <string name="screen_settings">Ayarlar</string>
+    <string name="screen_archive">Arşiv</string>
+    <string name="screen_about">Hakkında</string>
+    <string name="screen_feedback">Geri Bildirim</string>
+    <string name="share_app">Bu Uygulamayı Paylaş</string>
+    <string name="label_more">daha fazla</string>
+    <string name="label_less">daha az</string>
+    <string name="msg_deleted">silindi</string>
+    <string name="action_undo">Geri Al</string>
+    <string name="tag_placeholder">Etiket..</string>
+    <string name="tag_cannot_be_empty">Etiket boş olamaz!</string>
+    <string name="archive">Arşiv</string>
+    <string name="deleted">silindi!</string>
+    <string name="erase_notes">Notlar Silinsin mi?</string>
+    <string name="confirm_erase_notes">"Çöp kutusundaki tüm notlar kalıcı olarak silinecektir."</string>
+    <string name="search_in_notes">"Notlarda ara.."</string>
+    <string name="select_layout">"Düzen seç"</string>
+    <string name="settings">"Ayarlar"</string>
+    <string name="account_sync">"Hesap Senkronizasyonu"</string>
+    <string name="account_sync_description">"
+                                Bu uygulama için Google Drive hesap
+                                senkronizasyonunu etkinleştirmek,
+                                notlar ve ayarlar gibi uygulama verilerinizi
+                                sorunsuz şekilde yedeklemenizi ve
+                                senkronize etmenizi sağlar,
+                                böylece verileriniz güvende kalır.
+        "</string>
+    <string name="assistant_configuration">"Asistan Yapılandırması"</string>
+    <string name="assistant_configuration_description">"
+                                AI asistanı, bu uygulamada geniş bir görev
+                                yelpazesinde size yardımcı olmak için
+                                tasarlanmış, yapay zeka destekli bir
+                                yazılım programıdır.
+                                Bu asistanlar doğal dili anlayıp yanıtlar,
+                                böylece görsel veya metin aracılığıyla
+                                onlarla etkileşim kurabilirsiniz.
+                            "</string>
+    <string name="dark_mode">"Karanlık Mod"</string>
+    <string name="dark_mode_description">"
+                                Bu mod, Android uygulamanızın arayüzünün
+                                arka plan rengini daha koyu renklerle
+                                değiştiren sistem genelinde bir ayardır.
+                                Göz yorgunluğunu azaltmak, erişilebilirliği
+                                iyileştirmek, pil ömrünü uzatmak ve
+                                kullanıcı deneyimini geliştirmek için
+                                tasarlanmıştır.
+                            "</string>
+    <string name="sound_effect">"Ses Efekti"</string>
+    <string name="sound_effect_description">"
+                                Jetnote uygulaması bağlamında,
+                                \'Ses Efekti\' özelliği, kullanıcılar
+                                düğmeler ve diğer arayüz öğeleriyle
+                                etkileşime girdiğinde sesli geri bildirim
+                                sağlar. Bu, kullanıcı deneyimini daha
+                                etkileşimli ve ilgi çekici hale getirmek
+                                için mobil uygulama geliştirmede
+                                yaygın bir uygulamadır.
+                            "</string>
+    <string name="layouts">"Düzenler"</string>
+    <string name="layouts_description">"
+                                Düzenler, Android uygulamalarınızda
+                                içeriği organize etmek ve görüntülemek
+                                için temel öneme sahiptir.
+                                Ekrandaki arayüz öğelerinin yapısını
+                                ve düzenlemesini tanımlarlar.
+                            "</string>
+    <string name="sort_notes">"Notları Sırala"</string>
+    <string name="default_sort">"varsayılan"</string>
+    <string name="name_sort">"ada göre"</string>
+    <string name="oldest_sort">"en eski"</string>
+    <string name="newest_sort">"en yeni"</string>
+    <string name="priority_sort">"öncelik"</string>
+    <string name="zen_mode">"Zen Modu"</string>
+    <string name="zen_mode_description">"
+                                Zen modu (tam ekran modu), bir uygulamanın
+                                tüm ekranı kaplamasına olanak tanıyan
+                                ve araç çubukları, menüler ile işletim
+                                sisteminin görev çubuğu gibi tüm diğer
+                                arayüz öğelerini gizleyen bir görüntü
+                                ayarıdır.
+                            "</string>
+    <string name="shake">"Sallayarak Bildir"</string>
+    <string name="shake_description">"
+                              Kullanıcıların Android cihazlarını fiziksel
+                              olarak sallayarak bir geri bildirim veya
+                              hata bildirme sürecini başlatmalarına olanak
+                              tanıyan kullanışlı bir özelliktir.
+                              \'Geri Bildirim Gönder\' veya \'Hata Bildir\'
+                              seçeneğini bulmak için birden fazla menüde
+                              gezinmek yerine kolayca kullanabilirsiniz.
+                            "</string>
+    <string name="block_screenshot">"Ekran Görüntüsünü Engelle"</string>
+    <string name="block_screenshot_description">"
+                                Ekran görüntüsü engelleme, kullanıcıların
+                                uygulamanızın içeriğinin ekran görüntüsünü
+                                almasını önleyen bir güvenlik önlemidir.
+                                Bankacılık bilgileri, kişisel veriler veya
+                                telif hakkıyla korunan materyaller gibi
+                                hassas bilgileri korumak için sıklıkla
+                                kullanılır.
+                            "</string>
+    <string name="lock_mode">"Kilit Modu"</string>
+    <string name="lock_mode_description">"
+                                Bu özellik, kullanıcıların içeriğe
+                                erişmeden önce kimlik doğrulaması
+                                yapmasını zorunlu kılarak uygulamanın
+                                güvenliğini artırır.
+                                Bu genellikle parmak izi, PIN veya
+                                desen kilidi gibi cihazın yerleşik
+                                güvenlik özellikleri kullanılarak
+                                gerçekleştirilir.
+                            "</string>
+    <string name="licenses">"Lisanslar"</string>
+    <string name="licenses_description">"
+                                    Bu lisanslar, ilgili yazarların dağıtım
+                                    gerekliliklerine uymak ve yazılımın
+                                    mimarisine ilişkin şeffaflık sağlamak
+                                    amacıyla buraya dahil edilmiştir.
+                                    "</string>
+    <string name="title">"Başlık"</string>
+    <string name="note">"Not"</string>
+    <string name="failed_to_save_document">"Belge kaydedilemedi."</string>
+    <string name="gallery">"Galeri"</string>
+    <string name="audio">Ses</string>
+    <string name="permission_denied">İzin Reddedildi!</string>
+    <string name="take_photo">Fotoğraf Çek</string>
+    <string name="video_capture">Video Kaydet</string>
+    <string name="recorder">Kayıt Cihazı</string>
+    <string name="document">Belge</string>
+    <string name="scanner">Tarayıcı</string>
+    <string name="tasks">Görevler</string>
+    <string name="tags">Etiketler</string>
+    <string name="reminder">Hatırlatıcı</string>
+    <string name="priority">Öncelik</string>
+    <string name="low_priority">Düşük</string>
+    <string name="medium_priority">Orta</string>
+    <string name="high_priority">Yüksek</string>
+    <string name="urgent_priority">Acil</string>
+    <string name="non_priority">Yok</string>
+    <string name="created">Oluşturuldu</string>
+    <string name="edited">Düzenlendi</string>
+    <string name="types">Türler</string>
+    <string name="media">Medya</string>
+    <string name="medias">Medya Dosyaları</string>
+    <string name="colour">Renk</string>
+    <string name="colours">Renkler</string>
+    <string name="search_within">İçinde ara</string>
+    <string name="issue_title">Sorun Başlığı*</string>
+    <string name="issue_description">Sorun Açıklaması (İsteğe Bağlı)</string>
+    <string name="noAccount">Hesapsız Giriş</string>
+    <string name="screenshot_selected">✓ Ekran görüntüsü seçildi</string>
+    <string name="drive_submit">Göndermede Drive\'a yüklenecek</string>
+    <string name="select_screenshot">Bir ekran görüntüsü seçin</string>
+    <string name="system_logs">Sistem günlükleri dahil edilsin mi?</string>
+    <string name="find_an_issue">Bir sorun mu buldunuz?</string>
+    <string name="take_a_screenshot">Ekran görüntüsü almayı unutmayın.</string>
+    <string name="report_an_issue">Sorun bildir!</string>
+    <string name="bug">Hata</string>
+    <string name="logs_title">\\uD83D\\uDCiE Geri Bildirim Raporundaki Android Sistem Günlükleri (Logcat)</string>
+    <string name="logs_description">Android sistem günlükleri, işletim sistemi ve çekirdekten gelen zaman damgalı mesajların akışıdır.\n    | Bir kullanıcı sorunla karşılaştığında (uygulama çökmesi, donma veya beklenmedik davranış gibi), günlükler soruna yol açan olayları kaydederek geliştiricilere teşhis için gerekli bağlamı sağlar.</string>
+    <string name="label_bug">Hata</string>
+    <string name="label_feature">Özellik</string>
+    <string name="label_invalid">Geçersiz</string>
+    <string name="label_question">Soru</string>
+    <string name="label_security">Güvenlik</string>
+    <string name="failed">Başarısız</string>
+    <string name="submit_feedback">Geri Bildirim Gönder!</string>
+    <string name="uploading_screenshot">Ekran görüntüsü yükleniyor…</string>
+    <string name="creating_github_issue">GitHub sorunu oluşturuluyor…</string>
+    <string name="upload_faild">Yükleme Başarısız…</string>
+    <string name="upload_failed">Yükleme Başarısız…</string>
+    <string name="issue_crea">Sorun oluşturuldu.</string>
+    <string name="issue_created">Sorun oluşturuldu!</string>
+    <string name="log_out">Çıkış Yap</string>
+    <string name="hi">Merhaba</string>
+    <string name="add_account">Başka Hesap Ekle</string>
+    <string name="manage_account">Hesabı Yönet</string>
+    <string name="upload_data">Veri Yükle</string>
+    <string name="download_data">Veri İndir</string>
+    <string name="firebase_authentication_failed">Firebase kimlik doğrulama başarısız</string>
+    <string name="sign_in_failed">Google ile giriş başarısız</string>
+    <string name="please_wait">Giriş yapılıyor, lütfen bekleyin…</string>
+    <string name="sync_title">Senkronizasyon için Giriş Yapın</string>
+    <string name="sync_description">Tüm cihazlarınızda notlarınızı yedeklemek ve senkronize etmek için Google hesabınızla giriş yapın.</string>
+    <string name="current_account">Mevcut Hesap</string>
+    <string name="no_name">İsim Yok</string>
+    <string name="no_email">E-posta Yok</string>
+    <string name="sign_out">Çıkış Yap</string>
+    <string name="sign_in_with_google">Google ile Giriş Yap</string>
+    <string name="ai_models">AI Modelleri</string>
+    <string name="load_more">Daha Fazla Yükle</string>
+    <string name="available_models">Mevcut Modeller</string>
+    <string name="assistant_settings">Asistan Ayarları</string>
+    <string name="learning_mode">Öğrenme Modu</string>
+    <string name="learning_mode_description">"
+                    Etiketlenmiş örneklerden öğrenilen kalıplara
+                    dayalı olarak yeni, görülmemiş veriler için
+                    çıktı tahmin etmek.
+                "</string>
+    <string name="temperat">Sıcaklık</string>
+    <string name="temperature">Sıcaklık</string>
+    <string name="temperature_description">"
+           Çıktının rastgeleliğini kontrol eder.
+           Daha yüksek değerler daha yaratıcı sonuçlar verir.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Çıktı için hangi token\'ların dikkate alındığını kontrol eder.
+            </string>
+    <string name="context_message_size">Bağlam Mesajı Boyutu</string>
+    <string name="context_message_size_description">
+            Bağlama dahil edilecek önceki mesajların
+            maksimum sayısı.
+        </string>
+    <string name="stream_output">Akış çıktısı</string>
+    <string name="stream_output_description">Yanıtı oluşturulurken görüntüle.</string>
+    <string name="thinking_budget">Düşünme bütçesi</string>
+    <string name="thinking_budget_description">
+                            Yanıt için kullanılan hesaplama
+                            kaynaklarını sınırlar.
+                        </string>
+    <string name="system_prompt">Sistem istemi</string>
+    <string name="prompt">İstem..</string>
+    <string name="properties">Özellikler</string>
+    <string name="quick_messages">Hızlı mesajlar</string>
+    <string name="quick_messages_description">Hızlı mesaj kısayollarını yapılandırın.</string>
+    <string name="regular_expressions">Düzenli ifadeler</string>
+    <string name="regular_expressions_description">
+                            Gönderme/alma öncesinde mesajları
+                            dönüştürmek için regex kalıpları tanımlayın.
+                        </string>
+    <string name="headers">Üstbilgiler</string>
+    <string name="headers_description">
+                            İsteğin üstbilgi bloğuna eklenen
+                            anahtar-değer çiftleridir.
+                            Kimlik doğrulama sağlamak, içerik türü
+                            belirtmek veya istek hakkında meta veri
+                            iletmek için kullanılır.
+                        </string>
+    <string name="bodies">Gövdeler</string>
+    <string name="bodies_description">
+                            İsteğin içinde gönderilen veri yükünü
+                            (anahtar: değer JSON yapısı) ifade eder.
+                            AI modeline girdi göndermek için
+                            birincil araçtır.
+                        </string>
+    <string name="memory">Bellek</string>
+    <string name="memory_description">
+                            Asistanın konuşmadaki önceki
+                            konuşma turlarını hatırlamasına izin verin.
+                        </string>
+    <string name="chats_reference">Son Sohbet Referansı</string>
+    <string name="chats_reference_description">
+                        Daha iyi bağlamsal yanıtlar için son
+                        sohbetlerinizdeki verileri referans alın.
+                        </string>
+    <string name="javascript">JavaScript motoru</string>
+    <string name="javascript_description">
+                            Hesaplamalar ve komut dosyası oluşturma için
+                            QuickJS motoru ile JavaScript kodu çalıştırın.
+                        </string>
+    <string name="reset">Ayarları Sıfırla!</string>
+    <string name="providers">Sağlayıcılar</string>
+    <string name="ask">Sor</string>
+    <string name="add_model"><![CDATA[<- AI modeli ekle]]></string>
+    <string name="delete">Sil</string>
+    <string name="options">Seçenekler</string>
+    <string name="retitle">Yeniden Adlandır</string>
+    <string name="assistant">Asistan</string>
+    <string name="new_chat">Yeni Sohbet</string>
+    <string name="files">Dosyalar</string>
+    <string name="audios">Sesler</string>
+    <string name="videos">Videolar</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Resimler</string>
+    <string name="provider_settings">Sağlayıcı Ayarları</string>
+    <string name="api_key">API Anahtarı</string>
+    <string name="base_url">Temel URL</string>
+    <string name="model_name">Model Adı</string>
+    <string name="modalities">Modaliteler</string>
+    <string name="tools">Araçlar</string>
+    <string name="reasoning">Akıl Yürütme</string>
+    <string name="respo">Yanıt API\'si</string>
+    <string name="response_api">Yanıt API\'si</string>
+    <string name="account_balance">Hesap Bakiyesi</string>
+    <string name="api_path">API Yolu..</string>
+    <string name="json_key">Json Anahtarı..</string>
+    <string name="network_proxy">Ağ Proxy\'si</string>
+    <string name="host">Ana Sunucu..</string>
+    <string name="username_option">Kullanıcı Adı (İsteğe Bağlı)..</string>
+    <string name="pass_option">Şifre (İsteğe Bağlı)..</string>
+    <string name="service_account">Hizmet hesabı @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Özel anahtar..</string>
+    <string name="location">Konum..</string>
+    <string name="project_uid">Proje UID\'si..</string>
+    <string name="details">Ayrıntılar</string>
+    <string name="model_type">Model Türü</string>
+    <string name="input_modalities">Giriş Modaliteleri</string>
+    <string name="output_modalities">Çıkış Modaliteleri</string>
+    <string name="abilities">Yetenekler</string>
+    <string name="provider_override">Sağlayıcı geçersiz kılma ekle</string>
+    <string name="provider_override_description">
+                            Bu belirli model için özel sağlayıcı
+                            ayarlarını yapılandırın.
+                            Modelin ana sağlayıcısından ortak
+                            özellikleri kullanır.
+                        </string>
+    <string name="build_tools">Derleme Araçları</string>
+    <string name="build_tools_description">
+                            Bu araçlar, uygulama desteği gerektirmeden
+                            doğrudan API tarafından sağlanır.
+                            Bu özellik şu anda yalnızca Gemini API
+                            tarafından desteklenmektedir.
+                        </string>
+    <string name="google_search">Ara</string>
+    <string name="google_search_description">Google Search entegrasyonunu etkinleştir</string>
+    <string name="url_context">URL Bağlamı</string>
+    <string name="url_context_description">URL bağlamı işlemeyi etkinleştir</string>
+    <string name="find">Bul</string>
+    <string name="replace">Değiştir</string>
+    <string name="effecting_scopes">Etki kapsamları</string>
+    <string name="user">kullanıcı</string>
+    <string name="visual_only">yalnızca görsel</string>
+    <string name="body">Gövde</string>
+    <string name="key">anahtar</string>
+    <string name="value">Değer</string>
+    <string name="header">Üstbilgi.</string>
+    <string name="reset_description">Asistan ayarlarını varsayılan moda sıfırlayın.</string>
+    <string name="save_changes">Değişiklikler kaydedilsin mi?</string>
+    <string name="save_changes_description">Kaydedilmemiş değişiklikleriniz var. Çıkmadan önce kaydetmek ister misiniz?</string>
+    <string name="dont_save">Kaydetme</string>
+    <string name="save">Kaydet</string>
+    <string name="links">Bağlantılar</string>
+    <string name="reminders">Hatırlatıcılar</string>
+    <string name="priorities">Öncelikler</string>
+    <string name="ai_chat">AI Sohbet</string>
+    <string name="auto">otomatik</string>
+    <string name="light">hafif</string>
+    <string name="medium">orta</string>
+    <string name="heavy">ağır</string>
+    <string name="date">tarih</string>
+    <string name="time">saat</string>
+    <string name="date_and_time">tarih ve saat</string>
+    <string name="local">yerel</string>
+    <string name="timezone">saat dilimi</string>
+    <string name="system_version">sistem sürümü</string>
+    <string name="device_info">cihaz bilgisi</string>
+    <string name="battery_level">pil seviyesi</string>
+    <string name="insert">Ekle</string>
+    <string name="confirm">Onayla</string>
+    <string name="message">Mesaj</string>
+    <string name="content">İçerik</string>
+    <string name="today">Bugün</string>
+    <string name="tomorrow">Yarın</string>
+    <string name="according_to_timing">Zamana göre</string>
+    <string name="untitled">Başlıksız</string>
+    <string name="hue">Ton</string>
+    <string name="saturation">Doygunluk</string>
+    <string name="brightness">Parlaklık</string>
+    <string name="shades">Gölgeler</string>
+    <string name="complementary">Tamamlayıcı</string>
+    <string name="task_placeholder">Görev..</string>
+    <string name="task_cannot_be_empty">Görev boş olamaz!</string>
+    <string name="of">içinde</string>
+    <string name="something_wrong_with_file">Dosyada bir sorun var</string>
+    <string name="could_not_load_any_information">Medya dosyası için herhangi bir bilgi yüklenemedi.</string>
+    <string name="no_file_path_provided">Dosya yolu sağlanmadı.</string>
+    <string name="security_error_processing_file">Dosya işlenirken güvenlik hatası</string>
+    <string name="an_unexpected_error_occurred">Beklenmedik bir hata oluştu</string>
+    <string name="could_not_retrieve_any_information">Bu video dosyası için herhangi bir bilgi alınamadı.</string>
+    <string name="error_reading_metadata">Medya meta verileri okunurken hata</string>
+    <string name="could_not_read_exif_data">EXIF verileri okunamadı</string>
+    <string name="error_reading_basic_file_info">Temel dosya bilgisi okunurken hata</string>
+    <string name="file_does_not_exist">Dosya mevcut değil</string>
+    <string name="error">Hata</string>
+    <string name="loading_media_info">Medya bilgileri yükleniyor…</string>
+    <string name="no_metadata_available_for_this_document">Bu belge için kullanılabilir meta veri yok.</string>
+    <string name="could_not_read_pdf_metadata">PDF meta verileri okunamadı</string>
+    <string name="cannot_read_file">Dosya okunamıyor</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Görüntü boyutları çözümlenemedi veya geçersiz format.</string>
+    <string name="error_during_dimension_decoding">Boyut çözümlemesi sırasında hata</string>
+    <string name="error_reading_exif_data">EXIF verileri okunurken hata</string>
+    <string name="duplicate">Çoğalt</string>
+    <string name="send">Gönder</string>
+    <string name="print">Yazdır</string>
+    <string name="cleaned">Temizlendi</string>
+    <string name="cleared">Silindi</string>
+    <string name="media_deleted">medya silindi!</string>
+    <string name="jotting">Not Alınıyor</string>
+    <string name="appwidget_text">ÖRNEK</string>
+    <string name="add_widget">Widget ekle</string>
+    <string name="app_widget_description">Bu bir uygulama widget açıklamasıdır</string>
+    <string name="quick_widget_description">Bu bir hızlı widget düzenidir</string>
+    <string name="creator_widget_description">Bu bir oluşturucu düzeni widget\'ıdır</string>
+    <string name="notes_list_description">Bu bir notlar listesidir</string>
+    <string name="record_deleted">kayıt silindi!</string>
+</resources>

@@ -31,6 +31,7 @@ import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
@@ -52,9 +53,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -287,8 +290,10 @@ data class WorkplaceScreen(
 
                 // Link display.
                 item {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Navigator(LinkScreen(currentData.value.uid, snackbarState))
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Navigator(LinkScreen(currentData.value.uid, snackbarState))
+                    }
                 }
 
                 // display the tasks list.
@@ -317,42 +322,44 @@ data class WorkplaceScreen(
             val deleteResource = stringResource(R.string.delete)
             val undoResource = stringResource(R.string.action_undo)
 
-            Spacer(modifier = Modifier.height(3.dp))
-            TaskItem(
-                currentData = currentData,
-                task = task,
-                onEdit = {
-                    it.show(AddTaskScreen(task, currentData))
-                },
-                onDelete = {
-                    orderedList = orderedList.filterNot { it.id == task.id }
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                Spacer(modifier = Modifier.height(3.dp))
+                TaskItem(
+                    currentData = currentData,
+                    task = task,
+                    onEdit = {
+                        it.show(AddTaskScreen(task, currentData))
+                    },
+                    onDelete = {
+                        orderedList = orderedList.filterNot { it.id == task.id }
 
-                    val currentJobId = jobCounter.intValue++
-                    deletedTask.add(Pair(task, currentJobId))
-                    val taskPair = deletedTask.firstOrNull { it.second == currentJobId }
-                    currentData.value = currentData.value.copy(
-                        tasks = currentData.value.tasks.minusElement(task)
-                    )
-
-                    scope.launch {
-                        snackbarState.currentSnackbarData?.dismiss()
-                        val result = snackbarState.showSnackbar(
-                            message = "${taskPair?.first?.item} $deleteResource",
-                            actionLabel = undoResource,
-                            duration = SnackbarDuration.Long
+                        val currentJobId = jobCounter.intValue++
+                        deletedTask.add(Pair(task, currentJobId))
+                        val taskPair = deletedTask.firstOrNull { it.second == currentJobId }
+                        currentData.value = currentData.value.copy(
+                            tasks = currentData.value.tasks.minusElement(task)
                         )
 
-                        if (result == SnackbarResult.ActionPerformed) {
-                            taskPair?.first?.let { task ->
-                                currentData.value = currentData.value.copy(
-                                    tasks = currentData.value.tasks.plusElement(task)
-                                )
+                        scope.launch {
+                            snackbarState.currentSnackbarData?.dismiss()
+                            val result = snackbarState.showSnackbar(
+                                message = "${taskPair?.first?.item} $deleteResource",
+                                actionLabel = undoResource,
+                                duration = SnackbarDuration.Long
+                            )
+
+                            if (result == SnackbarResult.ActionPerformed) {
+                                taskPair?.first?.let { task ->
+                                    currentData.value = currentData.value.copy(
+                                        tasks = currentData.value.tasks.plusElement(task)
+                                    )
+                                }
                             }
+                            taskPair?.let { deletedTask.remove(it) }
                         }
-                        taskPair?.let { deletedTask.remove(it) }
                     }
-                }
-            )
+                )
+            }
         }
     }
 

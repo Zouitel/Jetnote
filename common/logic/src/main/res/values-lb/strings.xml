@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Notizen</string>
+    <string name="screen_chat">AI Chat</string>
+    <string name="screen_tags">Tags</string>
+    <string name="screen_settings">Astellungen</string>
+    <string name="screen_archive">Archiv</string>
+    <string name="screen_about">Iwwer</string>
+    <string name="screen_feedback">Feedback</string>
+    <string name="share_app">Dës App deelen</string>
+    <string name="label_more">méi</string>
+    <string name="label_less">manner</string>
+    <string name="msg_deleted">geläscht</string>
+    <string name="action_undo">Réckgängeg</string>
+    <string name="tag_placeholder">Tag..</string>
+    <string name="tag_cannot_be_empty">De Tag kann net eidel sinn!</string>
+    <string name="archive">Archiv</string>
+    <string name="deleted">geläscht!</string>
+    <string name="erase_notes">Notizen läschen?</string>
+    <string name="confirm_erase_notes">"All Notizen am Pabeierkorb ginn definitiv geläscht."</string>
+    <string name="search_in_notes">"An Notizen sichen.."</string>
+    <string name="select_layout">"Layout auswielen"</string>
+    <string name="settings">"Astellungen"</string>
+    <string name="account_sync">"Kont-Synchronisatioun"</string>
+    <string name="account_sync_description">"
+                                D\'Aktivéierung vun der Google Drive
+                                Kontosynchronisatioun fir dës Applikatioun
+                                erlaabt Iech, Är Applikatiounsdaten,
+                                wéi Notizen an Astellungen, nahtlos
+                                ze sécheren an ze synchroniséieren,
+                                fir datt Är Daten sécher sinn.
+        "</string>
+    <string name="assistant_configuration">"Assistent-Konfiguratioun"</string>
+    <string name="assistant_configuration_description">"
+                                Den AI-Assistent ass e Softwareprogramm,
+                                dee vun der kënschtlecher Intelligenz
+                                ugedriwwe gëtt a entworf gouf, fir Iech
+                                bei enger breeder Palette vu Aufgaben
+                                an dëser Applikatioun ze hëllefen.
+                                Dës Assistenten verstinn an äntweren op
+                                natierleche Sprooch, wat Iech erlaabt,
+                                mat hinnen duerch Bild oder Text
+                                ze interagéieren.
+                            "</string>
+    <string name="dark_mode">"Donkele Modus"</string>
+    <string name="dark_mode_description">"
+                                Dëse Modus ass eng systemwäit Astellung,
+                                déi d\'Hannergrondschema vun Ärer
+                                Android-App-Benotzeroberfläche op
+                                méi donkel Faarwe wiesselt.
+                                Et ass entworf fir d\'Aesträin ze reduzéieren,
+                                d\'Accessibilitéit ze verbesseren,
+                                d\'Batterie ze spueren an d\'Benotzererfahrung
+                                ze verbesseren.
+                            "</string>
+    <string name="sound_effect">"Touneffekt"</string>
+    <string name="sound_effect_description">"
+                                Am Kontext vun der Jetnote-Applikatioun
+                                bitt d\'Fonktioun \'Touneffekt\'
+                                de Benotzer akustesch Feedback wann
+                                se mat Knäppercher an anere
+                                UI-Elementer interagéieren.
+                                Dëst ass eng üblech Praxis an der
+                                mobiler App-Entwécklung, fir d\'Erfahrung
+                                méi interaktiv an engagéiert ze maachen.
+                            "</string>
+    <string name="layouts">"Layouten"</string>
+    <string name="layouts_description">"
+                                Layouten sinn fundamental fir Inhalt
+                                an Äre Android-Applikatioune z\'organiséieren
+                                an unzezeeën. Si definéieren d\'Struktur
+                                an d\'Uerdnung vun den UI-Elementer
+                                op dem Bildschirm.
+                            "</string>
+    <string name="sort_notes">"Notizen sortéieren"</string>
+    <string name="default_sort">"Standard"</string>
+    <string name="name_sort">"Numm"</string>
+    <string name="oldest_sort">"ältsten"</string>
+    <string name="newest_sort">"neisten"</string>
+    <string name="priority_sort">"Prioritéit"</string>
+    <string name="zen_mode">"Zen-Modus"</string>
+    <string name="zen_mode_description">"
+                                De Zen-Modus (Vollbildmodus) ass eng
+                                Displaysastellung, déi enger Applikatioun
+                                erlaabt, de ganze Bildschirm anzehëllen,
+                                andeems all aner Interfaceelementer
+                                wéi Symbolleeschten, Menüen an d\'Taskbar
+                                vum Betriebssystem verstoppe ginn.
+                            "</string>
+    <string name="shake">"Schlëddere fir ze mellen"</string>
+    <string name="shake_description">"
+                              Et ass eng praktesch Fonktioun, déi
+                              de Benotzer erlaabt, e Feedback- oder
+                              Fehlermeldeprozess einfach duerch
+                              physesch Schlëddere vun hirem Android-Apparat
+                              ze starten. Amplaz duerch verschidde Menüen
+                              ze navigéieren, fir \'Feedback schécken\'
+                              oder \'Feeler mellen\' ze fannen.
+                            "</string>
+    <string name="block_screenshot">"Screenshot blockéieren"</string>
+    <string name="block_screenshot_description">"
+                                D\'Screenshot-Blockéierung ass eng
+                                Sécherheetsmesure, déi verhënnert, datt
+                                Benotzer Screenshots vum Inhalt vun
+                                Ärer App maachen. Et gëtt dacks benotzt,
+                                fir sensibel Informatiounen ze schützen,
+                                wéi Bankdaten, perséinlech Daten oder
+                                urheberrechtlech geschützt Material.
+                            "</string>
+    <string name="lock_mode">"Spärrmodus"</string>
+    <string name="lock_mode_description">"
+                                Dës Fonktioun verbessert d\'Sécherheet
+                                vun Ärer App, andeems se d\'Benotzer
+                                opfuerdert, sech ze authentifizéieren,
+                                éier se op den Inhalt zougräife kënnen.
+                                Dëst gëtt typesch mat de integréierte
+                                Sécherheetsfunktiounen vum Apparat
+                                erreecht, wéi Fingerofdrockscanner,
+                                PIN oder Muster-Entspärrung.
+                            "</string>
+    <string name="licenses">"Lizenzen"</string>
+    <string name="licenses_description">"
+                                    Dës Lizenzen sinn hei abegraff,
+                                    fir d\'Verdeelungsufuerderunge vun
+                                    den jeeweilege Auteuren anzehalen an
+                                    Transparenz iwwer d\'Architektur
+                                    vun der Software ze bidden.
+                                    "</string>
+    <string name="title">"Titel"</string>
+    <string name="note">"Notiz"</string>
+    <string name="failed_to_save_document">"D\'Dokument konnt net gespäichert ginn."</string>
+    <string name="gallery">"Galerie"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Erlabnis refuséiert!</string>
+    <string name="take_photo">Foto maachen</string>
+    <string name="video_capture">Video ophuelen</string>
+    <string name="recorder">Rekorder</string>
+    <string name="document">Dokument</string>
+    <string name="scanner">Scanner</string>
+    <string name="tasks">Aufgaben</string>
+    <string name="tags">Tags</string>
+    <string name="reminder">Erënnerung</string>
+    <string name="priority">Prioritéit</string>
+    <string name="low_priority">Niddreg</string>
+    <string name="medium_priority">Mëttel</string>
+    <string name="high_priority">Héich</string>
+    <string name="urgent_priority">Dringend</string>
+    <string name="non_priority">Keen</string>
+    <string name="created">Erstallt</string>
+    <string name="edited">Beaarbecht</string>
+    <string name="types">Typen</string>
+    <string name="media">Medien</string>
+    <string name="medias">Mediendateien</string>
+    <string name="colour">Faarf</string>
+    <string name="colours">Faarwen</string>
+    <string name="search_within">Sichen an</string>
+    <string name="issue_title">Probleemtitel*</string>
+    <string name="issue_description">Probleembeschreiwung (Fakultativ)</string>
+    <string name="noAccount">Aloggen ouni Kont</string>
+    <string name="screenshot_selected">✓ Screenshot ausgewielt</string>
+    <string name="drive_submit">Gëtt beim Schécken op Drive eropgelueden</string>
+    <string name="select_screenshot">Screenshot auswielen</string>
+    <string name="system_logs">Systemlogbicher abegraff?</string>
+    <string name="find_an_issue">Hutt Dir e Problem fonnt?</string>
+    <string name="take_a_screenshot">Vergiesst net, e Screenshot ze maachen.</string>
+    <string name="report_an_issue">E Problem mellen!</string>
+    <string name="bug">Bug</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android Systemlogbicher (Logcat) am Feedback-Rapport</string>
+    <string name="logs_description">Android-Systemlogbicher sinn e Flux vun Zäitstempel-Messagen aus dem Betriebssystem an dem Kernel.\n    | Wann e Benotzer e Problem begéint (wéi App-Crash, Afréiere oder onerwaartem Verhalen), erfaassen d\'Logbicher d\'Evenementer ronderëm de Problem a ginn Entwéckler de néidege Kontext fir d\'Diagnostik.</string>
+    <string name="label_bug">Bug</string>
+    <string name="label_feature">Fonktioun</string>
+    <string name="label_invalid">Ongülteg</string>
+    <string name="label_question">Fro</string>
+    <string name="label_security">Sécherheet</string>
+    <string name="failed">Misslongen</string>
+    <string name="submit_feedback">Feedback schécken!</string>
+    <string name="uploading_screenshot">Screenshot gëtt eropgelueden…</string>
+    <string name="creating_github_issue">GitHub-Issue gëtt erstallt…</string>
+    <string name="upload_faild">Eroplueden misslongen…</string>
+    <string name="upload_failed">Eroplueden misslongen…</string>
+    <string name="issue_crea">Issue erstallt.</string>
+    <string name="issue_created">Issue erstallt!</string>
+    <string name="log_out">Ausloggen</string>
+    <string name="hi">Moien</string>
+    <string name="add_account">En anere Kont bäisetzen</string>
+    <string name="manage_account">Kont verwalten</string>
+    <string name="upload_data">Daten eroplueden</string>
+    <string name="download_data">Daten eroflueden</string>
+    <string name="firebase_authentication_failed">Firebase-Authentifikatioun misslongen</string>
+    <string name="sign_in_failed">Google-Aloggen misslongen</string>
+    <string name="please_wait">Aloggen, w.e.g. waarden…</string>
+    <string name="sync_title">Aloggen fir ze synchroniséieren</string>
+    <string name="sync_description">Loggt Iech mat Ärem Google-Kont an, fir Är Notizen op all Äre Geräter ze sécheren an ze synchroniséieren.</string>
+    <string name="current_account">Aktuellt Kont</string>
+    <string name="no_name">Kee Numm</string>
+    <string name="no_email">Keng E-Mail</string>
+    <string name="sign_out">Ausloggen</string>
+    <string name="sign_in_with_google">Mat Google aloggen</string>
+    <string name="ai_models">AI-Modeller</string>
+    <string name="load_more">Méi lueden</string>
+    <string name="available_models">Verfügbar Modeller</string>
+    <string name="assistant_settings">Assistent-Astellungen</string>
+    <string name="learning_mode">Léiermodus</string>
+    <string name="learning_mode_description">"
+                    E Resultat fir nei, ongesinn Daten viraussoen,
+                    baséiert op de Musteren, déi aus de
+                    markéierte Beispiller geléiert goufen.
+                "</string>
+    <string name="temperat">Temperatur</string>
+    <string name="temperature">Temperatur</string>
+    <string name="temperature_description">"
+           Kontrolléiert d\'Zoufälligkeit vum Output.
+           Méi héich Wäerter sinn méi kreativ.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Kontrolléiert wéi eng Tokens fir de Output berécksiichtegt ginn.
+            </string>
+    <string name="context_message_size">Kontext-Messagegréisst</string>
+    <string name="context_message_size_description">
+            Maximal Unzuel vu virege Messagen,
+            déi am Kontext abegraff ginn.
+        </string>
+    <string name="stream_output">Stream-Output</string>
+    <string name="stream_output_description">Äntwert wärend der Generéierung uweisen.</string>
+    <string name="thinking_budget">Denk-Budget</string>
+    <string name="thinking_budget_description">
+                            Limitéiert d\'Rechressourcen,
+                            déi fir d\'Äntwert benotzt ginn.
+                        </string>
+    <string name="system_prompt">System-Prompt</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Eegeschaften</string>
+    <string name="quick_messages">Schnell Messagen</string>
+    <string name="quick_messages_description">Schnell-Message-Ofkiirzungen konfiguren.</string>
+    <string name="regular_expressions">Regulär Ausdréck</string>
+    <string name="regular_expressions_description">
+                            Regex-Muster definéieren fir Messagen
+                            virum Schécken/Empfänken z\'transforméieren.
+                        </string>
+    <string name="headers">Header</string>
+    <string name="headers_description">
+                            Dëst sinn Schlëssel-Wäert-Pairen, déi dem
+                            Header-Block vun der Ufro bäigefüügt ginn.
+                            Si ginn typesch fir d\'Authentifikatioun,
+                            d\'Spezifizéierung vum Inhaltstyp oder
+                            d\'Iwwerdroung vu Metadaten benotzt.
+                        </string>
+    <string name="bodies">Rumpf</string>
+    <string name="bodies_description">
+                            Dëst bezitt sech op de Datepayload
+                            (JSON-Struktur), dee bannent der Ufro
+                            geschéckt gëtt. Et ass de primären Wee
+                            fir Inputen un de AI-Modell ze schécken.
+                        </string>
+    <string name="memory">Erënnerung</string>
+    <string name="memory_description">
+                            Dem Assistent erlaben, sech u viregte
+                            Konversatiounsronne ze erënneren.
+                        </string>
+    <string name="chats_reference">Referenz vu rezente Chats</string>
+    <string name="chats_reference_description">
+                        Daten aus Äre rezente Chats referenzéieren
+                        fir besser kontextuell Äntwerten.
+                        </string>
+    <string name="javascript">JavaScript-Motor</string>
+    <string name="javascript_description">
+                            JavaScript-Code mat dem QuickJS-Motor
+                            fir Berechunge a Scripting ausféieren.
+                        </string>
+    <string name="reset">Astellungen zrécksetzen!</string>
+    <string name="providers">Ubidder</string>
+    <string name="ask">Froen</string>
+    <string name="add_model"><![CDATA[<- AI-Modell bäisetzen]]></string>
+    <string name="delete">Läschen</string>
+    <string name="options">Optiounen</string>
+    <string name="retitle">Ëmbenennen</string>
+    <string name="assistant">Assistent</string>
+    <string name="new_chat">Neie Chat</string>
+    <string name="files">Dateien</string>
+    <string name="audios">Audiodateien</string>
+    <string name="videos">Videoen</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Biller</string>
+    <string name="provider_settings">Ubidder-Astellungen</string>
+    <string name="api_key">API-Schlëssel</string>
+    <string name="base_url">Basis-URL</string>
+    <string name="model_name">Modellnumm</string>
+    <string name="modalities">Modalitéiten</string>
+    <string name="tools">Werkzeeg</string>
+    <string name="reasoning">Schlussfolgerung</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Kontosaldo</string>
+    <string name="api_path">API-Pad..</string>
+    <string name="json_key">Json-Schlëssel..</string>
+    <string name="network_proxy">Netzwierks-Proxy</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Benotzernumm (Fakultativ)..</string>
+    <string name="pass_option">Passwuert (Fakultativ)..</string>
+    <string name="service_account">Servicekont @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Privaten Schlëssel..</string>
+    <string name="location">Standuert..</string>
+    <string name="project_uid">Projet-UID..</string>
+    <string name="details">Detailer</string>
+    <string name="model_type">Modelltyp</string>
+    <string name="input_modalities">Input-Modalitéiten</string>
+    <string name="output_modalities">Output-Modalitéiten</string>
+    <string name="abilities">Fäegkeeten</string>
+    <string name="provider_override">Ubidder-Iwwerschreiwung bäisetzen</string>
+    <string name="provider_override_description">
+                            Personaliséiert Ubidder-Astellunge fir
+                            dëse spezifesche Modell konfiguren.
+                            Benotzt allgemeng Eegeschaften vum
+                            Haaptubidder vum Modell.
+                        </string>
+    <string name="build_tools">Build-Werkzeeg</string>
+    <string name="build_tools_description">
+                            Dës Werkzeeg gi vun der API direkt
+                            ubidde ouni App-Ënnerstëtzung.
+                            Dës Fonktioun gëtt momentan nëmmen
+                            vun der Gemini API ënnerstëtzt.
+                        </string>
+    <string name="google_search">Sichen</string>
+    <string name="google_search_description">Google Search-Integratioun aktivéieren</string>
+    <string name="url_context">URL-Kontext</string>
+    <string name="url_context_description">URL-Kontextveraarbechtung aktivéieren</string>
+    <string name="find">Sichen</string>
+    <string name="replace">Ersetzen</string>
+    <string name="effecting_scopes">Wierksam Beräicher</string>
+    <string name="user">Benotzer</string>
+    <string name="visual_only">nëmme visuell</string>
+    <string name="body">Rumpf</string>
+    <string name="key">Schlëssel</string>
+    <string name="value">Wäert</string>
+    <string name="header">Header.</string>
+    <string name="reset_description">D\'Assistent-Astellunge op de Standardmodus zrécksetzen.</string>
+    <string name="save_changes">Ännerunge späicheren?</string>
+    <string name="save_changes_description">Dir hutt ongespeichert Ännerungen. Wëllt Dir se späicheren, éier Dir gitt?</string>
+    <string name="dont_save">Net späicheren</string>
+    <string name="save">Späicheren</string>
+    <string name="links">Linken</string>
+    <string name="reminders">Erënnerungen</string>
+    <string name="priorities">Prioritéiten</string>
+    <string name="ai_chat">AI Chat</string>
+    <string name="auto">automatesch</string>
+    <string name="light">liicht</string>
+    <string name="medium">mëttel</string>
+    <string name="heavy">schwéier</string>
+    <string name="date">Datum</string>
+    <string name="time">Zäit</string>
+    <string name="date_and_time">Datum an Zäit</string>
+    <string name="local">lokal</string>
+    <string name="timezone">Zäitzon</string>
+    <string name="system_version">Systemversioun</string>
+    <string name="device_info">Apparatinfo</string>
+    <string name="battery_level">Batterieniveau</string>
+    <string name="insert">Asetzen</string>
+    <string name="confirm">Confirméieren</string>
+    <string name="message">Message</string>
+    <string name="content">Inhalt</string>
+    <string name="today">Haut</string>
+    <string name="tomorrow">Muer</string>
+    <string name="according_to_timing">No der Zäitplanung</string>
+    <string name="untitled">Ouni Titel</string>
+    <string name="hue">Faarwton</string>
+    <string name="saturation">Sättigung</string>
+    <string name="brightness">Hellegkeet</string>
+    <string name="shades">Schied</string>
+    <string name="complementary">Komplementär</string>
+    <string name="task_placeholder">Aufgab..</string>
+    <string name="task_cannot_be_empty">D\'Aufgab kann net eidel sinn!</string>
+    <string name="of">vun</string>
+    <string name="something_wrong_with_file">E Problem mat der Datei</string>
+    <string name="could_not_load_any_information">Keng Informatioun fir d\'Mediendatei konnt geluede ginn.</string>
+    <string name="no_file_path_provided">Kee Dateipfad uginn.</string>
+    <string name="security_error_processing_file">Sécherheetsfehler beim Veraarbechte vun der Datei</string>
+    <string name="an_unexpected_error_occurred">E onerwaartte Fehler ass opgetrueden</string>
+    <string name="could_not_retrieve_any_information">Keng Informatioun fir dës Videodatei konnt geholl ginn.</string>
+    <string name="error_reading_metadata">Fehler beim Liesen vun de Medien-Metadaten</string>
+    <string name="could_not_read_exif_data">EXIF-Daten konnten net gelies ginn</string>
+    <string name="error_reading_basic_file_info">Fehler beim Liese vun de Basisdateiinformatiounen</string>
+    <string name="file_does_not_exist">Datei existéiert net</string>
+    <string name="error">Fehler</string>
+    <string name="loading_media_info">Medieninformatioun gëtt gelueden…</string>
+    <string name="no_metadata_available_for_this_document">Keng Metadaten fir dëse Dokument verfügbar.</string>
+    <string name="could_not_read_pdf_metadata">PDF-Metadaten konnten net gelies ginn</string>
+    <string name="cannot_read_file">Datei kann net gelies ginn</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Bildofmoossungen konnten net dekodéiert ginn oder ongültegt Format.</string>
+    <string name="error_during_dimension_decoding">Fehler beim Dekodéiere vun den Ofmoossungen</string>
+    <string name="error_reading_exif_data">Fehler beim Liesen vun den EXIF-Daten</string>
+    <string name="duplicate">Duplizéieren</string>
+    <string name="send">Schécken</string>
+    <string name="print">Drécken</string>
+    <string name="cleaned">Botzt</string>
+    <string name="cleared">Geläscht</string>
+    <string name="media_deleted">Medien geläscht!</string>
+    <string name="jotting">Notéieren</string>
+    <string name="appwidget_text">BEISPILL</string>
+    <string name="add_widget">Widget bäisetzen</string>
+    <string name="app_widget_description">Dëst ass eng App-Widget-Beschreiwung</string>
+    <string name="quick_widget_description">Dëst ass e schnellt Widget-Layout</string>
+    <string name="creator_widget_description">Dëst ass e Creator-Layout-Widget</string>
+    <string name="notes_list_description">Dëst ass eng Notizlëscht</string>
+    <string name="record_deleted">Rekord geläscht!</string>
+</resources>

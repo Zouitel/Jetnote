@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Белешке</string>
+    <string name="screen_chat">AI Разговор</string>
+    <string name="screen_tags">Ознаке</string>
+    <string name="screen_settings">Подешавања</string>
+    <string name="screen_archive">Архива</string>
+    <string name="screen_about">О апликацији</string>
+    <string name="screen_feedback">Повратне информације</string>
+    <string name="share_app">Подели ову апликацију</string>
+    <string name="label_more">више</string>
+    <string name="label_less">мање</string>
+    <string name="msg_deleted">обрисано</string>
+    <string name="action_undo">Опозови</string>
+    <string name="tag_placeholder">Ознака..</string>
+    <string name="tag_cannot_be_empty">Ознака не може бити празна!</string>
+    <string name="archive">Архива</string>
+    <string name="deleted">обрисано!</string>
+    <string name="erase_notes">Обриши белешке?</string>
+    <string name="confirm_erase_notes">"Све белешке у корпи ће бити трајно обрисане."</string>
+    <string name="search_in_notes">"Претражи белешке.."</string>
+    <string name="select_layout">"Изабери распоред"</string>
+    <string name="settings">"Подешавања"</string>
+    <string name="account_sync">"Синхронизација налога"</string>
+    <string name="account_sync_description">"
+                                Омогућавање синхронизације Google Drive
+                                налога за ову апликацију омогућава вам
+                                да неприметно направите резервну копију
+                                и синхронизујете податке апликације,
+                                као што су белешке и подешавања,
+                                осигуравајући да су ваши подаци безбедни.
+        "</string>
+    <string name="assistant_configuration">"Конфигурација асистента"</string>
+    <string name="assistant_configuration_description">"
+                                AI асистент је софтверски програм
+                                покретан вештачком интелигенцијом,
+                                дизајниран да вам помогне са широким
+                                спектром задатака у овој апликацији.
+                                Ови асистенти разумеју и одговарају на
+                                природни језик, омогућавајући вам да
+                                комуницирате са њима путем слике или текста.
+                            "</string>
+    <string name="dark_mode">"Тамни режим"</string>
+    <string name="dark_mode_description">"
+                                Овај режим је системско подешавање које
+                                мења позадинску шему вашег Android
+                                корисничког интерфејса у тамније боје.
+                                Дизајниран је да смањи напрезање очију,
+                                побољша приступачност, уштеди батерију
+                                и унапреди корисничко искуство.
+                            "</string>
+    <string name="sound_effect">"Звучни ефекат"</string>
+    <string name="sound_effect_description">"
+                                У контексту апликације Jetnote,
+                                функција \'Звучни ефекат\' пружа
+                                звучне повратне информације корисницима
+                                када комуницирају са дугмадима и другим
+                                елементима интерфејса. Ово је уобичајена
+                                пракса у развоју мобилних апликација
+                                која корисничко искуство чини
+                                интерактивнијим и занимљивијим.
+                            "</string>
+    <string name="layouts">"Распореди"</string>
+    <string name="layouts_description">"
+                                Распореди су основни за организовање и
+                                приказивање садржаја у Android
+                                апликацијама. Они дефинишу структуру
+                                и распоред елемената интерфејса на екрану.
+                            "</string>
+    <string name="sort_notes">"Сортирај белешке"</string>
+    <string name="default_sort">"подразумевано"</string>
+    <string name="name_sort">"по имену"</string>
+    <string name="oldest_sort">"најстарије"</string>
+    <string name="newest_sort">"најновије"</string>
+    <string name="priority_sort">"приоритет"</string>
+    <string name="zen_mode">"Зен режим"</string>
+    <string name="zen_mode_description">"
+                                Зен режим (режим целог екрана) је
+                                поставка екрана која омогућава апликацији
+                                да заузме цео екран, скривајући све
+                                остале елементе интерфејса као што су
+                                траке са алаткама, менији и траке задатака
+                                оперативног система.
+                            "</string>
+    <string name="shake">"Протресите за пријаву"</string>
+    <string name="shake_description">"
+                              Ово је практична функција која корисницима
+                              омогућава да покрену процес повратних
+                              информација или пријаве грешке једноставним
+                              физичким тресењем Android уређаја. Уместо
+                              да прегледате више менија да бисте пронашли
+                              \'Пошаљи повратне информације\' или
+                              \'Пријави грешку\'.
+                            "</string>
+    <string name="block_screenshot">"Блокирај снимак екрана"</string>
+    <string name="block_screenshot_description">"
+                                Блокирање снимака екрана је безбедносна
+                                мера која спречава кориснике да снимају
+                                екране садржаја ваше апликације.
+                                Често се користи за заштиту осетљивих
+                                информација, као што су банкарски подаци,
+                                лични подаци или материјал заштићен
+                                ауторским правима.
+                            "</string>
+    <string name="lock_mode">"Режим закључавања"</string>
+    <string name="lock_mode_description">"
+                                Ова функција побољшава безбедност ваше
+                                апликације захтевањем аутентификације
+                                пре приступа садржају. Ово се обично
+                                постиже коришћењем уграђених безбедносних
+                                функција уређаја, као што су отисак прста,
+                                PIN или образац за откључавање.
+                            "</string>
+    <string name="licenses">"Лиценце"</string>
+    <string name="licenses_description">"
+                                    Ове лиценце су укључене овде ради
+                                    поштовања захтева за дистрибуцију
+                                    одговарајућих аутора и обезбеђивања
+                                    транспарентности у вези са архитектуром
+                                    софтвера.
+                                    "</string>
+    <string name="title">"Наслов"</string>
+    <string name="note">"Белешка"</string>
+    <string name="failed_to_save_document">"Чување документа није успело."</string>
+    <string name="gallery">"Галерија"</string>
+    <string name="audio">Звук</string>
+    <string name="permission_denied">Дозвола је одбијена!</string>
+    <string name="take_photo">Сними фотографију</string>
+    <string name="video_capture">Снимање видеа</string>
+    <string name="recorder">Снимач</string>
+    <string name="document">Документ</string>
+    <string name="scanner">Скенер</string>
+    <string name="tasks">Задаци</string>
+    <string name="tags">Ознаке</string>
+    <string name="reminder">Подсетник</string>
+    <string name="priority">Приоритет</string>
+    <string name="low_priority">Низак</string>
+    <string name="medium_priority">Средњи</string>
+    <string name="high_priority">Висок</string>
+    <string name="urgent_priority">Хитно</string>
+    <string name="non_priority">Без</string>
+    <string name="created">Креирано</string>
+    <string name="edited">Измењено</string>
+    <string name="types">Типови</string>
+    <string name="media">Медија</string>
+    <string name="medias">Медијске датотеке</string>
+    <string name="colour">Боја</string>
+    <string name="colours">Боје</string>
+    <string name="search_within">Претражи унутар</string>
+    <string name="issue_title">Наслов проблема*</string>
+    <string name="issue_description">Опис проблема (опционо)</string>
+    <string name="noAccount">Пријавите се без налога</string>
+    <string name="screenshot_selected">✓ Снимак екрана је изабран</string>
+    <string name="drive_submit">Биће отпремљено на Drive при слању</string>
+    <string name="select_screenshot">Изаберите снимак екрана</string>
+    <string name="system_logs">Укључити системске евиденције?</string>
+    <string name="find_an_issue">Да ли сте пронашли проблем?</string>
+    <string name="take_a_screenshot">Не заборавите да направите снимак екрана.</string>
+    <string name="report_an_issue">Пријавите проблем!</string>
+    <string name="bug">Грешка</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android системске евиденције (Logcat) у извештају о повратним информацијама</string>
+    <string name="logs_description">Android системске евиденције су ток порука са временском ознаком из оперативног система и кернела.\n    | Када корисник наиђе на проблем (пад апликације, замрзавање или неочекивано понашање), евиденције бележе события пре и током проблема, пружајући програмерима контекст потребан за дијагнозу.</string>
+    <string name="label_bug">Грешка</string>
+    <string name="label_feature">Функција</string>
+    <string name="label_invalid">Неважеће</string>
+    <string name="label_question">Питање</string>
+    <string name="label_security">Безбедност</string>
+    <string name="failed">Неуспешно</string>
+    <string name="submit_feedback">Пошаљи повратне информације!</string>
+    <string name="uploading_screenshot">Отпремање снимка екрана…</string>
+    <string name="creating_github_issue">Креирање GitHub проблема…</string>
+    <string name="upload_faild">Отпремање није успело…</string>
+    <string name="upload_failed">Отпремање није успело…</string>
+    <string name="issue_crea">Проблем је креиран.</string>
+    <string name="issue_created">Проблем је креиран!</string>
+    <string name="log_out">Одјавите се</string>
+    <string name="hi">Здраво</string>
+    <string name="add_account">Додај још један налог</string>
+    <string name="manage_account">Управљај налогом</string>
+    <string name="upload_data">Отпреми податке</string>
+    <string name="download_data">Преузми податке</string>
+    <string name="firebase_authentication_failed">Firebase аутентификација није успела</string>
+    <string name="sign_in_failed">Google пријава није успела</string>
+    <string name="please_wait">Пријављивање, молимо сачекајте…</string>
+    <string name="sync_title">Пријавите се за синхронизацију</string>
+    <string name="sync_description">Пријавите се са Google налогом да бисте направили резервну копију и синхронизовали белешке на свим уређајима.</string>
+    <string name="current_account">Тренутни налог</string>
+    <string name="no_name">Без имена</string>
+    <string name="no_email">Без е-поште</string>
+    <string name="sign_out">Одјавите се</string>
+    <string name="sign_in_with_google">Пријавите се са Google-ом</string>
+    <string name="ai_models">AI модели</string>
+    <string name="load_more">Учитај још</string>
+    <string name="available_models">Доступни модели</string>
+    <string name="assistant_settings">Подешавања асистента</string>
+    <string name="learning_mode">Режим учења</string>
+    <string name="learning_mode_description">"
+                    Предвиђање излаза за нове, невиђене податке
+                    на основу образаца научених из означених примера.
+                "</string>
+    <string name="temperat">Температура</string>
+    <string name="temperature">Температура</string>
+    <string name="temperature_description">"
+           Контролише случајност излаза.
+           Веће вредности су креативније.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Контролише које токене треба узети у обзир за излаз.
+            </string>
+    <string name="context_message_size">Величина контекстних порука</string>
+    <string name="context_message_size_description">
+            Максималан број претходних порука
+            за укључивање у контекст.
+        </string>
+    <string name="stream_output">Стриминг излаз</string>
+    <string name="stream_output_description">Прикажи одговор током генерисања.</string>
+    <string name="thinking_budget">Буџет размишљања</string>
+    <string name="thinking_budget_description">
+                            Ограничава рачунарске ресурсе коришћене
+                            за одговор.
+                        </string>
+    <string name="system_prompt">Системски упит</string>
+    <string name="prompt">Упит..</string>
+    <string name="properties">Својства</string>
+    <string name="quick_messages">Брзе поруке</string>
+    <string name="quick_messages_description">Конфигуришите пречице за брзе поруке.</string>
+    <string name="regular_expressions">Регуларни изрази</string>
+    <string name="regular_expressions_description">
+                            Дефинишите regex обрасце за трансформацију
+                            порука пре слања/примања.
+                        </string>
+    <string name="headers">Заглавља</string>
+    <string name="headers_description">
+                            Ово су парови кључ-вредност додати блоку
+                            заглавља захтева. Обично се користе за
+                            пружање аутентификације, одређивање типа
+                            садржаја или пренос метаподатака о захтеву.
+                        </string>
+    <string name="bodies">Тела</string>
+    <string name="bodies_description">
+                            Односи се на корисни терет података
+                            (JSON структура) послат унутар захтева.
+                            То је примарни начин слања улаза AI моделу.
+                        </string>
+    <string name="memory">Меморија</string>
+    <string name="memory_description">
+                            Омогућите асистенту да памти претходне
+                            обрте у разговору.
+                        </string>
+    <string name="chats_reference">Референца недавних разговора</string>
+    <string name="chats_reference_description">
+                        Референцирајте податке из недавних разговора
+                        за боље контекстуалне одговоре.
+                        </string>
+    <string name="javascript">JavaScript мотор</string>
+    <string name="javascript_description">
+                            Извршите JavaScript код помоћу QuickJS мотора
+                            за прорачуне и скриптовање.
+                        </string>
+    <string name="reset">Ресетуј подешавања!</string>
+    <string name="providers">Провајдери</string>
+    <string name="ask">Питај</string>
+    <string name="add_model"><![CDATA[<- Додај AI модел]]></string>
+    <string name="delete">Обриши</string>
+    <string name="options">Опције</string>
+    <string name="retitle">Преименуј</string>
+    <string name="assistant">Асистент</string>
+    <string name="new_chat">Нови разговор</string>
+    <string name="files">Датотеке</string>
+    <string name="audios">Звучни записи</string>
+    <string name="videos">Видео записи</string>
+    <string name="camera">Камера</string>
+    <string name="pictures">Слике</string>
+    <string name="provider_settings">Подешавања провајдера</string>
+    <string name="api_key">API кључ</string>
+    <string name="base_url">Основни URL</string>
+    <string name="model_name">Назив модела</string>
+    <string name="modalities">Модалитети</string>
+    <string name="tools">Алатке</string>
+    <string name="reasoning">Расуђивање</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Стање налога</string>
+    <string name="api_path">API путања..</string>
+    <string name="json_key">Json кључ..</string>
+    <string name="network_proxy">Мрежни прокси</string>
+    <string name="host">Хост..</string>
+    <string name="username_option">Корисничко име (опционо)..</string>
+    <string name="pass_option">Лозинка (опционо)..</string>
+    <string name="service_account">Сервисни налог @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Приватни кључ..</string>
+    <string name="location">Локација..</string>
+    <string name="project_uid">UID пројекта..</string>
+    <string name="details">Детаљи</string>
+    <string name="model_type">Тип модела</string>
+    <string name="input_modalities">Улазни модалитети</string>
+    <string name="output_modalities">Излазни модалитети</string>
+    <string name="abilities">Способности</string>
+    <string name="provider_override">Додај замену провајдера</string>
+    <string name="provider_override_description">
+                            Конфигуришите прилагођена подешавања
+                            провајдера за овај конкретни модел.
+                            Користи заједничка својства главног
+                            провајдера модела.
+                        </string>
+    <string name="build_tools">Алатке за изградњу</string>
+    <string name="build_tools_description">
+                            Ове алатке директно пружа API без потребе
+                            за подршком апликације. Ова функција је
+                            тренутно подржана само Gemini API-јем.
+                        </string>
+    <string name="google_search">Претрага</string>
+    <string name="google_search_description">Омогући интеграцију са Google претрагом</string>
+    <string name="url_context">URL контекст</string>
+    <string name="url_context_description">Омогући обраду URL контекста</string>
+    <string name="find">Пронађи</string>
+    <string name="replace">Замени</string>
+    <string name="effecting_scopes">Опсези утицаја</string>
+    <string name="user">корисник</string>
+    <string name="visual_only">само визуелно</string>
+    <string name="body">Тело</string>
+    <string name="key">кључ</string>
+    <string name="value">Вредност</string>
+    <string name="header">Заглавље.</string>
+    <string name="reset_description">Ресетујте подешавања асистента на подразумевани режим.</string>
+    <string name="save_changes">Сачувати измене?</string>
+    <string name="save_changes_description">Имате несачуване измене. Да ли желите да их сачувате пре одласка?</string>
+    <string name="dont_save">Не чувај</string>
+    <string name="save">Сачувај</string>
+    <string name="links">Везе</string>
+    <string name="reminders">Подсетници</string>
+    <string name="priorities">Приоритети</string>
+    <string name="ai_chat">AI разговор</string>
+    <string name="auto">аутоматски</string>
+    <string name="light">лако</string>
+    <string name="medium">средње</string>
+    <string name="heavy">тешко</string>
+    <string name="date">датум</string>
+    <string name="time">време</string>
+    <string name="date_and_time">датум и време</string>
+    <string name="local">локално</string>
+    <string name="timezone">временска зона</string>
+    <string name="system_version">верзија система</string>
+    <string name="device_info">информације о уређају</string>
+    <string name="battery_level">ниво батерије</string>
+    <string name="insert">Уметни</string>
+    <string name="confirm">Потврди</string>
+    <string name="message">Порука</string>
+    <string name="content">Садржај</string>
+    <string name="today">Данас</string>
+    <string name="tomorrow">Сутра</string>
+    <string name="according_to_timing">Према времену</string>
+    <string name="untitled">Без наслова</string>
+    <string name="hue">Нијанса</string>
+    <string name="saturation">Засићеност</string>
+    <string name="brightness">Осветљеност</string>
+    <string name="shades">Сенке</string>
+    <string name="complementary">Комплементарно</string>
+    <string name="task_placeholder">Задатак..</string>
+    <string name="task_cannot_be_empty">Задатак не може бити празан!</string>
+    <string name="of">од</string>
+    <string name="something_wrong_with_file">Нешто није у реду са датотеком</string>
+    <string name="could_not_load_any_information">Нису могле да се учитају информације о медијској датотеци.</string>
+    <string name="no_file_path_provided">Путања датотеке није наведена.</string>
+    <string name="security_error_processing_file">Безбедносна грешка при обради датотеке</string>
+    <string name="an_unexpected_error_occurred">Дошло је до неочекиване грешке</string>
+    <string name="could_not_retrieve_any_information">Нису могле да се преузму информације за ову видео датотеку.</string>
+    <string name="error_reading_metadata">Грешка при читању медијских метаподатака</string>
+    <string name="could_not_read_exif_data">EXIF подаци нису могли да се прочитају</string>
+    <string name="error_reading_basic_file_info">Грешка при читању основних информација о датотеци</string>
+    <string name="file_does_not_exist">Датотека не постоји</string>
+    <string name="error">Грешка</string>
+    <string name="loading_media_info">Учитавање медијских информација…</string>
+    <string name="no_metadata_available_for_this_document">За овај документ нема доступних метаподатака.</string>
+    <string name="could_not_read_pdf_metadata">PDF метаподаци нису могли да се прочитају</string>
+    <string name="cannot_read_file">Датотека не може да се прочита</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Димензије слике нису могле да се декодирају или је формат неважећи.</string>
+    <string name="error_during_dimension_decoding">Грешка при декодирању димензија</string>
+    <string name="error_reading_exif_data">Грешка при читању EXIF података</string>
+    <string name="duplicate">Дуплирај</string>
+    <string name="send">Пошаљи</string>
+    <string name="print">Штампај</string>
+    <string name="cleaned">Очишћено</string>
+    <string name="cleared">Обрисано</string>
+    <string name="media_deleted">медија обрисана!</string>
+    <string name="jotting">Бележење</string>
+    <string name="appwidget_text">ПРИМЕР</string>
+    <string name="add_widget">Додај виџет</string>
+    <string name="app_widget_description">Ово је опис виџета апликације</string>
+    <string name="quick_widget_description">Ово је брзи распоред виџета</string>
+    <string name="creator_widget_description">Ово је виџет распореда творца</string>
+    <string name="notes_list_description">Ово је листа белешки</string>
+    <string name="record_deleted">запис је обрисан!</string>
+</resources>

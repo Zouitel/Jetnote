@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Noti</string>
+    <string name="screen_chat">Chat AI</string>
+    <string name="screen_tags">Tikketti</string>
+    <string name="screen_settings">Settings</string>
+    <string name="screen_archive">Arkivju</string>
+    <string name="screen_about">Dwar</string>
+    <string name="screen_feedback">Feedback</string>
+    <string name="share_app">Aqsam din l-App</string>
+    <string name="label_more">aktar</string>
+    <string name="label_less">inqas</string>
+    <string name="msg_deleted">imħassar</string>
+    <string name="action_undo">Agħmel lura</string>
+    <string name="tag_placeholder">Tikketta..</string>
+    <string name="tag_cannot_be_empty">It-tikketta ma tistax tkun vojta!</string>
+    <string name="archive">Arkivju</string>
+    <string name="deleted">imħassar!</string>
+    <string name="erase_notes">Ħassar in-Noti?</string>
+    <string name="confirm_erase_notes">"In-noti kollha fit-tlaqqit se jitħassru b\'mod permanenti."</string>
+    <string name="search_in_notes">"Fittex fin-noti.."</string>
+    <string name="select_layout">"Agħżel it-tqassim"</string>
+    <string name="settings">"Settings"</string>
+    <string name="account_sync">"Sinkronizzazzjoni tal-Kont"</string>
+    <string name="account_sync_description">"
+                                L-attivazzjoni tas-sinkronizzazzjoni
+                                tal-kont Google Drive għal din
+                                l-applikazzjoni tippermettik li
+                                tibbackja u tissinkronizza d-dejta
+                                tal-applikazzjoni tiegħek, bħan-noti
+                                u s-settings, b\'mod bla xkiel,
+                                biex id-dejta tiegħek tibqa\' sigura.
+        "</string>
+    <string name="assistant_configuration">"Konfigurazzjoni tal-Assistent"</string>
+    <string name="assistant_configuration_description">"
+                                L-assistent AI huwa programm tas-softwer
+                                imħaddem mill-intelliġenza artifiċjali,
+                                mfassal biex jgħinek f\'firxa wiesgħa
+                                ta\' kompiti f\'din l-applikazzjoni.
+                                Dawn l-assistenti jifhmu u jwieġbu
+                                bil-lingwaġġ naturali, li jippermettik
+                                tinteraġixxi magħhom permezz ta\'
+                                immaġni jew test.
+                            "</string>
+    <string name="dark_mode">"Modalità Skura"</string>
+    <string name="dark_mode_description">"
+                                Din il-modalità hija setting tas-sistema
+                                kollha li tibdel l-iskema tal-isfond
+                                tal-UI tal-app Android tiegħek
+                                għal kuluri aktar skuri.
+                                Hija mfassla biex tnaqqas it-taħbit
+                                tal-għajnejn, ttejjeb l-aċċessibbiltà,
+                                tiffranka l-batterija u ttejjeb
+                                l-esperjenza tal-utent.
+                            "</string>
+    <string name="sound_effect">"Effett ta\' Ħoss"</string>
+    <string name="sound_effect_description">"
+                                Fil-kuntest tal-applikazzjoni Jetnote,
+                                il-karatteristika \'Effett ta\' Ħoss\'
+                                tipprovdi feedback awditorju lill-utenti
+                                meta jinteraġixxu ma\' buttuni u
+                                elementi oħra tal-UI.
+                                Din hija prattika komuni fl-iżvilupp
+                                ta\' apps mobbli biex l-esperjenza
+                                tal-utent tkun aktar interattiva u
+                                attraenti.
+                            "</string>
+    <string name="layouts">"Tqassimiet"</string>
+    <string name="layouts_description">"
+                                It-tqassimiet huma fundamentali biex
+                                torganizza u turi l-kontenut
+                                fl-applikazzjonijiet Android tiegħek.
+                                Huma jiddefinixxu l-istruttura u
+                                l-arranġament tal-elementi tal-UI
+                                fuq l-iskrin.
+                            "</string>
+    <string name="sort_notes">"Issortja n-Noti"</string>
+    <string name="default_sort">"default"</string>
+    <string name="name_sort">"isem"</string>
+    <string name="oldest_sort">"l-eqdem"</string>
+    <string name="newest_sort">"l-aktar reċenti"</string>
+    <string name="priority_sort">"prijorità"</string>
+    <string name="zen_mode">"Modalità Zen"</string>
+    <string name="zen_mode_description">"
+                                Il-modalità Zen (full screen) hija
+                                setting tal-wirja li tippermetti lill-applikazzjoni
+                                tokkupa l-iskrin kollu, taħbi
+                                l-elementi l-oħra kollha tal-interface
+                                bħal bżieżaq tal-għodod, menus
+                                u l-taskbar tas-sistema operattiva.
+                            "</string>
+    <string name="shake">"Ċaqlaq biex Tirrapporta"</string>
+    <string name="shake_description">"
+                              Hija karatteristika konvenjenti li
+                              tippermetti lill-utenti jibdew proċess
+                              ta\' feedback jew rappurtar ta\' bug
+                              sempliċement billi jċaqalqu fiżikament
+                              l-apparat Android tagħhom. Minflok
+                              tinnnaviga minn menus multipli biex
+                              issib \'Ibgħat Feedback\' jew
+                              \'Irrapporta Bug\'.
+                            "</string>
+    <string name="block_screenshot">"Imblokka Screenshot"</string>
+    <string name="block_screenshot_description">"
+                                L-imblukkar tal-iskrinshot huwa miżura
+                                ta\' sigurtà li tipprevjeni lill-utenti
+                                milli jaqbdu screenshots tal-kontenut
+                                tal-app tiegħek. Spiss jintuża biex
+                                jipproteġi informazzjoni sensittiva,
+                                bħal dettalji bankarji, dejta personali
+                                jew materjal protett bid-drittijiet
+                                tal-awtur.
+                            "</string>
+    <string name="lock_mode">"Modalità ta\' Blokkatura"</string>
+    <string name="lock_mode_description">"
+                                Din il-karatteristika ttejjeb is-sigurtà
+                                tal-app tiegħek billi teħtieġ
+                                lill-utenti jawtentikaw qabel ma
+                                jaċċessaw il-kontenut. Dan tipikament
+                                jinkiseb billi jintuża l-karatteristiċi
+                                tas-sigurtà inkorporati tal-apparat,
+                                bħall-fingerprint, PIN jew maqfal
+                                bil-mudell.
+                            "</string>
+    <string name="licenses">"Liċenzji"</string>
+    <string name="licenses_description">"
+                                    Dawn il-liċenzji huma inklużi hawn
+                                    biex jikkonformaw mar-rekwiżiti
+                                    ta\' distribuzzjoni tal-awturi
+                                    rispettivi u biex jipprovdu
+                                    trasparenza dwar l-arkitettura
+                                    tas-softwer.
+                                    "</string>
+    <string name="title">"Titolu"</string>
+    <string name="note">"Nota"</string>
+    <string name="failed_to_save_document">"Falliment fl-iffrankar tad-dokument."</string>
+    <string name="gallery">"Galleria"</string>
+    <string name="audio">Awdjo</string>
+    <string name="permission_denied">Il-permess huwa miċħud!</string>
+    <string name="take_photo">Ieħu Ritratt</string>
+    <string name="video_capture">Reġistra Vidjo</string>
+    <string name="recorder">Rekordjatur</string>
+    <string name="document">Dokument</string>
+    <string name="scanner">Scanner</string>
+    <string name="tasks">Kompiti</string>
+    <string name="tags">Tikketti</string>
+    <string name="reminder">Reminder</string>
+    <string name="priority">Prijorità</string>
+    <string name="low_priority">Baxxa</string>
+    <string name="medium_priority">Medja</string>
+    <string name="high_priority">Għolja</string>
+    <string name="urgent_priority">Urġenti</string>
+    <string name="non_priority">Ebda</string>
+    <string name="created">Maħluq</string>
+    <string name="edited">Editjat</string>
+    <string name="types">Tipi</string>
+    <string name="media">Midja</string>
+    <string name="medias">Fajls tal-Midja</string>
+    <string name="colour">Kulur</string>
+    <string name="colours">Kuluri</string>
+    <string name="search_within">Fittex fi</string>
+    <string name="issue_title">Titolu tal-Problema*</string>
+    <string name="issue_description">Deskrizzjoni tal-Problema (Fakultattiv)</string>
+    <string name="noAccount">Idħol mingħajr Kont</string>
+    <string name="screenshot_selected">✓ Screenshot magħżul</string>
+    <string name="drive_submit">Se jittella\' fuq Drive meta tissottometti</string>
+    <string name="select_screenshot">Agħżel screenshot</string>
+    <string name="system_logs">Inkludi l-logs tas-sistema?</string>
+    <string name="find_an_issue">Sibt problema?</string>
+    <string name="take_a_screenshot">Tinsix tieħu screenshot.</string>
+    <string name="report_an_issue">Irrapporta problema!</string>
+    <string name="bug">Bug</string>
+    <string name="logs_title">\\uD83D\\uDCiE Logs tas-Sistema Android (Logcat) f\'Rapport ta\' Feedback</string>
+    <string name="logs_description">Il-logs tas-sistema Android huma fluss ta\' messaġġi bil-timestamp mis-sistema operattiva u l-kernel.\n    | Meta utent jiltaqa\' ma\' problema (bħal crash, friżar jew imġiba mhux mistennija tal-app), il-logs jaqbdu l-avvenimenti madwar il-problema, u jipprovdu lill-iżviluppaturi l-kuntest meħtieġ għad-dijanjosi.</string>
+    <string name="label_bug">Bug</string>
+    <string name="label_feature">Karatteristika</string>
+    <string name="label_invalid">Invalidu</string>
+    <string name="label_question">Mistoqsija</string>
+    <string name="label_security">Sigurtà</string>
+    <string name="failed">Falliment</string>
+    <string name="submit_feedback">Issottometti Feedback!</string>
+    <string name="uploading_screenshot">Qed jittella\' s-screenshot…</string>
+    <string name="creating_github_issue">Qed jinħoloq issue ta\' GitHub…</string>
+    <string name="upload_faild">It-tqabbil fallut…</string>
+    <string name="upload_failed">It-tqabbil fallut…</string>
+    <string name="issue_crea">Issue maħluq.</string>
+    <string name="issue_created">Issue maħluq!</string>
+    <string name="log_out">Oħroġ</string>
+    <string name="hi">Bonġu</string>
+    <string name="add_account">Żid Kont Ieħor</string>
+    <string name="manage_account">Immaniġġja l-Kont</string>
+    <string name="upload_data">Tella\' d-Dejta</string>
+    <string name="download_data">Niżżel id-Dejta</string>
+    <string name="firebase_authentication_failed">L-awtentikazzjoni ta\' Firebase falliet</string>
+    <string name="sign_in_failed">Id-dħul ma\' Google falliet</string>
+    <string name="please_wait">Qed tidħol, jekk jogħġbok stenna…</string>
+    <string name="sync_title">Idħol biex Tissinkronizza</string>
+    <string name="sync_description">Idħol bil-kont Google tiegħek biex tibbackja u tissinkronizza n-noti tiegħek fuq id-dispositivi kollha tiegħek.</string>
+    <string name="current_account">Kont Attwali</string>
+    <string name="no_name">Ebda Isem</string>
+    <string name="no_email">Ebda Email</string>
+    <string name="sign_out">Oħroġ</string>
+    <string name="sign_in_with_google">Idħol ma\' Google</string>
+    <string name="ai_models">Mudelli AI</string>
+    <string name="load_more">Ħobb Aktar</string>
+    <string name="available_models">Mudelli Disponibbli</string>
+    <string name="assistant_settings">Settings tal-Assistent</string>
+    <string name="learning_mode">Modalità ta\' Tagħlim</string>
+    <string name="learning_mode_description">"
+                    Tbassir ta\' output għal dejta ġdida,
+                    mhux magħrufa bbażata fuq il-mudelli
+                    mitgħallma mill-eżempji etikettati.
+                "</string>
+    <string name="temperat">Temperatura</string>
+    <string name="temperature">Temperatura</string>
+    <string name="temperature_description">"
+           Tikkontrolla l-casualità tal-output.
+           Valuri ogħla huma aktar kreattivi.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Tikkontrolla liema tokens jiġu kkunsidrati għall-output.
+            </string>
+    <string name="context_message_size">Daqs tal-Messaġġi tal-Kuntest</string>
+    <string name="context_message_size_description">
+            Numru massimu ta\' messaġġi preċedenti
+            li jinkludu fil-kuntest.
+        </string>
+    <string name="stream_output">Output tal-Istream</string>
+    <string name="stream_output_description">Uri t-tweġiba hekk kif tinħoloq.</string>
+    <string name="thinking_budget">Baġit tal-Ħsieb</string>
+    <string name="thinking_budget_description">
+                            Illimita r-riżorsi komputazzjonali
+                            użati għat-tweġiba.
+                        </string>
+    <string name="system_prompt">Prompt tas-Sistema</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Proprjetajiet</string>
+    <string name="quick_messages">Messaġġi Veloċi</string>
+    <string name="quick_messages_description">Ikkonfigura shortcuts ta\' messaġġi veloċi.</string>
+    <string name="regular_expressions">Espressjonijiet Regolari</string>
+    <string name="regular_expressions_description">
+                            Iddefinixxi mudelli regex biex tittrasfroma
+                            l-messaġġi qabel ma tibgħat/tirċievi.
+                        </string>
+    <string name="headers">Headers</string>
+    <string name="headers_description">
+                            Dawn huma pari ta\' ċavetta-valur miżjuda
+                            mal-blokk tal-header tat-talba. Tipikament
+                            jintużaw għall-awtentikazzjoni, speċifikazzjoni
+                            tat-tip tal-kontenut jew trażmissjoni
+                            tal-metadata dwar it-talba.
+                        </string>
+    <string name="bodies">Korpi</string>
+    <string name="bodies_description">
+                            Dan jirreferi għall-payload tad-dejta
+                            (struttura JSON) mibgħuta fit-talba.
+                            Huwa l-mezz primarju ta\' trażmissjoni
+                            tal-inputs lill-mudell AI.
+                        </string>
+    <string name="memory">Memorja</string>
+    <string name="memory_description">
+                            Ħalli lill-assistent jiftakar
+                            it-turns preċedenti fil-konversazzjoni.
+                        </string>
+    <string name="chats_reference">Referenza ta\' Chats Reċenti</string>
+    <string name="chats_reference_description">
+                        Irreferi d-dejta mill-chats reċenti tiegħek
+                        għal rispondi aktar kontestwali.
+                        </string>
+    <string name="javascript">Magna JavaScript</string>
+    <string name="javascript_description">
+                            Eżegwixxi kodiċi JavaScript bil-magna
+                            QuickJS għal kalkoli u scripting.
+                        </string>
+    <string name="reset">Irrisettja s-Settings!</string>
+    <string name="providers">Fornituri</string>
+    <string name="ask">Staqsi</string>
+    <string name="add_model"><![CDATA[<- Żid Mudell AI]]></string>
+    <string name="delete">Ħassar</string>
+    <string name="options">Għażliet</string>
+    <string name="retitle">Ibdel l-Isem</string>
+    <string name="assistant">Assistent</string>
+    <string name="new_chat">Chat Ġdid</string>
+    <string name="files">Fajls</string>
+    <string name="audios">Awdjos</string>
+    <string name="videos">Vidjows</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Ritratti</string>
+    <string name="provider_settings">Settings tal-Fornittur</string>
+    <string name="api_key">Ċavetta API</string>
+    <string name="base_url">URL Bażiku</string>
+    <string name="model_name">Isem tal-Mudell</string>
+    <string name="modalities">Modalitajiet</string>
+    <string name="tools">Għodod</string>
+    <string name="reasoning">Raġunament</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Bilanċ tal-Kont</string>
+    <string name="api_path">Mogħdija API..</string>
+    <string name="json_key">Ċavetta Json..</string>
+    <string name="network_proxy">Proxy tan-Netwerk</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Isem tal-Utent (Fakultattiv)..</string>
+    <string name="pass_option">Password (Fakultattiv)..</string>
+    <string name="service_account">Kont tas-Servizz @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Ċavetta privata..</string>
+    <string name="location">Post..</string>
+    <string name="project_uid">UID tal-Proġett..</string>
+    <string name="details">Dettalji</string>
+    <string name="model_type">Tip tal-Mudell</string>
+    <string name="input_modalities">Modalitajiet tal-Input</string>
+    <string name="output_modalities">Modalitajiet tal-Output</string>
+    <string name="abilities">Abbiltajiet</string>
+    <string name="provider_override">Żid override tal-fornittur</string>
+    <string name="provider_override_description">
+                            Ikkonfigura settings tal-fornittur
+                            personalizzati għal dan il-mudell speċifiku.
+                            Juża proprjetajiet komuni mill-fornittur
+                            ewlieni tal-mudell.
+                        </string>
+    <string name="build_tools">Għodod tal-Bini</string>
+    <string name="build_tools_description">
+                            Dawn l-għodod huma pprovduti direttament
+                            mill-API mingħajr ma jeħtieġu appoġġ
+                            tal-app. Din il-karatteristika hija
+                            appoġġjata biss mill-Gemini API bħalissa.
+                        </string>
+    <string name="google_search">Fittex</string>
+    <string name="google_search_description">Attiva l-integrazzjoni ma\' Google Search</string>
+    <string name="url_context">Kuntest tal-URL</string>
+    <string name="url_context_description">Attiva l-ipproċessar tal-kuntest tal-URL</string>
+    <string name="find">Sib</string>
+    <string name="replace">Ibdel</string>
+    <string name="effecting_scopes">Skopji tal-Effett</string>
+    <string name="user">utent</string>
+    <string name="visual_only">viżwali biss</string>
+    <string name="body">Ġisem</string>
+    <string name="key">ċavetta</string>
+    <string name="value">Valur</string>
+    <string name="header">Header.</string>
+    <string name="reset_description">Irrisettja s-settings tal-assistent għall-modalità default.</string>
+    <string name="save_changes">Issalva l-bidliet?</string>
+    <string name="save_changes_description">Għandek bidliet mhux issalvati. Trid tissalvahom qabel ma tħalli?</string>
+    <string name="dont_save">Tissalvax</string>
+    <string name="save">Issalva</string>
+    <string name="links">Links</string>
+    <string name="reminders">Reminders</string>
+    <string name="priorities">Prijoritajiet</string>
+    <string name="ai_chat">Chat AI</string>
+    <string name="auto">awtomatiku</string>
+    <string name="light">ħafif</string>
+    <string name="medium">medju</string>
+    <string name="heavy">tqil</string>
+    <string name="date">data</string>
+    <string name="time">ħin</string>
+    <string name="date_and_time">data u ħin</string>
+    <string name="local">lokali</string>
+    <string name="timezone">żona tal-ħin</string>
+    <string name="system_version">verżjoni tas-sistema</string>
+    <string name="device_info">info tal-apparat</string>
+    <string name="battery_level">livell tal-batterija</string>
+    <string name="insert">Daħħal</string>
+    <string name="confirm">Ikkonferma</string>
+    <string name="message">Messaġġ</string>
+    <string name="content">Kontenut</string>
+    <string name="today">Illum</string>
+    <string name="tomorrow">Għada</string>
+    <string name="according_to_timing">Skont il-ħin</string>
+    <string name="untitled">Mingħajr Titolu</string>
+    <string name="hue">Tint</string>
+    <string name="saturation">Saturazzjoni</string>
+    <string name="brightness">Dawl</string>
+    <string name="shades">Dellijiet</string>
+    <string name="complementary">Kumplementari</string>
+    <string name="task_placeholder">Kompitu..</string>
+    <string name="task_cannot_be_empty">Il-kompitu ma jistax ikun vojt!</string>
+    <string name="of">minn</string>
+    <string name="something_wrong_with_file">Xi ħaġa ħażina mal-fajl</string>
+    <string name="could_not_load_any_information">Ma setax jgħabbi informazzjoni għall-fajl tal-midja.</string>
+    <string name="no_file_path_provided">Ma ngħatat l-ebda mogħdija tal-fajl.</string>
+    <string name="security_error_processing_file">Żball ta\' sigurtà fl-ipproċessar tal-fajl</string>
+    <string name="an_unexpected_error_occurred">Seħħ żball mhux mistenni</string>
+    <string name="could_not_retrieve_any_information">Ma setax jiġbor informazzjoni għal dan il-fajl tal-vidjo.</string>
+    <string name="error_reading_metadata">Żball fil-qari tal-metadata tal-midja</string>
+    <string name="could_not_read_exif_data">Ma setax jaqra d-dejta EXIF</string>
+    <string name="error_reading_basic_file_info">Żball fil-qari tal-informazzjoni bażika tal-fajl</string>
+    <string name="file_does_not_exist">Il-fajl ma jeżistix</string>
+    <string name="error">Żball</string>
+    <string name="loading_media_info">Qed jgħabbi l-informazzjoni tal-midja…</string>
+    <string name="no_metadata_available_for_this_document">L-ebda metadata disponibbli għal dan id-dokument.</string>
+    <string name="could_not_read_pdf_metadata">Ma setax jaqra l-metadata tal-PDF</string>
+    <string name="cannot_read_file">Ma jistax jaqra l-fajl</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Ma setax jiddekodifika d-dimensjonijiet tal-immaġni jew format invalidu.</string>
+    <string name="error_during_dimension_decoding">Żball waqt id-dekodikar tad-dimensjonijiet</string>
+    <string name="error_reading_exif_data">Żball fil-qari tad-dejta EXIF</string>
+    <string name="duplicate">Idduplika</string>
+    <string name="send">Ibgħat</string>
+    <string name="print">Ipprintja</string>
+    <string name="cleaned">Imnaddfat</string>
+    <string name="cleared">Imħassar</string>
+    <string name="media_deleted">midja mħassra!</string>
+    <string name="jotting">Qed tinnota</string>
+    <string name="appwidget_text">EŻEMPJU</string>
+    <string name="add_widget">Żid widget</string>
+    <string name="app_widget_description">Din hija deskrizzjoni tal-widget tal-app</string>
+    <string name="quick_widget_description">Dan huwa tqassim ta\' widget veloċi</string>
+    <string name="creator_widget_description">Dan huwa widget tat-tqassim tal-kreatur</string>
+    <string name="notes_list_description">Din hija lista ta\' noti</string>
+    <string name="record_deleted">rekord imħassar!</string>
+</resources>

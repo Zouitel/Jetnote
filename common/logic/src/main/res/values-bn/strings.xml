@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">নোট</string>
+    <string name="screen_chat">AI চ্যাট</string>
+    <string name="screen_tags">ট্যাগ</string>
+    <string name="screen_settings">সেটিংস</string>
+    <string name="screen_archive">আর্কাইভ</string>
+    <string name="screen_about">সম্পর্কে</string>
+    <string name="screen_feedback">মতামত</string>
+    <string name="share_app">এই অ্যাপ শেয়ার করুন</string>
+    <string name="label_more">আরও</string>
+    <string name="label_less">কম</string>
+    <string name="msg_deleted">মুছে ফেলা হয়েছে</string>
+    <string name="action_undo">পূর্বাবস্থায় ফেরান</string>
+    <string name="tag_placeholder">ট্যাগ..</string>
+    <string name="tag_cannot_be_empty">ট্যাগ খালি রাখা যাবে না!</string>
+    <string name="archive">আর্কাইভ</string>
+    <string name="deleted">মুছে ফেলা হয়েছে!</string>
+    <string name="erase_notes">নোট মুছবেন?</string>
+    <string name="confirm_erase_notes">"ট্র্যাশে থাকা সব নোট স্থায়ীভাবে মুছে ফেলা হবে।"</string>
+    <string name="search_in_notes">"নোটে অনুসন্ধান করুন.."</string>
+    <string name="select_layout">"লেআউট নির্বাচন করুন"</string>
+    <string name="settings">"সেটিংস"</string>
+    <string name="account_sync">"অ্যাকাউন্ট সিঙ্ক"</string>
+    <string name="account_sync_description">"
+                                এই অ্যাপের জন্য Google Drive অ্যাকাউন্ট
+                                সিঙ্ক সক্ষম করলে নোট ও সেটিংসের মতো
+                                অ্যাপ ডেটা নির্বিঘ্নে ব্যাকআপ এবং
+                                সিঙ্ক্রোনাইজ করা যায়, যা আপনার
+                                ডেটা সুরক্ষিত রাখে।
+        "</string>
+    <string name="assistant_configuration">"সহকারী কনফিগারেশন"</string>
+    <string name="assistant_configuration_description">"
+                                AI সহকারী হলো কৃত্রিম বুদ্ধিমত্তা
+                                চালিত একটি সফটওয়্যার প্রোগ্রাম,
+                                যা এই অ্যাপে বিভিন্ন কাজে আপনাকে
+                                সাহায্য করতে ডিজাইন করা হয়েছে।
+                                এই সহকারীরা প্রাকৃতিক ভাষা বোঝে
+                                এবং সাড়া দেয়, ফলে আপনি ছবি বা
+                                টেক্সটের মাধ্যমে তাদের সঙ্গে
+                                যোগাযোগ করতে পারেন।
+                            "</string>
+    <string name="dark_mode">"ডার্ক মোড"</string>
+    <string name="dark_mode_description">"
+                                এই মোড একটি সিস্টেম-ব্যাপী সেটিং
+                                যা আপনার Android অ্যাপের UI-এর
+                                ব্যাকগ্রাউন্ড রঙের স্কিম গাঢ় রঙে
+                                পরিবর্তন করে। এটি চোখের ক্লান্তি
+                                কমাতে, অ্যাক্সেসিবিলিটি উন্নত করতে,
+                                ব্যাটারি সাশ্রয় করতে এবং ব্যবহারকারীর
+                                অভিজ্ঞতা উন্নত করতে ডিজাইন করা হয়েছে।
+                            "</string>
+    <string name="sound_effect">"সাউন্ড ইফেক্ট"</string>
+    <string name="sound_effect_description">"
+                                Jetnote অ্যাপের প্রেক্ষাপটে
+                                \'সাউন্ড ইফেক্ট\' ফিচারটি বাটন
+                                ও অন্যান্য UI উপাদানের সাথে
+                                ইন্টারঅ্যাক্ট করার সময় ব্যবহারকারীদের
+                                শ্রবণ প্রতিক্রিয়া প্রদান করে।
+                                মোবাইল অ্যাপ ডেভেলপমেন্টে এটি
+                                একটি প্রচলিত পদ্ধতি যা ব্যবহারকারীর
+                                অভিজ্ঞতাকে আরো ইন্টারেক্টিভ ও
+                                আকর্ষণীয় করে তোলে।
+                            "</string>
+    <string name="layouts">"লেআউট"</string>
+    <string name="layouts_description">"
+                                লেআউটগুলো Android অ্যাপে বিষয়বস্তু
+                                সংগঠিত ও প্রদর্শন করার মূল ভিত্তি।
+                                এগুলো স্ক্রিনে UI উপাদানগুলোর
+                                কাঠামো ও বিন্যাস নির্ধারণ করে।
+                            "</string>
+    <string name="sort_notes">"নোট সাজান"</string>
+    <string name="default_sort">"ডিফল্ট"</string>
+    <string name="name_sort">"নাম"</string>
+    <string name="oldest_sort">"পুরনো"</string>
+    <string name="newest_sort">"নতুন"</string>
+    <string name="priority_sort">"অগ্রাধিকার"</string>
+    <string name="zen_mode">"জেন মোড"</string>
+    <string name="zen_mode_description">"
+                                জেন মোড (ফুল স্ক্রিন মোড) একটি
+                                ডিসপ্লে সেটিং যা অ্যাপ্লিকেশনকে
+                                সম্পূর্ণ স্ক্রিন জুড়ে বিস্তৃত হতে
+                                দেয়, টুলবার, মেনু ও অপারেটিং
+                                সিস্টেমের টাস্কবারের মতো অন্য সব
+                                ইন্টারফেস উপাদান লুকিয়ে রেখে।
+                            "</string>
+    <string name="shake">"রিপোর্ট করতে ঝাঁকান"</string>
+    <string name="shake_description">"
+                              এটি একটি সুবিধাজনক ফিচার যা ব্যবহারকারীদের
+                              শুধুমাত্র Android ডিভাইস শারীরিকভাবে
+                              ঝাঁকিয়ে মতামত বা বাগ রিপোর্ট করার
+                              প্রক্রিয়া শুরু করতে দেয়। \'ফিডব্যাক পাঠান\'
+                              বা \'বাগ রিপোর্ট করুন\' খুঁজতে
+                              একাধিক মেনু নেভিগেট না করে।
+                            "</string>
+    <string name="block_screenshot">"স্ক্রিনশট ব্লক করুন"</string>
+    <string name="block_screenshot_description">"
+                                স্ক্রিনশট ব্লকিং একটি নিরাপত্তা ব্যবস্থা
+                                যা ব্যবহারকারীদের অ্যাপের বিষয়বস্তুর
+                                স্ক্রিনশট নিতে বাধা দেয়। এটি প্রায়শই
+                                ব্যাংকিং বিবরণ, ব্যক্তিগত ডেটা বা
+                                কপিরাইট-সুরক্ষিত উপকরণের মতো
+                                সংবেদনশীল তথ্য রক্ষা করতে ব্যবহৃত হয়।
+                            "</string>
+    <string name="lock_mode">"লক মোড"</string>
+    <string name="lock_mode_description">"
+                                এই ফিচারটি বিষয়বস্তু অ্যাক্সেস করার
+                                আগে ব্যবহারকারীদের প্রমাণীকরণ
+                                প্রয়োজন করে অ্যাপের নিরাপত্তা বাড়ায়।
+                                এটি সাধারণত ফিঙ্গারপ্রিন্ট, পিন বা
+                                প্যাটার্ন আনলকের মতো ডিভাইসের
+                                বিল্ট-ইন নিরাপত্তা ফিচার ব্যবহার করে
+                                অর্জন করা হয়।
+                            "</string>
+    <string name="licenses">"লাইসেন্স"</string>
+    <string name="licenses_description">"
+                                    এই লাইসেন্সগুলো সংশ্লিষ্ট লেখকদের
+                                    বিতরণ প্রয়োজনীয়তা মেনে চলতে এবং
+                                    সফটওয়্যারের আর্কিটেকচার সম্পর্কে
+                                    স্বচ্ছতা প্রদান করতে এখানে
+                                    অন্তর্ভুক্ত করা হয়েছে।
+                                    "</string>
+    <string name="title">"শিরোনাম"</string>
+    <string name="note">"নোট"</string>
+    <string name="failed_to_save_document">"ডকুমেন্ট সংরক্ষণ ব্যর্থ হয়েছে।"</string>
+    <string name="gallery">"গ্যালারি"</string>
+    <string name="audio">অডিও</string>
+    <string name="permission_denied">অনুমতি প্রত্যাখ্যাত!</string>
+    <string name="take_photo">ছবি তুলুন</string>
+    <string name="video_capture">ভিডিও রেকর্ড করুন</string>
+    <string name="recorder">রেকর্ডার</string>
+    <string name="document">ডকুমেন্ট</string>
+    <string name="scanner">স্ক্যানার</string>
+    <string name="tasks">কাজ</string>
+    <string name="tags">ট্যাগ</string>
+    <string name="reminder">রিমাইন্ডার</string>
+    <string name="priority">অগ্রাধিকার</string>
+    <string name="low_priority">কম</string>
+    <string name="medium_priority">মাঝারি</string>
+    <string name="high_priority">বেশি</string>
+    <string name="urgent_priority">জরুরি</string>
+    <string name="non_priority">নেই</string>
+    <string name="created">তৈরি করা হয়েছে</string>
+    <string name="edited">সম্পাদিত</string>
+    <string name="types">ধরন</string>
+    <string name="media">মিডিয়া</string>
+    <string name="medias">মিডিয়া ফাইল</string>
+    <string name="colour">রঙ</string>
+    <string name="colours">রঙসমূহ</string>
+    <string name="search_within">এর মধ্যে খুঁজুন</string>
+    <string name="issue_title">সমস্যার শিরোনাম*</string>
+    <string name="issue_description">সমস্যার বিবরণ (ঐচ্ছিক)</string>
+    <string name="noAccount">অ্যাকাউন্ট ছাড়া সাইন ইন</string>
+    <string name="screenshot_selected">✓ স্ক্রিনশট নির্বাচিত</string>
+    <string name="drive_submit">সাবমিট করলে Drive-এ আপলোড হবে</string>
+    <string name="select_screenshot">স্ক্রিনশট নির্বাচন করুন</string>
+    <string name="system_logs">সিস্টেম লগ অন্তর্ভুক্ত করবেন?</string>
+    <string name="find_an_issue">কোনো সমস্যা পেয়েছেন?</string>
+    <string name="take_a_screenshot">স্ক্রিনশট নিতে ভুলবেন না।</string>
+    <string name="report_an_issue">সমস্যা রিপোর্ট করুন!</string>
+    <string name="bug">বাগ</string>
+    <string name="logs_title">\\uD83D\\uDCiE ফিডব্যাক রিপোর্টে Android সিস্টেম লগ (Logcat)</string>
+    <string name="logs_description">Android সিস্টেম লগগুলো হলো অপারেটিং সিস্টেম এবং কার্নেল থেকে আসা টাইমস্ট্যাম্পযুক্ত বার্তার স্ট্রিম।\n    | ব্যবহারকারী কোনো সমস্যার (অ্যাপ ক্র্যাশ, ফ্রিজ বা অপ্রত্যাশিত আচরণ) মুখোমুখি হলে, লগগুলো সমস্যার আগে ও সময়কালীন ঘটনাগুলো ধারণ করে, ডেভেলপারদের রোগ নির্ণয়ের জন্য প্রয়োজনীয় প্রসঙ্গ সরবরাহ করে।</string>
+    <string name="label_bug">বাগ</string>
+    <string name="label_feature">ফিচার</string>
+    <string name="label_invalid">অবৈধ</string>
+    <string name="label_question">প্রশ্ন</string>
+    <string name="label_security">নিরাপত্তা</string>
+    <string name="failed">ব্যর্থ</string>
+    <string name="submit_feedback">মতামত জমা দিন!</string>
+    <string name="uploading_screenshot">স্ক্রিনশট আপলোড হচ্ছে…</string>
+    <string name="creating_github_issue">GitHub ইস্যু তৈরি হচ্ছে…</string>
+    <string name="upload_faild">আপলোড ব্যর্থ হয়েছে…</string>
+    <string name="upload_failed">আপলোড ব্যর্থ হয়েছে…</string>
+    <string name="issue_crea">ইস্যু তৈরি হয়েছে।</string>
+    <string name="issue_created">ইস্যু তৈরি হয়েছে!</string>
+    <string name="log_out">লগ আউট</string>
+    <string name="hi">হ্যালো</string>
+    <string name="add_account">অন্য অ্যাকাউন্ট যোগ করুন</string>
+    <string name="manage_account">অ্যাকাউন্ট পরিচালনা করুন</string>
+    <string name="upload_data">ডেটা আপলোড করুন</string>
+    <string name="download_data">ডেটা ডাউনলোড করুন</string>
+    <string name="firebase_authentication_failed">Firebase অ্যাথেনটিকেশন ব্যর্থ হয়েছে</string>
+    <string name="sign_in_failed">Google সাইন-ইন ব্যর্থ হয়েছে</string>
+    <string name="please_wait">সাইন ইন হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন…</string>
+    <string name="sync_title">সিঙ্ক করতে সাইন ইন করুন</string>
+    <string name="sync_description">সমস্ত ডিভাইসে নোট ব্যাকআপ ও সিঙ্ক করতে আপনার Google অ্যাকাউন্ট দিয়ে সাইন ইন করুন।</string>
+    <string name="current_account">বর্তমান অ্যাকাউন্ট</string>
+    <string name="no_name">কোনো নাম নেই</string>
+    <string name="no_email">কোনো ইমেইল নেই</string>
+    <string name="sign_out">সাইন আউট</string>
+    <string name="sign_in_with_google">Google দিয়ে সাইন ইন করুন</string>
+    <string name="ai_models">AI মডেল</string>
+    <string name="load_more">আরও লোড করুন</string>
+    <string name="available_models">উপলব্ধ মডেল</string>
+    <string name="assistant_settings">সহকারীর সেটিংস</string>
+    <string name="learning_mode">লার্নিং মোড</string>
+    <string name="learning_mode_description">"
+                    লেবেলযুক্ত উদাহরণ থেকে শেখা প্যাটার্নের
+                    উপর ভিত্তি করে নতুন, অদেখা ডেটার
+                    জন্য আউটপুট পূর্বাভাস দেওয়া।
+                "</string>
+    <string name="temperat">তাপমাত্রা</string>
+    <string name="temperature">তাপমাত্রা</string>
+    <string name="temperature_description">"
+           আউটপুটের এলোমেলোতা নিয়ন্ত্রণ করে।
+           বেশি মান আরো সৃজনশীল।
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            আউটপুটের জন্য কোন টোকেনগুলো বিবেচনা করা হবে তা নিয়ন্ত্রণ করে।
+            </string>
+    <string name="context_message_size">প্রসঙ্গ বার্তার আকার</string>
+    <string name="context_message_size_description">
+            প্রসঙ্গে অন্তর্ভুক্ত করার জন্য পূর্ববর্তী
+            বার্তার সর্বোচ্চ সংখ্যা।
+        </string>
+    <string name="stream_output">স্ট্রিম আউটপুট</string>
+    <string name="stream_output_description">তৈরি হওয়ার সাথে সাথে প্রতিক্রিয়া প্রদর্শন করুন।</string>
+    <string name="thinking_budget">থিংকিং বাজেট</string>
+    <string name="thinking_budget_description">
+                            প্রতিক্রিয়ার জন্য ব্যবহৃত
+                            কম্পিউটেশনাল রিসোর্স সীমিত করে।
+                        </string>
+    <string name="system_prompt">সিস্টেম প্রম্পট</string>
+    <string name="prompt">প্রম্পট..</string>
+    <string name="properties">বৈশিষ্ট্য</string>
+    <string name="quick_messages">দ্রুত বার্তা</string>
+    <string name="quick_messages_description">দ্রুত বার্তার শর্টকাট কনফিগার করুন।</string>
+    <string name="regular_expressions">রেগুলার এক্সপ্রেশন</string>
+    <string name="regular_expressions_description">
+                            পাঠানো/গ্রহণের আগে বার্তা রূপান্তরিত
+                            করতে regex প্যাটার্ন সংজ্ঞায়িত করুন।
+                        </string>
+    <string name="headers">হেডার</string>
+    <string name="headers_description">
+                            এগুলো কী-মান জোড়া যা অনুরোধের হেডার
+                            ব্লকে যোগ করা হয়। সাধারণত
+                            প্রমাণীকরণ, কন্টেন্ট টাইপ নির্ধারণ
+                            বা অনুরোধ সংক্রান্ত মেটাডেটা
+                            পাঠাতে ব্যবহৃত হয়।
+                        </string>
+    <string name="bodies">বডি</string>
+    <string name="bodies_description">
+                            অনুরোধের মধ্যে পাঠানো ডেটা পেলোড
+                            (JSON কাঠামো) বোঝায়। এটি AI মডেলে
+                            ইনপুট পাঠানোর প্রাথমিক উপায়।
+                        </string>
+    <string name="memory">মেমোরি</string>
+    <string name="memory_description">
+                            সহকারীকে কথোপকথনের পূর্ববর্তী
+                            পর্যায়গুলো মনে রাখতে দিন।
+                        </string>
+    <string name="chats_reference">সাম্প্রতিক চ্যাট রেফারেন্স</string>
+    <string name="chats_reference_description">
+                        আরও ভালো প্রাসঙ্গিক প্রতিক্রিয়ার জন্য
+                        সাম্প্রতিক চ্যাটের ডেটা রেফার করুন।
+                        </string>
+    <string name="javascript">JavaScript ইঞ্জিন</string>
+    <string name="javascript_description">
+                            গণনা ও স্ক্রিপ্টিংয়ের জন্য QuickJS
+                            ইঞ্জিন দিয়ে JavaScript কোড চালান।
+                        </string>
+    <string name="reset">সেটিংস রিসেট করুন!</string>
+    <string name="providers">প্রদানকারী</string>
+    <string name="ask">জিজ্ঞেস করুন</string>
+    <string name="add_model"><![CDATA[<- AI মডেল যোগ করুন]]></string>
+    <string name="delete">মুছুন</string>
+    <string name="options">বিকল্প</string>
+    <string name="retitle">নাম পরিবর্তন করুন</string>
+    <string name="assistant">সহকারী</string>
+    <string name="new_chat">নতুন চ্যাট</string>
+    <string name="files">ফাইল</string>
+    <string name="audios">অডিও</string>
+    <string name="videos">ভিডিও</string>
+    <string name="camera">ক্যামেরা</string>
+    <string name="pictures">ছবি</string>
+    <string name="provider_settings">প্রদানকারীর সেটিংস</string>
+    <string name="api_key">API কী</string>
+    <string name="base_url">বেস URL</string>
+    <string name="model_name">মডেলের নাম</string>
+    <string name="modalities">মোডালিটি</string>
+    <string name="tools">সরঞ্জাম</string>
+    <string name="reasoning">যুক্তি</string>
+    <string name="respo">রেসপন্স API</string>
+    <string name="response_api">রেসপন্স API</string>
+    <string name="account_balance">অ্যাকাউন্ট ব্যালেন্স</string>
+    <string name="api_path">API পাথ..</string>
+    <string name="json_key">Json কী..</string>
+    <string name="network_proxy">নেটওয়ার্ক প্রক্সি</string>
+    <string name="host">হোস্ট..</string>
+    <string name="username_option">ব্যবহারকারীর নাম (ঐচ্ছিক)..</string>
+    <string name="pass_option">পাসওয়ার্ড (ঐচ্ছিক)..</string>
+    <string name="service_account">সার্ভিস অ্যাকাউন্ট @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">প্রাইভেট কী..</string>
+    <string name="location">অবস্থান..</string>
+    <string name="project_uid">প্রজেক্ট UID..</string>
+    <string name="details">বিবরণ</string>
+    <string name="model_type">মডেলের ধরন</string>
+    <string name="input_modalities">ইনপুট মোডালিটি</string>
+    <string name="output_modalities">আউটপুট মোডালিটি</string>
+    <string name="abilities">সক্ষমতা</string>
+    <string name="provider_override">প্রদানকারী ওভাররাইড যোগ করুন</string>
+    <string name="provider_override_description">
+                            এই নির্দিষ্ট মডেলের জন্য কাস্টম
+                            প্রদানকারীর সেটিংস কনফিগার করুন।
+                            মডেলের প্রধান প্রদানকারীর সাধারণ
+                            বৈশিষ্ট্য ব্যবহার করে।
+                        </string>
+    <string name="build_tools">বিল্ড টুলস</string>
+    <string name="build_tools_description">
+                            এই টুলগুলো অ্যাপ সাপোর্টের প্রয়োজন
+                            ছাড়াই API দ্বারা সরাসরি সরবরাহ করা হয়।
+                            এই ফিচারটি বর্তমানে শুধুমাত্র
+                            Gemini API দ্বারা সমর্থিত।
+                        </string>
+    <string name="google_search">অনুসন্ধান</string>
+    <string name="google_search_description">Google Search ইন্টিগ্রেশন সক্ষম করুন</string>
+    <string name="url_context">URL প্রসঙ্গ</string>
+    <string name="url_context_description">URL প্রসঙ্গ প্রক্রিয়াকরণ সক্ষম করুন</string>
+    <string name="find">খুঁজুন</string>
+    <string name="replace">প্রতিস্থাপন করুন</string>
+    <string name="effecting_scopes">প্রভাবিত স্কোপ</string>
+    <string name="user">ব্যবহারকারী</string>
+    <string name="visual_only">শুধু ভিজ্যুয়াল</string>
+    <string name="body">বডি</string>
+    <string name="key">কী</string>
+    <string name="value">মান</string>
+    <string name="header">হেডার.</string>
+    <string name="reset_description">সহকারীর সেটিংস ডিফল্ট মোডে রিসেট করুন।</string>
+    <string name="save_changes">পরিবর্তন সংরক্ষণ করবেন?</string>
+    <string name="save_changes_description">আপনার কাছে সংরক্ষণ না করা পরিবর্তন আছে। চলে যাওয়ার আগে সংরক্ষণ করতে চান?</string>
+    <string name="dont_save">সংরক্ষণ করবেন না</string>
+    <string name="save">সংরক্ষণ করুন</string>
+    <string name="links">লিংক</string>
+    <string name="reminders">রিমাইন্ডার</string>
+    <string name="priorities">অগ্রাধিকারসমূহ</string>
+    <string name="ai_chat">AI চ্যাট</string>
+    <string name="auto">স্বয়ংক্রিয়</string>
+    <string name="light">হালকা</string>
+    <string name="medium">মাঝারি</string>
+    <string name="heavy">ভারী</string>
+    <string name="date">তারিখ</string>
+    <string name="time">সময়</string>
+    <string name="date_and_time">তারিখ ও সময়</string>
+    <string name="local">স্থানীয়</string>
+    <string name="timezone">টাইমজোন</string>
+    <string name="system_version">সিস্টেম সংস্করণ</string>
+    <string name="device_info">ডিভাইস তথ্য</string>
+    <string name="battery_level">ব্যাটারি লেভেল</string>
+    <string name="insert">সন্নিবেশ করুন</string>
+    <string name="confirm">নিশ্চিত করুন</string>
+    <string name="message">বার্তা</string>
+    <string name="content">বিষয়বস্তু</string>
+    <string name="today">আজ</string>
+    <string name="tomorrow">আগামীকাল</string>
+    <string name="according_to_timing">সময় অনুযায়ী</string>
+    <string name="untitled">শিরোনামবিহীন</string>
+    <string name="hue">হিউ</string>
+    <string name="saturation">স্যাচুরেশন</string>
+    <string name="brightness">উজ্জ্বলতা</string>
+    <string name="shades">শেড</string>
+    <string name="complementary">পরিপূরক</string>
+    <string name="task_placeholder">কাজ..</string>
+    <string name="task_cannot_be_empty">কাজ খালি রাখা যাবে না!</string>
+    <string name="of">এর মধ্যে</string>
+    <string name="something_wrong_with_file">ফাইলে কিছু সমস্যা আছে</string>
+    <string name="could_not_load_any_information">মিডিয়া ফাইলের তথ্য লোড করা যায়নি।</string>
+    <string name="no_file_path_provided">কোনো ফাইল পাথ দেওয়া হয়নি।</string>
+    <string name="security_error_processing_file">ফাইল প্রক্রিয়াকরণে নিরাপত্তা ত্রুটি</string>
+    <string name="an_unexpected_error_occurred">একটি অপ্রত্যাশিত ত্রুটি ঘটেছে</string>
+    <string name="could_not_retrieve_any_information">এই ভিডিও ফাইলের তথ্য পাওয়া যায়নি।</string>
+    <string name="error_reading_metadata">মিডিয়া মেটাডেটা পড়তে ত্রুটি</string>
+    <string name="could_not_read_exif_data">EXIF ডেটা পড়া যায়নি</string>
+    <string name="error_reading_basic_file_info">মৌলিক ফাইল তথ্য পড়তে ত্রুটি</string>
+    <string name="file_does_not_exist">ফাইলটি বিদ্যমান নেই</string>
+    <string name="error">ত্রুটি</string>
+    <string name="loading_media_info">মিডিয়া তথ্য লোড হচ্ছে…</string>
+    <string name="no_metadata_available_for_this_document">এই ডকুমেন্টের জন্য কোনো মেটাডেটা পাওয়া যায়নি।</string>
+    <string name="could_not_read_pdf_metadata">PDF মেটাডেটা পড়া যায়নি</string>
+    <string name="cannot_read_file">ফাইলটি পড়া যাচ্ছে না</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">ছবির মাত্রা ডিকোড করা যায়নি বা অবৈধ ফরম্যাট।</string>
+    <string name="error_during_dimension_decoding">মাত্রা ডিকোড করার সময় ত্রুটি</string>
+    <string name="error_reading_exif_data">EXIF ডেটা পড়তে ত্রুটি</string>
+    <string name="duplicate">ডুপ্লিকেট</string>
+    <string name="send">পাঠান</string>
+    <string name="print">প্রিন্ট করুন</string>
+    <string name="cleaned">পরিষ্কার করা হয়েছে</string>
+    <string name="cleared">সাফ করা হয়েছে</string>
+    <string name="media_deleted">মিডিয়া মুছে ফেলা হয়েছে!</string>
+    <string name="jotting">নোট নেওয়া হচ্ছে</string>
+    <string name="appwidget_text">উদাহরণ</string>
+    <string name="add_widget">উইজেট যোগ করুন</string>
+    <string name="app_widget_description">এটি একটি অ্যাপ উইজেটের বিবরণ</string>
+    <string name="quick_widget_description">এটি একটি দ্রুত উইজেট লেআউট</string>
+    <string name="creator_widget_description">এটি একটি ক্রিয়েটর লেআউট উইজেট</string>
+    <string name="notes_list_description">এটি একটি নোটের তালিকা</string>
+    <string name="record_deleted">রেকর্ড মুছে ফেলা হয়েছে!</string>
+</resources>

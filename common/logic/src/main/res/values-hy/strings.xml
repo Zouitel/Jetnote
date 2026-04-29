@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Նշումներ</string>
+    <string name="screen_chat">AI Չաթ</string>
+    <string name="screen_tags">Պիտակներ</string>
+    <string name="screen_settings">Կարգավորումներ</string>
+    <string name="screen_archive">Արխիվ</string>
+    <string name="screen_about">Մեր մասին</string>
+    <string name="screen_feedback">Հետադարձ կապ</string>
+    <string name="share_app">Կիսվել այս հավելվածով</string>
+    <string name="label_more">ավելին</string>
+    <string name="label_less">պակաս</string>
+    <string name="msg_deleted">ջնջված է</string>
+    <string name="action_undo">Հետարկել</string>
+    <string name="tag_placeholder">Պիտակ..</string>
+    <string name="tag_cannot_be_empty">Պիտակը չի կարող դատարկ լինել!</string>
+    <string name="archive">Արխիվ</string>
+    <string name="deleted">ջնջված է!</string>
+    <string name="erase_notes">Ջնջե՞լ նշումները</string>
+    <string name="confirm_erase_notes">"Աղբարկղում գտնվող բոլոր նշումները կջնջվեն անդառնալիորեն։"</string>
+    <string name="search_in_notes">"Որոնել նշումներում.."</string>
+    <string name="select_layout">"Ընտրել դասավորությունը"</string>
+    <string name="settings">"Կարգավորումներ"</string>
+    <string name="account_sync">"Հաշվի համաժամեցում"</string>
+    <string name="account_sync_description">"
+                                Այս հավելվածի համար Google Drive-ի
+                                հաշվի համաժամեցումը միացնելը թույլ է
+                                տալիս անխափան կերպով կրկնօրինակել
+                                և համաժամեցնել հավելվածի տվյալները,
+                                ինչպես նշումներն ու կարգավորումները,
+                                ապահովելով ձեր տվյալների անվտանգությունը։
+        "</string>
+    <string name="assistant_configuration">"Օգնականի կարգավորում"</string>
+    <string name="assistant_configuration_description">"
+                                AI օգնականը արհեստական բանականությամբ
+                                աշխատող ծրագրային ապահովում է, որը
+                                նախատեսված է այս հավելվածում բազմազան
+                                առաջադրանքներ կատարելիս ձեզ օգնելու
+                                համար։ Այս օգնականները հասկանում և
+                                արձագանքում են բնական լեզվին, ինչը
+                                թույլ է տալիս շփվել նրանց հետ
+                                պատկերի կամ տեքստի միջոցով։
+                            "</string>
+    <string name="dark_mode">"Մուգ ռեժիմ"</string>
+    <string name="dark_mode_description">"
+                                Այս ռեժիմը համակարգի մակարդակի
+                                կարգավորում է, որը Android հավելվածի
+                                ինտերֆեյսի ֆոնի գունային սխեման
+                                փոխում է ավելի մուգ գույների։
+                                Նախատեսված է աչքերի հոգնածությունը
+                                նվազեցնելու, հասանելիությունը
+                                բարելավելու, մարտկոցի կյանքը
+                                երկարացնելու և օգտատիրոջ փորձը
+                                բարելավելու համար։
+                            "</string>
+    <string name="sound_effect">"Ձայնային էֆեկտ"</string>
+    <string name="sound_effect_description">"
+                                Jetnote հավելվածի համատեքստում
+                                \'Ձայնային էֆեկտ\' գործառույթն
+                                ապահովում է ձայնային հետադարձ կապ
+                                օգտատերերի համար, երբ նրանք
+                                փոխազդում են կոճակների և ինտերֆեյսի
+                                այլ տարրերի հետ։ Սա բջջային
+                                հավելվածների մշակման ընդհանուր
+                                պրակտիկա է, որն օգտատիրոջ
+                                փորձն ավելի ինտերակտիվ
+                                և գրավիչ է դարձնում։
+                            "</string>
+    <string name="layouts">"Դասավորություններ"</string>
+    <string name="layouts_description">"
+                                Դասավորությունները Android
+                                հավելվածներում բովանդակությունը
+                                կազմակերպելու և ցուցադրելու
+                                հիմքն են։ Դրանք սահմանում են
+                                էկրանի ինտերֆեյսի տարրերի
+                                կառուցվածքն ու դասավորությունը։
+                            "</string>
+    <string name="sort_notes">"Դասավորել նշումները"</string>
+    <string name="default_sort">"կանխադրված"</string>
+    <string name="name_sort">"անուն"</string>
+    <string name="oldest_sort">"հնագույն"</string>
+    <string name="newest_sort">"նորագույն"</string>
+    <string name="priority_sort">"առաջնահերթություն"</string>
+    <string name="zen_mode">"Zen ռեժիմ"</string>
+    <string name="zen_mode_description">"
+                                Zen ռեժիմը (լրիվ էկրան) ցուցադրման
+                                կարգավորում է, որը թույլ է տալիս
+                                հավելվածին զբաղեցնել ամբողջ էկրանը՝
+                                թաքցնելով բոլոր մյուս ինտերֆեյսի
+                                տարրերը, ինչպես գործիքների վահանակները,
+                                ընտրացանկերը և օպերացիոն համակարգի
+                                առաջադրանքների տողը։
+                            "</string>
+    <string name="shake">"Թափահարել հաղորդելու համար"</string>
+    <string name="shake_description">"
+                              Հարմար գործառույթ է, որը թույլ է տալիս
+                              օգտատերերին հետադարձ կապ կամ
+                              սխալների հաղորդման գործընթաց
+                              սկսել՝ պարզապես ֆիզիկապես
+                              թափահարելով Android սարքը։
+                              Փոխարեն \'Ուղարկել հետադարձ կապ\'
+                              կամ \'Հաղորդել սխալ\' գտնելու
+                              համար մի քանի ընտրացանկերով
+                              անցնելու։
+                            "</string>
+    <string name="block_screenshot">"Արգելափակել սքրինշոթը"</string>
+    <string name="block_screenshot_description">"
+                                Սքրինշոթների արգելափակումը
+                                անվտանգության միջոց է, որը
+                                թույլ չի տալիս օգտատերերին
+                                հավելվածի բովանդակության
+                                սքրինշոթներ անել։ Հաճախ
+                                օգտագործվում է բանկային
+                                տվյալների, անձնական տեղեկությունների
+                                կամ հեղինակային իրավունքով
+                                պաշտպանված նյութի պաշտպանության
+                                համար։
+                            "</string>
+    <string name="lock_mode">"Կողպման ռեժիմ"</string>
+    <string name="lock_mode_description">"
+                                Այս գործառույթն ուժեղացնում է
+                                հավելվածի անվտանգությունը՝
+                                բովանդակությունը մուտք գործելուց
+                                առաջ օգտատերերից
+                                նույնականացում պահանջելով։
+                                Դա սովորաբար ձեռք է բերվում
+                                սարքի ներկառուցված
+                                անվտանգության գործառույթների
+                                միջոցով, ինչպիսիք են
+                                մատնահետք, PIN կամ
+                                օրինակելի ապակողպումը։
+                            "</string>
+    <string name="licenses">"Լիցենզիաներ"</string>
+    <string name="licenses_description">"
+                                    Այս լիցենզիաները ներառված են
+                                    համապատասխան հեղինակների
+                                    բաշխման պահանջները
+                                    կատարելու և ծրագրային
+                                    ապահովման ճարտարապետության
+                                    վերաբերյալ թափանցիկություն
+                                    ապահովելու համար։
+                                    "</string>
+    <string name="title">"Վերնագիր"</string>
+    <string name="note">"Նշում"</string>
+    <string name="failed_to_save_document">"Չհաջողվեց պահպանել փաստաթուղթը։"</string>
+    <string name="gallery">"Պատկերասրահ"</string>
+    <string name="audio">Ձայն</string>
+    <string name="permission_denied">Թույլտվությունը մերժված է!</string>
+    <string name="take_photo">Լուսանկարել</string>
+    <string name="video_capture">Տեսանկարահանել</string>
+    <string name="recorder">Ձայնագրիչ</string>
+    <string name="document">Փաստաթուղթ</string>
+    <string name="scanner">Սկաներ</string>
+    <string name="tasks">Առաջադրանքներ</string>
+    <string name="tags">Պիտակներ</string>
+    <string name="reminder">Հիշեցում</string>
+    <string name="priority">Առաջնահերթություն</string>
+    <string name="low_priority">Ցածր</string>
+    <string name="medium_priority">Միջին</string>
+    <string name="high_priority">Բարձր</string>
+    <string name="urgent_priority">Շտապ</string>
+    <string name="non_priority">Առանց</string>
+    <string name="created">Ստեղծված</string>
+    <string name="edited">Խմբագրված</string>
+    <string name="types">Տեսակներ</string>
+    <string name="media">Մեդիա</string>
+    <string name="medias">Մեդիա ֆայլեր</string>
+    <string name="colour">Գույն</string>
+    <string name="colours">Գույներ</string>
+    <string name="search_within">Որոնել</string>
+    <string name="issue_title">Խնդրի վերնագիր*</string>
+    <string name="issue_description">Խնդրի նկարագրություն (կամընտիր)</string>
+    <string name="noAccount">Մուտք գործել առանց հաշվի</string>
+    <string name="screenshot_selected">✓ Սքրինշոթն ընտրված է</string>
+    <string name="drive_submit">Ուղարկելիս կբեռնվի Drive-ի վրա</string>
+    <string name="select_screenshot">Ընտրել սքրինշոթ</string>
+    <string name="system_logs">Ներառե՞լ համակարգի գրանցամատյանները</string>
+    <string name="find_an_issue">Խնդի՞ր եք գտել</string>
+    <string name="take_a_screenshot">Մի մոռացեք սքրինշոթ անել։</string>
+    <string name="report_an_issue">Հաղորդել խնդրի մասին!</string>
+    <string name="bug">Սխալ</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android համակարգի գրանցամատյաններ (Logcat) հետադարձ կապի հաշվետվությունում</string>
+    <string name="logs_description">Android-ի համակարգի գրանցամատյանները ժամանակի դրոշմով հաղորդագրությունների հոսք են օպերացիոն համակարգից և միջուկից:\n    | Երբ օգտատերը հանդիպում է խնդրի (հավելվածի կախման, սառեցման կամ անսպասելի վարքի), գրանցամատյանները գրանցում են խնդրի շուրջ իրադարձությունները՝ մշակողներին ախտորոշման համար անհրաժեշտ համատեքստ տրամադրելով։</string>
+    <string name="label_bug">Սխալ</string>
+    <string name="label_feature">Գործառույթ</string>
+    <string name="label_invalid">Անվավեր</string>
+    <string name="label_question">Հարց</string>
+    <string name="label_security">Անվտանգություն</string>
+    <string name="failed">Ձախողվել է</string>
+    <string name="submit_feedback">Ուղարկել հետադարձ կապ!</string>
+    <string name="uploading_screenshot">Սքրինշոթը բեռնվում է…</string>
+    <string name="creating_github_issue">GitHub issue-ն ստեղծվում է…</string>
+    <string name="upload_faild">Բեռնումը ձախողվեց…</string>
+    <string name="upload_failed">Բեռնումը ձախողվեց…</string>
+    <string name="issue_crea">Issue-ն ստեղծվեց։</string>
+    <string name="issue_created">Issue-ն ստեղծվեց!</string>
+    <string name="log_out">Դուրս գալ</string>
+    <string name="hi">Բարև</string>
+    <string name="add_account">Ավելացնել մեկ այլ հաշիվ</string>
+    <string name="manage_account">Կառավարել հաշիվը</string>
+    <string name="upload_data">Բեռնել տվյալները</string>
+    <string name="download_data">Ներբեռնել տվյալները</string>
+    <string name="firebase_authentication_failed">Firebase-ի նույնականացումը ձախողվեց</string>
+    <string name="sign_in_failed">Google-ով մուտք գործելը ձախողվեց</string>
+    <string name="please_wait">Մուտք է գործվում, խնդրում ենք սպասեք…</string>
+    <string name="sync_title">Մուտք գործեք համաժամեցման համար</string>
+    <string name="sync_description">Մուտք գործեք ձեր Google հաշվով՝ բոլոր սարքերում նշումները կրկնօրինակելու և համաժամեցնելու համար։</string>
+    <string name="current_account">Ընթացիկ հաշիվ</string>
+    <string name="no_name">Անուն չկա</string>
+    <string name="no_email">Էլ. փոստ չկա</string>
+    <string name="sign_out">Դուրս գալ</string>
+    <string name="sign_in_with_google">Մուտք գործել Google-ով</string>
+    <string name="ai_models">AI մոդելներ</string>
+    <string name="load_more">Բեռնել ավելին</string>
+    <string name="available_models">Հասանելի մոդելներ</string>
+    <string name="assistant_settings">Օգնականի կարգավորումներ</string>
+    <string name="learning_mode">Ուսուցման ռեժիմ</string>
+    <string name="learning_mode_description">"
+                    Նշված օրինակներից սովորած
+                    օրինաչափությունների հիման վրա
+                    նոր, չտեսնված տվյալների
+                    ելքը կանխատեսել։
+                "</string>
+    <string name="temperat">Ջերմաստիճան</string>
+    <string name="temperature">Ջերմաստիճան</string>
+    <string name="temperature_description">"
+           Կառավարում է ելքի պատահականությունը։
+           Ավելի բարձր արժեքներն ավելի ստեղծագործ են։
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Կառավարում է, թե որ տոկենները են հաշվի առնվում ելքի համար։
+            </string>
+    <string name="context_message_size">Համատեքստի հաղորդագրությունների չափը</string>
+    <string name="context_message_size_description">
+            Համատեքստում ներառվող նախորդ
+            հաղորդագրությունների առավելագույն քանակը։
+        </string>
+    <string name="stream_output">Հոսքային ելք</string>
+    <string name="stream_output_description">Ցուցադրել պատասխանը դրա ստեղծման ընթացքում։</string>
+    <string name="thinking_budget">Մտածողության բյուջե</string>
+    <string name="thinking_budget_description">
+                            Սահմանափակում է պատասխանի համար
+                            օգտագործվող հաշվողական ռեսուրսները։
+                        </string>
+    <string name="system_prompt">Համակարգի հուշում</string>
+    <string name="prompt">Հուշում..</string>
+    <string name="properties">Հատկություններ</string>
+    <string name="quick_messages">Արագ հաղորդագրություններ</string>
+    <string name="quick_messages_description">Կարգավորել արագ հաղորդագրությունների դյուրանցումները։</string>
+    <string name="regular_expressions">Կանոնավոր արտահայտություններ</string>
+    <string name="regular_expressions_description">
+                            Սահմանել regex օրինաչափություններ
+                            ուղարկելուց/ստանալուց առաջ
+                            հաղորդագրությունները փոխակերպելու համար։
+                        </string>
+    <string name="headers">Վերնագրեր</string>
+    <string name="headers_description">
+                            Սրանք հիմնական-արժեքի զույգեր են,
+                            որոնք ավելացվում են հարցման
+                            վերնագրի բլոկին։ Սովորաբար
+                            օգտագործվում են նույնականացում
+                            ապահովելու, բովանդակության տեսակը
+                            նշելու կամ հարցման մասին
+                            մետատվյալներ փոխանցելու համար։
+                        </string>
+    <string name="bodies">Մարմիններ</string>
+    <string name="bodies_description">
+                            Վերաբերում է հարցման ներսում
+                            ուղարկվող տվյալների բեռին
+                            (JSON կառուցվածք)։ Սա
+                            AI մոդելին մուտքեր ուղարկելու
+                            հիմնական միջոցն է։
+                        </string>
+    <string name="memory">Հիշողություն</string>
+    <string name="memory_description">
+                            Թույլ տալ օգնականին հիշել
+                            զրույցի նախորդ հերթերը։
+                        </string>
+    <string name="chats_reference">Վերջին չաթերի հղում</string>
+    <string name="chats_reference_description">
+                        Ավելի լավ համատեքստային պատասխանների
+                        համար հղում կատարել ձեր
+                        վերջին չաթերի տվյալներին։
+                        </string>
+    <string name="javascript">JavaScript շարժիչ</string>
+    <string name="javascript_description">
+                            Հաշվարկների և սկրիպտավորման
+                            համար QuickJS շարժիչով
+                            JavaScript կոդ գործարկել։
+                        </string>
+    <string name="reset">Վերականգնել կարգավորումները!</string>
+    <string name="providers">Մատակարարներ</string>
+    <string name="ask">Հարցնել</string>
+    <string name="add_model"><![CDATA[<- Ավելացնել AI մոդել]]></string>
+    <string name="delete">Ջնջել</string>
+    <string name="options">Ընտրանքներ</string>
+    <string name="retitle">Վերանվանել</string>
+    <string name="assistant">Օգնական</string>
+    <string name="new_chat">Նոր չաթ</string>
+    <string name="files">Ֆայլեր</string>
+    <string name="audios">Ձայնային ֆայլեր</string>
+    <string name="videos">Տեսանյութեր</string>
+    <string name="camera">Տեսախցիկ</string>
+    <string name="pictures">Նկարներ</string>
+    <string name="provider_settings">Մատակարարի կարգավորումներ</string>
+    <string name="api_key">API բանալի</string>
+    <string name="base_url">Հիմնական URL</string>
+    <string name="model_name">Մոդելի անուն</string>
+    <string name="modalities">Մոդալություններ</string>
+    <string name="tools">Գործիքներ</string>
+    <string name="reasoning">Տրամաբանություն</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Հաշվի մնացորդ</string>
+    <string name="api_path">API ուղի..</string>
+    <string name="json_key">Json բանալի..</string>
+    <string name="network_proxy">Ցանցային պրոքսի</string>
+    <string name="host">Հոստ..</string>
+    <string name="username_option">Օգտատիրոջ անուն (կամընտիր)..</string>
+    <string name="pass_option">Գաղտնաբառ (կամընտիր)..</string>
+    <string name="service_account">Ծառայության հաշիվ @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Անձնական բանալի..</string>
+    <string name="location">Գտնվելու վայր..</string>
+    <string name="project_uid">Նախագծի UID..</string>
+    <string name="details">Մանրամասներ</string>
+    <string name="model_type">Մոդելի տեսակ</string>
+    <string name="input_modalities">Մուտքային մոդալություններ</string>
+    <string name="output_modalities">Ելքային մոդալություններ</string>
+    <string name="abilities">Հնարավորություններ</string>
+    <string name="provider_override">Ավելացնել մատակարարի վերասահմանում</string>
+    <string name="provider_override_description">
+                            Կարգավորել այս կոնկրետ մոդելի
+                            համար հատուկ մատակարարի
+                            կարգավորումներ։ Օգտագործում է
+                            մոդելի հիմնական մատակարարի
+                            ընդհանուր հատկությունները։
+                        </string>
+    <string name="build_tools">Կառուցման գործիքներ</string>
+    <string name="build_tools_description">
+                            Այս գործիքներն API-ի կողմից
+                            ուղղակիորեն են տրամադրվում՝
+                            առանց հավելվածի աջակցության
+                            պահանջի։ Այս գործառույթը
+                            ներկայումս աջակցվում է
+                            միայն Gemini API-ի կողմից։
+                        </string>
+    <string name="google_search">Որոնել</string>
+    <string name="google_search_description">Միացնել Google Search ինտեգրումը</string>
+    <string name="url_context">URL համատեքստ</string>
+    <string name="url_context_description">Միացնել URL համատեքստի մշակումը</string>
+    <string name="find">Գտնել</string>
+    <string name="replace">Փոխարինել</string>
+    <string name="effecting_scopes">Ազդեցության շրջանակներ</string>
+    <string name="user">օգտատեր</string>
+    <string name="visual_only">միայն տեսողական</string>
+    <string name="body">Մարմին</string>
+    <string name="key">բանալի</string>
+    <string name="value">Արժեք</string>
+    <string name="header">Վերնագիր.</string>
+    <string name="reset_description">Վերականգնել օգնականի կարգավորումները կանխադրված ռեժիմի։</string>
+    <string name="save_changes">Պահպանե՞լ փոփոխությունները</string>
+    <string name="save_changes_description">Դուք ունեք չպահպանված փոփոխություններ։ Ցանկանու՞մ եք պահպանել դրանք մեկնելուց առաջ:</string>
+    <string name="dont_save">Չպահպանել</string>
+    <string name="save">Պահպանել</string>
+    <string name="links">Հղումներ</string>
+    <string name="reminders">Հիշեցումներ</string>
+    <string name="priorities">Առաջնահերթություններ</string>
+    <string name="ai_chat">AI Չաթ</string>
+    <string name="auto">ավտոմատ</string>
+    <string name="light">թեթև</string>
+    <string name="medium">միջին</string>
+    <string name="heavy">ծանր</string>
+    <string name="date">ամսաթիվ</string>
+    <string name="time">ժամ</string>
+    <string name="date_and_time">ամսաթիվ և ժամ</string>
+    <string name="local">տեղական</string>
+    <string name="timezone">ժամային գոտի</string>
+    <string name="system_version">համակարգի տարբերակ</string>
+    <string name="device_info">սարքի տեղեկատվություն</string>
+    <string name="battery_level">մարտկոցի մակարդակ</string>
+    <string name="insert">Տեղադրել</string>
+    <string name="confirm">Հաստատել</string>
+    <string name="message">Հաղորդագրություն</string>
+    <string name="content">Բովանդակություն</string>
+    <string name="today">Այսօր</string>
+    <string name="tomorrow">Վաղը</string>
+    <string name="according_to_timing">Ըստ ժամանակացույցի</string>
+    <string name="untitled">Անվերնագիր</string>
+    <string name="hue">Երանգ</string>
+    <string name="saturation">Հագեցվածություն</string>
+    <string name="brightness">Պայծառություն</string>
+    <string name="shades">Ստվերներ</string>
+    <string name="complementary">Լրացնող</string>
+    <string name="task_placeholder">Առաջադրանք..</string>
+    <string name="task_cannot_be_empty">Առաջադրանքը չի կարող դատարկ լինել!</string>
+    <string name="of">-ից</string>
+    <string name="something_wrong_with_file">Ֆայլի հետ ինչ-որ բան այն չէ</string>
+    <string name="could_not_load_any_information">Չհաջողվեց բեռնել մեդիա ֆայլի տեղեկատվությունը։</string>
+    <string name="no_file_path_provided">Ֆայլի ուղի նշված չէ։</string>
+    <string name="security_error_processing_file">Անվտանգության սխալ ֆայլի մշակման ժամանակ</string>
+    <string name="an_unexpected_error_occurred">Տեղի ունեցավ անսպասելի սխալ</string>
+    <string name="could_not_retrieve_any_information">Չհաջողվեց ստանալ այս տեսանյութ ֆայլի տեղեկատվությունը։</string>
+    <string name="error_reading_metadata">Սխալ մեդիայի մետատվյալները կարդալիս</string>
+    <string name="could_not_read_exif_data">Չհաջողվեց կարդալ EXIF տվյալները</string>
+    <string name="error_reading_basic_file_info">Սխալ ֆայլի հիմնական տեղեկատվությունը կարդալիս</string>
+    <string name="file_does_not_exist">Ֆայլը գոյություն չունի</string>
+    <string name="error">Սխալ</string>
+    <string name="loading_media_info">Բեռնվում են մեդիայի տեղեկատվությունը…</string>
+    <string name="no_metadata_available_for_this_document">Այս փաստաթղթի համար մետատվյալ հասանելի չէ։</string>
+    <string name="could_not_read_pdf_metadata">Չհաջողվեց կարդալ PDF մետատվյալները</string>
+    <string name="cannot_read_file">Հնարավոր չէ կարդալ ֆայլը</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Չհաջողվեց վերծանել պատկերի չափերը կամ անվավեր ձևաչափ։</string>
+    <string name="error_during_dimension_decoding">Սխալ չափերի վերծանման ժամանակ</string>
+    <string name="error_reading_exif_data">Սխալ EXIF տվյալները կարդալիս</string>
+    <string name="duplicate">Կրկնօրինակել</string>
+    <string name="send">Ուղարկել</string>
+    <string name="print">Տպել</string>
+    <string name="cleaned">Մաքրված է</string>
+    <string name="cleared">Ջնջված է</string>
+    <string name="media_deleted">մեդիան ջնջված է!</string>
+    <string name="jotting">Նշումներ կատարում</string>
+    <string name="appwidget_text">ՕՐԻՆԱԿ</string>
+    <string name="add_widget">Ավելացնել վիջեթ</string>
+    <string name="app_widget_description">Սա հավելվածի վիջեթի նկարագրությունն է</string>
+    <string name="quick_widget_description">Սա արագ վիջեթ դասավորությունն է</string>
+    <string name="creator_widget_description">Սա ստեղծողի դասավորության վիջեթն է</string>
+    <string name="notes_list_description">Սա նշումների ցանկ է</string>
+    <string name="record_deleted">գրառումը ջնջված է!</string>
+</resources>

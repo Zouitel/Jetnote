@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -25,8 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.ai.provider.Model
@@ -72,24 +75,26 @@ fun FullModels(
             .reportable(settings.isShakable)
             .cloudy(enabled = bottomNav.isVisible),
         {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton({
-                        navigator?.pop()
-                    }) {
-                        Icon(painterResource(CommonIcons.ARROW_LEFT), null)
-                    }
-                },
-                title = { Text(stringResource(R.string.ai_models)) },
-                actions = {
-                    IconButton({
-                        navigator?.push(ProvidersScreen())
-                    }) {
-                        Icon(painterResource(CommonIcons.PLUS), null)
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                TopAppBar(
+                    navigationIcon = {
+                        IconButton({
+                            navigator?.pop()
+                        }) {
+                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                        }
+                    },
+                    title = { Text(stringResource(R.string.ai_models)) },
+                    actions = {
+                        IconButton({
+                            navigator?.push(ProvidersScreen())
+                        }) {
+                            Icon(painterResource(CommonIcons.PLUS), null)
+                        }
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            }
         },
         snackbarHost = {
             SnackbarHost(snackbarState) { data ->

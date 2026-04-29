@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Catatan</string>
+    <string name="screen_chat">Obrolan AI</string>
+    <string name="screen_tags">Tag</string>
+    <string name="screen_settings">Pengaturan</string>
+    <string name="screen_archive">Arsip</string>
+    <string name="screen_about">Tentang</string>
+    <string name="screen_feedback">Masukan</string>
+    <string name="share_app">Bagikan Aplikasi Ini</string>
+    <string name="label_more">lebih</string>
+    <string name="label_less">kurang</string>
+    <string name="msg_deleted">dihapus</string>
+    <string name="action_undo">Urungkan</string>
+    <string name="tag_placeholder">Tag..</string>
+    <string name="tag_cannot_be_empty">Tag tidak boleh kosong!</string>
+    <string name="archive">Arsip</string>
+    <string name="deleted">dihapus!</string>
+    <string name="erase_notes">Hapus Catatan?</string>
+    <string name="confirm_erase_notes">"Semua catatan di tempat sampah akan dihapus permanen."</string>
+    <string name="search_in_notes">"Cari di catatan.."</string>
+    <string name="select_layout">"Pilih tata letak"</string>
+    <string name="settings">"Pengaturan"</string>
+    <string name="account_sync">"Sinkronisasi Akun"</string>
+    <string name="account_sync_description">"
+                                Mengaktifkan sinkronisasi akun Google Drive
+                                untuk aplikasi ini memungkinkan Anda
+                                mencadangkan dan menyinkronkan data
+                                aplikasi, seperti catatan dan pengaturan,
+                                dengan lancar, memastikan data Anda aman.
+        "</string>
+    <string name="assistant_configuration">"Konfigurasi Asisten"</string>
+    <string name="assistant_configuration_description">"
+                                Asisten AI adalah program perangkat lunak
+                                yang didukung kecerdasan buatan, dirancang
+                                untuk membantu Anda dengan berbagai tugas
+                                di aplikasi ini. Asisten ini memahami dan
+                                merespons bahasa alami, memungkinkan Anda
+                                berinteraksi melalui gambar atau teks.
+                            "</string>
+    <string name="dark_mode">"Mode Gelap"</string>
+    <string name="dark_mode_description">"
+                                Mode ini adalah pengaturan seluruh sistem
+                                yang mengubah skema latar belakang antarmuka
+                                aplikasi Android Anda ke warna yang lebih gelap.
+                                Dirancang untuk mengurangi ketegangan mata,
+                                meningkatkan aksesibilitas, menghemat baterai,
+                                dan meningkatkan pengalaman pengguna.
+                            "</string>
+    <string name="sound_effect">"Efek Suara"</string>
+    <string name="sound_effect_description">"
+                                Dalam konteks aplikasi Jetnote, fitur
+                                \'Efek Suara\' memberikan umpan balik
+                                pendengaran kepada pengguna saat mereka
+                                berinteraksi dengan tombol dan elemen UI
+                                lainnya. Ini adalah praktik umum dalam
+                                pengembangan aplikasi mobile untuk membuat
+                                pengalaman pengguna lebih interaktif dan
+                                menarik.
+                            "</string>
+    <string name="layouts">"Tata Letak"</string>
+    <string name="layouts_description">"
+                                Tata letak sangat penting untuk mengatur
+                                dan menampilkan konten di aplikasi Android.
+                                Tata letak mendefinisikan struktur dan
+                                susunan elemen UI di layar.
+                            "</string>
+    <string name="sort_notes">"Urutkan Catatan"</string>
+    <string name="default_sort">"bawaan"</string>
+    <string name="name_sort">"nama"</string>
+    <string name="oldest_sort">"terlama"</string>
+    <string name="newest_sort">"terbaru"</string>
+    <string name="priority_sort">"prioritas"</string>
+    <string name="zen_mode">"Mode Zen"</string>
+    <string name="zen_mode_description">"
+                                Mode Zen (mode layar penuh) adalah
+                                pengaturan tampilan yang memungkinkan
+                                aplikasi menempati seluruh layar,
+                                menyembunyikan semua elemen antarmuka
+                                lainnya seperti bilah alat, menu, dan
+                                bilah tugas sistem operasi.
+                            "</string>
+    <string name="shake">"Kocok untuk Melapor"</string>
+    <string name="shake_description">"
+                              Ini adalah fitur yang memudahkan pengguna
+                              memulai proses umpan balik atau pelaporan
+                              bug hanya dengan menggoyangkan perangkat
+                              Android mereka secara fisik. Daripada
+                              menavigasi beberapa menu untuk menemukan
+                              \'Kirim Masukan\' atau \'Laporkan Bug\'.
+                            "</string>
+    <string name="block_screenshot">"Blokir Tangkapan Layar"</string>
+    <string name="block_screenshot_description">"
+                                Pemblokiran tangkapan layar adalah langkah
+                                keamanan yang mencegah pengguna mengambil
+                                tangkapan layar konten aplikasi Anda.
+                                Sering digunakan untuk melindungi informasi
+                                sensitif, seperti detail perbankan, data
+                                pribadi, atau materi yang dilindungi hak cipta.
+                            "</string>
+    <string name="lock_mode">"Mode Kunci"</string>
+    <string name="lock_mode_description">"
+                                Fitur ini meningkatkan keamanan aplikasi
+                                dengan mengharuskan pengguna melakukan
+                                autentikasi sebelum mengakses konten.
+                                Biasanya dicapai menggunakan fitur keamanan
+                                bawaan perangkat, seperti sidik jari,
+                                PIN, atau pola buka kunci.
+                            "</string>
+    <string name="licenses">"Lisensi"</string>
+    <string name="licenses_description">"
+                                    Lisensi ini disertakan untuk mematuhi
+                                    persyaratan distribusi penulis masing-masing
+                                    dan memberikan transparansi mengenai
+                                    arsitektur perangkat lunak.
+                                    "</string>
+    <string name="title">"Judul"</string>
+    <string name="note">"Catatan"</string>
+    <string name="failed_to_save_document">"Gagal menyimpan dokumen."</string>
+    <string name="gallery">"Galeri"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Izin Ditolak!</string>
+    <string name="take_photo">Ambil Foto</string>
+    <string name="video_capture">Rekam Video</string>
+    <string name="recorder">Perekam</string>
+    <string name="document">Dokumen</string>
+    <string name="scanner">Pemindai</string>
+    <string name="tasks">Tugas</string>
+    <string name="tags">Tag</string>
+    <string name="reminder">Pengingat</string>
+    <string name="priority">Prioritas</string>
+    <string name="low_priority">Rendah</string>
+    <string name="medium_priority">Sedang</string>
+    <string name="high_priority">Tinggi</string>
+    <string name="urgent_priority">Mendesak</string>
+    <string name="non_priority">Tidak Ada</string>
+    <string name="created">Dibuat</string>
+    <string name="edited">Diedit</string>
+    <string name="types">Jenis</string>
+    <string name="media">Media</string>
+    <string name="medias">File Media</string>
+    <string name="colour">Warna</string>
+    <string name="colours">Warna-warni</string>
+    <string name="search_within">Cari di dalam</string>
+    <string name="issue_title">Judul Masalah*</string>
+    <string name="issue_description">Deskripsi Masalah (Opsional)</string>
+    <string name="noAccount">Masuk Tanpa Akun</string>
+    <string name="screenshot_selected">✓ Tangkapan layar dipilih</string>
+    <string name="drive_submit">Akan diunggah ke Drive saat dikirim</string>
+    <string name="select_screenshot">Pilih tangkapan layar</string>
+    <string name="system_logs">Sertakan log sistem?</string>
+    <string name="find_an_issue">Apakah Anda menemukan masalah?</string>
+    <string name="take_a_screenshot">Jangan lupa ambil tangkapan layar.</string>
+    <string name="report_an_issue">Laporkan masalah!</string>
+    <string name="bug">Bug</string>
+    <string name="logs_title">\\uD83D\\uDCiE Log Sistem Android (Logcat) dalam Laporan Masukan</string>
+    <string name="logs_description">Log sistem Android adalah aliran pesan bertanda waktu dari sistem operasi dan kernel.\n    | Ketika pengguna mengalami masalah (seperti crash, freeze, atau perilaku tak terduga pada aplikasi), log merekam kejadian di sekitar masalah, memberikan pengembang konteks yang diperlukan untuk diagnosis.</string>
+    <string name="label_bug">Bug</string>
+    <string name="label_feature">Fitur</string>
+    <string name="label_invalid">Tidak Valid</string>
+    <string name="label_question">Pertanyaan</string>
+    <string name="label_security">Keamanan</string>
+    <string name="failed">Gagal</string>
+    <string name="submit_feedback">Kirim Masukan!</string>
+    <string name="uploading_screenshot">Mengunggah tangkapan layar…</string>
+    <string name="creating_github_issue">Membuat issue GitHub…</string>
+    <string name="upload_faild">Unggahan Gagal…</string>
+    <string name="upload_failed">Unggahan Gagal…</string>
+    <string name="issue_crea">Issue dibuat.</string>
+    <string name="issue_created">Issue dibuat!</string>
+    <string name="log_out">Keluar</string>
+    <string name="hi">Halo</string>
+    <string name="add_account">Tambah Akun Lain</string>
+    <string name="manage_account">Kelola Akun</string>
+    <string name="upload_data">Unggah Data</string>
+    <string name="download_data">Unduh Data</string>
+    <string name="firebase_authentication_failed">Autentikasi Firebase gagal</string>
+    <string name="sign_in_failed">Masuk Google gagal</string>
+    <string name="please_wait">Sedang masuk, harap tunggu…</string>
+    <string name="sync_title">Masuk untuk Sinkronisasi</string>
+    <string name="sync_description">Masuk dengan Akun Google Anda untuk mencadangkan dan menyinkronkan catatan di semua perangkat Anda.</string>
+    <string name="current_account">Akun Saat Ini</string>
+    <string name="no_name">Tidak Ada Nama</string>
+    <string name="no_email">Tidak Ada Email</string>
+    <string name="sign_out">Keluar</string>
+    <string name="sign_in_with_google">Masuk dengan Google</string>
+    <string name="ai_models">Model AI</string>
+    <string name="load_more">Muat Lebih Banyak</string>
+    <string name="available_models">Model Tersedia</string>
+    <string name="assistant_settings">Pengaturan Asisten</string>
+    <string name="learning_mode">Mode Pembelajaran</string>
+    <string name="learning_mode_description">"
+                    Memprediksi output untuk data baru yang belum
+                    pernah dilihat berdasarkan pola yang dipelajari
+                    dari contoh berlabel.
+                "</string>
+    <string name="temperat">Suhu</string>
+    <string name="temperature">Suhu</string>
+    <string name="temperature_description">"
+           Mengontrol keacakan output.
+           Nilai lebih tinggi lebih kreatif.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Mengontrol token mana yang dipertimbangkan untuk output.
+            </string>
+    <string name="context_message_size">Ukuran Pesan Konteks</string>
+    <string name="context_message_size_description">
+            Jumlah maksimum pesan sebelumnya yang
+            disertakan dalam konteks.
+        </string>
+    <string name="stream_output">Output streaming</string>
+    <string name="stream_output_description">Tampilkan respons saat sedang dibuat.</string>
+    <string name="thinking_budget">Anggaran pemikiran</string>
+    <string name="thinking_budget_description">
+                            Membatasi sumber daya komputasi yang
+                            digunakan untuk respons.
+                        </string>
+    <string name="system_prompt">Prompt sistem</string>
+    <string name="prompt">Prompt..</string>
+    <string name="properties">Properti</string>
+    <string name="quick_messages">Pesan cepat</string>
+    <string name="quick_messages_description">Konfigurasi pintasan pesan cepat.</string>
+    <string name="regular_expressions">Ekspresi reguler</string>
+    <string name="regular_expressions_description">
+                            Tentukan pola regex untuk mengubah
+                            pesan sebelum mengirim/menerima.
+                        </string>
+    <string name="headers">Header</string>
+    <string name="headers_description">
+                            Ini adalah pasangan kunci-nilai yang
+                            ditambahkan ke blok header permintaan.
+                            Biasanya digunakan untuk autentikasi,
+                            menentukan jenis konten, atau meneruskan
+                            metadata tentang permintaan.
+                        </string>
+    <string name="bodies">Isi</string>
+    <string name="bodies_description">
+                            Merujuk pada muatan data (struktur JSON)
+                            yang dikirim dalam permintaan. Ini adalah
+                            cara utama mengirim input ke model AI.
+                        </string>
+    <string name="memory">Memori</string>
+    <string name="memory_description">
+                            Izinkan asisten mengingat giliran
+                            percakapan sebelumnya.
+                        </string>
+    <string name="chats_reference">Referensi Obrolan Terkini</string>
+    <string name="chats_reference_description">
+                        Referensikan data dari obrolan terkini untuk
+                        respons kontekstual yang lebih baik.
+                        </string>
+    <string name="javascript">Mesin JavaScript</string>
+    <string name="javascript_description">
+                            Jalankan kode JavaScript dengan mesin
+                            QuickJS untuk kalkulasi dan skripting.
+                        </string>
+    <string name="reset">Setel Ulang Pengaturan!</string>
+    <string name="providers">Penyedia</string>
+    <string name="ask">Tanya</string>
+    <string name="add_model"><![CDATA[<- Tambah model AI]]></string>
+    <string name="delete">Hapus</string>
+    <string name="options">Opsi</string>
+    <string name="retitle">Ganti Nama</string>
+    <string name="assistant">Asisten</string>
+    <string name="new_chat">Obrolan Baru</string>
+    <string name="files">File</string>
+    <string name="audios">Audio</string>
+    <string name="videos">Video</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Gambar</string>
+    <string name="provider_settings">Pengaturan Penyedia</string>
+    <string name="api_key">Kunci API</string>
+    <string name="base_url">URL Dasar</string>
+    <string name="model_name">Nama Model</string>
+    <string name="modalities">Modalitas</string>
+    <string name="tools">Alat</string>
+    <string name="reasoning">Penalaran</string>
+    <string name="respo">API Respons</string>
+    <string name="response_api">API Respons</string>
+    <string name="account_balance">Saldo Akun</string>
+    <string name="api_path">Jalur API..</string>
+    <string name="json_key">Kunci Json..</string>
+    <string name="network_proxy">Proksi Jaringan</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Nama Pengguna (Opsional)..</string>
+    <string name="pass_option">Kata Sandi (Opsional)..</string>
+    <string name="service_account">Akun layanan @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Kunci pribadi..</string>
+    <string name="location">Lokasi..</string>
+    <string name="project_uid">UID Proyek..</string>
+    <string name="details">Detail</string>
+    <string name="model_type">Jenis Model</string>
+    <string name="input_modalities">Modalitas Input</string>
+    <string name="output_modalities">Modalitas Output</string>
+    <string name="abilities">Kemampuan</string>
+    <string name="provider_override">Tambah penggantian penyedia</string>
+    <string name="provider_override_description">
+                            Konfigurasikan pengaturan penyedia kustom
+                            untuk model tertentu ini. Menggunakan
+                            properti umum dari penyedia utama model.
+                        </string>
+    <string name="build_tools">Alat Build</string>
+    <string name="build_tools_description">
+                            Alat-alat ini disediakan langsung oleh API
+                            tanpa memerlukan dukungan aplikasi.
+                            Fitur ini saat ini hanya didukung
+                            oleh Gemini API.
+                        </string>
+    <string name="google_search">Cari</string>
+    <string name="google_search_description">Aktifkan integrasi Google Search</string>
+    <string name="url_context">Konteks URL</string>
+    <string name="url_context_description">Aktifkan pemrosesan konteks URL</string>
+    <string name="find">Temukan</string>
+    <string name="replace">Ganti</string>
+    <string name="effecting_scopes">Cakupan yang berlaku</string>
+    <string name="user">pengguna</string>
+    <string name="visual_only">hanya visual</string>
+    <string name="body">Isi</string>
+    <string name="key">kunci</string>
+    <string name="value">Nilai</string>
+    <string name="header">Header.</string>
+    <string name="reset_description">Setel ulang pengaturan asisten ke mode bawaan.</string>
+    <string name="save_changes">Simpan perubahan?</string>
+    <string name="save_changes_description">Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin menyimpannya sebelum keluar?</string>
+    <string name="dont_save">Jangan Simpan</string>
+    <string name="save">Simpan</string>
+    <string name="links">Tautan</string>
+    <string name="reminders">Pengingat</string>
+    <string name="priorities">Prioritas</string>
+    <string name="ai_chat">Obrolan AI</string>
+    <string name="auto">otomatis</string>
+    <string name="light">ringan</string>
+    <string name="medium">sedang</string>
+    <string name="heavy">berat</string>
+    <string name="date">tanggal</string>
+    <string name="time">waktu</string>
+    <string name="date_and_time">tanggal dan waktu</string>
+    <string name="local">lokal</string>
+    <string name="timezone">zona waktu</string>
+    <string name="system_version">versi sistem</string>
+    <string name="device_info">info perangkat</string>
+    <string name="battery_level">level baterai</string>
+    <string name="insert">Sisipkan</string>
+    <string name="confirm">Konfirmasi</string>
+    <string name="message">Pesan</string>
+    <string name="content">Konten</string>
+    <string name="today">Hari Ini</string>
+    <string name="tomorrow">Besok</string>
+    <string name="according_to_timing">Sesuai jadwal</string>
+    <string name="untitled">Tanpa Judul</string>
+    <string name="hue">Rona</string>
+    <string name="saturation">Saturasi</string>
+    <string name="brightness">Kecerahan</string>
+    <string name="shades">Bayangan</string>
+    <string name="complementary">Komplementer</string>
+    <string name="task_placeholder">Tugas..</string>
+    <string name="task_cannot_be_empty">Tugas tidak boleh kosong!</string>
+    <string name="of">dari</string>
+    <string name="something_wrong_with_file">Ada yang salah dengan file</string>
+    <string name="could_not_load_any_information">Tidak dapat memuat informasi untuk file media.</string>
+    <string name="no_file_path_provided">Tidak ada jalur file yang diberikan.</string>
+    <string name="security_error_processing_file">Kesalahan keamanan saat memproses file</string>
+    <string name="an_unexpected_error_occurred">Terjadi kesalahan yang tidak terduga</string>
+    <string name="could_not_retrieve_any_information">Tidak dapat mengambil informasi untuk file video ini.</string>
+    <string name="error_reading_metadata">Kesalahan membaca metadata media</string>
+    <string name="could_not_read_exif_data">Tidak dapat membaca data EXIF</string>
+    <string name="error_reading_basic_file_info">Kesalahan membaca info dasar file</string>
+    <string name="file_does_not_exist">File tidak ada</string>
+    <string name="error">Kesalahan</string>
+    <string name="loading_media_info">Memuat info media…</string>
+    <string name="no_metadata_available_for_this_document">Tidak ada metadata yang tersedia untuk dokumen ini.</string>
+    <string name="could_not_read_pdf_metadata">Tidak dapat membaca metadata PDF</string>
+    <string name="cannot_read_file">Tidak dapat membaca file</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Tidak dapat mendekode dimensi gambar atau format tidak valid.</string>
+    <string name="error_during_dimension_decoding">Kesalahan saat mendekode dimensi</string>
+    <string name="error_reading_exif_data">Kesalahan membaca data EXIF</string>
+    <string name="duplicate">Duplikat</string>
+    <string name="send">Kirim</string>
+    <string name="print">Cetak</string>
+    <string name="cleaned">Dibersihkan</string>
+    <string name="cleared">Dihapus</string>
+    <string name="media_deleted">media dihapus!</string>
+    <string name="jotting">Mencatat</string>
+    <string name="appwidget_text">CONTOH</string>
+    <string name="add_widget">Tambah widget</string>
+    <string name="app_widget_description">Ini adalah deskripsi widget aplikasi</string>
+    <string name="quick_widget_description">Ini adalah tata letak widget cepat</string>
+    <string name="creator_widget_description">Ini adalah widget tata letak kreator</string>
+    <string name="notes_list_description">Ini adalah daftar catatan</string>
+    <string name="record_deleted">rekaman dihapus!</string>
+</resources>

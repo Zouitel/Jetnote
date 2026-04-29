@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Eslatmalar</string>
+    <string name="screen_chat">AI suhbat</string>
+    <string name="screen_tags">Teglar</string>
+    <string name="screen_settings">Sozlamalar</string>
+    <string name="screen_archive">Arxiv</string>
+    <string name="screen_about">Ilova haqida</string>
+    <string name="screen_feedback">Fikr-mulohaza</string>
+    <string name="share_app">Ilovani ulashish</string>
+    <string name="label_more">ko\'proq</string>
+    <string name="label_less">kamroq</string>
+    <string name="msg_deleted">o\'chirildi</string>
+    <string name="action_undo">Bekor qilish</string>
+    <string name="tag_placeholder">Teg..</string>
+    <string name="tag_cannot_be_empty">Teg bo\'sh bo\'lishi mumkin emas!</string>
+    <string name="archive">Arxiv</string>
+    <string name="deleted">o\'chirildi!</string>
+    <string name="erase_notes">Eslatmalarni o\'chirish?</string>
+    <string name="confirm_erase_notes">"Savatchadagi barcha eslatmalar butunlay o\'chiriladi."</string>
+    <string name="search_in_notes">"Eslatmalarda qidirish.."</string>
+    <string name="select_layout">"Tartibni tanlash"</string>
+    <string name="settings">"Sozlamalar"</string>
+    <string name="account_sync">"Hisob sinxronizatsiyasi"</string>
+    <string name="account_sync_description">"
+                                Ushbu ilova uchun Google Drive hisob
+                                sinxronizatsiyasini yoqish ilova
+                                ma\'lumotlarini, masalan, eslatmalar va
+                                sozlamalarni muammosiz zaxiralash va
+                                sinxronlash imkonini beradi, bu esa
+                                ma\'lumotlaringiz xavfsizligini ta\'minlaydi.
+        "</string>
+    <string name="assistant_configuration">"Yordamchi konfiguratsiyasi"</string>
+    <string name="assistant_configuration_description">"
+                                AI yordamchi - bu ushbu ilovadagi
+                                keng ko\'lamli vazifalarni bajarishda
+                                yordam berish uchun mo\'ljallangan sun\'iy
+                                intellekt bilan ishlaydigan dastur.
+                                Bu yordamchilar tabiiy tilni tushunadi
+                                va unga javob beradi, bu esa siz bilan
+                                rasm yoki matn orqali muloqot qilish
+                                imkonini beradi.
+                            "</string>
+    <string name="dark_mode">"Qorong\'u rejim"</string>
+    <string name="dark_mode_description">"
+                                Bu rejim Android ilovasining UI orqa
+                                fon rangini quyuqroq ranglarga o\'zgartiruvchi
+                                tizim miqyosidagi sozlamadir. U ko\'z
+                                charchashini kamaytirish, kirish imkoniyatini
+                                yaxshilash, batareya quvvatini tejash va
+                                foydalanuvchi tajribasini yaxshilash uchun
+                                mo\'ljallangan.
+                            "</string>
+    <string name="sound_effect">"Tovush effekti"</string>
+    <string name="sound_effect_description">"
+                                Jetnote ilovasi kontekstida tovush effekti
+                                xususiyati foydalanuvchilarga tugmalar va
+                                boshqa UI elementlari bilan o\'zaro
+                                ta\'sirlashganda eshitish orqali fikr-
+                                mulohaza beradi. Bu mobil ilova ishlab
+                                chiqishda foydalanuvchi tajribasini yanada
+                                interaktiv va qiziqarli qilish uchun
+                                keng tarqalgan amaliyotdir.
+                            "</string>
+    <string name="layouts">"Tartiblar"</string>
+    <string name="layouts_description">"
+                                Tartiblar Android ilovalaringizda kontentni
+                                tartibga solish va ko\'rsatish uchun asosiy
+                                hisoblanadi. Ular ekrandagi UI elementlarining
+                                tuzilishi va joylashuvini belgilaydi.
+                            "</string>
+    <string name="sort_notes">"Eslatmalarni saralash"</string>
+    <string name="default_sort">"standart"</string>
+    <string name="name_sort">"nom"</string>
+    <string name="oldest_sort">"eng eski"</string>
+    <string name="newest_sort">"eng yangi"</string>
+    <string name="priority_sort">"muhimlik"</string>
+    <string name="zen_mode">"Zen rejimi"</string>
+    <string name="zen_mode_description">"
+                                Zen rejimi (to\'liq ekran rejimi) ilovaga
+                                butun ekranni egallash imkonini beruvchi
+                                va asboblar panellari, menyular va
+                                operatsion tizimning vazifalar paneli kabi
+                                barcha boshqa interfeys elementlarini
+                                yashiruvchi ko\'rsatish sozlamasidir.
+                            "</string>
+    <string name="shake">"Xabar berish uchun silkiting"</string>
+    <string name="shake_description">"
+                              Bu foydalanuvchilarga bir nechta menyular
+                              orqali navigatsiya qilmasdan, Android
+                              qurilmasini jismoniy silkitish orqali
+                              fikr-mulohaza yoki xato haqida xabar
+                              berish jarayonini boshlash imkonini
+                              beruvchi qulay xususiyatdir.
+                            "</string>
+    <string name="block_screenshot">"Skrinshot bloklash"</string>
+    <string name="block_screenshot_description">"
+                                Skrinshotni bloklash - foydalanuvchilarga
+                                ilovangiz kontentining skrinshotlarini
+                                olishni oldini oluvchi xavfsizlik chorasidir.
+                                Bu ko\'pincha bank ma\'lumotlari, shaxsiy
+                                ma\'lumotlar yoki mualliflik huquqi bilan
+                                himoyalangan materiallar kabi maxfiy
+                                ma\'lumotlarni himoya qilish uchun ishlatiladi.
+                            "</string>
+    <string name="lock_mode">"Qulflash rejimi"</string>
+    <string name="lock_mode_description">"
+                                Ushbu xususiyat foydalanuvchilardan
+                                kontentga kirishdan oldin autentifikatsiya
+                                talab qilish orqali ilovangiz xavfsizligini
+                                kuchaytiradi. Bu odatda barmoq izi, PIN
+                                yoki naqsh qulfini ochish kabi qurilmaning
+                                o\'rnatilgan xavfsizlik xususiyatlaridan
+                                foydalanib amalga oshiriladi.
+                            "</string>
+    <string name="licenses">"Litsenziyalar"</string>
+    <string name="licenses_description">"
+                                    Ushbu litsenziyalar tegishli mualliflarning
+                                    tarqatish talablariga rioya qilish va
+                                    dasturiy ta\'minotning arxitekturasi
+                                    haqida shaffoflikni ta\'minlash uchun
+                                    shu yerga kiritilgan.
+                                    "</string>
+    <string name="title">"Sarlavha"</string>
+    <string name="note">"Eslatma"</string>
+    <string name="failed_to_save_document">"Hujjatni saqlash muvaffaqiyatsiz tugadi."</string>
+    <string name="gallery">"Galereya"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Ruxsat rad etildi!</string>
+    <string name="take_photo">Rasm olish</string>
+    <string name="video_capture">Video yozish</string>
+    <string name="recorder">Yozuvchi</string>
+    <string name="document">Hujjat</string>
+    <string name="scanner">Skaner</string>
+    <string name="tasks">Vazifalar</string>
+    <string name="tags">Teglar</string>
+    <string name="reminder">Eslatma</string>
+    <string name="priority">Muhimlik</string>
+    <string name="low_priority">Past</string>
+    <string name="medium_priority">O\'rtacha</string>
+    <string name="high_priority">Yuqori</string>
+    <string name="urgent_priority">Shoshilinch</string>
+    <string name="non_priority">Yo\'q</string>
+    <string name="created">Yaratildi</string>
+    <string name="edited">Tahrirlandi</string>
+    <string name="types">Turlar</string>
+    <string name="media">Media</string>
+    <string name="medias">Media</string>
+    <string name="colour">Rang</string>
+    <string name="colours">Ranglar</string>
+    <string name="search_within">Ichida qidirish</string>
+    <string name="issue_title">Muammo sarlavhasi*</string>
+    <string name="issue_description">Muammo tavsifi (Ixtiyoriy)</string>
+    <string name="noAccount">Hisobsiz kirish</string>
+    <string name="screenshot_selected">✓ Skrinshot tanlandi</string>
+    <string name="drive_submit">Yuborilganda Drive\'ga yuklanadi</string>
+    <string name="select_screenshot">Skrinshot tanlash</string>
+    <string name="system_logs">Tizim jurnallarini qo\'shish?</string>
+    <string name="find_an_issue">Muammo topdingizmi?</string>
+    <string name="take_a_screenshot">Skrinshot olishni unutmang.</string>
+    <string name="report_an_issue">Muammo haqida xabar berish!</string>
+    <string name="bug">Xato</string>
+    <string name="logs_title">\\uD83D\\uDCiE Fikr-mulohaza hisobotidagi Android tizim jurnallari (Logcat)</string>
+    <string name="logs_description">Android tizim jurnallari - operatsion tizim va yadrodan vaqt tamg\'ali xabarlar oqimi.\n    | Foydalanuvchi muammoga duch kelganda, jurnallar muammoga olib kelgan hodisalarni qayd etib, ishlab chiquvchilarga tashxis qo\'yish uchun zarur kontekstni taqdim etadi.</string>
+    <string name="label_bug">Xato</string>
+    <string name="label_feature">Xususiyat</string>
+    <string name="label_invalid">Noto\'g\'ri</string>
+    <string name="label_question">Savol</string>
+    <string name="label_security">Xavfsizlik</string>
+    <string name="failed">Muvaffaqiyatsiz</string>
+    <string name="submit_feedback">Fikr-mulohaza yuborish!</string>
+    <string name="uploading_screenshot">Skrinshot yuklanmoqda…</string>
+    <string name="creating_github_issue">GitHub muammosi yaratilmoqda…</string>
+    <string name="upload_faild">Yuklash muvaffaqiyatsiz tugadi…</string>
+    <string name="upload_failed">Yuklash muvaffaqiyatsiz tugadi…</string>
+    <string name="issue_crea">Muammo yaratildi.</string>
+    <string name="issue_created">Muammo yaratildi!</string>
+    <string name="log_out">Chiqish</string>
+    <string name="hi">Salom</string>
+    <string name="add_account">Boshqa hisob qo\'shish</string>
+    <string name="manage_account">Hisobni boshqarish</string>
+    <string name="upload_data">Ma\'lumotlarni yuklash</string>
+    <string name="download_data">Ma\'lumotlarni yuklab olish</string>
+    <string name="firebase_authentication_failed">Firebase autentifikatsiyasi muvaffaqiyatsiz tugadi</string>
+    <string name="sign_in_failed">Google orqali kirish muvaffaqiyatsiz tugadi</string>
+    <string name="please_wait">Kirish amalga oshirilmoqda, iltimos kuting…</string>
+    <string name="sync_title">Sinxronlash uchun kiring</string>
+    <string name="sync_description">Barcha qurilmalaringizda eslatmalarni zaxiralash va sinxronlash uchun Google hisobi bilan kiring.</string>
+    <string name="current_account">Joriy hisob</string>
+    <string name="no_name">Nomsiz</string>
+    <string name="no_email">Email yo\'q</string>
+    <string name="sign_out">Chiqish</string>
+    <string name="sign_in_with_google">Google orqali kirish</string>
+    <string name="ai_models">AI modellari</string>
+    <string name="load_more">Ko\'proq yuklash</string>
+    <string name="available_models">Mavjud modellar</string>
+    <string name="assistant_settings">Yordamchi sozlamalari</string>
+    <string name="learning_mode">O\'rganish rejimi</string>
+    <string name="learning_mode_description">"
+                    Belgilangan namunalardan o\'rganilgan naqshlar
+                    asosida yangi, ko\'rilmagan ma\'lumotlar uchun
+                    chiqishni bashorat qilish.
+                "</string>
+    <string name="temperat">Harorat</string>
+    <string name="temperature">Harorat</string>
+    <string name="temperature_description">"
+           Chiqishning tasodifiyligini nazorat qiladi.
+           Yuqori qiymatlar yanada ijodiy hisoblanadi.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">Chiqish uchun qaysi tokenlar hisobga olinishini nazorat qiladi.</string>
+    <string name="context_message_size">Kontekst xabar hajmi</string>
+    <string name="context_message_size_description">Kontekstga kiritish uchun oldingi xabarlarning maksimal soni.</string>
+    <string name="stream_output">Oqim chiqishi</string>
+    <string name="stream_output_description">Javobni yaratilayotgan paytda ko\'rsatish.</string>
+    <string name="thinking_budget">Fikrlash byudjeti</string>
+    <string name="thinking_budget_description">Javob uchun ishlatiladigan hisoblash resurslarini cheklaydi.</string>
+    <string name="system_prompt">Tizim ko\'rsatmasi</string>
+    <string name="prompt">Ko\'rsatma..</string>
+    <string name="properties">Xususiyatlar</string>
+    <string name="quick_messages">Tezkor xabarlar</string>
+    <string name="quick_messages_description">Tezkor xabar yorliqlarini sozlash.</string>
+    <string name="regular_expressions">Muntazam ifodalar</string>
+    <string name="regular_expressions_description">Yuborish/qabul qilishdan oldin xabarlarni o\'zgartirish uchun regex naqshlarini aniqlash.</string>
+    <string name="headers">Sarlavhalar</string>
+    <string name="headers_description">
+                            Bular so\'rov sarlavha blokiga qo\'shiladigan
+                            kalit-qiymat juftlari. Odatda autentifikatsiya,
+                            kontent turini ko\'rsatish yoki so\'rov haqida
+                            metadata o\'tkazish uchun ishlatiladi.
+                        </string>
+    <string name="bodies">Tanalar</string>
+    <string name="bodies_description">
+                            Bu so\'rov ichida yuborilgan ma\'lumotlar
+                            yukiga (kalit: qiymat JSON tuzilmasi) ishora
+                            qiladi. Bu AI modeliga kiritishlarni yuborish
+                            uchun asosiy vositadir.
+                        </string>
+    <string name="memory">Xotira</string>
+    <string name="memory_description">Yordamchiga suhbatdagi oldingi navbatlarni eslab qolishga ruxsat berish.</string>
+    <string name="chats_reference">So\'nggi suhbatlar ma\'lumotnomasi</string>
+    <string name="chats_reference_description">Yaxshiroq kontekstual javoblar uchun so\'nggi suhbatlaringiz ma\'lumotlariga murojaat qilish.</string>
+    <string name="javascript">JavaScript mexanizmi</string>
+    <string name="javascript_description">Hisob-kitob va skript yozish uchun QuickJS mexanizmi bilan JavaScript kodini bajarish.</string>
+    <string name="reset">Sozlamalarni tiklash!</string>
+    <string name="providers">Provayderlar</string>
+    <string name="ask">So\'rash</string>
+    <string name="add_model"><![CDATA[<- AI modeli qo\'shish]]></string>
+    <string name="delete">O\'chirish</string>
+    <string name="options">Variantlar</string>
+    <string name="retitle">Qayta nomlash</string>
+    <string name="assistant">Yordamchi</string>
+    <string name="new_chat">Yangi suhbat</string>
+    <string name="files">Fayllar</string>
+    <string name="audios">Audio fayllar</string>
+    <string name="videos">Videolar</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Rasmlar</string>
+    <string name="provider_settings">Provayder sozlamalari</string>
+    <string name="api_key">API kaliti</string>
+    <string name="base_url">Asosiy URL</string>
+    <string name="model_name">Model nomi</string>
+    <string name="modalities">Modalliklar</string>
+    <string name="tools">Vositalar</string>
+    <string name="reasoning">Muhokama</string>
+    <string name="respo">Javob API</string>
+    <string name="response_api">Javob API</string>
+    <string name="account_balance">Hisob balansi</string>
+    <string name="api_path">API yo\'li..</string>
+    <string name="json_key">JSON kaliti..</string>
+    <string name="network_proxy">Tarmoq proksi</string>
+    <string name="host">Host..</string>
+    <string name="username_option">Foydalanuvchi nomi (Ixtiyoriy)..</string>
+    <string name="pass_option">Parol (Ixtiyoriy)..</string>
+    <string name="service_account">Xizmat hisobi @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Shaxsiy kalit..</string>
+    <string name="location">Joylashuv..</string>
+    <string name="project_uid">Loyiha UID..</string>
+    <string name="details">Tafsilotlar</string>
+    <string name="model_type">Model turi</string>
+    <string name="input_modalities">Kirish modalliklari</string>
+    <string name="output_modalities">Chiqish modalliklari</string>
+    <string name="abilities">Qobiliyatlar</string>
+    <string name="provider_override">Provayder bekor qilishni qo\'shish</string>
+    <string name="provider_override_description">Ushbu maxsus model uchun maxsus provayder sozlamalarini sozlash.</string>
+    <string name="build_tools">Qurilish vositalari</string>
+    <string name="build_tools_description">Bu vositalar ilova yordamisiz to\'g\'ridan-to\'g\'ri API tomonidan taqdim etiladi. Hozirda faqat Gemini API tomonidan qo\'llab-quvvatlanadi.</string>
+    <string name="google_search">Qidirish</string>
+    <string name="google_search_description">Google Qidiruvni integratsiyasini yoqish</string>
+    <string name="url_context">URL kontekst</string>
+    <string name="url_context_description">URL kontekstni qayta ishlashni yoqish</string>
+    <string name="find">Topish</string>
+    <string name="replace">Almashtirish</string>
+    <string name="effecting_scopes">Ta\'sirlangan doiralar</string>
+    <string name="user">foydalanuvchi</string>
+    <string name="visual_only">faqat vizual</string>
+    <string name="body">Tana</string>
+    <string name="key">kalit</string>
+    <string name="value">Qiymat</string>
+    <string name="header">Sarlavha.</string>
+    <string name="reset_description">Yordamchi sozlamalarini standart rejimga tiklash.</string>
+    <string name="save_changes">O\'zgarishlarni saqlash?</string>
+    <string name="save_changes_description">Saqlanmagan o\'zgarishlaringiz bor. Chiqishdan oldin ularni saqlamoqchimisiz?</string>
+    <string name="dont_save">Saqlamaslik</string>
+    <string name="save">Saqlash</string>
+    <string name="links">Havolalar</string>
+    <string name="reminders">Eslatmalar</string>
+    <string name="priorities">Muhimliklar</string>
+    <string name="ai_chat">AI suhbat</string>
+    <string name="auto">avtomatik</string>
+    <string name="light">yengil</string>
+    <string name="medium">o\'rtacha</string>
+    <string name="heavy">og\'ir</string>
+    <string name="date">sana</string>
+    <string name="time">vaqt</string>
+    <string name="date_and_time">sana va vaqt</string>
+    <string name="local">mahalliy</string>
+    <string name="timezone">vaqt mintaqasi</string>
+    <string name="system_version">tizim versiyasi</string>
+    <string name="device_info">qurilma ma\'lumotlari</string>
+    <string name="battery_level">batareya darajasi</string>
+    <string name="insert">Kiritish</string>
+    <string name="confirm">Tasdiqlash</string>
+    <string name="message">Xabar</string>
+    <string name="content">Kontent</string>
+    <string name="today">Bugun</string>
+    <string name="tomorrow">Ertaga</string>
+    <string name="according_to_timing">Vaqtga ko\'ra</string>
+    <string name="untitled">Nomsiz</string>
+    <string name="hue">Rang toni</string>
+    <string name="saturation">To\'yinganlik</string>
+    <string name="brightness">Yorqinlik</string>
+    <string name="shades">Soyalar</string>
+    <string name="complementary">To\'ldiruvchi</string>
+    <string name="task_placeholder">Vazifa..</string>
+    <string name="task_cannot_be_empty">Vazifa bo\'sh bo\'lishi mumkin emas!</string>
+    <string name="of">dan</string>
+    <string name="something_wrong_with_file">Fayl bilan muammo bor</string>
+    <string name="could_not_load_any_information">Media fayl uchun ma\'lumot yuklab bo\'lmadi.</string>
+    <string name="no_file_path_provided">Fayl yo\'li ko\'rsatilmagan.</string>
+    <string name="security_error_processing_file">Faylni qayta ishlashda xavfsizlik xatosi</string>
+    <string name="an_unexpected_error_occurred">Kutilmagan xato yuz berdi</string>
+    <string name="could_not_retrieve_any_information">Ushbu video fayl uchun ma\'lumot olib bo\'lmadi.</string>
+    <string name="error_reading_metadata">Media metadata o\'qishda xato</string>
+    <string name="could_not_read_exif_data">EXIF ma\'lumotlarini o\'qib bo\'lmadi</string>
+    <string name="error_reading_basic_file_info">Asosiy fayl ma\'lumotlarini o\'qishda xato</string>
+    <string name="file_does_not_exist">Fayl mavjud emas</string>
+    <string name="error">Xato</string>
+    <string name="loading_media_info">Media ma\'lumotlari yuklanmoqda…</string>
+    <string name="no_metadata_available_for_this_document">Ushbu hujjat uchun metadata mavjud emas.</string>
+    <string name="could_not_read_pdf_metadata">PDF metadata o\'qib bo\'lmadi</string>
+    <string name="cannot_read_file">Faylni o\'qib bo\'lmaydi</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Rasm o\'lchamlarini dekodlab bo\'lmadi yoki noto\'g\'ri format.</string>
+    <string name="error_during_dimension_decoding">O\'lchamlarni dekodlashda xato</string>
+    <string name="error_reading_exif_data">EXIF ma\'lumotlarini o\'qishda xato</string>
+    <string name="duplicate">Nusxalash</string>
+    <string name="send">Yuborish</string>
+    <string name="print">Chop etish</string>
+    <string name="cleaned">Tozalandi</string>
+    <string name="cleared">O\'chirildi</string>
+    <string name="media_deleted">Media o\'chirildi!</string>
+    <string name="jotting">Qisqa eslatma</string>
+    <string name="appwidget_text">NAMUNA</string>
+    <string name="add_widget">Vidjet qo\'shish</string>
+    <string name="app_widget_description">Bu ilova vidjeti tavsifi</string>
+    <string name="quick_widget_description">Bu tezkor vidjet tartibi</string>
+    <string name="creator_widget_description">Bu yaratuvchi tartibi vidjeti</string>
+    <string name="notes_list_description">Bu eslatmalar ro\'yxati</string>
+    <string name="record_deleted">Yozuv o\'chirildi!</string>
+</resources>

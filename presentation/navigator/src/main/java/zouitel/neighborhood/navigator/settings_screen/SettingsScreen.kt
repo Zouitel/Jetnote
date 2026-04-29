@@ -38,6 +38,7 @@ import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.navigator.R
+import zouitel.neighborhood.navigator.about_screen.Licenses
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
 import zouitel.neighborhood.navigator.utils.sound
@@ -283,21 +284,20 @@ class SettingsScreen: Screen {
                             )
                         }
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-                        item {
-                            NavigateItem(
-                                title = stringResource(zouitel.neighborhood.logic.R.string.licenses),
-                                description = stringResource(zouitel.neighborhood.logic.R.string.licenses_description).trimIndent(),
-                                icon = {
-                                    AsyncImage(
-                                        model = R.drawable.certificate,
-                                        contentDescription = null
-                                    )
-                                }
-                            ) {
-                                sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                navigator.push(Licenses())
-                            }
-                        }
+//                        item {
+//                            NavigateItem(
+//                                title = stringResource(zouitel.neighborhood.logic.R.string.licenses),
+//                                description = stringResource(zouitel.neighborhood.logic.R.string.licenses_description).trimIndent(),
+//                                icon = {
+//                                    AsyncImage(
+//                                        model = R.drawable.certificate,
+//                                        contentDescription = null
+//                                    )
+//                                }
+//                            ) {
+//                                sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+//                            }
+//                        }
                     }
                 }
             }

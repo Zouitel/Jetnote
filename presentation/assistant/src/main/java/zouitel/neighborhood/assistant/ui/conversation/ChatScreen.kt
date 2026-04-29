@@ -63,6 +63,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -83,12 +84,14 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
@@ -326,49 +329,50 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                 .reportable(settings.isShakable)
                 .cloudy(enabled = bottomNav.isVisible || expanded.value || optionsSheet.value || showModelSwitcher.value),
             topBar = {
-                TopAppBar(
-                    {
-                        Text(
-                            text = conversation?.title ?: "",
-                            style = MaterialTheme.typography.titleLarge,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton({
-                            navigator?.pop()
-                        }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
-                        }
-                    },
-                    actions = {
-                        IconButton({ expanded.value = true }) {
-                            Icon(painterResource(CommonIcons.MENU_DOTS), null)
-                        }
-                        ChatActionsMenu(
-                            expanded,
-                            assistant,
-                            {
-                                conversationModel.retitle(
-                                    conversation ?: return@ChatActionsMenu,
-                                    true
-                                )
-                                expanded.value = false
-                            },
-                            {
-                                val currentJobId = jobCounter.intValue++
-                                deletedChat.add(Pair(conversation ?: return@ChatActionsMenu, currentJobId))
-                                val chatPair = deletedChat.firstOrNull { pair -> pair.second == currentJobId }
-                                conversationModel.updateObservedConversation(conversation?.copy(nodes = emptyList()) ?: return@ChatActionsMenu)
-
-                                scope.launch {
-                                    snackbarState.currentSnackbarData?.dismiss()
-                                    val result = snackbarState.showSnackbar(
-                                        message = "${conversation?.title?.ifBlank { "Chat" }} $clearedResource",
-                                        actionLabel = undoResource,
-                                        duration = SnackbarDuration.Long
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    TopAppBar(
+                        {
+                            Text(
+                                text = conversation?.title ?: "",
+                                style = MaterialTheme.typography.titleLarge,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton({
+                                navigator?.pop()
+                            }) {
+                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                            }
+                        },
+                        actions = {
+                            IconButton({ expanded.value = true }) {
+                                Icon(painterResource(CommonIcons.MENU_DOTS), null)
+                            }
+                            ChatActionsMenu(
+                                expanded,
+                                assistant,
+                                {
+                                    conversationModel.retitle(
+                                        conversation ?: return@ChatActionsMenu,
+                                        true
                                     )
+                                    expanded.value = false
+                                },
+                                {
+                                    val currentJobId = jobCounter.intValue++
+                                    deletedChat.add(Pair(conversation ?: return@ChatActionsMenu, currentJobId))
+                                    val chatPair = deletedChat.firstOrNull { pair -> pair.second == currentJobId }
+                                    conversationModel.updateObservedConversation(conversation?.copy(nodes = emptyList()) ?: return@ChatActionsMenu)
+
+                                    scope.launch {
+                                        snackbarState.currentSnackbarData?.dismiss()
+                                        val result = snackbarState.showSnackbar(
+                                            message = "${conversation?.title?.ifBlank { "Chat" }} $clearedResource",
+                                            actionLabel = undoResource,
+                                            duration = SnackbarDuration.Long
+                                        )
 
 //                                    when (result) {
 //                                        SnackbarResult.ActionPerformed -> {
@@ -380,23 +384,24 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
 //                                            conversationModel.upsert(conversation ?: return@launch)
 //                                        }
 //                                    }
-                                    if (result == SnackbarResult.ActionPerformed) {
-                                        chatPair?.first?.let { original ->
-                                            conversationModel.upsert(original)
+                                        if (result == SnackbarResult.ActionPerformed) {
+                                            chatPair?.first?.let { original ->
+                                                conversationModel.upsert(original)
+                                            }
                                         }
+                                        chatPair?.let { deletedChat.remove(it) }
                                     }
-                                    chatPair?.let { deletedChat.remove(it) }
+                                    expanded.value = false
+                                },
+                                {
+                                    expanded.value = false
+                                    optionsSheet.value = true
                                 }
-                                expanded.value = false
-                            },
-                            {
-                                expanded.value = false
-                                optionsSheet.value = true
-                            }
-                        )
-                    },
-                    scrollBehavior = scrollBehavior
-                )
+                            )
+                        },
+                        scrollBehavior = scrollBehavior
+                    )
+                }
             },
             bottomBar = {
                 Column(

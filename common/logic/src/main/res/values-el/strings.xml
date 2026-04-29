@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Σημειώσεις</string>
+    <string name="screen_chat">AI Συνομιλία</string>
+    <string name="screen_tags">Ετικέτες</string>
+    <string name="screen_settings">Ρυθμίσεις</string>
+    <string name="screen_archive">Αρχείο</string>
+    <string name="screen_about">Σχετικά</string>
+    <string name="screen_feedback">Σχόλια</string>
+    <string name="share_app">Κοινοποίηση εφαρμογής</string>
+    <string name="label_more">περισσότερα</string>
+    <string name="label_less">λιγότερα</string>
+    <string name="msg_deleted">διαγράφηκε</string>
+    <string name="action_undo">Αναίρεση</string>
+    <string name="tag_placeholder">Ετικέτα..</string>
+    <string name="tag_cannot_be_empty">Η ετικέτα δεν μπορεί να είναι κενή!</string>
+    <string name="archive">Αρχείο</string>
+    <string name="deleted">διαγράφηκε!</string>
+    <string name="erase_notes">Διαγραφή σημειώσεων;</string>
+    <string name="confirm_erase_notes">"Όλες οι σημειώσεις στον κάδο θα διαγραφούν οριστικά."</string>
+    <string name="search_in_notes">"Αναζήτηση σε σημειώσεις.."</string>
+    <string name="select_layout">"Επιλογή διάταξης"</string>
+    <string name="settings">"Ρυθμίσεις"</string>
+    <string name="account_sync">"Συγχρονισμός λογαριασμού"</string>
+    <string name="account_sync_description">"
+                                Η ενεργοποίηση συγχρονισμού με Google Drive
+                                για αυτή την εφαρμογή σας επιτρέπει να
+                                δημιουργείτε αντίγραφα ασφαλείας και να
+                                συγχρονίζετε τα δεδομένα σας, όπως
+                                σημειώσεις και ρυθμίσεις, διασφαλίζοντας
+                                την ασφάλεια των δεδομένων σας.
+        "</string>
+    <string name="assistant_configuration">"Διαμόρφωση βοηθού"</string>
+    <string name="assistant_configuration_description">"
+                                Ο βοηθός AI είναι ένα πρόγραμμα λογισμικού
+                                που τροφοδοτείται από τεχνητή νοημοσύνη
+                                και έχει σχεδιαστεί για να σας βοηθά με
+                                ένα ευρύ φάσμα εργασιών σε αυτή την εφαρμογή.
+                                Αυτοί οι βοηθοί κατανοούν και ανταποκρίνονται
+                                στη φυσική γλώσσα, επιτρέποντάς σας να
+                                αλληλεπιδράτε μαζί τους μέσω εικόνας ή κειμένου.
+                            "</string>
+    <string name="dark_mode">"Σκοτεινή λειτουργία"</string>
+    <string name="dark_mode_description">"
+                                Αυτή η λειτουργία είναι μια ρύθμιση σε
+                                επίπεδο συστήματος που αλλάζει το σχήμα
+                                φόντου της διεπαφής της εφαρμογής Android
+                                σε πιο σκοτεινά χρώματα.
+                                Έχει σχεδιαστεί για να μειώνει την
+                                καταπόνηση των ματιών, να βελτιώνει
+                                την προσβασιμότητα, να εξοικονομεί
+                                μπαταρία και να ενισχύει την εμπειρία χρήστη.
+                            "</string>
+    <string name="sound_effect">"Ηχητικό εφέ"</string>
+    <string name="sound_effect_description">"
+                                Στο πλαίσιο της εφαρμογής Jetnote,
+                                η λειτουργία \'Ηχητικό εφέ\' παρέχει
+                                ηχητική ανατροφοδότηση στους χρήστες
+                                όταν αλληλεπιδρούν με κουμπιά και
+                                άλλα στοιχεία διεπαφής.
+                                Αυτή είναι κοινή πρακτική στην ανάπτυξη
+                                εφαρμογών για πιο διαδραστική
+                                εμπειρία χρήστη.
+                            "</string>
+    <string name="layouts">"Διατάξεις"</string>
+    <string name="layouts_description">"
+                                Οι διατάξεις είναι θεμελιώδεις για την
+                                οργάνωση και εμφάνιση περιεχομένου
+                                στις εφαρμογές Android.
+                                Ορίζουν τη δομή και τη διάταξη των
+                                στοιχείων διεπαφής στην οθόνη.
+                            "</string>
+    <string name="sort_notes">"Ταξινόμηση σημειώσεων"</string>
+    <string name="default_sort">"προεπιλογή"</string>
+    <string name="name_sort">"όνομα"</string>
+    <string name="oldest_sort">"παλαιότερα"</string>
+    <string name="newest_sort">"νεότερα"</string>
+    <string name="priority_sort">"προτεραιότητα"</string>
+    <string name="zen_mode">"Λειτουργία Zen"</string>
+    <string name="zen_mode_description">"
+                                Η λειτουργία Zen (πλήρης οθόνη) είναι μια
+                                ρύθμιση οθόνης που επιτρέπει στην εφαρμογή
+                                να καταλαμβάνει ολόκληρη την οθόνη,
+                                αποκρύπτοντας όλα τα άλλα στοιχεία
+                                διεπαφής όπως γραμμές εργαλείων, μενού
+                                και τη γραμμή εργασιών του λειτουργικού
+                                συστήματος.
+                            "</string>
+    <string name="shake">"Ανακίνηση για αναφορά"</string>
+    <string name="shake_description">"
+                              Είναι μια εύχρηστη λειτουργία που επιτρέπει
+                              στους χρήστες να ξεκινήσουν μια διαδικασία
+                              σχολίων ή αναφοράς σφαλμάτων απλά
+                              ανακινώντας φυσικά τη συσκευή τους.
+                              Αντί να πλοηγούνται σε πολλά μενού για να
+                              βρουν \'Αποστολή σχολίων\' ή \'Αναφορά σφάλματος\'.
+                            "</string>
+    <string name="block_screenshot">"Αποκλεισμός στιγμιότυπου"</string>
+    <string name="block_screenshot_description">"
+                                Ο αποκλεισμός στιγμιότυπων είναι ένα μέτρο
+                                ασφαλείας που αποτρέπει τους χρήστες από
+                                τη λήψη στιγμιότυπων του περιεχομένου
+                                της εφαρμογής. Χρησιμοποιείται συχνά για
+                                την προστασία ευαίσθητων πληροφοριών,
+                                όπως τραπεζικά στοιχεία, προσωπικά
+                                δεδομένα ή προστατευόμενο υλικό.
+                            "</string>
+    <string name="lock_mode">"Λειτουργία κλειδώματος"</string>
+    <string name="lock_mode_description">"
+                                Αυτή η λειτουργία ενισχύει την ασφάλεια
+                                της εφαρμογής απαιτώντας από τους χρήστες
+                                να πιστοποιηθούν πριν αποκτήσουν πρόσβαση
+                                στο περιεχόμενο. Επιτυγχάνεται συνήθως
+                                μέσω των ενσωματωμένων λειτουργιών
+                                ασφαλείας — δακτυλικό αποτύπωμα,
+                                PIN ή μοτίβο ξεκλειδώματος.
+                            "</string>
+    <string name="licenses">"Άδειες χρήσης"</string>
+    <string name="licenses_description">"
+                                    Αυτές οι άδειες χρήσης περιλαμβάνονται
+                                    εδώ για συμμόρφωση με τις απαιτήσεις
+                                    διανομής των αντίστοιχων συντακτών
+                                    και για διαφάνεια σχετικά με την
+                                    αρχιτεκτονική του λογισμικού.
+                                    "</string>
+    <string name="title">"Τίτλος"</string>
+    <string name="note">"Σημείωση"</string>
+    <string name="failed_to_save_document">"Αποτυχία αποθήκευσης εγγράφου."</string>
+    <string name="gallery">"Γκαλερί"</string>
+    <string name="audio">Ήχος</string>
+    <string name="permission_denied">Η άδεια απορρίφθηκε!</string>
+    <string name="take_photo">Λήψη φωτογραφίας</string>
+    <string name="video_capture">Εγγραφή βίντεο</string>
+    <string name="recorder">Συσκευή εγγραφής</string>
+    <string name="document">Έγγραφο</string>
+    <string name="scanner">Σαρωτής</string>
+    <string name="tasks">Εργασίες</string>
+    <string name="tags">Ετικέτες</string>
+    <string name="reminder">Υπενθύμιση</string>
+    <string name="priority">Προτεραιότητα</string>
+    <string name="low_priority">Χαμηλή</string>
+    <string name="medium_priority">Μεσαία</string>
+    <string name="high_priority">Υψηλή</string>
+    <string name="urgent_priority">Επείγον</string>
+    <string name="non_priority">Καμία</string>
+    <string name="created">Δημιουργήθηκε</string>
+    <string name="edited">Επεξεργάστηκε</string>
+    <string name="types">Τύποι</string>
+    <string name="media">Μέσα</string>
+    <string name="medias">Αρχεία μέσων</string>
+    <string name="colour">Χρώμα</string>
+    <string name="colours">Χρώματα</string>
+    <string name="search_within">Αναζήτηση σε</string>
+    <string name="issue_title">Τίτλος προβλήματος*</string>
+    <string name="issue_description">Περιγραφή προβλήματος (προαιρετικό)</string>
+    <string name="noAccount">Σύνδεση χωρίς λογαριασμό</string>
+    <string name="screenshot_selected">✓ Το στιγμιότυπο επιλέχθηκε</string>
+    <string name="drive_submit">Θα μεταφορτωθεί στο Drive κατά την υποβολή</string>
+    <string name="select_screenshot">Επιλέξτε στιγμιότυπο</string>
+    <string name="system_logs">Συμπερίληψη αρχείων καταγραφής συστήματος;</string>
+    <string name="find_an_issue">Βρήκατε κάποιο πρόβλημα;</string>
+    <string name="take_a_screenshot">Μην ξεχάσετε να τραβήξετε στιγμιότυπο.</string>
+    <string name="report_an_issue">Αναφορά προβλήματος!</string>
+    <string name="bug">Σφάλμα</string>
+    <string name="logs_title">\\uD83D\\uDCiE Αρχεία καταγραφής Android (Logcat) σε αναφορά σχολίων</string>
+    <string name="logs_description">Τα αρχεία καταγραφής Android είναι μια ροή μηνυμάτων με χρονική σήμανση από το λειτουργικό σύστημα και τον πυρήνα.\n    | Όταν ένας χρήστης αντιμετωπίζει πρόβλημα (σύγκρουση, πάγωμα ή απροσδόκητη συμπεριφορά), τα αρχεία καταγράφουν τα σχετικά γεγονότα, παρέχοντας στους προγραμματιστές το απαραίτητο πλαίσιο για διάγνωση.</string>
+    <string name="label_bug">Σφάλμα</string>
+    <string name="label_feature">Λειτουργία</string>
+    <string name="label_invalid">Μη έγκυρο</string>
+    <string name="label_question">Ερώτηση</string>
+    <string name="label_security">Ασφάλεια</string>
+    <string name="failed">Αποτυχία</string>
+    <string name="submit_feedback">Υποβολή σχολίων!</string>
+    <string name="uploading_screenshot">Μεταφόρτωση στιγμιότυπου…</string>
+    <string name="creating_github_issue">Δημιουργία ζητήματος GitHub…</string>
+    <string name="upload_faild">Η μεταφόρτωση απέτυχε…</string>
+    <string name="upload_failed">Η μεταφόρτωση απέτυχε…</string>
+    <string name="issue_crea">Το ζήτημα δημιουργήθηκε.</string>
+    <string name="issue_created">Το ζήτημα δημιουργήθηκε!</string>
+    <string name="log_out">Αποσύνδεση</string>
+    <string name="hi">Γεια σου</string>
+    <string name="add_account">Προσθήκη άλλου λογαριασμού</string>
+    <string name="manage_account">Διαχείριση λογαριασμού</string>
+    <string name="upload_data">Μεταφόρτωση δεδομένων</string>
+    <string name="download_data">Λήψη δεδομένων</string>
+    <string name="firebase_authentication_failed">Αποτυχία ελέγχου ταυτότητας Firebase</string>
+    <string name="sign_in_failed">Αποτυχία σύνδεσης Google</string>
+    <string name="please_wait">Σύνδεση, παρακαλώ περιμένετε…</string>
+    <string name="sync_title">Συνδεθείτε για συγχρονισμό</string>
+    <string name="sync_description">Συνδεθείτε με τον λογαριασμό Google σας για να δημιουργήσετε αντίγραφα ασφαλείας και να συγχρονίσετε τις σημειώσεις σας σε όλες τις συσκευές σας.</string>
+    <string name="current_account">Τρέχων λογαριασμός</string>
+    <string name="no_name">Χωρίς όνομα</string>
+    <string name="no_email">Χωρίς email</string>
+    <string name="sign_out">Αποσύνδεση</string>
+    <string name="sign_in_with_google">Σύνδεση με Google</string>
+    <string name="ai_models">Μοντέλα AI</string>
+    <string name="load_more">Φόρτωση περισσότερων</string>
+    <string name="available_models">Διαθέσιμα μοντέλα</string>
+    <string name="assistant_settings">Ρυθμίσεις βοηθού</string>
+    <string name="learning_mode">Λειτουργία μάθησης</string>
+    <string name="learning_mode_description">"
+                    Πρόβλεψη εξόδου για νέα, άγνωστα δεδομένα
+                    βάσει των προτύπων που εκπαιδεύτηκαν
+                    από τα επισημασμένα παραδείγματα.
+                "</string>
+    <string name="temperat">Θερμοκρασία</string>
+    <string name="temperature">Θερμοκρασία</string>
+    <string name="temperature_description">"
+           Ελέγχει την τυχαιότητα της εξόδου.
+           Υψηλότερες τιμές είναι πιο δημιουργικές.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Ελέγχει ποια tokens λαμβάνονται υπόψη για την έξοδο.
+            </string>
+    <string name="context_message_size">Μέγεθος μηνυμάτων περιβάλλοντος</string>
+    <string name="context_message_size_description">
+            Μέγιστος αριθμός προηγούμενων μηνυμάτων
+            για συμπερίληψη στο περιβάλλον.
+        </string>
+    <string name="stream_output">Ροή εξόδου</string>
+    <string name="stream_output_description">Εμφάνιση απόκρισης κατά τη δημιουργία της.</string>
+    <string name="thinking_budget">Προϋπολογισμός σκέψης</string>
+    <string name="thinking_budget_description">
+                            Περιορίζει τους υπολογιστικούς πόρους
+                            που χρησιμοποιούνται για την απόκριση.
+                        </string>
+    <string name="system_prompt">Προτροπή συστήματος</string>
+    <string name="prompt">Προτροπή..</string>
+    <string name="properties">Ιδιότητες</string>
+    <string name="quick_messages">Γρήγορα μηνύματα</string>
+    <string name="quick_messages_description">Διαμόρφωση συντομεύσεων γρήγορων μηνυμάτων.</string>
+    <string name="regular_expressions">Κανονικές εκφράσεις</string>
+    <string name="regular_expressions_description">
+                            Ορισμός προτύπων regex για μετασχηματισμό
+                            μηνυμάτων πριν από αποστολή/λήψη.
+                        </string>
+    <string name="headers">Κεφαλίδες</string>
+    <string name="headers_description">
+                            Ζεύγη κλειδιού-τιμής που προστίθενται στο
+                            μπλοκ κεφαλίδων του αιτήματος.
+                            Χρησιμοποιούνται για έλεγχο ταυτότητας,
+                            καθορισμό τύπου περιεχομένου ή μεταφορά
+                            μεταδεδομένων για το αίτημα.
+                        </string>
+    <string name="bodies">Σώματα</string>
+    <string name="bodies_description">
+                            Το ωφέλιμο φορτίο δεδομένων (δομή JSON)
+                            που αποστέλλεται εντός του αιτήματος.
+                            Ο κύριος τρόπος αποστολής εισόδων
+                            στο μοντέλο AI.
+                        </string>
+    <string name="memory">Μνήμη</string>
+    <string name="memory_description">
+                            Επιτρέπει στον βοηθό να θυμάται
+                            προηγούμενες γύρους της συνομιλίας.
+                        </string>
+    <string name="chats_reference">Αναφορά πρόσφατων συνομιλιών</string>
+    <string name="chats_reference_description">
+                        Αναφορά δεδομένων από πρόσφατες συνομιλίες
+                        για καλύτερες εκτεταμένες αποκρίσεις.
+                        </string>
+    <string name="javascript">Μηχανή JavaScript</string>
+    <string name="javascript_description">
+                            Εκτέλεση κώδικα JavaScript με τη μηχανή
+                            QuickJS για υπολογισμούς και δέσμες ενεργειών.
+                        </string>
+    <string name="reset">Επαναφορά ρυθμίσεων!</string>
+    <string name="providers">Πάροχοι</string>
+    <string name="ask">Ρώτα</string>
+    <string name="add_model"><![CDATA[<- Προσθήκη μοντέλου AI]]></string>
+    <string name="delete">Διαγραφή</string>
+    <string name="options">Επιλογές</string>
+    <string name="retitle">Μετονομασία</string>
+    <string name="assistant">Βοηθός</string>
+    <string name="new_chat">Νέα συνομιλία</string>
+    <string name="files">Αρχεία</string>
+    <string name="audios">Ήχοι</string>
+    <string name="videos">Βίντεο</string>
+    <string name="camera">Κάμερα</string>
+    <string name="pictures">Εικόνες</string>
+    <string name="provider_settings">Ρυθμίσεις παρόχου</string>
+    <string name="api_key">Κλειδί API</string>
+    <string name="base_url">Βασικό URL</string>
+    <string name="model_name">Όνομα μοντέλου</string>
+    <string name="modalities">Τρόποι</string>
+    <string name="tools">Εργαλεία</string>
+    <string name="reasoning">Συλλογισμός</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Υπόλοιπο λογαριασμού</string>
+    <string name="api_path">Διαδρομή API..</string>
+    <string name="json_key">Κλειδί Json..</string>
+    <string name="network_proxy">Διακομιστής μεσολάβησης</string>
+    <string name="host">Κεντρικός υπολογιστής..</string>
+    <string name="username_option">Όνομα χρήστη (προαιρετικό)..</string>
+    <string name="pass_option">Κωδικός πρόσβασης (προαιρετικό)..</string>
+    <string name="service_account">Λογαριασμός υπηρεσίας @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Ιδιωτικό κλειδί..</string>
+    <string name="location">Τοποθεσία..</string>
+    <string name="project_uid">UID έργου..</string>
+    <string name="details">Λεπτομέρειες</string>
+    <string name="model_type">Τύπος μοντέλου</string>
+    <string name="input_modalities">Τρόποι εισόδου</string>
+    <string name="output_modalities">Τρόποι εξόδου</string>
+    <string name="abilities">Δυνατότητες</string>
+    <string name="provider_override">Προσθήκη παράκαμψης παρόχου</string>
+    <string name="provider_override_description">
+                            Διαμόρφωση προσαρμοσμένων ρυθμίσεων παρόχου
+                            για αυτό το συγκεκριμένο μοντέλο.
+                            Χρησιμοποιεί κοινές ιδιότητες από τον
+                            κύριο πάροχο του μοντέλου.
+                        </string>
+    <string name="build_tools">Εργαλεία κατασκευής</string>
+    <string name="build_tools_description">
+                            Αυτά τα εργαλεία παρέχονται απευθείας από
+                            το API χωρίς να απαιτείται υποστήριξη εφαρμογής.
+                            Αυτή η λειτουργία υποστηρίζεται αυτήν τη στιγμή
+                            μόνο από το Gemini API.
+                        </string>
+    <string name="google_search">Αναζήτηση</string>
+    <string name="google_search_description">Ενεργοποίηση ενοποίησης με Google Search</string>
+    <string name="url_context">Περιβάλλον URL</string>
+    <string name="url_context_description">Ενεργοποίηση επεξεργασίας περιβάλλοντος URL</string>
+    <string name="find">Εύρεση</string>
+    <string name="replace">Αντικατάσταση</string>
+    <string name="effecting_scopes">Εύρος εφαρμογής</string>
+    <string name="user">χρήστης</string>
+    <string name="visual_only">μόνο οπτικό</string>
+    <string name="body">Σώμα</string>
+    <string name="key">κλειδί</string>
+    <string name="value">Τιμή</string>
+    <string name="header">Κεφαλίδα.</string>
+    <string name="reset_description">Επαναφορά ρυθμίσεων βοηθού στην προεπιλεγμένη λειτουργία.</string>
+    <string name="save_changes">Αποθήκευση αλλαγών;</string>
+    <string name="save_changes_description">Έχετε αποθηκευμένες αλλαγές. Θέλετε να τις αποθηκεύσετε πριν φύγετε;</string>
+    <string name="dont_save">Χωρίς αποθήκευση</string>
+    <string name="save">Αποθήκευση</string>
+    <string name="links">Σύνδεσμοι</string>
+    <string name="reminders">Υπενθυμίσεις</string>
+    <string name="priorities">Προτεραιότητες</string>
+    <string name="ai_chat">AI Συνομιλία</string>
+    <string name="auto">αυτόματο</string>
+    <string name="light">ελαφρύ</string>
+    <string name="medium">μεσαίο</string>
+    <string name="heavy">βαρύ</string>
+    <string name="date">ημερομηνία</string>
+    <string name="time">ώρα</string>
+    <string name="date_and_time">ημερομηνία και ώρα</string>
+    <string name="local">τοπικό</string>
+    <string name="timezone">ζώνη ώρας</string>
+    <string name="system_version">έκδοση συστήματος</string>
+    <string name="device_info">πληροφορίες συσκευής</string>
+    <string name="battery_level">επίπεδο μπαταρίας</string>
+    <string name="insert">Εισαγωγή</string>
+    <string name="confirm">Επιβεβαίωση</string>
+    <string name="message">Μήνυμα</string>
+    <string name="content">Περιεχόμενο</string>
+    <string name="today">Σήμερα</string>
+    <string name="tomorrow">Αύριο</string>
+    <string name="according_to_timing">Σύμφωνα με το χρονοδιάγραμμα</string>
+    <string name="untitled">Χωρίς τίτλο</string>
+    <string name="hue">Απόχρωση</string>
+    <string name="saturation">Κορεσμός</string>
+    <string name="brightness">Φωτεινότητα</string>
+    <string name="shades">Αποχρώσεις</string>
+    <string name="complementary">Συμπληρωματικό</string>
+    <string name="task_placeholder">Εργασία..</string>
+    <string name="task_cannot_be_empty">Η εργασία δεν μπορεί να είναι κενή!</string>
+    <string name="of">από</string>
+    <string name="something_wrong_with_file">Κάτι δεν πάει καλά με το αρχείο</string>
+    <string name="could_not_load_any_information">Αδύνατη η φόρτωση πληροφοριών για το αρχείο πολυμέσων.</string>
+    <string name="no_file_path_provided">Δεν παρέχεται διαδρομή αρχείου.</string>
+    <string name="security_error_processing_file">Σφάλμα ασφαλείας κατά την επεξεργασία αρχείου</string>
+    <string name="an_unexpected_error_occurred">Παρουσιάστηκε απρόσμενο σφάλμα</string>
+    <string name="could_not_retrieve_any_information">Αδύνατη η ανάκτηση πληροφοριών για αυτό το αρχείο βίντεο.</string>
+    <string name="error_reading_metadata">Σφάλμα ανάγνωσης μεταδεδομένων πολυμέσων</string>
+    <string name="could_not_read_exif_data">Αδύνατη η ανάγνωση δεδομένων EXIF</string>
+    <string name="error_reading_basic_file_info">Σφάλμα ανάγνωσης βασικών πληροφοριών αρχείου</string>
+    <string name="file_does_not_exist">Το αρχείο δεν υπάρχει</string>
+    <string name="error">Σφάλμα</string>
+    <string name="loading_media_info">Φόρτωση πληροφοριών πολυμέσων…</string>
+    <string name="no_metadata_available_for_this_document">Δεν υπάρχουν διαθέσιμα μεταδεδομένα για αυτό το έγγραφο.</string>
+    <string name="could_not_read_pdf_metadata">Αδύνατη η ανάγνωση μεταδεδομένων PDF</string>
+    <string name="cannot_read_file">Αδύνατη η ανάγνωση αρχείου</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Αδύνατη η αποκωδικοποίηση διαστάσεων εικόνας ή μη έγκυρη μορφή.</string>
+    <string name="error_during_dimension_decoding">Σφάλμα κατά την αποκωδικοποίηση διαστάσεων</string>
+    <string name="error_reading_exif_data">Σφάλμα ανάγνωσης δεδομένων EXIF</string>
+    <string name="duplicate">Αντιγραφή</string>
+    <string name="send">Αποστολή</string>
+    <string name="print">Εκτύπωση</string>
+    <string name="cleaned">Καθαρίστηκε</string>
+    <string name="cleared">Εκκαθαρίστηκε</string>
+    <string name="media_deleted">τα πολυμέσα διαγράφηκαν!</string>
+    <string name="jotting">Σημείωση</string>
+    <string name="appwidget_text">ΠΑΡΑΔΕΙΓΜΑ</string>
+    <string name="add_widget">Προσθήκη widget</string>
+    <string name="app_widget_description">Αυτή είναι η περιγραφή του widget εφαρμογής</string>
+    <string name="quick_widget_description">Αυτή είναι η διάταξη γρήγορου widget</string>
+    <string name="creator_widget_description">Αυτό είναι το widget διάταξης δημιουργού</string>
+    <string name="notes_list_description">Αυτή είναι μια λίστα σημειώσεων</string>
+    <string name="record_deleted">η εγγραφή διαγράφηκε!</string>
+</resources>

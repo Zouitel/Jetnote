@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">შენიშვნები</string>
+    <string name="screen_chat">AI ჩატი</string>
+    <string name="screen_tags">ტეგები</string>
+    <string name="screen_settings">პარამეტრები</string>
+    <string name="screen_archive">არქივი</string>
+    <string name="screen_about">შესახებ</string>
+    <string name="screen_feedback">გამოხმაურება</string>
+    <string name="share_app">გაუზიარე ეს აპლიკაცია</string>
+    <string name="label_more">მეტი</string>
+    <string name="label_less">ნაკლები</string>
+    <string name="msg_deleted">წაიშალა</string>
+    <string name="action_undo">გაუქმება</string>
+    <string name="tag_placeholder">ტეგი..</string>
+    <string name="tag_cannot_be_empty">ტეგი არ შეიძლება იყოს ცარიელი!</string>
+    <string name="archive">არქივი</string>
+    <string name="deleted">წაიშალა!</string>
+    <string name="erase_notes">შენიშვნების წაშლა?</string>
+    <string name="confirm_erase_notes">"სანაგვეში არსებული ყველა შენიშვნა სამუდამოდ წაიშლება."</string>
+    <string name="search_in_notes">"შენიშვნებში ძიება.."</string>
+    <string name="select_layout">"განლაგების არჩევა"</string>
+    <string name="settings">"პარამეტრები"</string>
+    <string name="account_sync">"ანგარიშის სინქრონიზაცია"</string>
+    <string name="account_sync_description">"
+                                ამ აპლიკაციისთვის Google Drive
+                                ანგარიშის სინქრონიზაციის ჩართვა
+                                საშუალებას გაძლევთ უწყვეტად
+                                შექმნათ სარეზერვო ასლი და
+                                სინქრონიზაციაში მოიყვანოთ
+                                აპლიკაციის მონაცემები, როგორიცაა
+                                შენიშვნები და პარამეტრები,
+                                რაც უზრუნველყოფს მონაცემების უსაფრთხოებას.
+        "</string>
+    <string name="assistant_configuration">"ასისტენტის კონფიგურაცია"</string>
+    <string name="assistant_configuration_description">"
+                                AI ასისტენტი არის პროგრამული
+                                უზრუნველყოფა, რომელიც მართავს
+                                ხელოვნური ინტელექტი და შექმნილია
+                                ამ აპლიკაციაში ფართო სპექტრის
+                                ამოცანებში დასახმარებლად.
+                                ეს ასისტენტები ესმით ბუნებრივ ენას
+                                და პასუხობენ მას, რაც საშუალებას
+                                გაძლევთ მათთან ურთიერთობა
+                                სურათის ან ტექსტის საშუალებით.
+                            "</string>
+    <string name="dark_mode">"მუქი რეჟიმი"</string>
+    <string name="dark_mode_description">"
+                                ეს რეჟიმი არის სისტემური პარამეტრი,
+                                რომელიც Android აპლიკაციის
+                                ინტერფეისის ფონის ფერთა სქემას
+                                უფრო მუქ ფერებზე გადართავს.
+                                შექმნილია თვალის დაღლის შესამცირებლად,
+                                ხელმისაწვდომობის გასაუმჯობესებლად,
+                                ბატარეის დასაზოგად და მომხმარებლის
+                                გამოცდილების გასაუმჯობესებლად.
+                            "</string>
+    <string name="sound_effect">"ხმოვანი ეფექტი"</string>
+    <string name="sound_effect_description">"
+                                Jetnote აპლიკაციის კონტექსტში
+                                \'ხმოვანი ეფექტის\' ფუნქცია
+                                მომხმარებლებს სმენითი გამოხმაურებას
+                                აძლევს ღილაკებთან და სხვა
+                                ინტერფეისის ელემენტებთან
+                                ურთიერთობისას.
+                                ეს გავრცელებული პრაქტიკაა
+                                მობილური აპლიკაციების შემუშავებაში
+                                მომხმარებლის გამოცდილების
+                                ინტერაქტიულობისა და მიმზიდველობის
+                                გასაზრდელად.
+                            "</string>
+    <string name="layouts">"განლაგებები"</string>
+    <string name="layouts_description">"
+                                განლაგებები ძირეულია Android
+                                აპლიკაციებში კონტენტის ორგანიზებისა
+                                და ჩვენებისთვის.
+                                ისინი განსაზღვრავენ ეკრანზე
+                                ინტერფეისის ელემენტების სტრუქტურასა
+                                და განლაგებას.
+                            "</string>
+    <string name="sort_notes">"შენიშვნების დალაგება"</string>
+    <string name="default_sort">"ნაგულისხმევი"</string>
+    <string name="name_sort">"სახელი"</string>
+    <string name="oldest_sort">"უძველესი"</string>
+    <string name="newest_sort">"უახლესი"</string>
+    <string name="priority_sort">"პრიორიტეტი"</string>
+    <string name="zen_mode">"ზენ რეჟიმი"</string>
+    <string name="zen_mode_description">"
+                                ზენ რეჟიმი (სრული ეკრანის რეჟიმი)
+                                არის ჩვენების პარამეტრი, რომელიც
+                                საშუალებას აძლევს აპლიკაციას
+                                დაიკავოს მთელი ეკრანი, მალავს
+                                ყველა სხვა ინტერფეისის ელემენტს
+                                როგორიცაა ხელსაწყოთა ზოლები,
+                                მენიუები და ოპერაციული სისტემის
+                                სამუშაო ზოლი.
+                            "</string>
+    <string name="shake">"შეანჯღრიე მოხსენებისთვის"</string>
+    <string name="shake_description">"
+                              ეს მოსახერხებელი ფუნქციაა, რომელიც
+                              მომხმარებლებს საშუალებას აძლევს
+                              გამოხმაურების ან შეცდომის
+                              მოხსენების პროცესი დაიწყოს
+                              Android მოწყობილობის ფიზიკური
+                              შეჟღრევით. \'გამოხმაურების გაგზავნის\'
+                              ან \'შეცდომის მოხსენების\'
+                              პარამეტრის მრავალ მენიუში
+                              ძებნის ნაცვლად.
+                            "</string>
+    <string name="block_screenshot">"ეკრანის ანაბეჭდის დაბლოკვა"</string>
+    <string name="block_screenshot_description">"
+                                ეკრანის ანაბეჭდების დაბლოკვა
+                                უსაფრთხოების ზომაა, რომელიც
+                                მომხმარებლებს ხელს უშლის
+                                აპლიკაციის კონტენტის ეკრანის
+                                ანაბეჭდის გადაღებაში.
+                                ხშირად გამოიყენება მგრძნობიარე
+                                ინფორმაციის, როგორიცაა საბანკო
+                                მონაცემები, პირადი მონაცემები
+                                ან საავტორო უფლებებით დაცული
+                                მასალის დასაცავად.
+                            "</string>
+    <string name="lock_mode">"დაბლოკვის რეჟიმი"</string>
+    <string name="lock_mode_description">"
+                                ეს ფუნქცია აძლიერებს აპლიკაციის
+                                უსაფრთხოებას, მოითხოვს
+                                მომხმარებლებისგან ავთენტიფიკაციას
+                                კონტენტზე წვდომამდე.
+                                ეს ჩვეულებრივ მიიღწევა მოწყობილობის
+                                ჩაშენებული უსაფრთხოების
+                                ფუნქციების გამოყენებით,
+                                როგორიცაა თითის ანაბეჭდი, PIN
+                                ან გრაფიკული გასაღები.
+                            "</string>
+    <string name="licenses">"ლიცენზიები"</string>
+    <string name="licenses_description">"
+                                    ეს ლიცენზიები შეტანილია შესაბამისი
+                                    ავტორების განაწილების მოთხოვნების
+                                    დასაკმაყოფილებლად და პროგრამული
+                                    უზრუნველყოფის არქიტექტურის
+                                    გამჭვირვალობის უზრუნველსაყოფად.
+                                    "</string>
+    <string name="title">"სათაური"</string>
+    <string name="note">"შენიშვნა"</string>
+    <string name="failed_to_save_document">"დოკუმენტის შენახვა ვერ მოხერხდა."</string>
+    <string name="gallery">"გალერეა"</string>
+    <string name="audio">აუდიო</string>
+    <string name="permission_denied">ნებართვა უარყოფილია!</string>
+    <string name="take_photo">ფოტოს გადაღება</string>
+    <string name="video_capture">ვიდეოს ჩაწერა</string>
+    <string name="recorder">ჩამწერი</string>
+    <string name="document">დოკუმენტი</string>
+    <string name="scanner">სკანერი</string>
+    <string name="tasks">დავალებები</string>
+    <string name="tags">ტეგები</string>
+    <string name="reminder">შეხსენება</string>
+    <string name="priority">პრიორიტეტი</string>
+    <string name="low_priority">დაბალი</string>
+    <string name="medium_priority">საშუალო</string>
+    <string name="high_priority">მაღალი</string>
+    <string name="urgent_priority">სასწრაფო</string>
+    <string name="non_priority">არცერთი</string>
+    <string name="created">შექმნილია</string>
+    <string name="edited">რედაქტირებულია</string>
+    <string name="types">ტიპები</string>
+    <string name="media">მედია</string>
+    <string name="medias">მედია ფაილები</string>
+    <string name="colour">ფერი</string>
+    <string name="colours">ფერები</string>
+    <string name="search_within">ძიება შიგნით</string>
+    <string name="issue_title">პრობლემის სათაური*</string>
+    <string name="issue_description">პრობლემის აღწერა (სურვილისამებრ)</string>
+    <string name="noAccount">ანგარიშის გარეშე შესვლა</string>
+    <string name="screenshot_selected">✓ ეკრანის ანაბეჭდი არჩეულია</string>
+    <string name="drive_submit">გაგზავნისას Drive-ზე ატვირთავს</string>
+    <string name="select_screenshot">ეკრანის ანაბეჭდის არჩევა</string>
+    <string name="system_logs">სისტემური ჟურნალების ჩართვა?</string>
+    <string name="find_an_issue">იპოვეთ პრობლემა?</string>
+    <string name="take_a_screenshot">არ დაგავიწყდეს ეკრანის ანაბეჭდის გადაღება.</string>
+    <string name="report_an_issue">პრობლემის შეტყობინება!</string>
+    <string name="bug">შეცდომა</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android სისტემური ჟურნალები (Logcat) გამოხმაურების ანგარიშში</string>
+    <string name="logs_description">Android სისტემური ჟურნალები არის ოპერაციული სისტემისა და ბირთვის დროის ნიშნულიანი შეტყობინებების ნაკადი.\n    | როდესაც მომხმარებელი წააწყდება პრობლემას (აპლიკაციის ავარია, გაყინვა ან მოულოდნელი ქცევა), ჟურნალები ჩაიწერს მოვლენებს პრობლემის გარშემო და მიაწვდის შემმუშავებლებს დიაგნოსტიკისთვის საჭირო კონტექსტს.</string>
+    <string name="label_bug">შეცდომა</string>
+    <string name="label_feature">ფუნქცია</string>
+    <string name="label_invalid">არასწორი</string>
+    <string name="label_question">კითხვა</string>
+    <string name="label_security">უსაფრთხოება</string>
+    <string name="failed">ვერ მოხერხდა</string>
+    <string name="submit_feedback">გამოხმაურების გაგზავნა!</string>
+    <string name="uploading_screenshot">ეკრანის ანაბეჭდის ატვირთვა…</string>
+    <string name="creating_github_issue">GitHub Issue-ის შექმნა…</string>
+    <string name="upload_faild">ატვირთვა ვერ მოხერხდა…</string>
+    <string name="upload_failed">ატვირთვა ვერ მოხერხდა…</string>
+    <string name="issue_crea">Issue შეიქმნა.</string>
+    <string name="issue_created">Issue შეიქმნა!</string>
+    <string name="log_out">გამოსვლა</string>
+    <string name="hi">გამარჯობა</string>
+    <string name="add_account">სხვა ანგარიშის დამატება</string>
+    <string name="manage_account">ანგარიშის მართვა</string>
+    <string name="upload_data">მონაცემების ატვირთვა</string>
+    <string name="download_data">მონაცემების ჩამოტვირთვა</string>
+    <string name="firebase_authentication_failed">Firebase-ის ავთენტიფიკაცია ვერ მოხერხდა</string>
+    <string name="sign_in_failed">Google-ით შესვლა ვერ მოხერხდა</string>
+    <string name="please_wait">შედიხართ, გთხოვთ დაელოდოთ…</string>
+    <string name="sync_title">შედით სინქრონიზაციისთვის</string>
+    <string name="sync_description">შედით Google ანგარიშით, რომ ყველა მოწყობილობაზე სარეზერვო ასლი შექმნათ და შენიშვნები სინქრონიზაციაში მოიყვანოთ.</string>
+    <string name="current_account">მიმდინარე ანგარიში</string>
+    <string name="no_name">სახელი არ არის</string>
+    <string name="no_email">ელ-ფოსტა არ არის</string>
+    <string name="sign_out">გამოსვლა</string>
+    <string name="sign_in_with_google">Google-ით შესვლა</string>
+    <string name="ai_models">AI მოდელები</string>
+    <string name="load_more">მეტის ჩატვირთვა</string>
+    <string name="available_models">ხელმისაწვდომი მოდელები</string>
+    <string name="assistant_settings">ასისტენტის პარამეტრები</string>
+    <string name="learning_mode">სწავლების რეჟიმი</string>
+    <string name="learning_mode_description">"
+                    მონიშნული მაგალითებიდან ნასწავლი
+                    შაბლონების საფუძველზე ახალი,
+                    დაუნახავი მონაცემებისთვის
+                    გამოსავლის პროგნოზირება.
+                "</string>
+    <string name="temperat">ტემპერატურა</string>
+    <string name="temperature">ტემპერატურა</string>
+    <string name="temperature_description">"
+           აკონტროლებს გამოსავლის შემთხვევითობას.
+           უფრო მაღალი მნიშვნელობები უფრო კრეატიულია.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            აკონტროლებს რომელი ტოკენები გათვალისწინებულია გამოსავლისთვის.
+            </string>
+    <string name="context_message_size">კონტექსტური შეტყობინებების ზომა</string>
+    <string name="context_message_size_description">
+            კონტექსტში ჩასართავი წინა შეტყობინებების
+            მაქსიმალური რაოდენობა.
+        </string>
+    <string name="stream_output">ნაკადური გამოსავალი</string>
+    <string name="stream_output_description">გამოსავლის ჩვენება გენერირებისას.</string>
+    <string name="thinking_budget">აზროვნების ბიუჯეტი</string>
+    <string name="thinking_budget_description">
+                            პასუხისთვის გამოყენებული
+                            გამოთვლითი რესურსების შეზღუდვა.
+                        </string>
+    <string name="system_prompt">სისტემური მოთხოვნა</string>
+    <string name="prompt">მოთხოვნა..</string>
+    <string name="properties">თვისებები</string>
+    <string name="quick_messages">სწრაფი შეტყობინებები</string>
+    <string name="quick_messages_description">სწრაფი შეტყობინებების მალსახმობების კონფიგურაცია.</string>
+    <string name="regular_expressions">რეგულარული გამოსახულებები</string>
+    <string name="regular_expressions_description">
+                            გაგზავნამდე/მიღებამდე შეტყობინებების
+                            გასარდამყოფად regex შაბლონების განსაზღვრა.
+                        </string>
+    <string name="headers">სათაურები</string>
+    <string name="headers_description">
+                            ეს არის გასაღები-მნიშვნელობის წყვილები
+                            დამატებული მოთხოვნის სათაურის ბლოკში.
+                            ჩვეულებრივ გამოიყენება ავთენტიფიკაციისთვის,
+                            კონტენტის ტიპის მითითებისთვის ან
+                            მოთხოვნის შესახებ მეტამონაცემების
+                            გადაცემისთვის.
+                        </string>
+    <string name="bodies">სხეულები</string>
+    <string name="bodies_description">
+                            მოთხოვნაში გაგზავნილ მონაცემთა დატვირთვას
+                            (JSON სტრუქტურა) ეხება.
+                            ეს AI მოდელისთვის შეყვანის გაგზავნის
+                            ძირითადი საშუალებაა.
+                        </string>
+    <string name="memory">მეხსიერება</string>
+    <string name="memory_description">
+                            ასისტენტს საშუალება მიეცეს გაიხსენოს
+                            საუბრის წინა შემობრუნებები.
+                        </string>
+    <string name="chats_reference">ბოლო ჩატების მითითება</string>
+    <string name="chats_reference_description">
+                        უკეთესი კონტექსტური პასუხებისთვის
+                        ბოლო ჩატების მონაცემებზე მითითება.
+                        </string>
+    <string name="javascript">JavaScript ძრავა</string>
+    <string name="javascript_description">
+                            გამოთვლებისა და სკრიპტირებისთვის
+                            QuickJS ძრავით JavaScript კოდის შესრულება.
+                        </string>
+    <string name="reset">პარამეტრების გადატვირთვა!</string>
+    <string name="providers">პროვაიდერები</string>
+    <string name="ask">კითხვა</string>
+    <string name="add_model"><![CDATA[<- AI მოდელის დამატება]]></string>
+    <string name="delete">წაშლა</string>
+    <string name="options">პარამეტრები</string>
+    <string name="retitle">გადარქმევა</string>
+    <string name="assistant">ასისტენტი</string>
+    <string name="new_chat">ახალი ჩატი</string>
+    <string name="files">ფაილები</string>
+    <string name="audios">აუდიო</string>
+    <string name="videos">ვიდეო</string>
+    <string name="camera">კამერა</string>
+    <string name="pictures">სურათები</string>
+    <string name="provider_settings">პროვაიდერის პარამეტრები</string>
+    <string name="api_key">API გასაღები</string>
+    <string name="base_url">საბაზო URL</string>
+    <string name="model_name">მოდელის სახელი</string>
+    <string name="modalities">მოდალობები</string>
+    <string name="tools">ხელსაწყოები</string>
+    <string name="reasoning">მსჯელობა</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">ანგარიშის ბალანსი</string>
+    <string name="api_path">API გზა..</string>
+    <string name="json_key">Json გასაღები..</string>
+    <string name="network_proxy">ქსელური პროქსი</string>
+    <string name="host">ჰოსტი..</string>
+    <string name="username_option">მომხმარებლის სახელი (სურვილისამებრ)..</string>
+    <string name="pass_option">პაროლი (სურვილისამებრ)..</string>
+    <string name="service_account">სასამსახურო ანგარიში @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">პირადი გასაღები..</string>
+    <string name="location">მდებარეობა..</string>
+    <string name="project_uid">პროექტის UID..</string>
+    <string name="details">დეტალები</string>
+    <string name="model_type">მოდელის ტიპი</string>
+    <string name="input_modalities">შეყვანის მოდალობები</string>
+    <string name="output_modalities">გამოსავლის მოდალობები</string>
+    <string name="abilities">შესაძლებლობები</string>
+    <string name="provider_override">პროვაიდერის გადაფარვის დამატება</string>
+    <string name="provider_override_description">
+                            ამ კონკრეტული მოდელისთვის
+                            მორგებული პროვაიდერის პარამეტრების
+                            კონფიგურაცია. იყენებს მოდელის მთავარი
+                            პროვაიდერის საერთო თვისებებს.
+                        </string>
+    <string name="build_tools">აგების ხელსაწყოები</string>
+    <string name="build_tools_description">
+                            ეს ხელსაწყოები პირდაპირ API-ის მიერ
+                            მოწოდებულია, აპლიკაციის მხარდაჭერის
+                            გარეშე. ეს ფუნქცია ამჟამად მხოლოდ
+                            Gemini API-ის მიერ არის მხარდაჭერილი.
+                        </string>
+    <string name="google_search">ძიება</string>
+    <string name="google_search_description">Google Search ინტეგრაციის ჩართვა</string>
+    <string name="url_context">URL კონტექსტი</string>
+    <string name="url_context_description">URL კონტექსტის დამუშავების ჩართვა</string>
+    <string name="find">პოვნა</string>
+    <string name="replace">შეცვლა</string>
+    <string name="effecting_scopes">მოქმედების სფეროები</string>
+    <string name="user">მომხმარებელი</string>
+    <string name="visual_only">მხოლოდ ვიზუალური</string>
+    <string name="body">სხეული</string>
+    <string name="key">გასაღები</string>
+    <string name="value">მნიშვნელობა</string>
+    <string name="header">სათაური.</string>
+    <string name="reset_description">ასისტენტის პარამეტრების ნაგულისხმევ რეჟიმზე გადატვირთვა.</string>
+    <string name="save_changes">ცვლილებების შენახვა?</string>
+    <string name="save_changes_description">გაქვთ შეუნახავი ცვლილებები. გსურთ მათი შენახვა გასვლამდე?</string>
+    <string name="dont_save">არ შეინახო</string>
+    <string name="save">შენახვა</string>
+    <string name="links">ბმულები</string>
+    <string name="reminders">შეხსენებები</string>
+    <string name="priorities">პრიორიტეტები</string>
+    <string name="ai_chat">AI ჩატი</string>
+    <string name="auto">ავტომატური</string>
+    <string name="light">მსუბუქი</string>
+    <string name="medium">საშუალო</string>
+    <string name="heavy">მძიმე</string>
+    <string name="date">თარიღი</string>
+    <string name="time">დრო</string>
+    <string name="date_and_time">თარიღი და დრო</string>
+    <string name="local">ლოკალური</string>
+    <string name="timezone">დროის სარტყელი</string>
+    <string name="system_version">სისტემის ვერსია</string>
+    <string name="device_info">მოწყობილობის ინფო</string>
+    <string name="battery_level">ბატარეის დონე</string>
+    <string name="insert">ჩასმა</string>
+    <string name="confirm">დადასტურება</string>
+    <string name="message">შეტყობინება</string>
+    <string name="content">კონტენტი</string>
+    <string name="today">დღეს</string>
+    <string name="tomorrow">ხვალ</string>
+    <string name="according_to_timing">დროის მიხედვით</string>
+    <string name="untitled">სახელდაუდებელი</string>
+    <string name="hue">ტონი</string>
+    <string name="saturation">გაჯერება</string>
+    <string name="brightness">სიკაშკაშე</string>
+    <string name="shades">ჩრდილები</string>
+    <string name="complementary">დამატებითი</string>
+    <string name="task_placeholder">დავალება..</string>
+    <string name="task_cannot_be_empty">დავალება არ შეიძლება იყოს ცარიელი!</string>
+    <string name="of">-დან</string>
+    <string name="something_wrong_with_file">ფაილთან დაკავშირებული პრობლემა</string>
+    <string name="could_not_load_any_information">მედია ფაილის ინფორმაციის ჩატვირთვა ვერ მოხერხდა.</string>
+    <string name="no_file_path_provided">ფაილის გზა არ არის მითითებული.</string>
+    <string name="security_error_processing_file">ფაილის დამუშავებისას უსაფრთხოების შეცდომა</string>
+    <string name="an_unexpected_error_occurred">მოულოდნელი შეცდომა მოხდა</string>
+    <string name="could_not_retrieve_any_information">ვიდეო ფაილის ინფორმაციის მიღება ვერ მოხერხდა.</string>
+    <string name="error_reading_metadata">მედია მეტამონაცემების წაკითხვის შეცდომა</string>
+    <string name="could_not_read_exif_data">EXIF მონაცემების წაკითხვა ვერ მოხერხდა</string>
+    <string name="error_reading_basic_file_info">ფაილის ძირითადი ინფორმაციის წაკითხვის შეცდომა</string>
+    <string name="file_does_not_exist">ფაილი არ არსებობს</string>
+    <string name="error">შეცდომა</string>
+    <string name="loading_media_info">მედია ინფორმაციის ჩატვირთვა…</string>
+    <string name="no_metadata_available_for_this_document">ამ დოკუმენტისთვის მეტამონაცემები არ არის ხელმისაწვდომი.</string>
+    <string name="could_not_read_pdf_metadata">PDF მეტამონაცემების წაკითხვა ვერ მოხერხდა</string>
+    <string name="cannot_read_file">ფაილის წაკითხვა შეუძლებელია</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">სურათის განზომილებების გაშიფვრა ვერ მოხერხდა ან ფორმატი არასწორია.</string>
+    <string name="error_during_dimension_decoding">განზომილებების გაშიფვრის შეცდომა</string>
+    <string name="error_reading_exif_data">EXIF მონაცემების წაკითხვის შეცდომა</string>
+    <string name="duplicate">დუბლირება</string>
+    <string name="send">გაგზავნა</string>
+    <string name="print">დაბეჭდვა</string>
+    <string name="cleaned">გასუფთავებულია</string>
+    <string name="cleared">გაწმენდილია</string>
+    <string name="media_deleted">მედია წაიშალა!</string>
+    <string name="jotting">ჩაწერა</string>
+    <string name="appwidget_text">მაგალითი</string>
+    <string name="add_widget">ვიჯეტის დამატება</string>
+    <string name="app_widget_description">ეს არის აპლიკაციის ვიჯეტის აღწერა</string>
+    <string name="quick_widget_description">ეს არის სწრაფი ვიჯეტის განლაგება</string>
+    <string name="creator_widget_description">ეს არის შემქმნელის განლაგების ვიჯეტი</string>
+    <string name="notes_list_description">ეს არის შენიშვნების სია</string>
+    <string name="record_deleted">ჩანაწერი წაიშალა!</string>
+</resources>

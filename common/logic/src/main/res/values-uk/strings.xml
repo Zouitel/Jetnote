@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Нотатки</string>
+    <string name="screen_chat">AI Чат</string>
+    <string name="screen_tags">Теги</string>
+    <string name="screen_settings">Налаштування</string>
+    <string name="screen_archive">Архів</string>
+    <string name="screen_about">Про застосунок</string>
+    <string name="screen_feedback">Відгук</string>
+    <string name="share_app">Поділитися цим застосунком</string>
+    <string name="label_more">більше</string>
+    <string name="label_less">менше</string>
+    <string name="msg_deleted">видалено</string>
+    <string name="action_undo">Скасувати</string>
+    <string name="tag_placeholder">Тег..</string>
+    <string name="tag_cannot_be_empty">Тег не може бути порожнім!</string>
+    <string name="archive">Архів</string>
+    <string name="deleted">видалено!</string>
+    <string name="erase_notes">Видалити нотатки?</string>
+    <string name="confirm_erase_notes">"Усі нотатки у кошику буде остаточно видалено."</string>
+    <string name="search_in_notes">"Пошук у нотатках.."</string>
+    <string name="select_layout">"Вибрати макет"</string>
+    <string name="settings">"Налаштування"</string>
+    <string name="account_sync">"Синхронізація облікового запису"</string>
+    <string name="account_sync_description">"
+                                Увімкнення синхронізації облікового запису
+                                Google Drive для цього застосунку дозволяє
+                                безперебійно створювати резервні копії та
+                                синхронізувати дані застосунку, такі як
+                                нотатки та налаштування, забезпечуючи
+                                безпеку ваших даних.
+        "</string>
+    <string name="assistant_configuration">"Налаштування асистента"</string>
+    <string name="assistant_configuration_description">"
+                                AI-асистент — це програмне забезпечення,
+                                кероване штучним інтелектом, розроблене
+                                для допомоги у виконанні широкого спектра
+                                завдань у цьому застосунку.
+                                Ці асистенти розуміють природну мову та
+                                відповідають нею, дозволяючи вам
+                                взаємодіяти з ними через зображення або текст.
+                            "</string>
+    <string name="dark_mode">"Темний режим"</string>
+    <string name="dark_mode_description">"
+                                Цей режим є загальносистемним налаштуванням,
+                                яке змінює кольорову схему фону інтерфейсу
+                                вашого Android-застосунку на темніші кольори.
+                                Він призначений для зменшення втоми очей,
+                                покращення доступності, економії заряду
+                                батареї та покращення користувацького досвіду.
+                            "</string>
+    <string name="sound_effect">"Звуковий ефект"</string>
+    <string name="sound_effect_description">"
+                                У контексті застосунку Jetnote функція
+                                \'Звуковий ефект\' надає користувачам
+                                звуковий зворотний зв\'язок під час
+                                взаємодії з кнопками та іншими елементами
+                                інтерфейсу. Це поширена практика в розробці
+                                мобільних застосунків, що робить
+                                користувацький досвід більш інтерактивним
+                                та захопливим.
+                            "</string>
+    <string name="layouts">"Макети"</string>
+    <string name="layouts_description">"
+                                Макети є основою для організації та
+                                відображення вмісту в Android-застосунках.
+                                Вони визначають структуру та розташування
+                                елементів інтерфейсу на екрані.
+                            "</string>
+    <string name="sort_notes">"Сортування нотаток"</string>
+    <string name="default_sort">"за замовчуванням"</string>
+    <string name="name_sort">"за назвою"</string>
+    <string name="oldest_sort">"найстаріші"</string>
+    <string name="newest_sort">"найновіші"</string>
+    <string name="priority_sort">"пріоритет"</string>
+    <string name="zen_mode">"Режим Дзен"</string>
+    <string name="zen_mode_description">"
+                                Режим Дзен (повноекранний режим) — це
+                                налаштування дисплея, яке дозволяє
+                                застосунку займати весь екран, приховуючи
+                                всі інші елементи інтерфейсу, такі як
+                                панелі інструментів, меню та панель
+                                завдань операційної системи.
+                            "</string>
+    <string name="shake">"Струсіть для звіту"</string>
+    <string name="shake_description">"
+                              Це зручна функція, яка дозволяє
+                              користувачам розпочати процес надсилання
+                              відгуку або звіту про помилку, просто
+                              фізично струснувши пристрій Android.
+                              Замість того щоб переходити через кілька
+                              меню, щоб знайти \'Надіслати відгук\'
+                              або \'Повідомити про помилку\'.
+                            "</string>
+    <string name="block_screenshot">"Блокувати знімки екрана"</string>
+    <string name="block_screenshot_description">"
+                                Блокування знімків екрана — це заходи
+                                безпеки, які запобігають створенню
+                                користувачами знімків вмісту вашого
+                                застосунку. Часто використовується для
+                                захисту конфіденційної інформації, такої
+                                як банківські дані, персональні дані або
+                                матеріали, захищені авторським правом.
+                            "</string>
+    <string name="lock_mode">"Режим блокування"</string>
+    <string name="lock_mode_description">"
+                                Ця функція підвищує безпеку застосунку,
+                                вимагаючи від користувачів автентифікації
+                                перед доступом до вмісту. Зазвичай це
+                                досягається за допомогою вбудованих
+                                функцій безпеки пристрою, таких як
+                                відбиток пальця, PIN-код або графічний ключ.
+                            "</string>
+    <string name="licenses">"Ліцензії"</string>
+    <string name="licenses_description">"
+                                    Ці ліцензії включено для дотримання
+                                    вимог щодо розповсюдження відповідних
+                                    авторів та забезпечення прозорості
+                                    архітектури програмного забезпечення.
+                                    "</string>
+    <string name="title">"Заголовок"</string>
+    <string name="note">"Нотатка"</string>
+    <string name="failed_to_save_document">"Не вдалося зберегти документ."</string>
+    <string name="gallery">"Галерея"</string>
+    <string name="audio">Аудіо</string>
+    <string name="permission_denied">Дозвіл відхилено!</string>
+    <string name="take_photo">Зробити фото</string>
+    <string name="video_capture">Записати відео</string>
+    <string name="recorder">Диктофон</string>
+    <string name="document">Документ</string>
+    <string name="scanner">Сканер</string>
+    <string name="tasks">Завдання</string>
+    <string name="tags">Теги</string>
+    <string name="reminder">Нагадування</string>
+    <string name="priority">Пріоритет</string>
+    <string name="low_priority">Низький</string>
+    <string name="medium_priority">Середній</string>
+    <string name="high_priority">Високий</string>
+    <string name="urgent_priority">Терміново</string>
+    <string name="non_priority">Без</string>
+    <string name="created">Створено</string>
+    <string name="edited">Відредаговано</string>
+    <string name="types">Типи</string>
+    <string name="media">Медіа</string>
+    <string name="medias">Медіафайли</string>
+    <string name="colour">Колір</string>
+    <string name="colours">Кольори</string>
+    <string name="search_within">Пошук у</string>
+    <string name="issue_title">Назва проблеми*</string>
+    <string name="issue_description">Опис проблеми (необов\'язково)</string>
+    <string name="noAccount">Увійти без облікового запису</string>
+    <string name="screenshot_selected">✓ Знімок екрана вибрано</string>
+    <string name="drive_submit">Буде завантажено на Drive під час надсилання</string>
+    <string name="select_screenshot">Вибрати знімок екрана</string>
+    <string name="system_logs">Включити системні журнали?</string>
+    <string name="find_an_issue">Знайшли проблему?</string>
+    <string name="take_a_screenshot">Не забудьте зробити знімок екрана.</string>
+    <string name="report_an_issue">Повідомити про проблему!</string>
+    <string name="bug">Помилка</string>
+    <string name="logs_title">\\uD83D\\uDCiE Системні журнали Android (Logcat) у звіті відгуку</string>
+    <string name="logs_description">Системні журнали Android — це потік повідомлень із позначками часу від операційної системи та ядра.\n    | Коли користувач стикається з проблемою (збій застосунку, зависання або несподівана поведінка), журнали фіксують події навколо проблеми, надаючи розробникам необхідний контекст для діагностики.</string>
+    <string name="label_bug">Помилка</string>
+    <string name="label_feature">Функція</string>
+    <string name="label_invalid">Недійсне</string>
+    <string name="label_question">Питання</string>
+    <string name="label_security">Безпека</string>
+    <string name="failed">Не вдалося</string>
+    <string name="submit_feedback">Надіслати відгук!</string>
+    <string name="uploading_screenshot">Завантаження знімка екрана…</string>
+    <string name="creating_github_issue">Створення GitHub issue…</string>
+    <string name="upload_faild">Завантаження не вдалося…</string>
+    <string name="upload_failed">Завантаження не вдалося…</string>
+    <string name="issue_crea">Issue створено.</string>
+    <string name="issue_created">Issue створено!</string>
+    <string name="log_out">Вийти</string>
+    <string name="hi">Привіт</string>
+    <string name="add_account">Додати інший обліковий запис</string>
+    <string name="manage_account">Керувати обліковим записом</string>
+    <string name="upload_data">Завантажити дані</string>
+    <string name="download_data">Завантажити дані</string>
+    <string name="firebase_authentication_failed">Автентифікація Firebase не вдалася</string>
+    <string name="sign_in_failed">Вхід через Google не вдався</string>
+    <string name="please_wait">Вхід, зачекайте будь ласка…</string>
+    <string name="sync_title">Увійдіть для синхронізації</string>
+    <string name="sync_description">Увійдіть за допомогою облікового запису Google, щоб створити резервну копію та синхронізувати нотатки на всіх пристроях.</string>
+    <string name="current_account">Поточний обліковий запис</string>
+    <string name="no_name">Без імені</string>
+    <string name="no_email">Без електронної пошти</string>
+    <string name="sign_out">Вийти</string>
+    <string name="sign_in_with_google">Увійти через Google</string>
+    <string name="ai_models">AI-моделі</string>
+    <string name="load_more">Завантажити більше</string>
+    <string name="available_models">Доступні моделі</string>
+    <string name="assistant_settings">Налаштування асистента</string>
+    <string name="learning_mode">Режим навчання</string>
+    <string name="learning_mode_description">"
+                    Прогнозування виходу для нових, раніше
+                    не бачених даних на основі закономірностей,
+                    вивчених із позначених прикладів.
+                "</string>
+    <string name="temperat">Температура</string>
+    <string name="temperature">Температура</string>
+    <string name="temperature_description">"
+           Контролює випадковість виходу.
+           Вищі значення дають більш творчі результати.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Контролює, які токени беруться до уваги для виходу.
+            </string>
+    <string name="context_message_size">Розмір контекстних повідомлень</string>
+    <string name="context_message_size_description">
+            Максимальна кількість попередніх повідомлень,
+            що включаються до контексту.
+        </string>
+    <string name="stream_output">Потоковий вивід</string>
+    <string name="stream_output_description">Відображати відповідь під час її генерування.</string>
+    <string name="thinking_budget">Бюджет міркувань</string>
+    <string name="thinking_budget_description">
+                            Обмежує обчислювальні ресурси,
+                            що використовуються для відповіді.
+                        </string>
+    <string name="system_prompt">Системний запит</string>
+    <string name="prompt">Запит..</string>
+    <string name="properties">Властивості</string>
+    <string name="quick_messages">Швидкі повідомлення</string>
+    <string name="quick_messages_description">Налаштувати ярлики для швидких повідомлень.</string>
+    <string name="regular_expressions">Регулярні вирази</string>
+    <string name="regular_expressions_description">
+                            Визначити шаблони regex для перетворення
+                            повідомлень перед надсиланням/отриманням.
+                        </string>
+    <string name="headers">Заголовки</string>
+    <string name="headers_description">
+                            Це пари ключ-значення, додані до блоку
+                            заголовків запиту. Зазвичай використовуються
+                            для автентифікації, визначення типу вмісту
+                            або передачі метаданих про запит.
+                        </string>
+    <string name="bodies">Тіла</string>
+    <string name="bodies_description">
+                            Посилається на корисне навантаження даних
+                            (JSON-структура), надіслане в запиті.
+                            Це основний спосіб надсилання вхідних
+                            даних до AI-моделі.
+                        </string>
+    <string name="memory">Пам\'ять</string>
+    <string name="memory_description">
+                            Дозволити асистенту запам\'ятовувати
+                            попередні частини розмови.
+                        </string>
+    <string name="chats_reference">Посилання на останні чати</string>
+    <string name="chats_reference_description">
+                        Посилатися на дані з останніх чатів для
+                        кращих контекстуальних відповідей.
+                        </string>
+    <string name="javascript">JavaScript-рушій</string>
+    <string name="javascript_description">
+                            Виконувати код JavaScript за допомогою
+                            рушія QuickJS для обчислень і сценаріїв.
+                        </string>
+    <string name="reset">Скинути налаштування!</string>
+    <string name="providers">Провайдери</string>
+    <string name="ask">Запитати</string>
+    <string name="add_model"><![CDATA[<- Додати AI-модель]]></string>
+    <string name="delete">Видалити</string>
+    <string name="options">Параметри</string>
+    <string name="retitle">Перейменувати</string>
+    <string name="assistant">Асистент</string>
+    <string name="new_chat">Новий чат</string>
+    <string name="files">Файли</string>
+    <string name="audios">Аудіо</string>
+    <string name="videos">Відео</string>
+    <string name="camera">Камера</string>
+    <string name="pictures">Зображення</string>
+    <string name="provider_settings">Налаштування провайдера</string>
+    <string name="api_key">API-ключ</string>
+    <string name="base_url">Базова URL</string>
+    <string name="model_name">Назва моделі</string>
+    <string name="modalities">Модальності</string>
+    <string name="tools">Інструменти</string>
+    <string name="reasoning">Міркування</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Баланс рахунку</string>
+    <string name="api_path">Шлях API..</string>
+    <string name="json_key">Json-ключ..</string>
+    <string name="network_proxy">Мережевий проксі</string>
+    <string name="host">Хост..</string>
+    <string name="username_option">Ім\'я користувача (необов\'язково)..</string>
+    <string name="pass_option">Пароль (необов\'язково)..</string>
+    <string name="service_account">Службовий обліковий запис @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Приватний ключ..</string>
+    <string name="location">Місцезнаходження..</string>
+    <string name="project_uid">UID проєкту..</string>
+    <string name="details">Деталі</string>
+    <string name="model_type">Тип моделі</string>
+    <string name="input_modalities">Вхідні модальності</string>
+    <string name="output_modalities">Вихідні модальності</string>
+    <string name="abilities">Можливості</string>
+    <string name="provider_override">Додати перевизначення провайдера</string>
+    <string name="provider_override_description">
+                            Налаштувати параметри провайдера для
+                            цієї конкретної моделі.
+                            Використовує загальні властивості основного
+                            провайдера моделі.
+                        </string>
+    <string name="build_tools">Інструменти збірки</string>
+    <string name="build_tools_description">
+                            Ці інструменти надаються безпосередньо API
+                            без необхідності підтримки застосунку.
+                            Ця функція наразі підтримується лише
+                            Gemini API.
+                        </string>
+    <string name="google_search">Пошук</string>
+    <string name="google_search_description">Увімкнути інтеграцію з Google Search</string>
+    <string name="url_context">URL-контекст</string>
+    <string name="url_context_description">Увімкнути обробку URL-контексту</string>
+    <string name="find">Знайти</string>
+    <string name="replace">Замінити</string>
+    <string name="effecting_scopes">Зони дії</string>
+    <string name="user">користувач</string>
+    <string name="visual_only">лише візуальне</string>
+    <string name="body">Тіло</string>
+    <string name="key">ключ</string>
+    <string name="value">Значення</string>
+    <string name="header">Заголовок.</string>
+    <string name="reset_description">Скинути налаштування асистента до режиму за замовчуванням.</string>
+    <string name="save_changes">Зберегти зміни?</string>
+    <string name="save_changes_description">У вас є незбережені зміни. Бажаєте зберегти їх перед виходом?</string>
+    <string name="dont_save">Не зберігати</string>
+    <string name="save">Зберегти</string>
+    <string name="links">Посилання</string>
+    <string name="reminders">Нагадування</string>
+    <string name="priorities">Пріоритети</string>
+    <string name="ai_chat">AI Чат</string>
+    <string name="auto">автоматично</string>
+    <string name="light">легкий</string>
+    <string name="medium">середній</string>
+    <string name="heavy">важкий</string>
+    <string name="date">дата</string>
+    <string name="time">час</string>
+    <string name="date_and_time">дата та час</string>
+    <string name="local">локальний</string>
+    <string name="timezone">часовий пояс</string>
+    <string name="system_version">версія системи</string>
+    <string name="device_info">інформація про пристрій</string>
+    <string name="battery_level">рівень заряду батареї</string>
+    <string name="insert">Вставити</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="message">Повідомлення</string>
+    <string name="content">Вміст</string>
+    <string name="today">Сьогодні</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="according_to_timing">Відповідно до розкладу</string>
+    <string name="untitled">Без назви</string>
+    <string name="hue">Відтінок</string>
+    <string name="saturation">Насиченість</string>
+    <string name="brightness">Яскравість</string>
+    <string name="shades">Тіні</string>
+    <string name="complementary">Додатковий</string>
+    <string name="task_placeholder">Завдання..</string>
+    <string name="task_cannot_be_empty">Завдання не може бути порожнім!</string>
+    <string name="of">з</string>
+    <string name="something_wrong_with_file">Щось не так із файлом</string>
+    <string name="could_not_load_any_information">Не вдалося завантажити інформацію про медіафайл.</string>
+    <string name="no_file_path_provided">Шлях до файлу не вказано.</string>
+    <string name="security_error_processing_file">Помилка безпеки під час обробки файлу</string>
+    <string name="an_unexpected_error_occurred">Сталася неочікувана помилка</string>
+    <string name="could_not_retrieve_any_information">Не вдалося отримати інформацію для цього відеофайлу.</string>
+    <string name="error_reading_metadata">Помилка читання медіаметаданих</string>
+    <string name="could_not_read_exif_data">Не вдалося прочитати дані EXIF</string>
+    <string name="error_reading_basic_file_info">Помилка читання основної інформації про файл</string>
+    <string name="file_does_not_exist">Файл не існує</string>
+    <string name="error">Помилка</string>
+    <string name="loading_media_info">Завантаження медіаінформації…</string>
+    <string name="no_metadata_available_for_this_document">Для цього документа немає доступних метаданих.</string>
+    <string name="could_not_read_pdf_metadata">Не вдалося прочитати метадані PDF</string>
+    <string name="cannot_read_file">Неможливо прочитати файл</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Не вдалося декодувати розміри зображення або недійсний формат.</string>
+    <string name="error_during_dimension_decoding">Помилка під час декодування розмірів</string>
+    <string name="error_reading_exif_data">Помилка читання даних EXIF</string>
+    <string name="duplicate">Дублювати</string>
+    <string name="send">Надіслати</string>
+    <string name="print">Друкувати</string>
+    <string name="cleaned">Очищено</string>
+    <string name="cleared">Видалено</string>
+    <string name="media_deleted">медіа видалено!</string>
+    <string name="jotting">Нотування</string>
+    <string name="appwidget_text">ПРИКЛАД</string>
+    <string name="add_widget">Додати віджет</string>
+    <string name="app_widget_description">Це опис віджета застосунку</string>
+    <string name="quick_widget_description">Це швидкий макет віджета</string>
+    <string name="creator_widget_description">Це віджет макета творця</string>
+    <string name="notes_list_description">Це список нотаток</string>
+    <string name="record_deleted">запис видалено!</string>
+</resources>

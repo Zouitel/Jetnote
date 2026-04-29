@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">កំណត់ចំណាំ</string>
+    <string name="screen_chat">AI ជជែក</string>
+    <string name="screen_tags">ស្លាក</string>
+    <string name="screen_settings">ការកំណត់</string>
+    <string name="screen_archive">ប័ណ្ណសារ</string>
+    <string name="screen_about">អំពី</string>
+    <string name="screen_feedback">មតិកែលម្អ</string>
+    <string name="share_app">ចែករំលែកកម្មវិធីនេះ</string>
+    <string name="label_more">បន្ថែម</string>
+    <string name="label_less">តិច</string>
+    <string name="msg_deleted">បានលុប</string>
+    <string name="action_undo">មិនធ្វើវិញ</string>
+    <string name="tag_placeholder">ស្លាក..</string>
+    <string name="tag_cannot_be_empty">ស្លាកមិនអាចទទេបានទេ!</string>
+    <string name="archive">ប័ណ្ណសារ</string>
+    <string name="deleted">បានលុប!</string>
+    <string name="erase_notes">លុបកំណត់ចំណាំ?</string>
+    <string name="confirm_erase_notes">"កំណត់ចំណាំទាំងអស់នៅក្នុងធុងសំរាមនឹងត្រូវបានលុបចោលជាអចិន្ត្រៃយ៍។"</string>
+    <string name="search_in_notes">"ស្វែងរកក្នុងកំណត់ចំណាំ.."</string>
+    <string name="select_layout">"ជ្រើសរើសប្លង់"</string>
+    <string name="settings">"ការកំណត់"</string>
+    <string name="account_sync">"ការធ្វើសមកាលកម្មគណនី"</string>
+    <string name="account_sync_description">"
+                                ការបើកដំណើរការធ្វើសមកាលកម្មគណនី
+                                Google Drive សម្រាប់កម្មវិធីនេះ
+                                អនុញ្ញាតឱ្យអ្នកបង្កើតការបម្រុងទុក
+                                និងធ្វើសមកាលកម្មទិន្នន័យកម្មវិធី
+                                ដូចជាកំណត់ចំណាំ និងការកំណត់
+                                ដោយរលូន ដើម្បីធានាថាទិន្នន័យ
+                                របស់អ្នកមានសុវត្ថិភាព។
+        "</string>
+    <string name="assistant_configuration">"ការកំណត់ប្រព័ន្ធជំនួយ"</string>
+    <string name="assistant_configuration_description">"
+                                ប្រព័ន្ធជំនួយ AI គឺជាកម្មវិធីដែលដំណើរការ
+                                ដោយបញ្ញាប្រឌិត ត្រូវបានរចនាឡើងដើម្បី
+                                ជួយអ្នកក្នុងការងារច្រើនប្រភេទ
+                                នៅក្នុងកម្មវិធីនេះ។ ប្រព័ន្ធជំនួយ
+                                ទាំងនេះយល់ និងឆ្លើយតបចំពោះ
+                                ភាសាធម្មជាតិ ដែលអនុញ្ញាតឱ្យអ្នក
+                                ទំនាក់ទំនងជាមួយពួកគេតាមរយៈ
+                                រូបភាព ឬអត្ថបទ។
+                            "</string>
+    <string name="dark_mode">"របៀបងងឹត"</string>
+    <string name="dark_mode_description">"
+                                របៀបនេះជាការកំណត់ទូទាំងប្រព័ន្ធ
+                                ដែលប្តូររូបភាពផ្ទៃខាងក្រោយ
+                                នៃចំណុចប្រទាក់ Android
+                                ទៅជាពណ៌ងងឹតជាង។ វាត្រូវបាន
+                                រចនាឡើងដើម្បីកាត់បន្ថយការឈឺភ្នែក
+                                កែលម្អភាពងាយស្រួល ចំណេញ
+                                ថ្ម និងពង្រឹង
+                                បទពិសោធន៍អ្នកប្រើប្រាស់។
+                            "</string>
+    <string name="sound_effect">"បែបបទសំឡេង"</string>
+    <string name="sound_effect_description">"
+                                នៅក្នុងបរិបទនៃកម្មវិធី Jetnote
+                                មុខងារ \'បែបបទសំឡេង\' ផ្តល់
+                                ការឆ្លើយតបតាមសំឡេងដល់
+                                អ្នកប្រើប្រាស់នៅពេលពួកគេ
+                                ធ្វើអន្តរកម្មជាមួយប៊ូតុង
+                                និងធាតុចំណុចប្រទាក់ផ្សេងៗ។
+                                នេះជាការអនុវត្តទូទៅ
+                                ក្នុងការអភិវឌ្ឍកម្មវិធីទូរស័ព្ទ
+                                ដើម្បីធ្វើឱ្យបទពិសោធន៍
+                                អ្នកប្រើប្រាស់ ជាអន្តរកម្ម
+                                និងគួរឱ្យចាប់អារម្មណ៍ជាង។
+                            "</string>
+    <string name="layouts">"ប្លង់"</string>
+    <string name="layouts_description">"
+                                ប្លង់គឺជាមូលដ្ឋាននៃការរៀបចំ
+                                និងបង្ហាញមាតិកានៅក្នុង
+                                កម្មវិធី Android ។ ពួកវា
+                                កំណត់រចនាសម្ព័ន្ធ និងការ
+                                배置 ធាតុចំណុចប្រទាក់
+                                នៅលើអេក្រង់។
+                            "</string>
+    <string name="sort_notes">"តម្រៀបកំណត់ចំណាំ"</string>
+    <string name="default_sort">"លំនាំដើម"</string>
+    <string name="name_sort">"ឈ្មោះ"</string>
+    <string name="oldest_sort">"ចាស់បំផុត"</string>
+    <string name="newest_sort">"ថ្មីបំផុត"</string>
+    <string name="priority_sort">"អាទិភាព"</string>
+    <string name="zen_mode">"របៀប Zen"</string>
+    <string name="zen_mode_description">"
+                                របៀប Zen (អេក្រង់ពេញ) គឺជា
+                                ការកំណត់画面 ដែលអនុញ្ញាតឱ្យ
+                                កម្មវិធីបំពេញអេក្រង់ទាំងមូល
+                                ដោយលាក់ធាតុចំណុចប្រទាក់
+                                ផ្សេងទៀតទាំងអស់ ដូចជា
+                                របារឧបករណ៍ ម៉ឺនុយ និង
+                                របារភារកិច្ចប្រព័ន្ធប្រតិបត្តិការ។
+                            "</string>
+    <string name="shake">"ញ័រដើម្បីរាយការណ៍"</string>
+    <string name="shake_description">"
+                              នេះជាមុខងារងាយស្រួលដែលអនុញ្ញាត
+                              ឱ្យអ្នកប្រើប្រាស់ចាប់ផ្តើម
+                              ដំណើរការផ្ញើមតិកែលម្អ ឬ
+                              រាយការណ៍កំហុស ដោយគ្រាន់តែ
+                              ញ័រឧបករណ៍ Android របស់ពួកគេ
+                              ជាក់ស្ដែង ជំនួសឱ្យការរុករក
+                              ម៉ឺនុយច្រើន ដើម្បីរក \'ផ្ញើ
+                              មតិកែលម្អ\' ឬ \'រាយការណ៍
+                              កំហុស\'។
+                            "</string>
+    <string name="block_screenshot">"ទប់ស្កាត់ការថតអេក្រង់"</string>
+    <string name="block_screenshot_description">"
+                                ការទប់ស្កាត់ការថតអេក្រង់គឺ
+                                ជាវិធានការសុវត្ថិភាព ដែលការពារ
+                                មិនឱ្យអ្នកប្រើប្រាស់ ថតអេក្រង់
+                                មាតិការបស់កម្មវិធីអ្នក។
+                                ច្រើនតែប្រើដើម្បីការពារ
+                                ព័ត៌មានរសើប ដូចជាព័ត៌មាន
+                                ធនាគារ ទិន្នន័យផ្ទាល់ខ្លួន
+                                ឬ សម្ភារៈដែលមានការ
+                                ការពារស្ទើរការ​ចម្លង។
+                            "</string>
+    <string name="lock_mode">"របៀបចាក់សោ"</string>
+    <string name="lock_mode_description">"
+                                មុខងារនេះពង្រឹងសុវត្ថិភាព
+                                កម្មវិធីរបស់អ្នក ដោយទាមទារ
+                                ឱ្យអ្នកប្រើប្រាស់ ផ្ទៀងផ្ទាត់
+                                ប្រព័ន្ធ មុននឹងចូលប្រើ
+                                មាតិការ។ ជាទូទៅ វាត្រូវបាន
+                                សម្រេចដោយប្រើ លក្ខណៈ
+                                សុវត្ថិភាពដែលភ្ជាប់មកជាមួយ
+                                ឧបករណ៍ ដូចជា ស្នាមម្រាម
+                                ដៃ PIN ឬ លំនាំ
+                                ដោះសោ។
+                            "</string>
+    <string name="licenses">"អាជ្ញាប័ណ្ណ"</string>
+    <string name="licenses_description">"
+                                    អាជ្ញាប័ណ្ណទាំងនេះត្រូវបាន
+                                    រួមបញ្ចូលនៅទីនេះ ដើម្បីអនុលោម
+                                    តាមតម្រូវការចែកចាយ
+                                    របស់អ្នកនិពន្ធ ដែលពាក់ព័ន្ធ
+                                    និងផ្តល់ការ
+                                    បើកចំហរ ទាក់ទង
+                                    ស្ថាបត្យកម្ម
+                                    នៃកម្មវិធី។
+                                    "</string>
+    <string name="title">"ចំណងជើង"</string>
+    <string name="note">"កំណត់ចំណាំ"</string>
+    <string name="failed_to_save_document">"រក្សាទុកឯកសារបរាជ័យ។"</string>
+    <string name="gallery">"វិចិត្រសាល"</string>
+    <string name="audio">សំឡេង</string>
+    <string name="permission_denied">ការអនុញ្ញាតត្រូវបានបដិសេធ!</string>
+    <string name="take_photo">ថតរូប</string>
+    <string name="video_capture">ថតវីដេអូ</string>
+    <string name="recorder">ម៉ាស៊ីនថតសំឡេង</string>
+    <string name="document">ឯកសារ</string>
+    <string name="scanner">ម៉ាស៊ីនស្កែន</string>
+    <string name="tasks">ភារកិច្ច</string>
+    <string name="tags">ស្លាក</string>
+    <string name="reminder">ការរំលឹក</string>
+    <string name="priority">អាទិភាព</string>
+    <string name="low_priority">ទាប</string>
+    <string name="medium_priority">មធ្យម</string>
+    <string name="high_priority">ខ្ពស់</string>
+    <string name="urgent_priority">បន្ទាន់</string>
+    <string name="non_priority">គ្មាន</string>
+    <string name="created">បានបង្កើត</string>
+    <string name="edited">បានកែសម្រួល</string>
+    <string name="types">ប្រភេទ</string>
+    <string name="media">មេឌៀ</string>
+    <string name="medias">ឯកសារមេឌៀ</string>
+    <string name="colour">ពណ៌</string>
+    <string name="colours">ពណ៌</string>
+    <string name="search_within">ស្វែងរកក្នុង</string>
+    <string name="issue_title">ចំណងជើងបញ្ហា*</string>
+    <string name="issue_description">ការពិពណ៌នាបញ្ហា (ជាជម្រើស)</string>
+    <string name="noAccount">ចូលដោយគ្មានគណនី</string>
+    <string name="screenshot_selected">✓ បានជ្រើសរើសរូបថតអេក្រង់</string>
+    <string name="drive_submit">នឹងបង្ហោះទៅ Drive នៅពេលដាក់ស្នើ</string>
+    <string name="select_screenshot">ជ្រើសរើសរូបថតអេក្រង់</string>
+    <string name="system_logs">រួមបញ្ចូលកំណត់ហេតុប្រព័ន្ធ?</string>
+    <string name="find_an_issue">តើអ្នករកឃើញបញ្ហា?</string>
+    <string name="take_a_screenshot">កុំភ្លេចថតអេក្រង់។</string>
+    <string name="report_an_issue">រាយការណ៍បញ្ហា!</string>
+    <string name="bug">កំហុស</string>
+    <string name="logs_title">\\uD83D\\uDCiE កំណត់ហេតុប្រព័ន្ធ Android (Logcat) នៅក្នុងរបាយការណ៍មតិកែលម្អ</string>
+    <string name="logs_description">កំណត់ហេតុប្រព័ន្ធ Android គឺជាស្ទ្រីមសារដែលមានការបោះត្រាពេលវេលាពីប្រព័ន្ធប្រតិបត្តិការ និងខឺណែល។\n    | នៅពេលអ្នកប្រើប្រាស់ជួបបញ្ហា (ដូចជា app ដួលរលំ ។ ។ ។ ការបង្កក ឬ ឥរិយាបថ មិនរំពឹងទុក) កំណត់ហេតុ ចាប់យកព្រឹត្តិការណ៍ជុំវិញបញ្ហា ផ្តល់ឱ្យអ្នក​អភិវឌ្ឍ​ន៍​នូវ​បរិបទ​ចាំបាច់​សម្រាប់​ការ​វិនិច្ឆ័យ។</string>
+    <string name="label_bug">កំហុស</string>
+    <string name="label_feature">មុខងារ</string>
+    <string name="label_invalid">មិនត្រឹមត្រូវ</string>
+    <string name="label_question">សំណួរ</string>
+    <string name="label_security">សុវត្ថិភាព</string>
+    <string name="failed">បរាជ័យ</string>
+    <string name="submit_feedback">ដាក់ស្នើមតិកែលម្អ!</string>
+    <string name="uploading_screenshot">កំពុងបង្ហោះរូបថតអេក្រង់…</string>
+    <string name="creating_github_issue">កំពុងបង្កើតបញ្ហា GitHub…</string>
+    <string name="upload_faild">ការបង្ហោះបរាជ័យ…</string>
+    <string name="upload_failed">ការបង្ហោះបរាជ័យ…</string>
+    <string name="issue_crea">បានបង្កើតបញ្ហា។</string>
+    <string name="issue_created">បានបង្កើតបញ្ហា!</string>
+    <string name="log_out">ចាកចេញ</string>
+    <string name="hi">សួស្តី</string>
+    <string name="add_account">បន្ថែមគណនីផ្សេងទៀត</string>
+    <string name="manage_account">គ្រប់គ្រងគណនី</string>
+    <string name="upload_data">បង្ហោះទិន្នន័យ</string>
+    <string name="download_data">ទាញយកទិន្នន័យ</string>
+    <string name="firebase_authentication_failed">ការផ្ទៀងផ្ទាត់ Firebase បរាជ័យ</string>
+    <string name="sign_in_failed">ការចូលជាមួយ Google បរាជ័យ</string>
+    <string name="please_wait">កំពុងចូល សូមរង់ចាំ…</string>
+    <string name="sync_title">ចូលដើម្បីធ្វើសមកាលកម្ម</string>
+    <string name="sync_description">ចូលជាមួយគណនី Google របស់អ្នក ដើម្បីបម្រុងទុក និងធ្វើសមកាលកម្មកំណត់ចំណាំ នៅលើឧបករណ៍ទាំងអស់របស់អ្នក។</string>
+    <string name="current_account">គណនីបច្ចុប្បន្ន</string>
+    <string name="no_name">គ្មានឈ្មោះ</string>
+    <string name="no_email">គ្មានអ៊ីមែល</string>
+    <string name="sign_out">ចាកចេញ</string>
+    <string name="sign_in_with_google">ចូលជាមួយ Google</string>
+    <string name="ai_models">គំរូ AI</string>
+    <string name="load_more">ផ្ទុកបន្ថែម</string>
+    <string name="available_models">គំរូដែលមាន</string>
+    <string name="assistant_settings">ការកំណត់ប្រព័ន្ធជំនួយ</string>
+    <string name="learning_mode">របៀបរៀន</string>
+    <string name="learning_mode_description">"
+                    ការព្យាករលទ្ធផលសម្រាប់ទិន្នន័យ
+                    ថ្មី ដែលមិនទាន់ឃើញ ដោយផ្អែក
+                    លើគំរូដែលបានរៀន
+                    ពីឧទាហរណ៍ដែលបានដាក់ស្លាក។
+                "</string>
+    <string name="temperat">សីតុណ្ហភាព</string>
+    <string name="temperature">សីតុណ្ហភាព</string>
+    <string name="temperature_description">"
+           គ្រប់គ្រងលក្ខណៈចៃដន្យ
+           នៃលទ្ធផល។ តម្លៃខ្ពស់ជាង
+           មានភាពច្នៃប្រឌិតជាង។
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            គ្រប់គ្រងថាតូខឹនណាត្រូវបានពិចារណាសម្រាប់លទ្ធផល។
+            </string>
+    <string name="context_message_size">ទំហំសាររបស់បរិបទ</string>
+    <string name="context_message_size_description">
+            ចំនួនអតិបរិមានៃសារមុន
+            ដែលត្រូវរួមបញ្ចូលក្នុងបរិបទ។
+        </string>
+    <string name="stream_output">លទ្ធផលស្ទ្រីម</string>
+    <string name="stream_output_description">បង្ហាញការឆ្លើយតបនៅពេលកំពុងបង្កើត។</string>
+    <string name="thinking_budget">ថវិកាគំនិត</string>
+    <string name="thinking_budget_description">
+                            កំណត់ធនធានគណនា
+                            ដែលប្រើសម្រាប់ការឆ្លើយតប។
+                        </string>
+    <string name="system_prompt">ប្រស័យប្រព័ន្ធ</string>
+    <string name="prompt">ប្រស័យ..</string>
+    <string name="properties">លក្ខណៈសម្បត្តិ</string>
+    <string name="quick_messages">សាររហ័ស</string>
+    <string name="quick_messages_description">កំណត់រចនាសម្ព័ន្ធផ្លូវកាត់សាររហ័ស។</string>
+    <string name="regular_expressions">កន្សោមធម្មតា</string>
+    <string name="regular_expressions_description">
+                            កំណត់គំរូ regex ដើម្បីបំប្លែង
+                            សារមុនពេលផ្ញើ/ទទួល។
+                        </string>
+    <string name="headers">ក្បាល</string>
+    <string name="headers_description">
+                            ទាំងនេះជាគូគន្លឹះ-តម្លៃ
+                            ដែលត្រូវបានបន្ថែម
+                            ទៅប្លុកក្បាលនៃសំណើ។
+                            ជាទូទៅប្រើដើម្បីផ្តល់
+                            ការផ្ទៀងផ្ទាត់ បញ្ជាក់
+                            ប្រភេទមាតិកា ឬ
+                            បញ្ជូនទំនិញទិន្នន័យ
+                            អំពីសំណើ។
+                        </string>
+    <string name="bodies">ខ្លួន</string>
+    <string name="bodies_description">
+                            សំដៅទៅលើបន្ទុកទិន្នន័យ
+                            (រចនាសម្ព័ន្ធ JSON)
+                            ដែលបានផ្ញើនៅក្នុងសំណើ។
+                            វាជាមធ្យោបាយចម្បង
+                            នៃការផ្ញើការបញ្ចូល
+                            ទៅ AI model ។
+                        </string>
+    <string name="memory">ការចងចាំ</string>
+    <string name="memory_description">
+                            អនុញ្ញាតឱ្យប្រព័ន្ធជំនួយ
+                            ចងចាំការប្រែប្រួល
+                            មុននៅក្នុងការសន្ទនា។
+                        </string>
+    <string name="chats_reference">សេចក្តីយោងការជជែកថ្មីៗ</string>
+    <string name="chats_reference_description">
+                        យោងទិន្នន័យពីការជជែក
+                        ថ្មីៗរបស់អ្នក ដើម្បី
+                        ការឆ្លើយតបបែបបរិបទ
+                        ប្រសើរជាង។
+                        </string>
+    <string name="javascript">ម៉ាស៊ីន JavaScript</string>
+    <string name="javascript_description">
+                            ប្រតិបត្តិកូដ JavaScript
+                            ជាមួយម៉ាស៊ីន QuickJS
+                            សម្រាប់ការគណនា
+                            និងស្គ្រីបតាម។
+                        </string>
+    <string name="reset">កំណត់ឡើងវិញ!</string>
+    <string name="providers">អ្នកផ្តល់សេវា</string>
+    <string name="ask">សួរ</string>
+    <string name="add_model"><![CDATA[<- បន្ថែម AI model]]></string>
+    <string name="delete">លុប</string>
+    <string name="options">ជម្រើស</string>
+    <string name="retitle">ប្តូរឈ្មោះ</string>
+    <string name="assistant">ប្រព័ន្ធជំនួយ</string>
+    <string name="new_chat">ជជែកថ្មី</string>
+    <string name="files">ឯកសារ</string>
+    <string name="audios">សំឡេង</string>
+    <string name="videos">វីដេអូ</string>
+    <string name="camera">កាមេរ៉ា</string>
+    <string name="pictures">រូបភាព</string>
+    <string name="provider_settings">ការកំណត់អ្នកផ្តល់សេវា</string>
+    <string name="api_key">កូន API</string>
+    <string name="base_url">URL មូលដ្ឋាន</string>
+    <string name="model_name">ឈ្មោះគំរូ</string>
+    <string name="modalities">របៀប</string>
+    <string name="tools">ឧបករណ៍</string>
+    <string name="reasoning">ហេតុផល</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">សមតុល្យគណនី</string>
+    <string name="api_path">ផ្លូវ API..</string>
+    <string name="json_key">កូន Json..</string>
+    <string name="network_proxy">ប្រូក្ស៊ីបណ្តាញ</string>
+    <string name="host">ម៉ាស៊ីន..</string>
+    <string name="username_option">ឈ្មោះអ្នកប្រើ (ជាជម្រើស)..</string>
+    <string name="pass_option">ពាក្យសម្ងាត់ (ជាជម្រើស)..</string>
+    <string name="service_account">គណនីសេវា @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">កូនឯកជន..</string>
+    <string name="location">ទីតាំង..</string>
+    <string name="project_uid">UID គម្រោង..</string>
+    <string name="details">ព័ត៌មានលម្អិត</string>
+    <string name="model_type">ប្រភេទគំរូ</string>
+    <string name="input_modalities">របៀបបញ្ចូល</string>
+    <string name="output_modalities">របៀបបញ្ចេញ</string>
+    <string name="abilities">សមត្ថភាព</string>
+    <string name="provider_override">បន្ថែមការជំនួសអ្នកផ្តល់សេវា</string>
+    <string name="provider_override_description">
+                            កំណត់រចនាសម្ព័ន្ធការកំណត់
+                            អ្នកផ្តល់សេវាផ្ទាល់ខ្លួន
+                            សម្រាប់គំរូជាក់លាក់នេះ។
+                            ប្រើលក្ខណៈទូទៅពី
+                            អ្នកផ្តល់សេវាចម្បង
+                            នៃគំរូ។
+                        </string>
+    <string name="build_tools">ឧបករណ៍សាងសង់</string>
+    <string name="build_tools_description">
+                            ឧបករណ៍ទាំងនេះត្រូវបានផ្តល់
+                            ដោយផ្ទាល់ដោយ API
+                            ដោយមិនទាមទារ
+                            ការគាំទ្រ app។
+                            មុខងារនេះ
+                            ត្រូវបានគាំទ្រ
+                            ដោយ Gemini API ប៉ុណ្ណោះ
+                            នៅពេលនេះ។
+                        </string>
+    <string name="google_search">ស្វែងរក</string>
+    <string name="google_search_description">បើកដំណើរការរួមបញ្ចូល Google Search</string>
+    <string name="url_context">បរិបទ URL</string>
+    <string name="url_context_description">បើកដំណើរការដំណើរការបរិបទ URL</string>
+    <string name="find">រក</string>
+    <string name="replace">ជំនួស</string>
+    <string name="effecting_scopes">វិសាលភាពប៉ះពាល់</string>
+    <string name="user">អ្នកប្រើប្រាស់</string>
+    <string name="visual_only">ចក្ខុវិស័យប៉ុណ្ណោះ</string>
+    <string name="body">ខ្លួន</string>
+    <string name="key">គន្លឹះ</string>
+    <string name="value">តម្លៃ</string>
+    <string name="header">ក្បាល.</string>
+    <string name="reset_description">កំណត់ការកំណត់ប្រព័ន្ធជំនួយឡើងវិញទៅរបៀបលំនាំដើម។</string>
+    <string name="save_changes">រក្សាទុកការផ្លាស់ប្តូរ?</string>
+    <string name="save_changes_description">អ្នកមានការផ្លាស់ប្តូរដែលមិនទាន់រក្សាទុក។ តើអ្នកចង់រក្សាទុកពួកវាមុននឹងចាកចេញ?</string>
+    <string name="dont_save">កុំរក្សាទុក</string>
+    <string name="save">រក្សាទុក</string>
+    <string name="links">តំណ</string>
+    <string name="reminders">ការរំលឹក</string>
+    <string name="priorities">អាទិភាព</string>
+    <string name="ai_chat">AI ជជែក</string>
+    <string name="auto">ស្វ័យប្រវត្តិ</string>
+    <string name="light">ស្រាល</string>
+    <string name="medium">មធ្យម</string>
+    <string name="heavy">ធ្ងន់</string>
+    <string name="date">កាលបរិច្ឆេទ</string>
+    <string name="time">ពេលវេលា</string>
+    <string name="date_and_time">កាលបរិច្ឆេទ និងពេលវេលា</string>
+    <string name="local">មូលដ្ឋាន</string>
+    <string name="timezone">តំបន់ពេលវេលា</string>
+    <string name="system_version">កំណែប្រព័ន្ធ</string>
+    <string name="device_info">ព័ត៌មានឧបករណ៍</string>
+    <string name="battery_level">កម្រិតថ្ម</string>
+    <string name="insert">បញ្ចូល</string>
+    <string name="confirm">បញ្ជាក់</string>
+    <string name="message">សារ</string>
+    <string name="content">មាតិកា</string>
+    <string name="today">ថ្ងៃនេះ</string>
+    <string name="tomorrow">ថ្ងៃស្អែក</string>
+    <string name="according_to_timing">យោងតាមពេលវេលា</string>
+    <string name="untitled">គ្មានចំណងជើង</string>
+    <string name="hue">ពណ៌</string>
+    <string name="saturation">ភាពឆ្អែតពណ៌</string>
+    <string name="brightness">ភ្លឺ</string>
+    <string name="shades">ស្រមោល</string>
+    <string name="complementary">ពណ៌ប្រឆាំង</string>
+    <string name="task_placeholder">ភារកិច្ច..</string>
+    <string name="task_cannot_be_empty">ភារកិច្ចមិនអាចទទេបានទេ!</string>
+    <string name="of">នៃ</string>
+    <string name="something_wrong_with_file">មានបញ្ហាជាមួយឯកសារ</string>
+    <string name="could_not_load_any_information">មិនអាចផ្ទុកព័ត៌មានសម្រាប់ឯកសារមេឌៀ។</string>
+    <string name="no_file_path_provided">គ្មានផ្លូវឯកសារត្រូវបានផ្តល់ឱ្យ។</string>
+    <string name="security_error_processing_file">កំហុសសុវត្ថិភាពក្នុងការដំណើរការឯកសារ</string>
+    <string name="an_unexpected_error_occurred">មានកំហុសដែលមិនបានរំពឹងទុក</string>
+    <string name="could_not_retrieve_any_information">មិនអាចទទួលយកព័ត៌មានសម្រាប់ឯកសារវីដេអូនេះ។</string>
+    <string name="error_reading_metadata">កំហុសក្នុងការអានទំនិញទិន្នន័យមេឌៀ</string>
+    <string name="could_not_read_exif_data">មិនអាចអានទិន្នន័យ EXIF</string>
+    <string name="error_reading_basic_file_info">កំហុសក្នុងការអានព័ត៌មានឯកសារមូលដ្ឋាន</string>
+    <string name="file_does_not_exist">ឯកសារមិនមាន</string>
+    <string name="error">កំហុស</string>
+    <string name="loading_media_info">កំពុងផ្ទុកព័ត៌មានមេឌៀ…</string>
+    <string name="no_metadata_available_for_this_document">គ្មានទំនិញទិន្នន័យដែលមានសម្រាប់ឯកសារនេះ។</string>
+    <string name="could_not_read_pdf_metadata">មិនអាចអានទំនិញទិន្នន័យ PDF</string>
+    <string name="cannot_read_file">មិនអាចអានឯកសារ</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">មិនអាចឌីកូដទំហំរូបភាព ឬ ទ្រង់ទ្រាយមិនត្រឹមត្រូវ។</string>
+    <string name="error_during_dimension_decoding">កំហុសក្នុងការឌីកូដទំហំ</string>
+    <string name="error_reading_exif_data">កំហុសក្នុងការអានទិន្នន័យ EXIF</string>
+    <string name="duplicate">ចម្លង</string>
+    <string name="send">ផ្ញើ</string>
+    <string name="print">បោះពុម្ព</string>
+    <string name="cleaned">បានសំអាត</string>
+    <string name="cleared">បានលុបចោល</string>
+    <string name="media_deleted">មេឌៀត្រូវបានលុប!</string>
+    <string name="jotting">កំពុងកត់ចំណាំ</string>
+    <string name="appwidget_text">ឧទាហរណ៍</string>
+    <string name="add_widget">បន្ថែម widget</string>
+    <string name="app_widget_description">នេះជាការពណ៌នា widget របស់ app</string>
+    <string name="quick_widget_description">នេះជាប្លង់ widget រហ័ស</string>
+    <string name="creator_widget_description">នេះជា widget ប្លង់អ្នកបង្កើត</string>
+    <string name="notes_list_description">នេះជាបញ្ជីកំណត់ចំណាំ</string>
+    <string name="record_deleted">កំណត់ត្រាត្រូវបានលុប!</string>
+</resources>

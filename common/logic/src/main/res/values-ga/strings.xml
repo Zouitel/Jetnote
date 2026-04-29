@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Nótaí</string>
+    <string name="screen_chat">Comhrá AI</string>
+    <string name="screen_tags">Clibeanna</string>
+    <string name="screen_settings">Socruithe</string>
+    <string name="screen_archive">Cartlann</string>
+    <string name="screen_about">Faoi</string>
+    <string name="screen_feedback">Aiseolas</string>
+    <string name="share_app">Roinn an Aip Seo</string>
+    <string name="label_more">tuilleadh</string>
+    <string name="label_less">níos lú</string>
+    <string name="msg_deleted">scriosta</string>
+    <string name="action_undo">Cealaigh</string>
+    <string name="tag_placeholder">Clib..</string>
+    <string name="tag_cannot_be_empty">Ní féidir leis an gclib a bheith folamh!</string>
+    <string name="archive">Cartlann</string>
+    <string name="deleted">scriosta!</string>
+    <string name="erase_notes">Nótaí a scriosadh?</string>
+    <string name="confirm_erase_notes">"Scriosfar gach nóta sa bhosca bruscair go buan."</string>
+    <string name="search_in_notes">"Cuardaigh i nótaí.."</string>
+    <string name="select_layout">"Roghnaigh leagan amach"</string>
+    <string name="settings">"Socruithe"</string>
+    <string name="account_sync">"Sioncronú Cuntais"</string>
+    <string name="account_sync_description">"
+                                Trí shioncronú cuntas Google Drive a chumasú
+                                don aip seo, is féidir leat do chuid sonraí
+                                aipe, cosúil le nótaí agus socruithe,
+                                a chúltaca agus a shioncrónú go seamless,
+                                rud a chinntíonn go bhfuil do chuid sonraí
+                                slán sábháilte.
+        "</string>
+    <string name="assistant_configuration">"Cumraíocht an Chúntóra"</string>
+    <string name="assistant_configuration_description">"
+                                Is clár bogearraí é an cúntóir AI atá
+                                cumhachtaithe ag intleacht shaorga,
+                                deartha chun cabhrú leat le raon leathan
+                                cúraimí san aip seo. Tuigeann na cúntóirí
+                                seo teanga nádúrtha agus freagraíonn siad
+                                dó, rud a cheadaíonn duit idirghníomhú
+                                leo trí íomhá nó téacs.
+                            "</string>
+    <string name="dark_mode">"Mód Dorcha"</string>
+    <string name="dark_mode_description">"
+                                Is socrú córas-leathan é an mód seo a
+                                athraíonn scéim chúlra chomhéadan d\'aip
+                                Android do dhathanna níos dorcha.
+                                Tá sé deartha chun strus súl a laghdú,
+                                inrochtaineacht a fheabhsú, an ceallra
+                                a shábháil agus taithí an úsáideora
+                                a fheabhsú.
+                            "</string>
+    <string name="sound_effect">"Éifeacht Fuaime"</string>
+    <string name="sound_effect_description">"
+                                I gcomhthéacs fheidhmchlár Jetnote,
+                                soláthraíonn an ghné \'Éifeacht Fuaime\'
+                                aiseolas éisteachta d\'úsáideoirí nuair a
+                                idirghníomhaíonn siad le cnaipí agus
+                                eilimintí comhéadain eile. Is cleachtas
+                                coitianta é seo i bhforbairt aipeanna
+                                móibíleacha chun taithí an úsáideora
+                                a dhéanamh níos idirghníomhaí agus
+                                níos tarraingteach.
+                            "</string>
+    <string name="layouts">"Leaganacha Amach"</string>
+    <string name="layouts_description">"
+                                Tá leaganacha amach bunúsach chun ábhar
+                                a eagrú agus a thaispeáint i d\'aipeanna
+                                Android. Sainmhínítear leo struchtúr agus
+                                socrú eilimintí comhéadain ar an scáileán.
+                            "</string>
+    <string name="sort_notes">"Sórtáil Nótaí"</string>
+    <string name="default_sort">"réamhshocrú"</string>
+    <string name="name_sort">"ainm"</string>
+    <string name="oldest_sort">"is sine"</string>
+    <string name="newest_sort">"is nuaí"</string>
+    <string name="priority_sort">"tosaíocht"</string>
+    <string name="zen_mode">"Mód Zen"</string>
+    <string name="zen_mode_description">"
+                                Is socrú taispeána é Mód Zen (mód lánscáileáin)
+                                a ligeann d\'aip an scáileán ar fad a áitiú,
+                                ag folú gach eilimint comhéadain eile
+                                cosúil le barraí uirlisí, roghchláir agus
+                                barra tascanna an chórais oibriúcháin.
+                            "</string>
+    <string name="shake">"Croith chun Tuairisciú"</string>
+    <string name="shake_description">"
+                              Is gné áisiúil í seo a ligeann d\'úsáideoirí
+                              próiseas aiseolais nó tuairiscithe fabhtanna
+                              a thosú ach a ngléas Android a chroitheadh
+                              go fisiciúil. In ionad nascleanúint a dhéanamh
+                              trí iliomad roghchláir chun \'Seol Aiseolas\'
+                              nó \'Tuairiscigh Fabht\' a aimsiú.
+                            "</string>
+    <string name="block_screenshot">"Bloc Gabháil Scáileáin"</string>
+    <string name="block_screenshot_description">"
+                                Is beart slándála é blocáil gabháil scáileáin
+                                a chuireann cosc ar úsáideoirí ó ghabháil
+                                scáileán d\'ábhar d\'aipe. Úsáidtear é seo
+                                go minic chun faisnéis íogair a chosaint,
+                                cosúil le sonraí baincéireachta, sonraí
+                                pearsanta nó ábhar atá faoi chosaint
+                                cóipchirt.
+                            "</string>
+    <string name="lock_mode">"Mód Glasála"</string>
+    <string name="lock_mode_description">"
+                                Feabhsaíonn an ghné seo slándáil d\'aipe
+                                trí éileamh ar úsáideoirí fíordheimhniú
+                                a dhéanamh sula bhféadfaidh siad rochtain
+                                a fháil ar a ábhar. Baintear é seo amach
+                                de ghnáth ag baint úsáide as gnéithe
+                                slándála ionsuite an ghléis, cosúil le
+                                méarlorg, PIN nó patrún díghlasála.
+                            "</string>
+    <string name="licenses">"Ceadúnais"</string>
+    <string name="licenses_description">"
+                                    Tá na ceadúnais seo san áireamh anseo
+                                    chun cloí le riachtanais dáilte na
+                                    n-údar faoi seach agus chun trédhearcacht
+                                    a sholáthar maidir le hailtireacht
+                                    an bhogearraí.
+                                    "</string>
+    <string name="title">"Teideal"</string>
+    <string name="note">"Nóta"</string>
+    <string name="failed_to_save_document">"Theip ar shábháil an doiciméid."</string>
+    <string name="gallery">"Gailearaí"</string>
+    <string name="audio">Fuaim</string>
+    <string name="permission_denied">Diúltaíodh Cead!</string>
+    <string name="take_photo">Tóg Grianghraf</string>
+    <string name="video_capture">Gabhann Físeáin</string>
+    <string name="recorder">Taifeadán</string>
+    <string name="document">Doiciméad</string>
+    <string name="scanner">Scanóir</string>
+    <string name="tasks">Tascanna</string>
+    <string name="tags">Clibeanna</string>
+    <string name="reminder">Meabhrán</string>
+    <string name="priority">Tosaíocht</string>
+    <string name="low_priority">Íseal</string>
+    <string name="medium_priority">Meánach</string>
+    <string name="high_priority">Ard</string>
+    <string name="urgent_priority">Práinneach</string>
+    <string name="non_priority">Dada</string>
+    <string name="created">Cruthaithe</string>
+    <string name="edited">Curtha in eagar</string>
+    <string name="types">Cineálacha</string>
+    <string name="media">Meáin</string>
+    <string name="medias">Comhaid Meáin</string>
+    <string name="colour">Dath</string>
+    <string name="colours">Dathanna</string>
+    <string name="search_within">Cuardaigh laistigh de</string>
+    <string name="issue_title">Teideal na Ceiste*</string>
+    <string name="issue_description">Cur Síos ar an gCeist (Roghnach)</string>
+    <string name="noAccount">Sínigh Isteach gan Cuntas</string>
+    <string name="screenshot_selected">✓ Roghnaithe gabháil scáileáin</string>
+    <string name="drive_submit">Uaslódálfar chuig Drive ar chur isteach</string>
+    <string name="select_screenshot">Roghnaigh gabháil scáileáin</string>
+    <string name="system_logs">Logaí córais a chur san áireamh?</string>
+    <string name="find_an_issue">Ar aimsigh tú fadhb?</string>
+    <string name="take_a_screenshot">Ná déan dearmad gabháil scáileáin a ghlacadh.</string>
+    <string name="report_an_issue">Tuairiscigh fadhb!</string>
+    <string name="bug">Fabht</string>
+    <string name="logs_title">\\uD83D\\uDCiE Logaí Córais Android (Logcat) i dTuarascáil Aiseolais</string>
+    <string name="logs_description">Is sruth teachtaireachtaí stampa ama ó chóras oibriúcháin agus ón gcroílár iad logaí córais Android.\n    | Nuair a thagann úsáideoir ar fhadhb (cosúil le tuairteáil aipe, reo nó iompar gan choinne), glacann na logaí leis na himeachtaí a bhí ann roimh an bhfadhb agus ina lár, rud a sholáthraíonn do fhorbróirí an comhthéacs atá de dhíth chun diagnóis a dhéanamh.</string>
+    <string name="label_bug">Fabht</string>
+    <string name="label_feature">Gné</string>
+    <string name="label_invalid">Neamhbhailí</string>
+    <string name="label_question">Ceist</string>
+    <string name="label_security">Slándáil</string>
+    <string name="failed">Theip</string>
+    <string name="submit_feedback">Cuir Aiseolas Isteach!</string>
+    <string name="uploading_screenshot">Ag uaslódáil gabháil scáileáin…</string>
+    <string name="creating_github_issue">Ag cruthú ceist GitHub…</string>
+    <string name="upload_faild">Theip ar an uaslódáil…</string>
+    <string name="upload_failed">Theip ar an uaslódáil…</string>
+    <string name="issue_crea">Ceist cruthaithe.</string>
+    <string name="issue_created">Ceist cruthaithe!</string>
+    <string name="log_out">Sínigh Amach</string>
+    <string name="hi">Dia dhuit</string>
+    <string name="add_account">Cuir Cuntas Eile Leis</string>
+    <string name="manage_account">Bainistigh Cuntas</string>
+    <string name="upload_data">Uaslódáil Sonraí</string>
+    <string name="download_data">Íoslódáil Sonraí</string>
+    <string name="firebase_authentication_failed">Theip ar fhíordheimhniú Firebase</string>
+    <string name="sign_in_failed">Theip ar shíniú isteach Google</string>
+    <string name="please_wait">Ag síniú isteach, fan le do thoil…</string>
+    <string name="sync_title">Sínigh Isteach chun Sioncrónú</string>
+    <string name="sync_description">Sínigh isteach le do chuntas Google chun do nótaí a chúltaca agus a shioncrónú ar fud do ghléasanna ar fad.</string>
+    <string name="current_account">Cuntas Reatha</string>
+    <string name="no_name">Gan Ainm</string>
+    <string name="no_email">Gan Ríomhphost</string>
+    <string name="sign_out">Sínigh Amach</string>
+    <string name="sign_in_with_google">Sínigh Isteach le Google</string>
+    <string name="ai_models">Samhlacha AI</string>
+    <string name="load_more">Luchtaigh Tuilleadh</string>
+    <string name="available_models">Samhlacha ar Fáil</string>
+    <string name="assistant_settings">Socruithe Cúntóra</string>
+    <string name="learning_mode">Mód Foghlama</string>
+    <string name="learning_mode_description">"
+                    Aschur a thuar do shonraí nua, nach bhfacthas roimhe,
+                    bunaithe ar phatrúin a foghlaimíodh ó na samplaí lipéadaithe.
+                "</string>
+    <string name="temperat">Teocht</string>
+    <string name="temperature">Teocht</string>
+    <string name="temperature_description">"
+           Rialaíonn randamacht an aschuir.
+           Tá luachanna níos airde níos cruthaitheach.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Rialaíonn cé na comharthaí a chuirtear san áireamh don aschur.
+            </string>
+    <string name="context_message_size">Méid Teachtaireachtaí Comhthéacs</string>
+    <string name="context_message_size_description">
+            Uasmhéid teachtaireachtaí roimhe seo le cur san áireamh sa chomhthéacs.
+        </string>
+    <string name="stream_output">Aschur Sruthú</string>
+    <string name="stream_output_description">Taispeáin freagra agus é á ghiniúint.</string>
+    <string name="thinking_budget">Buiséad Smaoinimh</string>
+    <string name="thinking_budget_description">
+                            Teorannaíonn acmhainní ríomhaireachta a úsáidtear
+                            don fhreagra.
+                        </string>
+    <string name="system_prompt">Leid Chórais</string>
+    <string name="prompt">Leid..</string>
+    <string name="properties">Airíonna</string>
+    <string name="quick_messages">Teachtaireachtaí Tapa</string>
+    <string name="quick_messages_description">Cumraigh aicearraí teachtaireachtaí tapa.</string>
+    <string name="regular_expressions">Nathanna Rialta</string>
+    <string name="regular_expressions_description">
+                            Sainmhínigh patrúin regex chun teachtaireachtaí
+                            a athrú roimh sheoladh/fáil.
+                        </string>
+    <string name="headers">Ceanntásca</string>
+    <string name="headers_description">
+                            Is péirí eochracha-luacha iad seo a chuirtear
+                            le bloc ceanntásc an iarratais. Úsáidtear
+                            iad de ghnáth chun fíordheimhniú a sholáthar,
+                            an cineál ábhair a shonrú nó meiteashonraí
+                            faoin iarratas a chur ar aghaidh.
+                        </string>
+    <string name="bodies">Corpáin</string>
+    <string name="bodies_description">
+                            Tagraíonn sé seo don lasta sonraí (struchtúr
+                            JSON eochair: luach) a sheoltar laistigh den
+                            iarratas. Is é an príomhbhealach chun ionchur
+                            a sheoladh chuig an samhail AI.
+                        </string>
+    <string name="memory">Cuimhne</string>
+    <string name="memory_description">
+                            Ceadaigh don chúntóir cuimhneamh ar chasanna
+                            roimhe sa chomhrá.
+                        </string>
+    <string name="chats_reference">Tagairt Comhrá le Déanaí</string>
+    <string name="chats_reference_description">
+                        Sonraí ó do chomhráite le déanaí a thagairt
+                        le haghaidh freagraí comhthéacsúla níos fearr.
+                        </string>
+    <string name="javascript">Inneall JavaScript</string>
+    <string name="javascript_description">
+                            Cód JavaScript a rith le hinneall QuickJS
+                            le haghaidh ríomhaireachtaí agus scriptithe.
+                        </string>
+    <string name="reset">Athshocraigh Socruithe!</string>
+    <string name="providers">Soláthraithe</string>
+    <string name="ask">Fiafraigh</string>
+    <string name="add_model"><![CDATA[<- Cuir samhail AI leis]]></string>
+    <string name="delete">Scrios</string>
+    <string name="options">Roghanna</string>
+    <string name="retitle">Athainmnigh</string>
+    <string name="assistant">Cúntóir</string>
+    <string name="new_chat">Comhrá Nua</string>
+    <string name="files">Comhaid</string>
+    <string name="audios">Comhaid Fuaime</string>
+    <string name="videos">Físeáin</string>
+    <string name="camera">Ceamara</string>
+    <string name="pictures">Pictiúir</string>
+    <string name="provider_settings">Socruithe Soláthraí</string>
+    <string name="api_key">Eochair API</string>
+    <string name="base_url">URL Bunaidh</string>
+    <string name="model_name">Ainm Samhla</string>
+    <string name="modalities">Modhúlachtaí</string>
+    <string name="tools">Uirlisí</string>
+    <string name="reasoning">Réasúnaíocht</string>
+    <string name="respo">API Freagartha</string>
+    <string name="response_api">API Freagartha</string>
+    <string name="account_balance">Iarmhéid Cuntais</string>
+    <string name="api_path">Cosán API..</string>
+    <string name="json_key">Eochair JSON..</string>
+    <string name="network_proxy">Seachvótálaí Líonra</string>
+    <string name="host">Óstach..</string>
+    <string name="username_option">Ainm Úsáideora (Roghnach)..</string>
+    <string name="pass_option">Pasfhocal (Roghnach)..</string>
+    <string name="service_account">Cuntas seirbhíse @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Eochair phríobháideach..</string>
+    <string name="location">Suíomh..</string>
+    <string name="project_uid">UID Tionscadail..</string>
+    <string name="details">Sonraí</string>
+    <string name="model_type">Cineál Samhla</string>
+    <string name="input_modalities">Modhúlachtaí Ionchur</string>
+    <string name="output_modalities">Modhúlachtaí Aschuir</string>
+    <string name="abilities">Cumais</string>
+    <string name="provider_override">Cuir sárú soláthraí leis</string>
+    <string name="provider_override_description">
+                            Cumraigh socruithe soláthraí saincheaptha
+                            don tsamhail shonrach seo. Úsáideann sé
+                            airíonna coitianta ó phríomhsholáthraí
+                            na samhla.
+                        </string>
+    <string name="build_tools">Uirlisí Tógála</string>
+    <string name="build_tools_description">
+                            Soláthraítear na huirlisí seo go díreach ag
+                            an API gan tacaíocht aipe a bheith de dhíth.
+                            Tacaítear leis an ngné seo ag Gemini API
+                            amháin faoi láthair.
+                        </string>
+    <string name="google_search">Cuardach</string>
+    <string name="google_search_description">Cumasaigh comhtháthú Cuardaigh Google</string>
+    <string name="url_context">Comhthéacs URL</string>
+    <string name="url_context_description">Cumasaigh próiseáil comhthéacs URL</string>
+    <string name="find">Faigh</string>
+    <string name="replace">Ionadaigh</string>
+    <string name="effecting_scopes">Scóip a Dhéanann Difear</string>
+    <string name="user">úsáideoir</string>
+    <string name="visual_only">amhairc amháin</string>
+    <string name="body">Corp</string>
+    <string name="key">eochair</string>
+    <string name="value">Luach</string>
+    <string name="header">Ceanntásc.</string>
+    <string name="reset_description">Athshocraigh socruithe an chúntóra chuig mód réamhshocraithe.</string>
+    <string name="save_changes">Sábháil athruithe?</string>
+    <string name="save_changes_description">Tá athruithe neamhshábháilte agat. Ar mhaith leat iad a shábháil roimh imeacht?</string>
+    <string name="dont_save">Ná Sábháil</string>
+    <string name="save">Sábháil</string>
+    <string name="links">Naisc</string>
+    <string name="reminders">Meabhrúcháin</string>
+    <string name="priorities">Tosaíochtaí</string>
+    <string name="ai_chat">Comhrá AI</string>
+    <string name="auto">uathoibríoch</string>
+    <string name="light">éadrom</string>
+    <string name="medium">meánach</string>
+    <string name="heavy">trom</string>
+    <string name="date">dáta</string>
+    <string name="time">am</string>
+    <string name="date_and_time">dáta agus am</string>
+    <string name="local">áitiúil</string>
+    <string name="timezone">crios ama</string>
+    <string name="system_version">leagan córais</string>
+    <string name="device_info">eolas gléis</string>
+    <string name="battery_level">leibhéal ceallraí</string>
+    <string name="insert">Ionsáigh</string>
+    <string name="confirm">Deimhnigh</string>
+    <string name="message">Teachtaireacht</string>
+    <string name="content">Ábhar</string>
+    <string name="today">Inniu</string>
+    <string name="tomorrow">Amárach</string>
+    <string name="according_to_timing">De réir am</string>
+    <string name="untitled">Gan Teideal</string>
+    <string name="hue">Lí</string>
+    <string name="saturation">Sáithiú</string>
+    <string name="brightness">Gile</string>
+    <string name="shades">Scátháin</string>
+    <string name="complementary">Comhlántach</string>
+    <string name="task_placeholder">Tasc..</string>
+    <string name="task_cannot_be_empty">Ní féidir leis an tasc a bheith folamh!</string>
+    <string name="of">de</string>
+    <string name="something_wrong_with_file">Tá rud éigin mícheart leis an gcomhad</string>
+    <string name="could_not_load_any_information">Níorbh fhéidir aon eolas a luchtú don chomhad meán.</string>
+    <string name="no_file_path_provided">Níor soláthraíodh cosán comhaid.</string>
+    <string name="security_error_processing_file">Earráid slándála agus comhad á phróiseáil</string>
+    <string name="an_unexpected_error_occurred">Tharla earráid gan choinne</string>
+    <string name="could_not_retrieve_any_information">Níorbh fhéidir aon eolas a aisghabháil don chomhad físeáin seo.</string>
+    <string name="error_reading_metadata">Earráid ag léamh meiteashonraí meán</string>
+    <string name="could_not_read_exif_data">Níorbh fhéidir sonraí EXIF a léamh</string>
+    <string name="error_reading_basic_file_info">Earráid ag léamh bunfhaisnéis comhaid</string>
+    <string name="file_does_not_exist">Níl an comhad ann</string>
+    <string name="error">Earráid</string>
+    <string name="loading_media_info">Ag luchtú faisnéis meán…</string>
+    <string name="no_metadata_available_for_this_document">Níl aon mheiteashonraí ar fáil don doiciméad seo.</string>
+    <string name="could_not_read_pdf_metadata">Níorbh fhéidir meiteashonraí PDF a léamh</string>
+    <string name="cannot_read_file">Ní féidir an comhad a léamh</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Níorbh fhéidir toisí íomhá a dhíchódú nó formáid neamhbhailí.</string>
+    <string name="error_during_dimension_decoding">Earráid le linn díchódaithe toise</string>
+    <string name="error_reading_exif_data">Earráid ag léamh sonraí EXIF</string>
+    <string name="duplicate">Dúblaigh</string>
+    <string name="send">Seol</string>
+    <string name="print">Priontáil</string>
+    <string name="cleaned">Glanaithe</string>
+    <string name="cleared">Réitithe</string>
+    <string name="media_deleted">meán scriosta!</string>
+    <string name="jotting">Ag scríobh síos</string>
+    <string name="appwidget_text">SAMPLA</string>
+    <string name="add_widget">Cuir giuirléid leis</string>
+    <string name="app_widget_description">Seo cur síos ar ghiuirléid aipe</string>
+    <string name="quick_widget_description">Seo leagan amach giuirléide tapa</string>
+    <string name="creator_widget_description">Seo giuirléid leagan amach cruthaitheora</string>
+    <string name="notes_list_description">Seo liosta nótaí</string>
+    <string name="record_deleted">taifead scriosta!</string>
+</resources>

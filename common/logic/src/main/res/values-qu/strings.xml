@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Qillqakuna</string>
+    <string name="screen_chat">IA rimay</string>
+    <string name="screen_tags">Sutichakuna</string>
+    <string name="screen_settings">Churakuna</string>
+    <string name="screen_archive">Waqaychana</string>
+    <string name="screen_about">Imaymana</string>
+    <string name="screen_feedback">Kutichiy</string>
+    <string name="share_app">Kay programata rakiy</string>
+    <string name="label_more">aswan</string>
+    <string name="label_less">pisilla</string>
+    <string name="msg_deleted">chinkarirqa</string>
+    <string name="action_undo">Kutichiy</string>
+    <string name="tag_placeholder">Sutichay..</string>
+    <string name="tag_cannot_be_empty">Sutichay mana chusaq kanmanchu!</string>
+    <string name="archive">Waqaychana</string>
+    <string name="deleted">chinkarirqa!</string>
+    <string name="erase_notes">Qillqakunata chinkarichiy?</string>
+    <string name="confirm_erase_notes">"Quchukunapi tukuy qillqakuna wiñaypaq chinkarinqaku."</string>
+    <string name="search_in_notes">"Qillqakunapi maskay.."</string>
+    <string name="select_layout">"Churanata akllay"</string>
+    <string name="settings">"Churakuna"</string>
+    <string name="account_sync">"Cuenta tupay"</string>
+    <string name="account_sync_description">"
+                                Kay programapaq Google Drive cuenta
+                                tupachiy yaykuchiqa qillqakunata
+                                churakuykunata ima segurokiwan
+                                waqaychanaykipaq yanapasunki.
+        "</string>
+    <string name="assistant_configuration">"Yanapakuqpa churakuynin"</string>
+    <string name="assistant_configuration_description">"
+                                IA yanapakuq makina yachaywan
+                                rurasqa programa, kay aplicacionpi
+                                askha ruwaykunapi yanapanaykipaq.
+                                Kay yanapakuqkuna rimayniykita
+                                entiendinku, siq\'irakunawan
+                                qillqakunawan ima rimanakuyta
+                                saqenku.
+                            "</string>
+    <string name="dark_mode">"Tutayaq churay"</string>
+    <string name="dark_mode_description">"
+                                Kay churay Android programap
+                                ñawpaqninpa qilluykuyninta
+                                laqhayaq qillukunaman tikran.
+                                Ñawiykita samachiy, accesibilidadta
+                                allinchay, pilata waqaychay ima
+                                runakunap saminchakuyninpaq.
+                            "</string>
+    <string name="sound_effect">"Suytu waqay"</string>
+    <string name="sound_effect_description">"
+                                Jetnote aplicacionpi kay función
+                                runakunaman tiyakunata
+                                makinawan rimanakuqtinkupi
+                                suytu waqayta qun.
+                                Kay celular aplicacionkunap
+                                allin ruwayninmi.
+                            "</string>
+    <string name="layouts">"Churanakuna"</string>
+    <string name="layouts_description">"
+                                Churanakuna Android aplicacionkunapi
+                                imaymanataq churananpaq
+                                rikuchinanpaqmi kanku.
+                                Pantallapi elementukunap
+                                churananta qispichinku.
+                            "</string>
+    <string name="sort_notes">"Qillqakunata churay"</string>
+    <string name="default_sort">"nisqan"</string>
+    <string name="name_sort">"suti"</string>
+    <string name="oldest_sort">"ñawpaq"</string>
+    <string name="newest_sort">"mosoq"</string>
+    <string name="priority_sort">"ñawpaqchasqa"</string>
+    <string name="zen_mode">"Zen churay"</string>
+    <string name="zen_mode_description">"
+                                Zen churay pantallata tucuy
+                                hap\'inan churay, herramientakuna
+                                menukuna ima pakasqa kanankupaq.
+                            "</string>
+    <string name="shake">"Kuyuchiy willakuypaq"</string>
+    <string name="shake_description">"
+                              Kay función runakunata
+                              celularninkunata kuyuchispa
+                              willakuyninta apachiy
+                              atinankupaq yanapan.
+                            "</string>
+    <string name="block_screenshot">"Pantalla siq\'iyta wataykuy</string>
+    <string name="block_screenshot_description">"
+                                Pantalla siq\'iy wataykuy
+                                runakunata manchachiq imata
+                                siq\'iyta ripuchinan
+                                seguridadmi.
+                            "</string>
+    <string name="lock_mode">"Wisq\'ay churay"</string>
+    <string name="lock_mode_description">"
+                                Kay función aplicacionpa
+                                seguridadninta hukkachiy
+                                runakunata yaykunankupaq
+                                ñawpaqta kikinku kasqanta
+                                rikuchinankuta munaspa.
+                            "</string>
+    <string name="licenses">"Licenciakuna"</string>
+    <string name="licenses_description">"
+                                    Kay licenciakuna rurasqankunap
+                                    munayninkunata pakarichinankupaq
+                                    programap imaynin kasqanta
+                                    sumayta rikuchinanpaq kaypim kachkan.
+                                    "</string>
+    <string name="title">"Sutiyuq"</string>
+    <string name="note">"Qillqa"</string>
+    <string name="failed_to_save_document">"Qillqata mana waqaychay atikurqachu."</string>
+    <string name="gallery">"Siq\'ikunapa wasin"</string>
+    <string name="audio">Uyariy</string>
+    <string name="permission_denied">Saqiy mana qusqachu!</string>
+    <string name="take_photo">Siq\'iy tomar</string>
+    <string name="video_capture">Video qhawachiyta tomar</string>
+    <string name="recorder">Waqaychaq</string>
+    <string name="document">Qillqa</string>
+    <string name="scanner">Leedor</string>
+    <string name="tasks">Ruwanakuna</string>
+    <string name="tags">Sutichakuna</string>
+    <string name="reminder">Yuyarichiy</string>
+    <string name="priority">Ñawpaqchasqa</string>
+    <string name="low_priority">Pisilla</string>
+    <string name="medium_priority">Chawpi</string>
+    <string name="high_priority">Hatun</string>
+    <string name="urgent_priority">Usqhayta</string>
+    <string name="non_priority">Mana</string>
+    <string name="created">Rurasqa</string>
+    <string name="edited">Allichasqa</string>
+    <string name="types">Kasta</string>
+    <string name="media">Midiyu</string>
+    <string name="medias">Midiyukuna</string>
+    <string name="colour">Qillu</string>
+    <string name="colours">Qillukuna</string>
+    <string name="search_within">Ukupi maskay</string>
+    <string name="issue_title">Ima ima sutiyuq*</string>
+    <string name="issue_description">Ima ima willay (Ñawpaqchasqachu)</string>
+    <string name="noAccount">Cuentaniyuq kaymanta yaykuy</string>
+    <string name="screenshot_selected">✓ Pantalla siq\'iy akllasqa</string>
+    <string name="drive_submit">Apachikuqtin Drive-man rinqa</string>
+    <string name="select_screenshot">Pantalla siq\'iyta akllay</string>
+    <string name="system_logs">Sistema willakuykunata yapay?</string>
+    <string name="find_an_issue">Imata tarirqankichu?</string>
+    <string name="take_a_screenshot">Pantalla siq\'iyta ama qonqaychu.</string>
+    <string name="report_an_issue">Imata willakuy!</string>
+    <string name="bug">Pantiy</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android sistema willakuykuna (Logcat) kutichiy willakuypi</string>
+    <string name="logs_description">Android sistema willakuykuna sistema operativowan kernelmanta horasapa willakuykuna.\n    | Runa imapichus pantaypi chayarqukun chayqa, willakuykuna imaymanata pantaypi chayan ñawpaqta qhawarikuspa, desarrolladorkuna allichananpaq.</string>
+    <string name="label_bug">Pantiy</string>
+    <string name="label_feature">Función</string>
+    <string name="label_invalid">Mana allinchu</string>
+    <string name="label_question">Tapuy</string>
+    <string name="label_security">Seguridad</string>
+    <string name="failed">Mana atikurqachu</string>
+    <string name="submit_feedback">Kutichiy apachiy!</string>
+    <string name="uploading_screenshot">Pantalla siq\'iy apachikuchkan…</string>
+    <string name="creating_github_issue">GitHub problemata ruwachkan…</string>
+    <string name="upload_faild">Apachiy mana atikurqachu…</string>
+    <string name="upload_failed">Apachiy mana atikurqachu…</string>
+    <string name="issue_crea">Problema rurasqa.</string>
+    <string name="issue_created">Problema rurasqa!</string>
+    <string name="log_out">Lloqsiy</string>
+    <string name="hi">Napaykullayki</string>
+    <string name="add_account">Huq cuentata yapay</string>
+    <string name="manage_account">Cuentata kamachiy</string>
+    <string name="upload_data">Datata apachiy</string>
+    <string name="download_data">Datata apamuy</string>
+    <string name="firebase_authentication_failed">Firebase yaykuy mana atikurqachu</string>
+    <string name="sign_in_failed">Google yaykuy mana atikurqachu</string>
+    <string name="please_wait">Yaykunachkan, suyaykuy…</string>
+    <string name="sync_title">Tupachiy yaykuy</string>
+    <string name="sync_description">Google cuentaykiwan yaykuy qillqakunaykita tukuy maquinakunapi waqaychanaykipaq.</string>
+    <string name="current_account">Kunan cuenta</string>
+    <string name="no_name">Sutin mana kanchu</string>
+    <string name="no_email">Email mana kanchu</string>
+    <string name="sign_out">Lloqsiy</string>
+    <string name="sign_in_with_google">Google-wan yaykuy</string>
+    <string name="ai_models">IA modelokuna</string>
+    <string name="load_more">Aswan apamuy</string>
+    <string name="available_models">Kapuq modelokuna</string>
+    <string name="assistant_settings">Yanapakuqpa churakuynin</string>
+    <string name="learning_mode">Yachay churay</string>
+    <string name="learning_mode_description">"
+                    Mosoq datakunapaq llojsiy
+                    sutichakuymanta yachaqaspa.
+                "</string>
+    <string name="temperat">Chiri</string>
+    <string name="temperature">Chiri</string>
+    <string name="temperature_description">"
+           Llojsiypa mana yuyasqan
+           kananta kamachiy.
+           Hatun kaqkuna aswan mosoyachisqa.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">Llojsiypaq imata yuyayta kamachiy.</string>
+    <string name="context_message_size">Contexto willakuy hatunyan</string>
+    <string name="context_message_size_description">Contextopi yapakunan ñawpaq willakuykunap aswan achka yupay.</string>
+    <string name="stream_output">Llojsiy qhawariy</string>
+    <string name="stream_output_description">Kutichiyta rurachkanpi rikuchiy.</string>
+    <string name="thinking_budget">Yuyay presupuesto</string>
+    <string name="thinking_budget_description">Kutichiypa computación recursokunanta wataykuy.</string>
+    <string name="system_prompt">Sistema niy</string>
+    <string name="prompt">Niy..</string>
+    <string name="properties">Imaymana</string>
+    <string name="quick_messages">Usqhay willakuykuna</string>
+    <string name="quick_messages_description">Usqhay willakuy atajokunata churay.</string>
+    <string name="regular_expressions">Expresión regularkuna</string>
+    <string name="regular_expressions_description">Willakuykunata apachiy ñawpaqta tikranapaq regex patrones churaykuy.</string>
+    <string name="headers">Umakuna</string>
+    <string name="headers_description">
+                            Kay ñanñaw-valor pares mañakuypa
+                            uma bloqenman yapakun. Autenticación,
+                            tipo contenido niy ima
+                            metadatakuna apachinapaqmi.
+                        </string>
+    <string name="bodies">Ukukuna</string>
+    <string name="bodies_description">
+                            Kay mañakuy ukupi apachisqa
+                            data cargata (ñanñaw: valor JSON)
+                            rikuchichkan. IA modeloman
+                            ñawpaq apachiypa medio.
+                        </string>
+    <string name="memory">Yuyay</string>
+    <string name="memory_description">Yanapakuqta ñawpaq rimaykunata yuyarichinapaq saqiy.</string>
+    <string name="chats_reference">Ñawpaq rimaykunap referencia</string>
+    <string name="chats_reference_description">Ñawpaq rimaykunamanta datata referenciay aswan allin kutichiykunapaq.</string>
+    <string name="javascript">JavaScript motor</string>
+    <string name="javascript_description">QuickJS motorwan JavaScript kódigota ruray yupaykunapaq.</string>
+    <string name="reset">Churakuynita kutichiy!</string>
+    <string name="providers">Quqkuna</string>
+    <string name="ask">Tapuy</string>
+    <string name="add_model"><![CDATA[<- IA modelota yapay]]></string>
+    <string name="delete">Chinkarichiy</string>
+    <string name="options">Akllakuna</string>
+    <string name="retitle">Sutichayta tikray</string>
+    <string name="assistant">Yanapakuq</string>
+    <string name="new_chat">Mosoq rimay</string>
+    <string name="files">Archivokuna</string>
+    <string name="audios">Uyariy archivokuna</string>
+    <string name="videos">Videokuna</string>
+    <string name="camera">Cámara</string>
+    <string name="pictures">Siq\'ikuna</string>
+    <string name="provider_settings">Quqpa churakuynin</string>
+    <string name="api_key">API ñanñaw</string>
+    <string name="base_url">Chawpi URL</string>
+    <string name="model_name">Modelo suti</string>
+    <string name="modalities">Modalidadkuna</string>
+    <string name="tools">Herramientakuna</string>
+    <string name="reasoning">Yuyay</string>
+    <string name="respo">Kutichiy API</string>
+    <string name="response_api">Kutichiy API</string>
+    <string name="account_balance">Cuenta qallu</string>
+    <string name="api_path">API ñan..</string>
+    <string name="json_key">JSON ñanñaw..</string>
+    <string name="network_proxy">Red proxy</string>
+    <string name="host">Servidor..</string>
+    <string name="username_option">Runa suti (Ñawpaqchasqachu)..</string>
+    <string name="pass_option">Contraseña (Ñawpaqchasqachu)..</string>
+    <string name="service_account">Servicio cuenta @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Ukhu ñanñaw..</string>
+    <string name="location">Kay..</string>
+    <string name="project_uid">Proyecto UID..</string>
+    <string name="details">Sutimanta</string>
+    <string name="model_type">Modelo kasta</string>
+    <string name="input_modalities">Yaykuy modalidadkuna</string>
+    <string name="output_modalities">Llojsiy modalidadkuna</string>
+    <string name="abilities">Atikuyninkuna</string>
+    <string name="provider_override">Quqpa tikrayninta yapay</string>
+    <string name="provider_override_description">Kay modelo específicupaq quqpa churakuyninta churay.</string>
+    <string name="build_tools">Herramienta ruwanakuna</string>
+    <string name="build_tools_description">Kay herramientakuna API-manta dirijtomanta qun aplicacionpa yanapakuynin mana munanchu. Kunankama Gemini API-lla yanapan.</string>
+    <string name="google_search">Maskay</string>
+    <string name="google_search_description">Google Maskay integracionta yaykuchiy</string>
+    <string name="url_context">URL contexto</string>
+    <string name="url_context_description">URL contexto ruraykunata yaykuchiy</string>
+    <string name="find">Tariy</string>
+    <string name="replace">Tikray</string>
+    <string name="effecting_scopes">Chayasqa alcancekuna</string>
+    <string name="user">runa</string>
+    <string name="visual_only">qhawayllanpaq</string>
+    <string name="body">Ukuntin</string>
+    <string name="key">ñanñaw</string>
+    <string name="value">Valor</string>
+    <string name="header">Uma.</string>
+    <string name="reset_description">Yanapakuqpa churakuyninta standar churakuyman kutichiy.</string>
+    <string name="save_changes">Tikrayta waqaychay?</string>
+    <string name="save_changes_description">Mana waqaychakuq tikraykuna tiyanki. ¿Lloqsiyta ñawpaqta waqaychayta munankichu?</string>
+    <string name="dont_save">Ama waqaychaychu</string>
+    <string name="save">Waqaychay</string>
+    <string name="links">Enlacekuna</string>
+    <string name="reminders">Yuyarichikuna</string>
+    <string name="priorities">Ñawpaqchasqakuna</string>
+    <string name="ai_chat">IA rimay</string>
+    <string name="auto">kikillanmanta</string>
+    <string name="light">pisilla</string>
+    <string name="medium">chawpi</string>
+    <string name="heavy">llasaq</string>
+    <string name="date">punchay</string>
+    <string name="time">hora</string>
+    <string name="date_and_time">punchay ima hora</string>
+    <string name="local">kaypi</string>
+    <string name="timezone">hora zona</string>
+    <string name="system_version">sistema versión</string>
+    <string name="device_info">maquina willakuy</string>
+    <string name="battery_level">pila nivel</string>
+    <string name="insert">Churay</string>
+    <string name="confirm">Checanchay</string>
+    <string name="message">Willakuy</string>
+    <string name="content">Ukupi</string>
+    <string name="today">Kunan punchay</string>
+    <string name="tomorrow">Paqarin</string>
+    <string name="according_to_timing">Horankuwan</string>
+    <string name="untitled">Sutin mana kanchu</string>
+    <string name="hue">Qillu tono</string>
+    <string name="saturation">Qillu hunt\'ay</string>
+    <string name="brightness">K\'anchay</string>
+    <string name="shades">Laqhay</string>
+    <string name="complementary">Hunt\'aq</string>
+    <string name="task_placeholder">Ruwana..</string>
+    <string name="task_cannot_be_empty">Ruwana mana chusaq kanmanchu!</string>
+    <string name="of">-manta</string>
+    <string name="something_wrong_with_file">Archivopi ima pantay kan</string>
+    <string name="could_not_load_any_information">Media archivop willakuyninta mana apamuy atikurqachu.</string>
+    <string name="no_file_path_provided">Archivo ñan mana qurasqachu.</string>
+    <string name="security_error_processing_file">Archivo ruraypi seguridad pantay</string>
+    <string name="an_unexpected_error_occurred">Mana yuyasqa pantay karqan</string>
+    <string name="could_not_retrieve_any_information">Kay video archivop willakuyninta mana apamuy atikurqachu.</string>
+    <string name="error_reading_metadata">Media metadatata leeypi pantay</string>
+    <string name="could_not_read_exif_data">EXIF datata mana leeyta atikurqachu</string>
+    <string name="error_reading_basic_file_info">Archivo willakuyta leeypi pantay</string>
+    <string name="file_does_not_exist">Archivo mana kanchu</string>
+    <string name="error">Pantay</string>
+    <string name="loading_media_info">Media willakuyta apamuchkan…</string>
+    <string name="no_metadata_available_for_this_document">Kay qillqapaq metadata mana kanchu.</string>
+    <string name="could_not_read_pdf_metadata">PDF metadata mana leeyta atikurqachu</string>
+    <string name="cannot_read_file">Archivota mana leeyta atikurqachu</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Siq\'ip medidankuna mana decodifikayta atikurqachu.</string>
+    <string name="error_during_dimension_decoding">Medidakuna decodifikaypim pantay karqan</string>
+    <string name="error_reading_exif_data">EXIF data leeypi pantay</string>
+    <string name="duplicate">Kinsachay</string>
+    <string name="send">Apachiy</string>
+    <string name="print">Imprimiy</string>
+    <string name="cleaned">Pichasqa</string>
+    <string name="cleared">Chinkarichisqa</string>
+    <string name="media_deleted">Media chinkarichisqa!</string>
+    <string name="jotting">Usqhay qillqa</string>
+    <string name="appwidget_text">MUESTRA</string>
+    <string name="add_widget">Widget yapay</string>
+    <string name="app_widget_description">Kay aplicación widgetp willakuynin</string>
+    <string name="quick_widget_description">Kay usqhay widget churana</string>
+    <string name="creator_widget_description">Kay ruwaq churana widget</string>
+    <string name="notes_list_description">Kay qillqakunap lista</string>
+    <string name="record_deleted">Registro chinkarichisqa!</string>
+</resources>

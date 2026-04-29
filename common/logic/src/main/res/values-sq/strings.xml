@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Shënime</string>
+    <string name="screen_chat">Bisedë AI</string>
+    <string name="screen_tags">Etiketat</string>
+    <string name="screen_settings">Cilësimet</string>
+    <string name="screen_archive">Arkiva</string>
+    <string name="screen_about">Rreth</string>
+    <string name="screen_feedback">Komente</string>
+    <string name="share_app">Ndaj këtë aplikacion</string>
+    <string name="label_more">më shumë</string>
+    <string name="label_less">më pak</string>
+    <string name="msg_deleted">fshirë</string>
+    <string name="action_undo">Zhbëj</string>
+    <string name="tag_placeholder">Etiketë..</string>
+    <string name="tag_cannot_be_empty">Etiketa nuk mund të jetë bosh!</string>
+    <string name="archive">Arkiva</string>
+    <string name="deleted">fshirë!</string>
+    <string name="erase_notes">Fshi shënimet?</string>
+    <string name="confirm_erase_notes">"Të gjitha shënimet në kosh do të fshihen përgjithmonë."</string>
+    <string name="search_in_notes">"Kërko në shënime.."</string>
+    <string name="select_layout">"Zgjidh paraqitjen"</string>
+    <string name="settings">"Cilësimet"</string>
+    <string name="account_sync">"Sinkronizimi i llogarisë"</string>
+    <string name="account_sync_description">"
+                                Aktivizimi i sinkronizimit të llogarisë
+                                Google Drive për këtë aplikacion ju lejon
+                                të rezervoni dhe sinkronizoni të dhënat
+                                tuaja, si shënime dhe cilësime, pa
+                                ndërprerje, duke siguruar që të dhënat
+                                tuaja janë të sigurta.
+        "</string>
+    <string name="assistant_configuration">"Konfigurimi i asistentit"</string>
+    <string name="assistant_configuration_description">"
+                                Asistenti AI është një program software
+                                i mundësuar nga inteligjenca artificiale,
+                                i krijuar për t\'ju ndihmuar me një gamë
+                                të gjerë detyrash në këtë aplikacion.
+                                Këta asistentë kuptojnë dhe u përgjigjen
+                                gjuhës natyrore, duke ju lejuar të
+                                ndërveproni me ta nëpërmjet imazhit ose tekstit.
+                            "</string>
+    <string name="dark_mode">"Modaliteti i errët"</string>
+    <string name="dark_mode_description">"
+                                Ky modalitet është një cilësim i të gjithë
+                                sistemit që ndryshon skemën e sfondit të
+                                ndërfaqes së aplikacionit tuaj Android
+                                në ngjyra më të errëta.
+                                Është projektuar për të reduktuar lodhjen
+                                e syve, për të përmirësuar aksesueshmërinë,
+                                për të kursyer baterinë dhe për të
+                                përmirësuar përvojën e përdoruesit.
+                            "</string>
+    <string name="sound_effect">"Efekt zanor"</string>
+    <string name="sound_effect_description">"
+                                Në kontekstin e aplikacionit Jetnote,
+                                funksioni \'Efekt zanor\' ofron reagim
+                                dëgjimor për përdoruesit kur ndërveprojnë
+                                me butonat dhe elementet e tjera të ndërfaqes.
+                                Kjo është një praktikë e zakonshme në
+                                zhvillimin e aplikacioneve mobile për të
+                                bërë përvojën e përdoruesit më interaktive
+                                dhe tërheqëse.
+                            "</string>
+    <string name="layouts">"Paraqitjet"</string>
+    <string name="layouts_description">"
+                                Paraqitjet janë themelore për organizimin
+                                dhe shfaqjen e përmbajtjes në aplikacionet
+                                tuaja Android. Ato përcaktojnë strukturën
+                                dhe rregullimin e elementeve të ndërfaqes
+                                në ekran.
+                            "</string>
+    <string name="sort_notes">"Rendit shënimet"</string>
+    <string name="default_sort">"parazgjedhje"</string>
+    <string name="name_sort">"emër"</string>
+    <string name="oldest_sort">"më të vjetrat"</string>
+    <string name="newest_sort">"më të rejat"</string>
+    <string name="priority_sort">"prioritet"</string>
+    <string name="zen_mode">"Modaliteti Zen"</string>
+    <string name="zen_mode_description">"
+                                Modaliteti Zen (ekran i plotë) është një
+                                cilësim ekrani që lejon aplikacionin të
+                                zërë të gjithë ekranin, duke fshehur të
+                                gjitha elementet e tjera të ndërfaqes si
+                                shiritat e veglave, menytë dhe shiriti i
+                                detyrave i sistemit operativ.
+                            "</string>
+    <string name="shake">"Tunde për të raportuar"</string>
+    <string name="shake_description">"
+                              Është një funksion i përshtatshëm që u lejon
+                              përdoruesve të iniciojnë një proces komentesh
+                              ose raportimi të gabimeve thjesht duke
+                              tundur fizikisht pajisjen e tyre Android.
+                              Në vend të lundrimit nëpër meny të shumta
+                              për të gjetur \'Dërgo komente\' ose
+                              \'Raporto një gabim\'.
+                            "</string>
+    <string name="block_screenshot">"Blloko pamjen e ekranit"</string>
+    <string name="block_screenshot_description">"
+                                Bllokimi i pamjeve të ekranit është një
+                                masë sigurie që pengon përdoruesit të
+                                kapin pamje të ekranit të përmbajtjes
+                                së aplikacionit tuaj. Shpesh përdoret
+                                për të mbrojtur informacione të ndjeshme,
+                                si të dhënat bankare, të dhënat personale
+                                ose materialin e mbrojtur me të drejtë
+                                autori.
+                            "</string>
+    <string name="lock_mode">"Modaliteti i bllokimit"</string>
+    <string name="lock_mode_description">"
+                                Ky funksion rrit sigurinë e aplikacionit
+                                tuaj duke kërkuar nga përdoruesit të
+                                vërtetojnë identitetin para se të
+                                aksesojnë përmbajtjen e tij.
+                                Kjo zakonisht arrihet duke përdorur
+                                funksionet e integruara të sigurisë të
+                                pajisjes, si gjurmën e gishtit, PIN-in
+                                ose modelin e zhbllokimit.
+                            "</string>
+    <string name="licenses">"Licencat"</string>
+    <string name="licenses_description">"
+                                    Këto licenca janë përfshirë këtu për
+                                    të respektuar kërkesat e shpërndarjes
+                                    të autorëve përkatës dhe për të
+                                    siguruar transparencë në lidhje me
+                                    arkitekturën e softwarerit.
+                                    "</string>
+    <string name="title">"Titulli"</string>
+    <string name="note">"Shënim"</string>
+    <string name="failed_to_save_document">"Ruajtja e dokumentit dështoi."</string>
+    <string name="gallery">"Galeria"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Leja është refuzuar!</string>
+    <string name="take_photo">Bëj foto</string>
+    <string name="video_capture">Regjistro video</string>
+    <string name="recorder">Regjistrues</string>
+    <string name="document">Dokument</string>
+    <string name="scanner">Skaner</string>
+    <string name="tasks">Detyrat</string>
+    <string name="tags">Etiketat</string>
+    <string name="reminder">Kujtesë</string>
+    <string name="priority">Prioriteti</string>
+    <string name="low_priority">I ulët</string>
+    <string name="medium_priority">Mesatar</string>
+    <string name="high_priority">I lartë</string>
+    <string name="urgent_priority">Urgjent</string>
+    <string name="non_priority">Asnjë</string>
+    <string name="created">Krijuar</string>
+    <string name="edited">Redaktuar</string>
+    <string name="types">Llojet</string>
+    <string name="media">Media</string>
+    <string name="medias">Skedarët media</string>
+    <string name="colour">Ngjyra</string>
+    <string name="colours">Ngjyrat</string>
+    <string name="search_within">Kërko brenda</string>
+    <string name="issue_title">Titulli i problemit*</string>
+    <string name="issue_description">Përshkrimi i problemit (Opsional)</string>
+    <string name="noAccount">Hyrje pa llogari</string>
+    <string name="screenshot_selected">✓ Pamja e ekranit u zgjodh</string>
+    <string name="drive_submit">Do të ngarkohet në Drive gjatë dorëzimit</string>
+    <string name="select_screenshot">Zgjidhni një pamje ekrani</string>
+    <string name="system_logs">Të përfshihen regjistrat e sistemit?</string>
+    <string name="find_an_issue">Gjetët ndonjë problem?</string>
+    <string name="take_a_screenshot">Mos harroni të bëni një pamje ekrani.</string>
+    <string name="report_an_issue">Raportoni një problem!</string>
+    <string name="bug">Gabim</string>
+    <string name="logs_title">\\uD83D\\uDCiE Regjistrat e sistemit Android (Logcat) në një raport komentesh</string>
+    <string name="logs_description">Regjistrat e sistemit Android janë një rrjedhë mesazhesh me vulë kohore nga sistemi operativ dhe kerneli.\n    | Kur një përdorues has një problem (si një rrëzim, ngrirje ose sjellje e papritur), regjistrat kapin ngjarjet që çuan deri te problemi, duke u ofruar zhvilluesve kontekstin e nevojshëm për diagnozë.</string>
+    <string name="label_bug">Gabim</string>
+    <string name="label_feature">Funksion</string>
+    <string name="label_invalid">I pavlefshëm</string>
+    <string name="label_question">Pyetje</string>
+    <string name="label_security">Siguria</string>
+    <string name="failed">Dështoi</string>
+    <string name="submit_feedback">Dërgo komente!</string>
+    <string name="uploading_screenshot">Po ngarkohet pamja e ekranit…</string>
+    <string name="creating_github_issue">Po krijohet problemi GitHub…</string>
+    <string name="upload_faild">Ngarkimi dështoi…</string>
+    <string name="upload_failed">Ngarkimi dështoi…</string>
+    <string name="issue_crea">Problemi u krijua.</string>
+    <string name="issue_created">Problemi u krijua!</string>
+    <string name="log_out">Dil</string>
+    <string name="hi">Përshëndetje</string>
+    <string name="add_account">Shto një llogari tjetër</string>
+    <string name="manage_account">Menaxho llogarinë</string>
+    <string name="upload_data">Ngarko të dhënat</string>
+    <string name="download_data">Shkarko të dhënat</string>
+    <string name="firebase_authentication_failed">Autentifikimi Firebase dështoi</string>
+    <string name="sign_in_failed">Hyrja me Google dështoi</string>
+    <string name="please_wait">Po hyni, ju lutem prisni…</string>
+    <string name="sync_title">Hyni për të sinkronizuar</string>
+    <string name="sync_description">Hyni me llogarinë tuaj Google për të rezervuar dhe sinkronizuar shënimet tuaja në të gjitha pajisjet tuaja.</string>
+    <string name="current_account">Llogaria aktuale</string>
+    <string name="no_name">Pa emër</string>
+    <string name="no_email">Pa email</string>
+    <string name="sign_out">Dil</string>
+    <string name="sign_in_with_google">Hyr me Google</string>
+    <string name="ai_models">Modelet AI</string>
+    <string name="load_more">Ngarko më shumë</string>
+    <string name="available_models">Modelet e disponueshme</string>
+    <string name="assistant_settings">Cilësimet e asistentit</string>
+    <string name="learning_mode">Modaliteti i të mësuarit</string>
+    <string name="learning_mode_description">"
+                    Parashikimi i një dalje për të dhëna të reja
+                    bazuar në modelet e mësuara nga
+                    shembujt e etiketuar.
+                "</string>
+    <string name="temperat">Temperatura</string>
+    <string name="temperature">Temperatura</string>
+    <string name="temperature_description">"
+           Kontrollon rastësinë e daljes.
+           Vlerat më të larta janë më krijuese.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Kontrollon cilat token merren parasysh për dalje.
+            </string>
+    <string name="context_message_size">Madhësia e mesazheve të kontekstit</string>
+    <string name="context_message_size_description">
+            Numri maksimal i mesazheve të mëparshme
+            për t\'u përfshirë në kontekst.
+        </string>
+    <string name="stream_output">Dalja në rrjedhë</string>
+    <string name="stream_output_description">Shfaq përgjigjen ndërsa gjenerohet.</string>
+    <string name="thinking_budget">Buxheti i mendimit</string>
+    <string name="thinking_budget_description">
+                            Kufizon burimet llogaritëse të përdorura
+                            për përgjigjen.
+                        </string>
+    <string name="system_prompt">Nxitja e sistemit</string>
+    <string name="prompt">Nxitje..</string>
+    <string name="properties">Vetitë</string>
+    <string name="quick_messages">Mesazhe të shpejta</string>
+    <string name="quick_messages_description">Konfiguro shkurtesat e mesazheve të shpejta.</string>
+    <string name="regular_expressions">Shprehje të rregullta</string>
+    <string name="regular_expressions_description">
+                            Përcaktoni modele regex për të transformuar
+                            mesazhet para dërgimit/marrjes.
+                        </string>
+    <string name="headers">Titujt</string>
+    <string name="headers_description">
+                            Këto janë çifte çelës-vlerë të shtuara
+                            në bllokun e titujve të kërkesës.
+                            Zakonisht përdoren për të ofruar autentifikim,
+                            specifikuar llojin e përmbajtjes ose
+                            kaluar metadaten.
+                        </string>
+    <string name="bodies">Trupi</string>
+    <string name="bodies_description">
+                            I referohet ngarkesës së të dhënave
+                            (struktura JSON çelës: vlerë) dërguar
+                            brenda kërkesës.
+                            Është mjeti kryesor i dërgimit të hyrjeve
+                            te modeli AI.
+                        </string>
+    <string name="memory">Memoria</string>
+    <string name="memory_description">
+                            Lejoni asistentin të mbajë mend kthimet
+                            e mëparshme në bisedë.
+                        </string>
+    <string name="chats_reference">Referenca e bisedave të fundit</string>
+    <string name="chats_reference_description">
+                        Referoni të dhënat nga bisedat tuaja të fundit
+                        për përgjigje më të mira kontekstuale.
+                        </string>
+    <string name="javascript">Motori JavaScript</string>
+    <string name="javascript_description">
+                            Ekzekutoni kodin JavaScript me motorin
+                            QuickJS për llogaritje dhe skripting.
+                        </string>
+    <string name="reset">Rivendos cilësimet!</string>
+    <string name="providers">Ofruesit</string>
+    <string name="ask">Pyet</string>
+    <string name="add_model"><![CDATA[<- Shto model AI]]></string>
+    <string name="delete">Fshi</string>
+    <string name="options">Opsionet</string>
+    <string name="retitle">Riemërto</string>
+    <string name="assistant">Asistent</string>
+    <string name="new_chat">Bisedë e re</string>
+    <string name="files">Skedarët</string>
+    <string name="audios">Audio</string>
+    <string name="videos">Video</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Fotografitë</string>
+    <string name="provider_settings">Cilësimet e ofruesit</string>
+    <string name="api_key">Çelësi API</string>
+    <string name="base_url">URL bazë</string>
+    <string name="model_name">Emri i modelit</string>
+    <string name="modalities">Modalitetet</string>
+    <string name="tools">Veglat</string>
+    <string name="reasoning">Arsyetimi</string>
+    <string name="respo">API e përgjigjes</string>
+    <string name="response_api">API e përgjigjes</string>
+    <string name="account_balance">Bilanci i llogarisë</string>
+    <string name="api_path">Rruga API..</string>
+    <string name="json_key">Çelësi Json..</string>
+    <string name="network_proxy">Proxy i rrjetit</string>
+    <string name="host">Hosti..</string>
+    <string name="username_option">Emri i përdoruesit (Opsional)..</string>
+    <string name="pass_option">Fjalëkalimi (Opsional)..</string>
+    <string name="service_account">Llogaria e shërbimit @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Çelësi privat..</string>
+    <string name="location">Vendndodhja..</string>
+    <string name="project_uid">UID i projektit..</string>
+    <string name="details">Detajet</string>
+    <string name="model_type">Lloji i modelit</string>
+    <string name="input_modalities">Modalitetet e hyrjes</string>
+    <string name="output_modalities">Modalitetet e daljes</string>
+    <string name="abilities">Aftësitë</string>
+    <string name="provider_override">Shto zëvendësim ofrues</string>
+    <string name="provider_override_description">
+                            Konfiguroni cilësimet e personalizuara të
+                            ofruesit për këtë model specifik.
+                            Përdor vetitë e zakonshme nga ofruesi
+                            kryesor i modelit.
+                        </string>
+    <string name="build_tools">Veglat e ndërtimit</string>
+    <string name="build_tools_description">
+                            Këto vegla ofrohen drejtpërdrejt nga API
+                            pa kërkuar mbështetje nga aplikacioni.
+                            Kjo funksion mbështetet vetëm nga Gemini API
+                            tani për tani.
+                        </string>
+    <string name="google_search">Kërko</string>
+    <string name="google_search_description">Aktivizo integrimin me Google Search</string>
+    <string name="url_context">Konteksti URL</string>
+    <string name="url_context_description">Aktivizo përpunimin e kontekstit URL</string>
+    <string name="find">Gjej</string>
+    <string name="replace">Zëvendëso</string>
+    <string name="effecting_scopes">Shtrirja e efektit</string>
+    <string name="user">përdorues</string>
+    <string name="visual_only">vetëm vizual</string>
+    <string name="body">Trupi</string>
+    <string name="key">çelës</string>
+    <string name="value">Vlera</string>
+    <string name="header">Titulli.</string>
+    <string name="reset_description">Rivendos cilësimet e asistentit në modalitetin parazgjedhës.</string>
+    <string name="save_changes">Ruaj ndryshimet?</string>
+    <string name="save_changes_description">Keni ndryshime të paruajtura. Dëshironi t\'i ruani para se të largoheni?</string>
+    <string name="dont_save">Mos ruaj</string>
+    <string name="save">Ruaj</string>
+    <string name="links">Lidhjet</string>
+    <string name="reminders">Kujtesat</string>
+    <string name="priorities">Prioritetet</string>
+    <string name="ai_chat">Bisedë AI</string>
+    <string name="auto">automatik</string>
+    <string name="light">i lehtë</string>
+    <string name="medium">mesatar</string>
+    <string name="heavy">i rëndë</string>
+    <string name="date">data</string>
+    <string name="time">ora</string>
+    <string name="date_and_time">data dhe ora</string>
+    <string name="local">lokal</string>
+    <string name="timezone">zona kohore</string>
+    <string name="system_version">versioni i sistemit</string>
+    <string name="device_info">informacioni i pajisjes</string>
+    <string name="battery_level">niveli i baterisë</string>
+    <string name="insert">Fut</string>
+    <string name="confirm">Konfirmo</string>
+    <string name="message">Mesazh</string>
+    <string name="content">Përmbajtja</string>
+    <string name="today">Sot</string>
+    <string name="tomorrow">Nesër</string>
+    <string name="according_to_timing">Sipas kohës</string>
+    <string name="untitled">Pa titull</string>
+    <string name="hue">Ngjyra bazë</string>
+    <string name="saturation">Ngopja</string>
+    <string name="brightness">Ndriçimi</string>
+    <string name="shades">Hijet</string>
+    <string name="complementary">Plotësuese</string>
+    <string name="task_placeholder">Detyrë..</string>
+    <string name="task_cannot_be_empty">Detyra nuk mund të jetë bosh!</string>
+    <string name="of">nga</string>
+    <string name="something_wrong_with_file">Diçka nuk shkon me skedarin</string>
+    <string name="could_not_load_any_information">Nuk mund të ngarkohet asnjë informacion për skedarin media.</string>
+    <string name="no_file_path_provided">Nuk është dhënë rruga e skedarit.</string>
+    <string name="security_error_processing_file">Gabim sigurie gjatë përpunimit të skedarit</string>
+    <string name="an_unexpected_error_occurred">Ndodhi një gabim i papritur</string>
+    <string name="could_not_retrieve_any_information">Nuk mund të merret asnjë informacion për këtë skedar video.</string>
+    <string name="error_reading_metadata">Gabim gjatë leximit të metadatave media</string>
+    <string name="could_not_read_exif_data">Nuk mund të lexohen të dhënat EXIF</string>
+    <string name="error_reading_basic_file_info">Gabim gjatë leximit të informacionit bazë të skedarit</string>
+    <string name="file_does_not_exist">Skedari nuk ekziston</string>
+    <string name="error">Gabim</string>
+    <string name="loading_media_info">Po ngarkohet informacioni media…</string>
+    <string name="no_metadata_available_for_this_document">Nuk ka metadatë të disponueshme për këtë dokument.</string>
+    <string name="could_not_read_pdf_metadata">Nuk mund të lexohen metadatat PDF</string>
+    <string name="cannot_read_file">Nuk mund të lexohet skedari</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Nuk mund të dekodizohen dimensionet e imazhit ose formati është i pavlefshëm.</string>
+    <string name="error_during_dimension_decoding">Gabim gjatë dekodimit të dimensioneve</string>
+    <string name="error_reading_exif_data">Gabim gjatë leximit të të dhënave EXIF</string>
+    <string name="duplicate">Dupliko</string>
+    <string name="send">Dërgo</string>
+    <string name="print">Printo</string>
+    <string name="cleaned">Pastruar</string>
+    <string name="cleared">Fshirë</string>
+    <string name="media_deleted">media u fshi!</string>
+    <string name="jotting">Duke shënuar</string>
+    <string name="appwidget_text">SHEMBULL</string>
+    <string name="add_widget">Shto widget</string>
+    <string name="app_widget_description">Ky është një përshkrim i widget-it të aplikacionit</string>
+    <string name="quick_widget_description">Ky është një paraqitje e widget-it të shpejtë</string>
+    <string name="creator_widget_description">Ky është widget-i i paraqitjes së krijuesit</string>
+    <string name="notes_list_description">Kjo është një listë shënimesh</string>
+    <string name="record_deleted">rekordi u fshi!</string>
+</resources>

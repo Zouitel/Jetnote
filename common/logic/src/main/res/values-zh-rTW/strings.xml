@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">筆記</string>
+    <string name="screen_chat">AI 對話</string>
+    <string name="screen_tags">標籤</string>
+    <string name="screen_settings">設定</string>
+    <string name="screen_archive">封存</string>
+    <string name="screen_about">關於</string>
+    <string name="screen_feedback">意見回饋</string>
+    <string name="share_app">分享此應用程式</string>
+    <string name="label_more">更多</string>
+    <string name="label_less">收起</string>
+    <string name="msg_deleted">已刪除</string>
+    <string name="action_undo">復原</string>
+    <string name="tag_placeholder">標籤..</string>
+    <string name="tag_cannot_be_empty">標籤不能為空！</string>
+    <string name="archive">封存</string>
+    <string name="deleted">已刪除！</string>
+    <string name="erase_notes">清除筆記？</string>
+    <string name="confirm_erase_notes">"資源回收筒中的所有筆記將永久刪除。"</string>
+    <string name="search_in_notes">"搜尋筆記.."</string>
+    <string name="select_layout">"選擇版面配置"</string>
+    <string name="settings">"設定"</string>
+    <string name="account_sync">"帳戶同步"</string>
+    <string name="account_sync_description">"
+                                為此應用程式啟用 Google 雲端硬碟帳戶同步，
+                                可讓您無縫備份並同步應用程式資料，
+                                例如筆記和設定，
+                                確保您的資料安全無虞。
+        "</string>
+    <string name="assistant_configuration">"助理設定"</string>
+    <string name="assistant_configuration_description">"
+                                AI 助理是一款由人工智慧驅動的軟體程式，
+                                專為協助您完成此應用程式中的各種工作而設計。
+                                這些助理能夠理解並回應自然語言，
+                                讓您可以透過圖片或文字與其互動。
+                            "</string>
+    <string name="dark_mode">"深色模式"</string>
+    <string name="dark_mode_description">"
+                                此模式是一項全系統設定，
+                                可將您 Android 應用程式介面的背景配色方案
+                                切換為較深色調。
+                                旨在減輕眼睛疲勞、改善無障礙性、
+                                節省電池電量並提升使用者體驗。
+                            "</string>
+    <string name="sound_effect">"音效"</string>
+    <string name="sound_effect_description">"
+                                在 Jetnote 應用程式中，
+                                「音效」功能可在使用者與按鈕及
+                                其他介面元素互動時提供聽覺回饋。
+                                這是行動應用程式開發中的常見做法，
+                                旨在讓使用者體驗更具互動性與吸引力。
+                            "</string>
+    <string name="layouts">"版面配置"</string>
+    <string name="layouts_description">"
+                                版面配置是 Android 應用程式中
+                                組織和顯示內容的基礎。
+                                它們定義了螢幕上介面元素的結構與排列方式。
+                            "</string>
+    <string name="sort_notes">"排序筆記"</string>
+    <string name="default_sort">"預設"</string>
+    <string name="name_sort">"名稱"</string>
+    <string name="oldest_sort">"最舊"</string>
+    <string name="newest_sort">"最新"</string>
+    <string name="priority_sort">"優先順序"</string>
+    <string name="zen_mode">"專注模式"</string>
+    <string name="zen_mode_description">"
+                                專注模式（全螢幕模式）是一種顯示設定，
+                                允許應用程式佔據整個螢幕，
+                                隱藏所有其他介面元素，
+                                例如工具列、選單以及作業系統的工作列。
+                            "</string>
+    <string name="shake">"搖晃以回報"</string>
+    <string name="shake_description">"
+                              這是一項便利功能，允許使用者
+                              只需物理搖晃 Android 裝置
+                              即可啟動意見回饋或錯誤回報流程。
+                              無需在多個選單中尋找「傳送意見回饋」
+                              或「回報錯誤」選項。
+                            "</string>
+    <string name="block_screenshot">"封鎖螢幕截圖"</string>
+    <string name="block_screenshot_description">"
+                                截圖封鎖是一項安全措施，
+                                可防止使用者擷取應用程式內容的螢幕截圖。
+                                通常用於保護敏感資訊，
+                                例如銀行詳細資料、個人資料
+                                或受版權保護的內容。
+                            "</string>
+    <string name="lock_mode">"鎖定模式"</string>
+    <string name="lock_mode_description">"
+                                此功能透過要求使用者在存取內容前
+                                進行身分驗證來增強應用程式安全性。
+                                通常透過裝置的內建安全功能實現，
+                                例如指紋、PIN 碼或圖案解鎖。
+                            "</string>
+    <string name="licenses">"授權條款"</string>
+    <string name="licenses_description">"
+                                    此處包含這些授權條款，
+                                    旨在遵守各自作者的散佈要求，
+                                    並提供有關軟體架構的透明度。
+                                    "</string>
+    <string name="title">"標題"</string>
+    <string name="note">"筆記"</string>
+    <string name="failed_to_save_document">"儲存文件失敗。"</string>
+    <string name="gallery">"圖庫"</string>
+    <string name="audio">音訊</string>
+    <string name="permission_denied">權限遭拒！</string>
+    <string name="take_photo">拍照</string>
+    <string name="video_capture">錄製影片</string>
+    <string name="recorder">錄音機</string>
+    <string name="document">文件</string>
+    <string name="scanner">掃描器</string>
+    <string name="tasks">工作</string>
+    <string name="tags">標籤</string>
+    <string name="reminder">提醒</string>
+    <string name="priority">優先順序</string>
+    <string name="low_priority">低</string>
+    <string name="medium_priority">中</string>
+    <string name="high_priority">高</string>
+    <string name="urgent_priority">緊急</string>
+    <string name="non_priority">無</string>
+    <string name="created">已建立</string>
+    <string name="edited">已編輯</string>
+    <string name="types">類型</string>
+    <string name="media">媒體</string>
+    <string name="medias">媒體清單</string>
+    <string name="colour">顏色</string>
+    <string name="colours">顏色清單</string>
+    <string name="search_within">搜尋範圍</string>
+    <string name="issue_title">問題標題*</string>
+    <string name="issue_description">問題說明（選填）</string>
+    <string name="noAccount">不使用帳戶登入</string>
+    <string name="screenshot_selected">✓ 已選取螢幕截圖</string>
+    <string name="drive_submit">提交後將上傳至雲端硬碟</string>
+    <string name="select_screenshot">選取螢幕截圖</string>
+    <string name="system_logs">包含系統記錄？</string>
+    <string name="find_an_issue">您是否發現問題？</string>
+    <string name="take_a_screenshot">別忘了擷取螢幕截圖。</string>
+    <string name="report_an_issue">回報問題！</string>
+    <string name="bug">錯誤</string>
+    <string name="logs_title">\\uD83D\\uDCiE 意見回饋報告中的 Android 系統記錄 (Logcat)</string>
+    <string name="logs_description">Android 系統記錄是來自作業系統和核心的時間戳記訊息串流。\n    | 當使用者遇到問題（例如應用程式當機、凍結或意外行為）時，記錄會擷取問題前後的事件，為開發人員提供診斷所需的背景資訊。</string>
+    <string name="label_bug">錯誤</string>
+    <string name="label_feature">功能</string>
+    <string name="label_invalid">無效</string>
+    <string name="label_question">問題</string>
+    <string name="label_security">安全性</string>
+    <string name="failed">失敗</string>
+    <string name="submit_feedback">提交意見回饋！</string>
+    <string name="uploading_screenshot">正在上傳螢幕截圖…</string>
+    <string name="creating_github_issue">正在建立 GitHub Issue…</string>
+    <string name="upload_faild">上傳失敗…</string>
+    <string name="upload_failed">上傳失敗…</string>
+    <string name="issue_crea">Issue 已建立。</string>
+    <string name="issue_created">Issue 已建立！</string>
+    <string name="log_out">登出</string>
+    <string name="hi">您好</string>
+    <string name="add_account">新增其他帳戶</string>
+    <string name="manage_account">管理帳戶</string>
+    <string name="upload_data">上傳資料</string>
+    <string name="download_data">下載資料</string>
+    <string name="firebase_authentication_failed">Firebase 驗證失敗</string>
+    <string name="sign_in_failed">Google 登入失敗</string>
+    <string name="please_wait">正在登入，請稍候…</string>
+    <string name="sync_title">登入以同步</string>
+    <string name="sync_description">使用您的 Google 帳戶登入，在所有裝置上備份並同步您的筆記。</string>
+    <string name="current_account">目前帳戶</string>
+    <string name="no_name">無名稱</string>
+    <string name="no_email">無電子郵件</string>
+    <string name="sign_out">登出</string>
+    <string name="sign_in_with_google">使用 Google 登入</string>
+    <string name="ai_models">AI 模型</string>
+    <string name="load_more">載入更多</string>
+    <string name="available_models">可用模型</string>
+    <string name="assistant_settings">助理設定</string>
+    <string name="learning_mode">學習模式</string>
+    <string name="learning_mode_description">"
+                    根據從標記範例中學習到的模式，
+                    預測新的、未見過資料的輸出。
+                "</string>
+    <string name="temperat">溫度</string>
+    <string name="temperature">溫度</string>
+    <string name="temperature_description">"
+           控制輸出的隨機性。
+           數值越高，輸出越有創意。
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            控制哪些權杖被納入輸出考量。
+            </string>
+    <string name="context_message_size">內容訊息大小</string>
+    <string name="context_message_size_description">
+            納入內容的先前訊息
+            最大數量。
+        </string>
+    <string name="stream_output">串流輸出</string>
+    <string name="stream_output_description">在產生過程中即時顯示回應。</string>
+    <string name="thinking_budget">思考預算</string>
+    <string name="thinking_budget_description">
+                            限制用於回應的運算資源。
+                        </string>
+    <string name="system_prompt">系統提示</string>
+    <string name="prompt">提示..</string>
+    <string name="properties">屬性</string>
+    <string name="quick_messages">快速訊息</string>
+    <string name="quick_messages_description">設定快速訊息捷徑。</string>
+    <string name="regular_expressions">規則運算式</string>
+    <string name="regular_expressions_description">
+                            定義規則運算式模式，以便在傳送/接收前
+                            轉換訊息。
+                        </string>
+    <string name="headers">標頭</string>
+    <string name="headers_description">
+                            這些是新增至要求標頭區塊的
+                            鍵值對（鍵：值）。
+                            通常用於提供驗證（例如 API 金鑰或權杖）、
+                            指定內容類型，或傳遞有關要求的中繼資料。
+                        </string>
+    <string name="bodies">主體</string>
+    <string name="bodies_description">
+                            指要求中傳送的資料承載
+                            （鍵：值 JSON 結構）。
+                            這是向 AI 模型傳送輸入的主要方式。
+                        </string>
+    <string name="memory">記憶體</string>
+    <string name="memory_description">
+                            允許助理記住對話中的
+                            先前輪次。
+                        </string>
+    <string name="chats_reference">最近對話參考</string>
+    <string name="chats_reference_description">
+                        參考最近對話中的資料，
+                        以提供更具脈絡的回應。
+                        </string>
+    <string name="javascript">JavaScript 引擎</string>
+    <string name="javascript_description">
+                            使用 QuickJS 引擎執行 JavaScript 程式碼，
+                            用於計算和指令碼處理。
+                        </string>
+    <string name="reset">重設設定！</string>
+    <string name="providers">提供者</string>
+    <string name="ask">詢問</string>
+    <string name="add_model"><![CDATA[<- 新增 AI 模型]]></string>
+    <string name="delete">刪除</string>
+    <string name="options">選項</string>
+    <string name="retitle">重新命名</string>
+    <string name="assistant">助理</string>
+    <string name="new_chat">新增對話</string>
+    <string name="files">檔案</string>
+    <string name="audios">音訊</string>
+    <string name="videos">影片</string>
+    <string name="camera">相機</string>
+    <string name="pictures">圖片</string>
+    <string name="provider_settings">提供者設定</string>
+    <string name="api_key">API 金鑰</string>
+    <string name="base_url">基礎 URL</string>
+    <string name="model_name">模型名稱</string>
+    <string name="modalities">模態</string>
+    <string name="tools">工具</string>
+    <string name="reasoning">推理</string>
+    <string name="respo">回應 API</string>
+    <string name="response_api">回應 API</string>
+    <string name="account_balance">帳戶餘額</string>
+    <string name="api_path">API 路徑..</string>
+    <string name="json_key">Json 金鑰..</string>
+    <string name="network_proxy">網路 Proxy</string>
+    <string name="host">主機..</string>
+    <string name="username_option">使用者名稱（選填）..</string>
+    <string name="pass_option">密碼（選填）..</string>
+    <string name="service_account">服務帳戶 @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">私密金鑰..</string>
+    <string name="location">位置..</string>
+    <string name="project_uid">專案 UID..</string>
+    <string name="details">詳細資料</string>
+    <string name="model_type">模型類型</string>
+    <string name="input_modalities">輸入模態</string>
+    <string name="output_modalities">輸出模態</string>
+    <string name="abilities">能力</string>
+    <string name="provider_override">新增提供者覆寫</string>
+    <string name="provider_override_description">
+                            為此特定模型設定自訂提供者設定。
+                            使用模型主要提供者的通用屬性。
+                        </string>
+    <string name="build_tools">建置工具</string>
+    <string name="build_tools_description">
+                            這些工具由 API 直接提供，
+                            無需應用程式支援。
+                            目前僅 Gemini API 支援此功能。
+                        </string>
+    <string name="google_search">搜尋</string>
+    <string name="google_search_description">啟用 Google 搜尋整合</string>
+    <string name="url_context">URL 內容</string>
+    <string name="url_context_description">啟用 URL 內容處理</string>
+    <string name="find">尋找</string>
+    <string name="replace">取代</string>
+    <string name="effecting_scopes">作用範圍</string>
+    <string name="user">使用者</string>
+    <string name="visual_only">僅視覺</string>
+    <string name="body">主體</string>
+    <string name="key">金鑰</string>
+    <string name="value">值</string>
+    <string name="header">標頭.</string>
+    <string name="reset_description">將助理設定重設為預設模式。</string>
+    <string name="save_changes">儲存變更？</string>
+    <string name="save_changes_description">您有未儲存的變更。是否要在離開前儲存？</string>
+    <string name="dont_save">不儲存</string>
+    <string name="save">儲存</string>
+    <string name="links">連結</string>
+    <string name="reminders">提醒清單</string>
+    <string name="priorities">優先順序清單</string>
+    <string name="ai_chat">AI 對話</string>
+    <string name="auto">自動</string>
+    <string name="light">輕量</string>
+    <string name="medium">中等</string>
+    <string name="heavy">重量</string>
+    <string name="date">日期</string>
+    <string name="time">時間</string>
+    <string name="date_and_time">日期和時間</string>
+    <string name="local">本機</string>
+    <string name="timezone">時區</string>
+    <string name="system_version">系統版本</string>
+    <string name="device_info">裝置資訊</string>
+    <string name="battery_level">電池電量</string>
+    <string name="insert">插入</string>
+    <string name="confirm">確認</string>
+    <string name="message">訊息</string>
+    <string name="content">內容</string>
+    <string name="today">今天</string>
+    <string name="tomorrow">明天</string>
+    <string name="according_to_timing">依時間安排</string>
+    <string name="untitled">無標題</string>
+    <string name="hue">色相</string>
+    <string name="saturation">飽和度</string>
+    <string name="brightness">亮度</string>
+    <string name="shades">色調</string>
+    <string name="complementary">互補色</string>
+    <string name="task_placeholder">工作..</string>
+    <string name="task_cannot_be_empty">工作不能為空！</string>
+    <string name="of">共</string>
+    <string name="something_wrong_with_file">檔案有問題</string>
+    <string name="could_not_load_any_information">無法載入媒體檔案的資訊。</string>
+    <string name="no_file_path_provided">未提供檔案路徑。</string>
+    <string name="security_error_processing_file">處理檔案時發生安全性錯誤</string>
+    <string name="an_unexpected_error_occurred">發生意外錯誤</string>
+    <string name="could_not_retrieve_any_information">無法擷取此視訊檔案的資訊。</string>
+    <string name="error_reading_metadata">讀取媒體中繼資料時發生錯誤</string>
+    <string name="could_not_read_exif_data">無法讀取 EXIF 資料</string>
+    <string name="error_reading_basic_file_info">讀取基本檔案資訊時發生錯誤</string>
+    <string name="file_does_not_exist">檔案不存在</string>
+    <string name="error">錯誤</string>
+    <string name="loading_media_info">正在載入媒體資訊…</string>
+    <string name="no_metadata_available_for_this_document">此文件沒有可用的中繼資料。</string>
+    <string name="could_not_read_pdf_metadata">無法讀取 PDF 中繼資料</string>
+    <string name="cannot_read_file">無法讀取檔案</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">無法解碼影像尺寸或格式無效。</string>
+    <string name="error_during_dimension_decoding">解碼尺寸時發生錯誤</string>
+    <string name="error_reading_exif_data">讀取 EXIF 資料時發生錯誤</string>
+    <string name="duplicate">複製</string>
+    <string name="send">傳送</string>
+    <string name="print">列印</string>
+    <string name="cleaned">已清理</string>
+    <string name="cleared">已清除</string>
+    <string name="media_deleted">媒體已刪除！</string>
+    <string name="jotting">記錄中</string>
+    <string name="appwidget_text">範例</string>
+    <string name="add_widget">新增小工具</string>
+    <string name="app_widget_description">這是應用程式小工具說明</string>
+    <string name="quick_widget_description">這是快速小工具版面配置</string>
+    <string name="creator_widget_description">這是建立者版面配置小工具</string>
+    <string name="notes_list_description">這是筆記清單</string>
+    <string name="record_deleted">記錄已刪除！</string>
+</resources>

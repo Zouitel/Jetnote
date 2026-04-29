@@ -39,6 +39,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -52,8 +53,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -177,21 +180,23 @@ class AssistantScreen(val assistant: Assistant?): Screen {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(LR.string.assistant_settings)) },
-                    navigationIcon = {
-                        IconButton({
-                            if (hasUnsavedChanges) {
-                                saveSheet = true
-                            } else {
-                                navigator?.pop()
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    TopAppBar(
+                        title = { Text(stringResource(LR.string.assistant_settings)) },
+                        navigationIcon = {
+                            IconButton({
+                                if (hasUnsavedChanges) {
+                                    saveSheet = true
+                                } else {
+                                    navigator?.pop()
+                                }
+                            }) {
+                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
                             }
-                        }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
-                        }
-                    },
-                    scrollBehavior = scrollBehavior
-                )
+                        },
+                        scrollBehavior = scrollBehavior
+                    )
+                }
             },
             snackbarHost = {
                 SnackbarHost(snackbarState) { data ->

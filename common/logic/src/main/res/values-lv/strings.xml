@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Piezīmes</string>
+    <string name="screen_chat">AI Tērzēšana</string>
+    <string name="screen_tags">Birkas</string>
+    <string name="screen_settings">Iestatījumi</string>
+    <string name="screen_archive">Arhīvs</string>
+    <string name="screen_about">Par lietotni</string>
+    <string name="screen_feedback">Atsauksmes</string>
+    <string name="share_app">Dalīties ar šo lietotni</string>
+    <string name="label_more">vairāk</string>
+    <string name="label_less">mazāk</string>
+    <string name="msg_deleted">dzēsts</string>
+    <string name="action_undo">Atsaukt</string>
+    <string name="tag_placeholder">Birka..</string>
+    <string name="tag_cannot_be_empty">Birka nevar būt tukša!</string>
+    <string name="archive">Arhīvs</string>
+    <string name="deleted">dzēsts!</string>
+    <string name="erase_notes">Dzēst piezīmes?</string>
+    <string name="confirm_erase_notes">"Visas piezīmes miskastē tiks neatgriezeniski dzēstas."</string>
+    <string name="search_in_notes">"Meklēt piezīmēs.."</string>
+    <string name="select_layout">"Izvēlēties izkārtojumu"</string>
+    <string name="settings">"Iestatījumi"</string>
+    <string name="account_sync">"Konta sinhronizācija"</string>
+    <string name="account_sync_description">"
+                                Iespējojot Google Drive konta
+                                sinhronizāciju šai lietotnei, varat
+                                nemanāmi dublēt un sinhronizēt
+                                lietotnes datus, piemēram, piezīmes
+                                un iestatījumus, nodrošinot datu
+                                drošību.
+        "</string>
+    <string name="assistant_configuration">"Asistenta konfigurācija"</string>
+    <string name="assistant_configuration_description">"
+                                AI asistents ir mākslīgā intelekta
+                                darbināta programmatūra, kas paredzēta,
+                                lai palīdzētu jums ar plašu uzdevumu
+                                klāstu šajā lietotnē.
+                                Šie asistenti saprot dabisko valodu un
+                                atbild uz to, ļaujot jums sazināties
+                                ar tiem, izmantojot attēlu vai tekstu.
+                            "</string>
+    <string name="dark_mode">"Tumšais režīms"</string>
+    <string name="dark_mode_description">"
+                                Šis režīms ir sistēmas mēroga iestatījums,
+                                kas maina jūsu Android lietotnes
+                                saskarnē fona krāsu shēmu uz tumšākām
+                                krāsām. Tas ir izstrādāts, lai mazinātu
+                                acu nogurumu, uzlabotu pieejamību,
+                                taupītu akumulatoru un uzlabotu
+                                lietotāja pieredzi.
+                            "</string>
+    <string name="sound_effect">"Skaņas efekts"</string>
+    <string name="sound_effect_description">"
+                                Jetnote lietotnes kontekstā \'Skaņas
+                                efekta\' funkcija sniedz skaņas
+                                atgriezenisko saiti lietotājiem, kad
+                                tie mijiedarbojas ar pogām un citiem
+                                saskarnes elementiem. Tā ir izplatīta
+                                prakse mobilo lietotņu izstrādē, lai
+                                padarītu lietotāja pieredzi
+                                interaktīvāku un saistošāku.
+                            "</string>
+    <string name="layouts">"Izkārtojumi"</string>
+    <string name="layouts_description">"
+                                Izkārtojumi ir būtiski satura
+                                organizēšanai un attēlošanai Android
+                                lietotnēs. Tie nosaka saskarnes
+                                elementu struktūru un izvietojumu
+                                ekrānā.
+                            "</string>
+    <string name="sort_notes">"Kārtot piezīmes"</string>
+    <string name="default_sort">"noklusējums"</string>
+    <string name="name_sort">"nosaukums"</string>
+    <string name="oldest_sort">"vecākās"</string>
+    <string name="newest_sort">"jaunākās"</string>
+    <string name="priority_sort">"prioritāte"</string>
+    <string name="zen_mode">"Zen režīms"</string>
+    <string name="zen_mode_description">"
+                                Zen režīms (pilnekrāna režīms) ir
+                                displeja iestatījums, kas ļauj lietotnei
+                                aizņemt visu ekrānu, paslēpjot visus
+                                citus saskarnes elementus, piemēram,
+                                rīkjoslas, izvēlnes un OS uzdevumjoslu.
+                            "</string>
+    <string name="shake">"Sakratīt, lai ziņotu"</string>
+    <string name="shake_description">"
+                              Ērta funkcija, kas ļauj lietotājiem
+                              uzsākt atsauksmju vai kļūdu ziņošanas
+                              procesu, vienkārši fiziski sakratot
+                              savu Android ierīci. Tā vietā, lai
+                              pārvietotos cauri vairākām izvēlnēm,
+                              meklējot \'Nosūtīt atsauksmes\' vai
+                              \'Ziņot par kļūdu\'.
+                            "</string>
+    <string name="block_screenshot">"Bloķēt ekrānuzņēmumu"</string>
+    <string name="block_screenshot_description">"
+                                Ekrānuzņēmumu bloķēšana ir drošības
+                                pasākums, kas neļauj lietotājiem
+                                uzņemt jūsu lietotnes satura
+                                ekrānuzņēmumus. To bieži izmanto,
+                                lai aizsargātu sensitīvu informāciju,
+                                piemēram, bankas datus, personas datus
+                                vai ar autortiesībām aizsargātus
+                                materiālus.
+                            "</string>
+    <string name="lock_mode">"Bloķēšanas režīms"</string>
+    <string name="lock_mode_description">"
+                                Šī funkcija uzlabo lietotnes drošību,
+                                pieprasot lietotājiem autentifikāciju
+                                pirms piekļuves saturam. To parasti
+                                panāk, izmantojot ierīces iebūvētās
+                                drošības funkcijas, piemēram,
+                                pirksta nospiedumu, PIN vai
+                                atbloķēšanas rakstu.
+                            "</string>
+    <string name="licenses">"Licences"</string>
+    <string name="licenses_description">"
+                                    Šīs licences ir iekļautas šeit,
+                                    lai ievērotu attiecīgo autoru
+                                    izplatīšanas prasības un nodrošinātu
+                                    pārredzamību attiecībā uz programmatūras
+                                    arhitektūru.
+                                    "</string>
+    <string name="title">"Virsraksts"</string>
+    <string name="note">"Piezīme"</string>
+    <string name="failed_to_save_document">"Neizdevās saglabāt dokumentu."</string>
+    <string name="gallery">"Galerija"</string>
+    <string name="audio">Audio</string>
+    <string name="permission_denied">Atļauja liegta!</string>
+    <string name="take_photo">Uzņemt foto</string>
+    <string name="video_capture">Ierakstīt video</string>
+    <string name="recorder">Ierakstītājs</string>
+    <string name="document">Dokuments</string>
+    <string name="scanner">Skeneris</string>
+    <string name="tasks">Uzdevumi</string>
+    <string name="tags">Birkas</string>
+    <string name="reminder">Atgādinājums</string>
+    <string name="priority">Prioritāte</string>
+    <string name="low_priority">Zema</string>
+    <string name="medium_priority">Vidēja</string>
+    <string name="high_priority">Augsta</string>
+    <string name="urgent_priority">Steidzama</string>
+    <string name="non_priority">Nav</string>
+    <string name="created">Izveidots</string>
+    <string name="edited">Rediģēts</string>
+    <string name="types">Veidi</string>
+    <string name="media">Multivide</string>
+    <string name="medias">Multivides faili</string>
+    <string name="colour">Krāsa</string>
+    <string name="colours">Krāsas</string>
+    <string name="search_within">Meklēt iekšā</string>
+    <string name="issue_title">Problēmas virsraksts*</string>
+    <string name="issue_description">Problēmas apraksts (neobligāts)</string>
+    <string name="noAccount">Pieteikties bez konta</string>
+    <string name="screenshot_selected">✓ Ekrānuzņēmums izvēlēts</string>
+    <string name="drive_submit">Tiks augšupielādēts Drive, iesniedzot</string>
+    <string name="select_screenshot">Izvēlēties ekrānuzņēmumu</string>
+    <string name="system_logs">Iekļaut sistēmas žurnālus?</string>
+    <string name="find_an_issue">Vai atradāt problēmu?</string>
+    <string name="take_a_screenshot">Neaizmirstiet uzņemt ekrānuzņēmumu.</string>
+    <string name="report_an_issue">Ziņot par problēmu!</string>
+    <string name="bug">Kļūda</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android sistēmas žurnāli (Logcat) atsauksmju ziņojumā</string>
+    <string name="logs_description">Android sistēmas žurnāli ir ar laikspiedolu versētu ziņojumu plūsma no operētājsistēmas un kodola.\n    | Kad lietotājs saskaras ar problēmu (lietotnes avārija, sasalšana vai neparedzēta darbība), žurnāli reģistrē notikumus pirms un laikā problēmas, sniedzot izstrādātājiem nepieciešamo kontekstu diagnostikai.</string>
+    <string name="label_bug">Kļūda</string>
+    <string name="label_feature">Funkcija</string>
+    <string name="label_invalid">Nederīgs</string>
+    <string name="label_question">Jautājums</string>
+    <string name="label_security">Drošība</string>
+    <string name="failed">Neizdevās</string>
+    <string name="submit_feedback">Iesniegt atsauksmes!</string>
+    <string name="uploading_screenshot">Augšupielādē ekrānuzņēmumu…</string>
+    <string name="creating_github_issue">Izveido GitHub problēmu…</string>
+    <string name="upload_faild">Augšupielāde neizdevās…</string>
+    <string name="upload_failed">Augšupielāde neizdevās…</string>
+    <string name="issue_crea">Problēma izveidota.</string>
+    <string name="issue_created">Problēma izveidota!</string>
+    <string name="log_out">Izrakstīties</string>
+    <string name="hi">Sveiki</string>
+    <string name="add_account">Pievienot citu kontu</string>
+    <string name="manage_account">Pārvaldīt kontu</string>
+    <string name="upload_data">Augšupielādēt datus</string>
+    <string name="download_data">Lejupielādēt datus</string>
+    <string name="firebase_authentication_failed">Firebase autentifikācija neizdevās</string>
+    <string name="sign_in_failed">Pieteikšanās ar Google neizdevās</string>
+    <string name="please_wait">Piesakās, lūdzu uzgaidiet…</string>
+    <string name="sync_title">Pieteikties sinhronizācijai</string>
+    <string name="sync_description">Piesakieties ar savu Google kontu, lai dublētu un sinhronizētu piezīmes visās ierīcēs.</string>
+    <string name="current_account">Pašreizējais konts</string>
+    <string name="no_name">Nav vārda</string>
+    <string name="no_email">Nav e-pasta</string>
+    <string name="sign_out">Izrakstīties</string>
+    <string name="sign_in_with_google">Pieteikties ar Google</string>
+    <string name="ai_models">AI modeļi</string>
+    <string name="load_more">Ielādēt vairāk</string>
+    <string name="available_models">Pieejamie modeļi</string>
+    <string name="assistant_settings">Asistenta iestatījumi</string>
+    <string name="learning_mode">Mācīšanās režīms</string>
+    <string name="learning_mode_description">"
+                    Prognozēt izvadi jauniem, neredzētiem datiem,
+                    pamatojoties uz modeļiem, kas apgūti no
+                    iezīmētajiem piemēriem.
+                "</string>
+    <string name="temperat">Temperatūra</string>
+    <string name="temperature">Temperatūra</string>
+    <string name="temperature_description">"
+           Kontrolē izvades nejaušību.
+           Augstākas vērtības ir radošākas.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Kontrolē, kuri marķieri tiek ņemti vērā izvadei.
+            </string>
+    <string name="context_message_size">Konteksta ziņojumu lielums</string>
+    <string name="context_message_size_description">
+            Maksimālais iepriekšējo ziņojumu skaits,
+            kas jāiekļauj kontekstā.
+        </string>
+    <string name="stream_output">Straumēšanas izvade</string>
+    <string name="stream_output_description">Rādīt atbildi tās ģenerēšanas laikā.</string>
+    <string name="thinking_budget">Domāšanas budžets</string>
+    <string name="thinking_budget_description">
+                            Ierobežo atbildei izmantotos
+                            skaitļošanas resursus.
+                        </string>
+    <string name="system_prompt">Sistēmas uzvedne</string>
+    <string name="prompt">Uzvedne..</string>
+    <string name="properties">Rekvizīti</string>
+    <string name="quick_messages">Ātrās ziņas</string>
+    <string name="quick_messages_description">Konfigurēt ātro ziņu saīsnes.</string>
+    <string name="regular_expressions">Regulārās izteiksmes</string>
+    <string name="regular_expressions_description">
+                            Definēt regex modeļus ziņojumu
+                            pārveidošanai pirms sūtīšanas/saņemšanas.
+                        </string>
+    <string name="headers">Galvenes</string>
+    <string name="headers_description">
+                            Tie ir atslēgas-vērtības pāri, kas pievienoti
+                            pieprasījuma galvenes blokam. Parasti izmanto
+                            autentifikācijai, satura veida norādīšanai
+                            vai metadatu nosūtīšanai par pieprasījumu.
+                        </string>
+    <string name="bodies">Pamatteksti</string>
+    <string name="bodies_description">
+                            Attiecas uz datu slodzi (JSON struktūra),
+                            kas nosūtīta pieprasījuma ietvaros.
+                            Tas ir galvenais veids, kā nosūtīt ievadi
+                            AI modelim.
+                        </string>
+    <string name="memory">Atmiņa</string>
+    <string name="memory_description">
+                            Ļaujiet asistentam atcerēties iepriekšējās
+                            sarunu kārtas.
+                        </string>
+    <string name="chats_reference">Nesenās tērzēšanas atsauce</string>
+    <string name="chats_reference_description">
+                        Atsaukties uz datiem no nesenajām tērzēšanām,
+                        lai iegūtu labākas kontekstuālas atbildes.
+                        </string>
+    <string name="javascript">JavaScript dzinējs</string>
+    <string name="javascript_description">
+                            Izpildīt JavaScript kodu ar QuickJS dzinēju
+                            aprēķiniem un skriptēšanai.
+                        </string>
+    <string name="reset">Atiestatīt iestatījumus!</string>
+    <string name="providers">Pakalpojumu sniedzēji</string>
+    <string name="ask">Jautāt</string>
+    <string name="add_model"><![CDATA[<- Pievienot AI modeli]]></string>
+    <string name="delete">Dzēst</string>
+    <string name="options">Opcijas</string>
+    <string name="retitle">Pārdēvēt</string>
+    <string name="assistant">Asistents</string>
+    <string name="new_chat">Jauna tērzēšana</string>
+    <string name="files">Faili</string>
+    <string name="audios">Audio faili</string>
+    <string name="videos">Video</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Attēli</string>
+    <string name="provider_settings">Pakalpojumu sniedzēja iestatījumi</string>
+    <string name="api_key">API atslēga</string>
+    <string name="base_url">Bāzes URL</string>
+    <string name="model_name">Modeļa nosaukums</string>
+    <string name="modalities">Modalitātes</string>
+    <string name="tools">Rīki</string>
+    <string name="reasoning">Spriedums</string>
+    <string name="respo">Atbildes API</string>
+    <string name="response_api">Atbildes API</string>
+    <string name="account_balance">Konta atlikums</string>
+    <string name="api_path">API ceļš..</string>
+    <string name="json_key">Json atslēga..</string>
+    <string name="network_proxy">Tīkla starpniekserveris</string>
+    <string name="host">Resursdators..</string>
+    <string name="username_option">Lietotājvārds (neobligāts)..</string>
+    <string name="pass_option">Parole (neobligāta)..</string>
+    <string name="service_account">Pakalpojuma konts @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Privātā atslēga..</string>
+    <string name="location">Atrašanās vieta..</string>
+    <string name="project_uid">Projekta UID..</string>
+    <string name="details">Detaļas</string>
+    <string name="model_type">Modeļa veids</string>
+    <string name="input_modalities">Ievades modalitātes</string>
+    <string name="output_modalities">Izvades modalitātes</string>
+    <string name="abilities">Spējas</string>
+    <string name="provider_override">Pievienot pakalpojumu sniedzēja ignorēšanu</string>
+    <string name="provider_override_description">
+                            Konfigurēt pielāgotus pakalpojumu sniedzēja
+                            iestatījumus šim konkrētajam modelim.
+                            Izmanto kopīgos rekvizītus no modeļa
+                            galvenā pakalpojumu sniedzēja.
+                        </string>
+    <string name="build_tools">Būvēšanas rīki</string>
+    <string name="build_tools_description">
+                            Šos rīkus nodrošina API tieši, nepieprasot
+                            lietotnes atbalstu. Šī funkcija pašlaik
+                            tiek atbalstīta tikai Gemini API.
+                        </string>
+    <string name="google_search">Meklēšana</string>
+    <string name="google_search_description">Iespējot Google meklēšanas integrāciju</string>
+    <string name="url_context">URL konteksts</string>
+    <string name="url_context_description">Iespējot URL konteksta apstrādi</string>
+    <string name="find">Atrast</string>
+    <string name="replace">Aizstāt</string>
+    <string name="effecting_scopes">Ietekmētās jomas</string>
+    <string name="user">lietotājs</string>
+    <string name="visual_only">tikai vizuāls</string>
+    <string name="body">Pamatteksts</string>
+    <string name="key">atslēga</string>
+    <string name="value">Vērtība</string>
+    <string name="header">Galvene.</string>
+    <string name="reset_description">Atiestatīt asistenta iestatījumus uz noklusējuma režīmu.</string>
+    <string name="save_changes">Saglabāt izmaiņas?</string>
+    <string name="save_changes_description">Jums ir nesaglabātas izmaiņas. Vai vēlaties tās saglabāt pirms iziešanas?</string>
+    <string name="dont_save">Nesaglabāt</string>
+    <string name="save">Saglabāt</string>
+    <string name="links">Saites</string>
+    <string name="reminders">Atgādinājumi</string>
+    <string name="priorities">Prioritātes</string>
+    <string name="ai_chat">AI tērzēšana</string>
+    <string name="auto">automātisks</string>
+    <string name="light">viegls</string>
+    <string name="medium">vidējs</string>
+    <string name="heavy">smags</string>
+    <string name="date">datums</string>
+    <string name="time">laiks</string>
+    <string name="date_and_time">datums un laiks</string>
+    <string name="local">lokāls</string>
+    <string name="timezone">laika zona</string>
+    <string name="system_version">sistēmas versija</string>
+    <string name="device_info">ierīces informācija</string>
+    <string name="battery_level">akumulatora līmenis</string>
+    <string name="insert">Ievietot</string>
+    <string name="confirm">Apstiprināt</string>
+    <string name="message">Ziņojums</string>
+    <string name="content">Saturs</string>
+    <string name="today">Šodien</string>
+    <string name="tomorrow">Rīt</string>
+    <string name="according_to_timing">Pēc laika grafika</string>
+    <string name="untitled">Bez virsraksta</string>
+    <string name="hue">Nokrāsa</string>
+    <string name="saturation">Piesātinājums</string>
+    <string name="brightness">Spilgtums</string>
+    <string name="shades">Toņi</string>
+    <string name="complementary">Papildinošs</string>
+    <string name="task_placeholder">Uzdevums..</string>
+    <string name="task_cannot_be_empty">Uzdevums nevar būt tukšs!</string>
+    <string name="of">no</string>
+    <string name="something_wrong_with_file">Ar failu kaut kas nav kārtībā</string>
+    <string name="could_not_load_any_information">Nevarēja ielādēt informāciju par multivides failu.</string>
+    <string name="no_file_path_provided">Nav norādīts faila ceļš.</string>
+    <string name="security_error_processing_file">Drošības kļūda, apstrādājot failu</string>
+    <string name="an_unexpected_error_occurred">Radās neparedzēta kļūda</string>
+    <string name="could_not_retrieve_any_information">Nevarēja iegūt informāciju par šo video failu.</string>
+    <string name="error_reading_metadata">Kļūda, lasot multivides metadatus</string>
+    <string name="could_not_read_exif_data">Nevarēja nolasīt EXIF datus</string>
+    <string name="error_reading_basic_file_info">Kļūda, lasot faila pamatinformāciju</string>
+    <string name="file_does_not_exist">Fails neeksistē</string>
+    <string name="error">Kļūda</string>
+    <string name="loading_media_info">Ielādē multivides informāciju…</string>
+    <string name="no_metadata_available_for_this_document">Šim dokumentam nav pieejamu metadatu.</string>
+    <string name="could_not_read_pdf_metadata">Nevarēja nolasīt PDF metadatus</string>
+    <string name="cannot_read_file">Failu nevar nolasīt</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Nevarēja atšifrēt attēla izmērus vai nederīgs formāts.</string>
+    <string name="error_during_dimension_decoding">Kļūda izmēru atšifrēšanas laikā</string>
+    <string name="error_reading_exif_data">Kļūda, lasot EXIF datus</string>
+    <string name="duplicate">Dublēt</string>
+    <string name="send">Sūtīt</string>
+    <string name="print">Drukāt</string>
+    <string name="cleaned">Iztīrīts</string>
+    <string name="cleared">Notīrīts</string>
+    <string name="media_deleted">multivide dzēsta!</string>
+    <string name="jotting">Pierakstīšana</string>
+    <string name="appwidget_text">PIEMĒRS</string>
+    <string name="add_widget">Pievienot logrīku</string>
+    <string name="app_widget_description">Šis ir lietotnes logrīka apraksts</string>
+    <string name="quick_widget_description">Šis ir ātrā logrīka izkārtojums</string>
+    <string name="creator_widget_description">Šis ir veidotāja izkārtojuma logrīks</string>
+    <string name="notes_list_description">Šis ir piezīmju saraksts</string>
+    <string name="record_deleted">ieraksts dzēsts!</string>
+</resources>

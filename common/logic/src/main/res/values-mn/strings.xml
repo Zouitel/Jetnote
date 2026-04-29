@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Тэмдэглэл</string>
+    <string name="screen_chat">AI Чат</string>
+    <string name="screen_tags">Шошго</string>
+    <string name="screen_settings">Тохиргоо</string>
+    <string name="screen_archive">Архив</string>
+    <string name="screen_about">Тухай</string>
+    <string name="screen_feedback">Санал хүсэлт</string>
+    <string name="share_app">Энэ аппыг хуваалцах</string>
+    <string name="label_more">илүү</string>
+    <string name="label_less">цөөн</string>
+    <string name="msg_deleted">устгасан</string>
+    <string name="action_undo">Буцаах</string>
+    <string name="tag_placeholder">Шошго..</string>
+    <string name="tag_cannot_be_empty">Шошго хоосон байж болохгүй!</string>
+    <string name="archive">Архив</string>
+    <string name="deleted">устгасан!</string>
+    <string name="erase_notes">Тэмдэглэлийг устгах уу?</string>
+    <string name="confirm_erase_notes">"Хогийн савны бүх тэмдэглэл бүр мөсөн устгагдана."</string>
+    <string name="search_in_notes">"Тэмдэглэлүүдэд хайх.."</string>
+    <string name="select_layout">"Загвар сонгох"</string>
+    <string name="settings">"Тохиргоо"</string>
+    <string name="account_sync">"Бүртгэл синхрончлол"</string>
+    <string name="account_sync_description">"
+                                Энэ аппликейшнд Google Drive бүртгэлийн
+                                синхрончлолыг идэвхжүүлснээр тэмдэглэл,
+                                тохиргоо зэрэг аппын өгөгдлийг
+                                тасралтгүй нөөцлөх, синхрончлох боломжтой
+                                болно, өгөгдлийн аюулгүй байдлыг хангана.
+        "</string>
+    <string name="assistant_configuration">"Туслагчийн тохиргоо"</string>
+    <string name="assistant_configuration_description">"
+                                AI туслагч нь хиймэл оюун ухаанаар
+                                ажилладаг программ хангамж бөгөөд энэ
+                                аппликейшнд олон төрлийн ажлыг гүйцэтгэхэд
+                                тусалдаг. Эдгээр туслагчид байгалийн хэлийг
+                                ойлгож хариулдаг бөгөөд зураг эсвэл текстээр
+                                дамжуулан харилцах боломжтой.
+                            "</string>
+    <string name="dark_mode">"Харанхуй горим"</string>
+    <string name="dark_mode_description">"
+                                Энэ горим нь системийн нийтлэг тохиргоо
+                                бөгөөд Android аппын хэрэглэгчийн интерфейсийн
+                                арын дэвсгэрийг харанхуй өнгө рүү шилжүүлдэг.
+                                Нүдний ядаргааг бууруулах, хүртээмжийг
+                                нэмэгдүүлэх, батарей хэмнэх, хэрэглэгчийн
+                                туршлагыг сайжруулах зорилготой.
+                            "</string>
+    <string name="sound_effect">"Дуу чимээний эффект"</string>
+    <string name="sound_effect_description">"
+                                Jetnote аппликейшний хүрээнд \'Дуу чимээний
+                                эффект\' функц нь хэрэглэгчид товчлуур болон
+                                бусад интерфейсийн элементүүдтэй харилцах үед
+                                дуут санал хүсэлт өгдөг. Энэ нь мобайл
+                                аппликейшн хөгжүүлэлтийн нийтлэг практик
+                                бөгөөд хэрэглэгчийн туршлагыг илүү
+                                интерактив болгодог.
+                            "</string>
+    <string name="layouts">"Загварууд"</string>
+    <string name="layouts_description">"
+                                Загварууд нь Android аппликейшнд агуулгыг
+                                зохион байгуулж харуулахад үндсэн үүрэг
+                                гүйцэтгэдэг. Дэлгэц дээрх интерфейсийн
+                                элементүүдийн бүтэц, байршлыг тодорхойлдог.
+                            "</string>
+    <string name="sort_notes">"Тэмдэглэл эрэмблэх"</string>
+    <string name="default_sort">"өгөгдмөл"</string>
+    <string name="name_sort">"нэрээр"</string>
+    <string name="oldest_sort">"хуучин"</string>
+    <string name="newest_sort">"шинэ"</string>
+    <string name="priority_sort">"ач холбогдол"</string>
+    <string name="zen_mode">"Зен горим"</string>
+    <string name="zen_mode_description">"
+                                Зен горим (бүтэн дэлгэцийн горим) нь
+                                аппликейшнд бүтэн дэлгэцийг эзлэх боломж
+                                олгодог дэлгэцийн тохиргоо бөгөөд хэрэглэгч
+                                интерфейсийн бусад элементүүд болох хэрэгслийн
+                                самбар, цэс, үйлдлийн системийн даалгаврын
+                                самбарыг нуудаг.
+                            "</string>
+    <string name="shake">"Мэдэгдэхийн тулд сэгсрэх"</string>
+    <string name="shake_description">"
+                              Энэ нь Android төхөөрөмжийг физикээр
+                              сэгсэрснээр санал хүсэлт эсвэл алдааг
+                              мэдэгдэх процессийг эхлүүлэх боломжийг
+                              олгодог тохиромжтой функц юм. \'Санал хүсэлт
+                              илгээх\' эсвэл \'Алдааг мэдэгдэх\'
+                              сонголтыг олохын тулд олон цэсийг
+                              үзэхийн оронд ашиглана.
+                            "</string>
+    <string name="block_screenshot">"Дэлгэц бичлэг хаах"</string>
+    <string name="block_screenshot_description">"
+                                Дэлгэц бичлэгийг хаах нь хэрэглэгчдийг
+                                аппын агуулгыг дэлгэц бичлэг хийхээс
+                                сэргийлдэг аюулгүй байдлын арга хэмжээ юм.
+                                Банкны мэдээлэл, хувийн өгөгдөл эсвэл
+                                зохиогчийн эрхээр хамгаалагдсан материал
+                                зэрэг нууц мэдээллийг хамгаалахад
+                                ихэвчлэн ашигладаг.
+                            "</string>
+    <string name="lock_mode">"Түгжээний горим"</string>
+    <string name="lock_mode_description">"
+                                Энэ функц нь хэрэглэгчдийг агуулга руу
+                                нэвтрэхээс өмнө баталгаажуулалт хийхийг
+                                шаарддаг бөгөөд аппын аюулгүй байдлыг
+                                нэмэгдүүлдэг. Энэ нь ихэвчлэн хурууны
+                                хээ, PIN код, эсвэл загварын түгжээ
+                                зэрэг төхөөрөмжийн суулгасан аюулгүй
+                                байдлын функцуудаар хийгддэг.
+                            "</string>
+    <string name="licenses">"Лиценз"</string>
+    <string name="licenses_description">"
+                                    Эдгээр лиценз нь тухайн зохиогчдын
+                                    түгээлтийн шаардлагыг хангах,
+                                    программ хангамжийн архитектурын
+                                    тухай ил тод байдлыг хангах зорилгоор
+                                    энд оруулсан болно.
+                                    "</string>
+    <string name="title">"Гарчиг"</string>
+    <string name="note">"Тэмдэглэл"</string>
+    <string name="failed_to_save_document">"Баримтыг хадгалж чадсангүй."</string>
+    <string name="gallery">"Галерей"</string>
+    <string name="audio">Аудио</string>
+    <string name="permission_denied">Зөвшөөрөл татгалзсан!</string>
+    <string name="take_photo">Зураг авах</string>
+    <string name="video_capture">Видео бичих</string>
+    <string name="recorder">Бичлэгийн төхөөрөмж</string>
+    <string name="document">Баримт</string>
+    <string name="scanner">Сканнер</string>
+    <string name="tasks">Даалгаврууд</string>
+    <string name="tags">Шошго</string>
+    <string name="reminder">Сануулга</string>
+    <string name="priority">Ач холбогдол</string>
+    <string name="low_priority">Бага</string>
+    <string name="medium_priority">Дунд</string>
+    <string name="high_priority">Өндөр</string>
+    <string name="urgent_priority">Яаралтай</string>
+    <string name="non_priority">Байхгүй</string>
+    <string name="created">Үүсгэсэн</string>
+    <string name="edited">Засварласан</string>
+    <string name="types">Төрлүүд</string>
+    <string name="media">Медиа</string>
+    <string name="medias">Медиа файлууд</string>
+    <string name="colour">Өнгө</string>
+    <string name="colours">Өнгөнүүд</string>
+    <string name="search_within">Дотор хайх</string>
+    <string name="issue_title">Асуудлын гарчиг*</string>
+    <string name="issue_description">Асуудлын тайлбар (заавал биш)</string>
+    <string name="noAccount">Бүртгэлгүйгээр нэвтрэх</string>
+    <string name="screenshot_selected">✓ Дэлгэц бичлэг сонгосон</string>
+    <string name="drive_submit">Илгээхэд Drive руу байршуулна</string>
+    <string name="select_screenshot">Дэлгэц бичлэг сонгох</string>
+    <string name="system_logs">Системийн бүртгэл оруулах уу?</string>
+    <string name="find_an_issue">Асуудал олдсон уу?</string>
+    <string name="take_a_screenshot">Дэлгэц бичлэг хийхаа бүү мартаарай.</string>
+    <string name="report_an_issue">Асуудал мэдэгдэх!</string>
+    <string name="bug">Алдаа</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android системийн бүртгэл (Logcat) санал хүсэлтийн тайланд</string>
+    <string name="logs_description">Android системийн бүртгэл нь үйлдлийн систем болон цөмөөс ирэх цагийн тэмдэгтэй мессежийн урсгал юм.\n    | Хэрэглэгч асуудалтай тулгарах үед (аппын гэмтэл, хөлдөх, эсвэл санаандгүй зан байдал) бүртгэл нь асуудлын эргэн тойрон дахь үйл явдлыг тэмдэглэж, хөгжүүлэгчдэд оношилгоонд шаардлагатай контекст хангадаг.</string>
+    <string name="label_bug">Алдаа</string>
+    <string name="label_feature">Функц</string>
+    <string name="label_invalid">Буруу</string>
+    <string name="label_question">Асуулт</string>
+    <string name="label_security">Аюулгүй байдал</string>
+    <string name="failed">Амжилтгүй</string>
+    <string name="submit_feedback">Санал хүсэлт илгээх!</string>
+    <string name="uploading_screenshot">Дэлгэц бичлэг байршуулж байна…</string>
+    <string name="creating_github_issue">GitHub Issue үүсгэж байна…</string>
+    <string name="upload_faild">Байршуулалт амжилтгүй…</string>
+    <string name="upload_failed">Байршуулалт амжилтгүй…</string>
+    <string name="issue_crea">Issue үүсгэсэн.</string>
+    <string name="issue_created">Issue үүсгэсэн!</string>
+    <string name="log_out">Гарах</string>
+    <string name="hi">Сайн уу</string>
+    <string name="add_account">Өөр бүртгэл нэмэх</string>
+    <string name="manage_account">Бүртгэл удирдах</string>
+    <string name="upload_data">Өгөгдөл байршуулах</string>
+    <string name="download_data">Өгөгдөл татаж авах</string>
+    <string name="firebase_authentication_failed">Firebase баталгаажуулалт амжилтгүй</string>
+    <string name="sign_in_failed">Google-ээр нэвтрэх амжилтгүй</string>
+    <string name="please_wait">Нэвтэрч байна, түр хүлээнэ үү…</string>
+    <string name="sync_title">Синхрончлохын тулд нэвтрэх</string>
+    <string name="sync_description">Бүх төхөөрөмж дээр тэмдэглэлийг нөөцлөх, синхрончлохын тулд Google бүртгэлээрээ нэвтэрнэ үү.</string>
+    <string name="current_account">Одоогийн бүртгэл</string>
+    <string name="no_name">Нэр байхгүй</string>
+    <string name="no_email">И-мэйл байхгүй</string>
+    <string name="sign_out">Гарах</string>
+    <string name="sign_in_with_google">Google-ээр нэвтрэх</string>
+    <string name="ai_models">AI загварууд</string>
+    <string name="load_more">Илүү ачаалах</string>
+    <string name="available_models">Боломжтой загварууд</string>
+    <string name="assistant_settings">Туслагчийн тохиргоо</string>
+    <string name="learning_mode">Суралцах горим</string>
+    <string name="learning_mode_description">"
+                    Шошголагдсан жишээнүүдээс сурсан хэв маягийн
+                    үндсэн дээр шинэ, үзэгдээгүй өгөгдлийн
+                    гаралтыг урьдчилан таамаглах.
+                "</string>
+    <string name="temperat">Температур</string>
+    <string name="temperature">Температур</string>
+    <string name="temperature_description">"
+           Гаралтын санамсаргүй байдлыг хянадаг.
+           Өндөр утгууд илүү бүтээлч байдаг.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Гаралтад ямар токенуудыг авч үзэхийг хянадаг.
+            </string>
+    <string name="context_message_size">Контекст мессежийн хэмжээ</string>
+    <string name="context_message_size_description">
+            Контекстэд оруулах өмнөх мессежийн
+            дээд хэмжээ.
+        </string>
+    <string name="stream_output">Урсгал гаралт</string>
+    <string name="stream_output_description">Хариулт үүсэж байхад харуулах.</string>
+    <string name="thinking_budget">Бодлын төсөв</string>
+    <string name="thinking_budget_description">
+                            Хариулт бэлтгэхэд ашигладаг
+                            тооцооллын нөөцийг хязгаарладаг.
+                        </string>
+    <string name="system_prompt">Системийн хүсэлт</string>
+    <string name="prompt">Хүсэлт..</string>
+    <string name="properties">Шинж чанарууд</string>
+    <string name="quick_messages">Хурдан мессежүүд</string>
+    <string name="quick_messages_description">Хурдан мессежийн товчлол тохируулах.</string>
+    <string name="regular_expressions">Тогтмол илэрхийлэл</string>
+    <string name="regular_expressions_description">
+                            Илгээх/хүлээн авахаас өмнө мессежийг
+                            өөрчлөхийн тулд regex хэв маяг тодорхойлох.
+                        </string>
+    <string name="headers">Толгой хэсэг</string>
+    <string name="headers_description">
+                            Хүсэлтийн толгой блокт нэмэгдсэн
+                            түлхүүр-утгын хосууд. Баталгаажуулалт,
+                            агуулгын төрлийг заах, эсвэл хүсэлтийн
+                            мета-өгөгдлийг дамжуулахад ашиглагддаг.
+                        </string>
+    <string name="bodies">Биеүүд</string>
+    <string name="bodies_description">
+                            Хүсэлтийн дотор илгээгдэх өгөгдлийн
+                            ачааллыг (JSON бүтэц) хэлнэ.
+                            AI загварт оруулга илгээх үндсэн арга.
+                        </string>
+    <string name="memory">Санах ой</string>
+    <string name="memory_description">
+                            Туслагчид харилцааны өмнөх ээлжүүдийг
+                            санах боломжийг олгох.
+                        </string>
+    <string name="chats_reference">Сүүлийн чатуудын лавлагаа</string>
+    <string name="chats_reference_description">
+                        Илүү сайн контекстуал хариулт авахын тулд
+                        сүүлийн чатуудын өгөгдлийг лавлах.
+                        </string>
+    <string name="javascript">JavaScript хөдөлгүүр</string>
+    <string name="javascript_description">
+                            Тооцоолол болон скриптийн тулд QuickJS
+                            хөдөлгүүрийг ашиглан JavaScript код ажиллуулах.
+                        </string>
+    <string name="reset">Тохиргоог дахин тохируулах!</string>
+    <string name="providers">Нийлүүлэгчид</string>
+    <string name="ask">Асуух</string>
+    <string name="add_model"><![CDATA[<- AI загвар нэмэх]]></string>
+    <string name="delete">Устгах</string>
+    <string name="options">Сонголтууд</string>
+    <string name="retitle">Нэрийг өөрчлөх</string>
+    <string name="assistant">Туслагч</string>
+    <string name="new_chat">Шинэ чат</string>
+    <string name="files">Файлууд</string>
+    <string name="audios">Аудио</string>
+    <string name="videos">Видео</string>
+    <string name="camera">Камер</string>
+    <string name="pictures">Зурагнууд</string>
+    <string name="provider_settings">Нийлүүлэгчийн тохиргоо</string>
+    <string name="api_key">API түлхүүр</string>
+    <string name="base_url">Үндсэн URL</string>
+    <string name="model_name">Загварын нэр</string>
+    <string name="modalities">Горимууд</string>
+    <string name="tools">Хэрэгслүүд</string>
+    <string name="reasoning">Дүгнэлт</string>
+    <string name="respo">Response API</string>
+    <string name="response_api">Response API</string>
+    <string name="account_balance">Бүртгэлийн үлдэгдэл</string>
+    <string name="api_path">API зам..</string>
+    <string name="json_key">Json түлхүүр..</string>
+    <string name="network_proxy">Сүлжээний прокси</string>
+    <string name="host">Хост..</string>
+    <string name="username_option">Хэрэглэгчийн нэр (заавал биш)..</string>
+    <string name="pass_option">Нууц үг (заавал биш)..</string>
+    <string name="service_account">Үйлчилгээний бүртгэл @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Хувийн түлхүүр..</string>
+    <string name="location">Байршил..</string>
+    <string name="project_uid">Төслийн UID..</string>
+    <string name="details">Дэлгэрэнгүй</string>
+    <string name="model_type">Загварын төрөл</string>
+    <string name="input_modalities">Оруулгын горимууд</string>
+    <string name="output_modalities">Гаралтын горимууд</string>
+    <string name="abilities">Чадварууд</string>
+    <string name="provider_override">Нийлүүлэгчийн дарагдуулалт нэмэх</string>
+    <string name="provider_override_description">
+                            Энэ тодорхой загварын тулд захиалгат
+                            нийлүүлэгчийн тохиргоог тохируулах.
+                            Загварын үндсэн нийлүүлэгчийн нийтлэг
+                            шинж чанаруудыг ашигладаг.
+                        </string>
+    <string name="build_tools">Барилгын хэрэгслүүд</string>
+    <string name="build_tools_description">
+                            Эдгээр хэрэгслүүдийг аппын дэмжлэггүйгээр
+                            шууд API-аас нийлүүлдэг. Энэ функц одоогоор
+                            зөвхөн Gemini API-аар дэмжигддэг.
+                        </string>
+    <string name="google_search">Хайх</string>
+    <string name="google_search_description">Google Search интеграцийг идэвхжүүлэх</string>
+    <string name="url_context">URL контекст</string>
+    <string name="url_context_description">URL контекст боловсруулалтыг идэвхжүүлэх</string>
+    <string name="find">Олох</string>
+    <string name="replace">Солих</string>
+    <string name="effecting_scopes">Үйлчлэх хүрээнүүд</string>
+    <string name="user">хэрэглэгч</string>
+    <string name="visual_only">зөвхөн харааны</string>
+    <string name="body">Бие</string>
+    <string name="key">түлхүүр</string>
+    <string name="value">Утга</string>
+    <string name="header">Толгой хэсэг.</string>
+    <string name="reset_description">Туслагчийн тохиргоог өгөгдмөл горим руу дахин тохируулах.</string>
+    <string name="save_changes">Өөрчлөлтийг хадгалах уу?</string>
+    <string name="save_changes_description">Хадгалаагүй өөрчлөлт байна. Гарахаасаа өмнө хадгалах уу?</string>
+    <string name="dont_save">Хадгалахгүй</string>
+    <string name="save">Хадгалах</string>
+    <string name="links">Холбоосууд</string>
+    <string name="reminders">Сануулгууд</string>
+    <string name="priorities">Ач холбогдлууд</string>
+    <string name="ai_chat">AI Чат</string>
+    <string name="auto">автоматаар</string>
+    <string name="light">хөнгөн</string>
+    <string name="medium">дунд</string>
+    <string name="heavy">хүнд</string>
+    <string name="date">огноо</string>
+    <string name="time">цаг</string>
+    <string name="date_and_time">огноо болон цаг</string>
+    <string name="local">орон нутгийн</string>
+    <string name="timezone">цагийн бүс</string>
+    <string name="system_version">системийн хувилбар</string>
+    <string name="device_info">төхөөрөмжийн мэдээлэл</string>
+    <string name="battery_level">батарейн түвшин</string>
+    <string name="insert">Оруулах</string>
+    <string name="confirm">Баталгаажуулах</string>
+    <string name="message">Мессеж</string>
+    <string name="content">Агуулга</string>
+    <string name="today">Өнөөдөр</string>
+    <string name="tomorrow">Маргааш</string>
+    <string name="according_to_timing">Хуваарийн дагуу</string>
+    <string name="untitled">Гарчиггүй</string>
+    <string name="hue">Өнгө аяс</string>
+    <string name="saturation">Ханасан байдал</string>
+    <string name="brightness">Тод байдал</string>
+    <string name="shades">Сүүдэр</string>
+    <string name="complementary">Нөхөх</string>
+    <string name="task_placeholder">Даалгавар..</string>
+    <string name="task_cannot_be_empty">Даалгавар хоосон байж болохгүй!</string>
+    <string name="of">-аас</string>
+    <string name="something_wrong_with_file">Файлтай холбоотой асуудал байна</string>
+    <string name="could_not_load_any_information">Медиа файлын мэдээллийг ачаалж чадсангүй.</string>
+    <string name="no_file_path_provided">Файлын зам заагдаагүй.</string>
+    <string name="security_error_processing_file">Файл боловсруулахад аюулгүй байдлын алдаа гарлаа</string>
+    <string name="an_unexpected_error_occurred">Санаандгүй алдаа гарлаа</string>
+    <string name="could_not_retrieve_any_information">Энэ видео файлын мэдээллийг авч чадсангүй.</string>
+    <string name="error_reading_metadata">Медиа мета-өгөгдлийг унших алдаа</string>
+    <string name="could_not_read_exif_data">EXIF өгөгдлийг унших боломжгүй</string>
+    <string name="error_reading_basic_file_info">Файлын үндсэн мэдээллийг унших алдаа</string>
+    <string name="file_does_not_exist">Файл байхгүй</string>
+    <string name="error">Алдаа</string>
+    <string name="loading_media_info">Медиа мэдээлэл ачаалж байна…</string>
+    <string name="no_metadata_available_for_this_document">Энэ баримтын хувьд мета-өгөгдөл байхгүй.</string>
+    <string name="could_not_read_pdf_metadata">PDF мета-өгөгдлийг унших боломжгүй</string>
+    <string name="cannot_read_file">Файлыг унших боломжгүй</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Зургийн хэмжээг тайлах боломжгүй эсвэл формат буруу.</string>
+    <string name="error_during_dimension_decoding">Хэмжээ тайлах үед алдаа гарлаа</string>
+    <string name="error_reading_exif_data">EXIF өгөгдлийг унших алдаа</string>
+    <string name="duplicate">Хуулбарлах</string>
+    <string name="send">Илгээх</string>
+    <string name="print">Хэвлэх</string>
+    <string name="cleaned">Цэвэрлэсэн</string>
+    <string name="cleared">Арилгасан</string>
+    <string name="media_deleted">медиа устгасан!</string>
+    <string name="jotting">Тэмдэглэж байна</string>
+    <string name="appwidget_text">ЖИШЭЭ</string>
+    <string name="add_widget">Виджет нэмэх</string>
+    <string name="app_widget_description">Энэ бол аппын виджетийн тайлбар</string>
+    <string name="quick_widget_description">Энэ бол хурдан виджетийн загвар</string>
+    <string name="creator_widget_description">Энэ бол бүтээгчийн загварын виджет</string>
+    <string name="notes_list_description">Энэ бол тэмдэглэлийн жагсаалт</string>
+    <string name="record_deleted">бичлэг устгасан!</string>
+</resources>

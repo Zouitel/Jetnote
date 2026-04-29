@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_notes">Muistiinpanot</string>
+    <string name="screen_chat">AI-chat</string>
+    <string name="screen_tags">Tunnisteet</string>
+    <string name="screen_settings">Asetukset</string>
+    <string name="screen_archive">Arkisto</string>
+    <string name="screen_about">Tietoja</string>
+    <string name="screen_feedback">Palaute</string>
+    <string name="share_app">Jaa tämä sovellus</string>
+    <string name="label_more">lisää</string>
+    <string name="label_less">vähemmän</string>
+    <string name="msg_deleted">poistettu</string>
+    <string name="action_undo">Kumoa</string>
+    <string name="tag_placeholder">Tunniste..</string>
+    <string name="tag_cannot_be_empty">Tunniste ei voi olla tyhjä!</string>
+    <string name="archive">Arkisto</string>
+    <string name="deleted">poistettu!</string>
+    <string name="erase_notes">Poistetaanko muistiinpanot?</string>
+    <string name="confirm_erase_notes">"Kaikki roskakorissa olevat muistiinpanot poistetaan pysyvästi."</string>
+    <string name="search_in_notes">"Hae muistiinpanoista.."</string>
+    <string name="select_layout">"Valitse asettelu"</string>
+    <string name="settings">"Asetukset"</string>
+    <string name="account_sync">"Tilin synkronointi"</string>
+    <string name="account_sync_description">"
+                                Google Drive -tilin synkronoinnin
+                                ottaminen käyttöön tässä sovelluksessa
+                                mahdollistaa sovelluksen tietojen,
+                                kuten muistiinpanojen ja asetusten,
+                                saumattoman varmuuskopioinnin ja
+                                synkronoinnin, varmistaen tietojesi turvallisuuden.
+        "</string>
+    <string name="assistant_configuration">"Avustajan määritykset"</string>
+    <string name="assistant_configuration_description">"
+                                Tekoälyavustaja on tekoälypohjainen
+                                ohjelma, joka on suunniteltu auttamaan
+                                sinua laajassa tehtävävalikoimassa
+                                tässä sovelluksessa. Nämä avustajat
+                                ymmärtävät luonnollista kieltä ja
+                                vastaavat siihen, joten voit
+                                kommunikoida niiden kanssa kuvan
+                                tai tekstin avulla.
+                            "</string>
+    <string name="dark_mode">"Tumma tila"</string>
+    <string name="dark_mode_description">"
+                                Tämä tila on järjestelmänlaajuinen asetus,
+                                joka muuttaa Android-sovelluksesi
+                                käyttöliittymän taustavärin tummemmaksi.
+                                Se on suunniteltu vähentämään silmien
+                                rasitusta, parantamaan esteettömyyttä,
+                                säästämään akkua ja parantamaan
+                                käyttökokemusta.
+                            "</string>
+    <string name="sound_effect">"Äänitehoste"</string>
+    <string name="sound_effect_description">"
+                                Jetnote-sovelluksen yhteydessä
+                                \'Äänitehoste\'-ominaisuus tarjoaa
+                                käyttäjille äänipalautteen, kun he
+                                käyttävät painikkeita ja muita
+                                käyttöliittymäelementtejä. Tämä on
+                                yleinen käytäntö mobiilisovelluskehityksessä,
+                                jotta käyttökokemus olisi interaktiivisempi
+                                ja mukaansatempaavampi.
+                            "</string>
+    <string name="layouts">"Asettelut"</string>
+    <string name="layouts_description">"
+                                Asettelut ovat keskeisiä sisällön
+                                järjestämisessä ja näyttämisessä
+                                Android-sovelluksissasi.
+                                Ne määrittävät käyttöliittymäelementtien
+                                rakenteen ja järjestyksen näytöllä.
+                            "</string>
+    <string name="sort_notes">"Lajittele muistiinpanot"</string>
+    <string name="default_sort">"oletus"</string>
+    <string name="name_sort">"nimi"</string>
+    <string name="oldest_sort">"vanhin"</string>
+    <string name="newest_sort">"uusin"</string>
+    <string name="priority_sort">"prioriteetti"</string>
+    <string name="zen_mode">"Zen-tila"</string>
+    <string name="zen_mode_description">"
+                                Zen-tila (koko näyttö) on näyttöasetus,
+                                joka antaa sovelluksen täyttää koko
+                                näytön, piilottaen kaikki muut
+                                käyttöliittymäelementit, kuten
+                                työkalupalkit, valikot ja
+                                käyttöjärjestelmän tehtäväpalkin.
+                            "</string>
+    <string name="shake">"Ravista ilmoittaaksesi"</string>
+    <string name="shake_description">"
+                              Tämä on kätevä ominaisuus, jonka avulla
+                              käyttäjät voivat käynnistää palautteen tai
+                              virheraportoinnin prosessin yksinkertaisesti
+                              ravistamalla Android-laitettaan fyysisesti.
+                              Sen sijaan että navigoisit useiden valikoiden
+                              läpi löytääksesi \'Lähetä palautetta\'
+                              tai \'Ilmoita virheestä\'.
+                            "</string>
+    <string name="block_screenshot">"Estä kuvakaappaus"</string>
+    <string name="block_screenshot_description">"
+                                Kuvakaappausten esto on turvatoimenpide,
+                                joka estää käyttäjiä ottamasta
+                                kuvakaappauksia sovelluksen sisällöstä.
+                                Sitä käytetään usein arkaluonteisten
+                                tietojen, kuten pankkitietojen,
+                                henkilötietojen tai tekijänoikeudella
+                                suojatun materiaalin, suojaamiseen.
+                            "</string>
+    <string name="lock_mode">"Lukitustila"</string>
+    <string name="lock_mode_description">"
+                                Tämä ominaisuus parantaa sovelluksen
+                                turvallisuutta edellyttämällä käyttäjiltä
+                                todentamista ennen sisällön käyttöä.
+                                Tämä toteutetaan tyypillisesti laitteen
+                                sisäänrakennetuilla suojausominaisuuksilla,
+                                kuten sormenjäljellä, PIN-koodilla tai
+                                kuviolla.
+                            "</string>
+    <string name="licenses">"Lisenssit"</string>
+    <string name="licenses_description">"
+                                    Nämä lisenssit on sisällytetty tähän
+                                    noudattaaksemme vastaavien tekijöiden
+                                    jakeluehtoja ja tarjotaksemme
+                                    läpinäkyvyyttä ohjelmiston arkkitehtuurin
+                                    suhteen.
+                                    "</string>
+    <string name="title">"Otsikko"</string>
+    <string name="note">"Muistiinpano"</string>
+    <string name="failed_to_save_document">"Asiakirjan tallentaminen epäonnistui."</string>
+    <string name="gallery">"Galleria"</string>
+    <string name="audio">Ääni</string>
+    <string name="permission_denied">Lupa evätty!</string>
+    <string name="take_photo">Ota kuva</string>
+    <string name="video_capture">Videokuvaus</string>
+    <string name="recorder">Tallennin</string>
+    <string name="document">Asiakirja</string>
+    <string name="scanner">Skanneri</string>
+    <string name="tasks">Tehtävät</string>
+    <string name="tags">Tunnisteet</string>
+    <string name="reminder">Muistutus</string>
+    <string name="priority">Prioriteetti</string>
+    <string name="low_priority">Matala</string>
+    <string name="medium_priority">Keskitaso</string>
+    <string name="high_priority">Korkea</string>
+    <string name="urgent_priority">Kiireellinen</string>
+    <string name="non_priority">Ei mitään</string>
+    <string name="created">Luotu</string>
+    <string name="edited">Muokattu</string>
+    <string name="types">Tyypit</string>
+    <string name="media">Media</string>
+    <string name="medias">Mediatiedostot</string>
+    <string name="colour">Väri</string>
+    <string name="colours">Värit</string>
+    <string name="search_within">Hae kohteesta</string>
+    <string name="issue_title">Ongelman otsikko*</string>
+    <string name="issue_description">Ongelman kuvaus (valinnainen)</string>
+    <string name="noAccount">Kirjaudu ilman tiliä</string>
+    <string name="screenshot_selected">✓ Kuvakaappaus valittu</string>
+    <string name="drive_submit">Ladataan Driveen lähetettäessä</string>
+    <string name="select_screenshot">Valitse kuvakaappaus</string>
+    <string name="system_logs">Sisällytetäänkö järjestelmälokit?</string>
+    <string name="find_an_issue">Löysitkö ongelman?</string>
+    <string name="take_a_screenshot">Muista ottaa kuvakaappaus.</string>
+    <string name="report_an_issue">Ilmoita ongelmasta!</string>
+    <string name="bug">Virhe</string>
+    <string name="logs_title">\\uD83D\\uDCiE Android-järjestelmälokit (Logcat) palauteraportissa</string>
+    <string name="logs_description">Android-järjestelmälokit ovat käyttöjärjestelmän ja ytimen aikaleimattuja viestivirtoja.\n    | Kun käyttäjä kohtaa ongelman (sovelluksen kaatuminen, jäätyminen tai odottamaton toiminta), lokit tallentavat ongelmaan johtaneet tapahtumat ja tarjoavat kehittäjille tarvittavan kontekstin diagnosointia varten.</string>
+    <string name="label_bug">Virhe</string>
+    <string name="label_feature">Ominaisuus</string>
+    <string name="label_invalid">Virheellinen</string>
+    <string name="label_question">Kysymys</string>
+    <string name="label_security">Turvallisuus</string>
+    <string name="failed">Epäonnistui</string>
+    <string name="submit_feedback">Lähetä palaute!</string>
+    <string name="uploading_screenshot">Ladataan kuvakaappausta…</string>
+    <string name="creating_github_issue">Luodaan GitHub-ongelmaa…</string>
+    <string name="upload_faild">Lataus epäonnistui…</string>
+    <string name="upload_failed">Lataus epäonnistui…</string>
+    <string name="issue_crea">Ongelma luotu.</string>
+    <string name="issue_created">Ongelma luotu!</string>
+    <string name="log_out">Kirjaudu ulos</string>
+    <string name="hi">Hei</string>
+    <string name="add_account">Lisää toinen tili</string>
+    <string name="manage_account">Hallinnoi tiliä</string>
+    <string name="upload_data">Lataa tiedot</string>
+    <string name="download_data">Lataa tiedot</string>
+    <string name="firebase_authentication_failed">Firebase-todennus epäonnistui</string>
+    <string name="sign_in_failed">Google-kirjautuminen epäonnistui</string>
+    <string name="please_wait">Kirjaudutaan sisään, odota…</string>
+    <string name="sync_title">Kirjaudu synkronoidaksesi</string>
+    <string name="sync_description">Kirjaudu sisään Google-tililläsi varmuuskopioidaksesi ja synkronoidaksesi muistiinpanosi kaikilla laitteillasi.</string>
+    <string name="current_account">Nykyinen tili</string>
+    <string name="no_name">Ei nimeä</string>
+    <string name="no_email">Ei sähköpostia</string>
+    <string name="sign_out">Kirjaudu ulos</string>
+    <string name="sign_in_with_google">Kirjaudu Googlella</string>
+    <string name="ai_models">Tekoälymallit</string>
+    <string name="load_more">Lataa lisää</string>
+    <string name="available_models">Käytettävissä olevat mallit</string>
+    <string name="assistant_settings">Avustajan asetukset</string>
+    <string name="learning_mode">Oppimistila</string>
+    <string name="learning_mode_description">"
+                    Ennustaa tulosteen uusille, näkemättömille tiedoille
+                    merkitytyistä esimerkeistä opittujen mallien perusteella.
+                "</string>
+    <string name="temperat">Lämpötila</string>
+    <string name="temperature">Lämpötila</string>
+    <string name="temperature_description">"
+           Ohjaa tulosteen satunnaisuutta.
+           Korkeammat arvot ovat luovempia.
+           "</string>
+    <string name="top_p">Top P</string>
+    <string name="top_p_description">
+            Ohjaa, mitä tokeneita otetaan huomioon tulosteessa.
+            </string>
+    <string name="context_message_size">Kontekstiviestien koko</string>
+    <string name="context_message_size_description">
+            Kontekstiin sisällytettävien aiempien viestien enimmäismäärä.
+        </string>
+    <string name="stream_output">Suoratoistotulos</string>
+    <string name="stream_output_description">Näytä vastaus sitä muodostettaessa.</string>
+    <string name="thinking_budget">Ajattelubudjetti</string>
+    <string name="thinking_budget_description">
+                            Rajoittaa vastaukseen käytettäviä
+                            laskentaresursseja.
+                        </string>
+    <string name="system_prompt">Järjestelmäkehote</string>
+    <string name="prompt">Kehote..</string>
+    <string name="properties">Ominaisuudet</string>
+    <string name="quick_messages">Pikaviestitit</string>
+    <string name="quick_messages_description">Määritä pikaviestipikavalintoja.</string>
+    <string name="regular_expressions">Säännölliset lausekkeet</string>
+    <string name="regular_expressions_description">
+                            Määritä regex-mallit viestien muuntamiseen
+                            ennen lähettämistä/vastaanottamista.
+                        </string>
+    <string name="headers">Otsikot</string>
+    <string name="headers_description">
+                            Nämä ovat avain-arvo-pareja, jotka lisätään
+                            pyynnön otsikkolohkoon. Niitä käytetään
+                            tyypillisesti todentamiseen (kuten API-avaimiin
+                            tai tunnuksiin), sisältötyypin määrittämiseen
+                            tai pyynnön metatietojen välittämiseen.
+                        </string>
+    <string name="bodies">Rungot</string>
+    <string name="bodies_description">
+                            Tämä viittaa pyyntöön sisältyvään
+                            datakuormaan (avain: arvo JSON-rakenne).
+                            Se on ensisijainen tapa lähettää syötteitä
+                            tekoälymallille.
+                        </string>
+    <string name="memory">Muisti</string>
+    <string name="memory_description">
+                            Anna avustajan muistaa keskustelun
+                            aiemmat vuorot.
+                        </string>
+    <string name="chats_reference">Viimeisimpien keskustelujen viite</string>
+    <string name="chats_reference_description">
+                        Viittaa viimeisimpien keskustelujesi tietoihin
+                        parempien kontekstuaalisten vastausten saamiseksi.
+                        </string>
+    <string name="javascript">JavaScript-moottori</string>
+    <string name="javascript_description">
+                            Suorita JavaScript-koodia QuickJS-moottorilla
+                            laskelmia ja skriptausta varten.
+                        </string>
+    <string name="reset">Nollaa asetukset!</string>
+    <string name="providers">Palveluntarjoajat</string>
+    <string name="ask">Kysy</string>
+    <string name="add_model"><![CDATA[<- Lisää tekoälymalli]]></string>
+    <string name="delete">Poista</string>
+    <string name="options">Valinnat</string>
+    <string name="retitle">Nimeä uudelleen</string>
+    <string name="assistant">Avustaja</string>
+    <string name="new_chat">Uusi chat</string>
+    <string name="files">Tiedostot</string>
+    <string name="audios">Äänitiedostot</string>
+    <string name="videos">Videot</string>
+    <string name="camera">Kamera</string>
+    <string name="pictures">Kuvat</string>
+    <string name="provider_settings">Palveluntarjoajan asetukset</string>
+    <string name="api_key">API-avain</string>
+    <string name="base_url">Perus-URL</string>
+    <string name="model_name">Mallin nimi</string>
+    <string name="modalities">Modaliteetit</string>
+    <string name="tools">Työkalut</string>
+    <string name="reasoning">Päättely</string>
+    <string name="respo">Vastaus-API</string>
+    <string name="response_api">Vastaus-API</string>
+    <string name="account_balance">Tilin saldo</string>
+    <string name="api_path">API-polku..</string>
+    <string name="json_key">JSON-avain..</string>
+    <string name="network_proxy">Verkkovälityspalvelin</string>
+    <string name="host">Isäntä..</string>
+    <string name="username_option">Käyttäjänimi (valinnainen)..</string>
+    <string name="pass_option">Salasana (valinnainen)..</string>
+    <string name="service_account">Palvelutili @email.com</string>
+    <string name="vertex_ai">Vertex AI</string>
+    <string name="private_key">Yksityinen avain..</string>
+    <string name="location">Sijainti..</string>
+    <string name="project_uid">Projektin UID..</string>
+    <string name="details">Tiedot</string>
+    <string name="model_type">Mallin tyyppi</string>
+    <string name="input_modalities">Syötteen modaliteetit</string>
+    <string name="output_modalities">Tulosteen modaliteetit</string>
+    <string name="abilities">Kyvyt</string>
+    <string name="provider_override">Lisää palveluntarjoajan ohitus</string>
+    <string name="provider_override_description">
+                            Määritä mukautetut palveluntarjoajan asetukset
+                            tälle tietylle mallille. Käyttää yleisiä
+                            ominaisuuksia mallin pääpalveluntarjoajalta.
+                        </string>
+    <string name="build_tools">Rakennustyökalut</string>
+    <string name="build_tools_description">
+                            Nämä työkalut tarjotaan suoraan API:n kautta
+                            ilman sovellustukea. Tätä ominaisuutta tukee
+                            tällä hetkellä vain Gemini API.
+                        </string>
+    <string name="google_search">Haku</string>
+    <string name="google_search_description">Ota Google-hakuintegraatio käyttöön</string>
+    <string name="url_context">URL-konteksti</string>
+    <string name="url_context_description">Ota URL-kontekstin käsittely käyttöön</string>
+    <string name="find">Etsi</string>
+    <string name="replace">Korvaa</string>
+    <string name="effecting_scopes">Vaikuttavat alueet</string>
+    <string name="user">käyttäjä</string>
+    <string name="visual_only">vain visuaalinen</string>
+    <string name="body">Runko</string>
+    <string name="key">avain</string>
+    <string name="value">Arvo</string>
+    <string name="header">Otsikko.</string>
+    <string name="reset_description">Nollaa avustajan asetukset oletustilaan.</string>
+    <string name="save_changes">Tallennetaanko muutokset?</string>
+    <string name="save_changes_description">Sinulla on tallentamattomia muutoksia. Haluatko tallentaa ne ennen poistumista?</string>
+    <string name="dont_save">Älä tallenna</string>
+    <string name="save">Tallenna</string>
+    <string name="links">Linkit</string>
+    <string name="reminders">Muistutukset</string>
+    <string name="priorities">Prioriteetit</string>
+    <string name="ai_chat">AI-chat</string>
+    <string name="auto">automaattinen</string>
+    <string name="light">kevyt</string>
+    <string name="medium">keskitaso</string>
+    <string name="heavy">raskas</string>
+    <string name="date">päivämäärä</string>
+    <string name="time">aika</string>
+    <string name="date_and_time">päivämäärä ja aika</string>
+    <string name="local">paikallinen</string>
+    <string name="timezone">aikavyöhyke</string>
+    <string name="system_version">järjestelmäversio</string>
+    <string name="device_info">laitteen tiedot</string>
+    <string name="battery_level">akun taso</string>
+    <string name="insert">Lisää</string>
+    <string name="confirm">Vahvista</string>
+    <string name="message">Viesti</string>
+    <string name="content">Sisältö</string>
+    <string name="today">Tänään</string>
+    <string name="tomorrow">Huomenna</string>
+    <string name="according_to_timing">Ajastuksen mukaan</string>
+    <string name="untitled">Nimetön</string>
+    <string name="hue">Sävy</string>
+    <string name="saturation">Kylläisyys</string>
+    <string name="brightness">Kirkkaus</string>
+    <string name="shades">Varjot</string>
+    <string name="complementary">Täydentävä</string>
+    <string name="task_placeholder">Tehtävä..</string>
+    <string name="task_cannot_be_empty">Tehtävä ei voi olla tyhjä!</string>
+    <string name="of">kohteesta</string>
+    <string name="something_wrong_with_file">Tiedostossa on jotain vialla</string>
+    <string name="could_not_load_any_information">Mediatiedoston tietoja ei voitu ladata.</string>
+    <string name="no_file_path_provided">Tiedostopolkua ei annettu.</string>
+    <string name="security_error_processing_file">Tietoturvavirhe tiedostoa käsiteltäessä</string>
+    <string name="an_unexpected_error_occurred">Odottamaton virhe tapahtui</string>
+    <string name="could_not_retrieve_any_information">Tämän videotiedoston tietoja ei voitu hakea.</string>
+    <string name="error_reading_metadata">Virhe mediametatietojen lukemisessa</string>
+    <string name="could_not_read_exif_data">EXIF-tietoja ei voitu lukea</string>
+    <string name="error_reading_basic_file_info">Virhe tiedoston perustietojen lukemisessa</string>
+    <string name="file_does_not_exist">Tiedostoa ei ole olemassa</string>
+    <string name="error">Virhe</string>
+    <string name="loading_media_info">Ladataan mediatietoja…</string>
+    <string name="no_metadata_available_for_this_document">Tälle asiakirjalle ei ole saatavilla metatietoja.</string>
+    <string name="could_not_read_pdf_metadata">PDF-metatietoja ei voitu lukea</string>
+    <string name="cannot_read_file">Tiedostoa ei voi lukea</string>
+    <string name="could_not_decode_image_dimensions_or_invalid_format">Kuvan mittoja ei voitu purkaa tai muoto on virheellinen.</string>
+    <string name="error_during_dimension_decoding">Virhe mittojen purkamisen aikana</string>
+    <string name="error_reading_exif_data">Virhe EXIF-tietojen lukemisessa</string>
+    <string name="duplicate">Kopioi</string>
+    <string name="send">Lähetä</string>
+    <string name="print">Tulosta</string>
+    <string name="cleaned">Siivottu</string>
+    <string name="cleared">Tyhjennetty</string>
+    <string name="media_deleted">media poistettu!</string>
+    <string name="jotting">Muistiinpano</string>
+    <string name="appwidget_text">ESIMERKKI</string>
+    <string name="add_widget">Lisää widget</string>
+    <string name="app_widget_description">Tämä on sovelluswidgetin kuvaus</string>
+    <string name="quick_widget_description">Tämä on pikawidgetin asettelu</string>
+    <string name="creator_widget_description">Tämä on luoja-asetteluwidget</string>
+    <string name="notes_list_description">Tämä on muistiinpanoluettelo</string>
+    <string name="record_deleted">tietue poistettu!</string>
+</resources>
