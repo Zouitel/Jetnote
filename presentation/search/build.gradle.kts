@@ -13,6 +13,7 @@ dependencies {
     //Modules.
     implementation(projects.common.ui)
     implementation(projects.common.logic)
+    implementation(projects.common.markdown)
     implementation(projects.domain)
     implementation(projects.presentation.tag)
     implementation(projects.presentation.recorder)

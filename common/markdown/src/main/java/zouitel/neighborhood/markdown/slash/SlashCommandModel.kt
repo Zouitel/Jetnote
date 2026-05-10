@@ -1,0 +1,81 @@
+package zouitel.neighborhood.markdown.slash
+
+import androidx.compose.runtime.Immutable
+import kotlin.jvm.JvmInline
+
+/**
+ * Opaque key for slash command icons.
+ * The UI layer maps this to an actual drawable/vector resource.
+ */
+@JvmInline
+ value class SlashCommandIconKey( val value: String)
+
+/**
+ * Policy for what happens to the slash query text when a command is executed.
+ */
+ enum class SlashQueryTextPolicy {
+    /** Remove the `/` and query text before the command's `onExecute` runs. */
+    RemoveBeforeExecute,
+
+    /** Leave the text in place; the command is responsible for its own edits. */
+    KeepText,
+}
+
+/**
+ * Result returned by a slash command after execution.
+ */
+ sealed interface SlashCommandResult {
+    /** Command completed successfully. The menu should close. */
+     data object Done : SlashCommandResult
+
+    /** Command completed but the menu should remain open (e.g. for chained commands). */
+     data object KeepOpen : SlashCommandResult
+
+    /** Command failed with an optional message. The menu closes and no further mutations occur. */
+     data class Failure(val message: String? = null) : SlashCommandResult
+}
+
+/**
+ * Sealed hierarchy for items that can appear in the slash menu.
+ *
+ * Every item has a unique [id] and display metadata.
+ */
+ sealed interface SlashCommandItem {
+     val id: SlashCommandId
+     val title: String
+     val description: String
+     val keywords: List<String>
+     val icon: SlashCommandIconKey?
+}
+
+/**
+ * A leaf command that performs an action when selected.
+ *
+ * @property queryTextPolicy Controls whether the `/…` text is removed before execution.
+ * @property onExecute Suspending lambda invoked with [SlashCommandContext] as receiver.
+ */
+@Immutable
+ data class SlashCommandAction(
+    override val id: SlashCommandId,
+    override val title: String,
+    override val description: String,
+    override val keywords: List<String> = emptyList(),
+    override val icon: SlashCommandIconKey? = null,
+    val queryTextPolicy: SlashQueryTextPolicy = SlashQueryTextPolicy.RemoveBeforeExecute,
+    val onExecute: suspend SlashCommandContext.() -> SlashCommandResult,
+) : SlashCommandItem
+
+/**
+ * A submenu node that contains child items revealed on selection.
+ *
+ * @property children The items visible when the user navigates into this menu.
+ */
+@Immutable
+ data class SlashCommandMenu(
+    override val id: SlashCommandId,
+    override val title: String,
+    override val description: String,
+    override val keywords: List<String> = emptyList(),
+    override val icon: SlashCommandIconKey? = null,
+    val children: List<SlashCommandItem> = emptyList(),
+) : SlashCommandItem

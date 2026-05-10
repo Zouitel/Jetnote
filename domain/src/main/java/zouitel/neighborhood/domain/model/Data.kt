@@ -7,18 +7,19 @@ import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_TXT
 
 @Keep
 data class Data(
-    val uid: String = DEFAULT_TXT,
-    val userUid: String = DEFAULT_TXT,
-    val title: String = DEFAULT_TXT,
-    val description: String = DEFAULT_TXT,
-    val priority: Int = DEFAULT_INT,
-    val background: Int? = null,
-    val textColor: Int? = null,
-    val date: String = DEFAULT_TXT,
-    val lastEdit: String = DEFAULT_TXT,
-    val archived: Boolean = DEFAULT_BOOLEAN,
-    val tasks: String = DEFAULT_TXT,
-    val medias: String = DEFAULT_TXT,
-    val audios: String = DEFAULT_TXT,
-    val reminders: String = DEFAULT_TXT
+    val uid: String,
+    val userUid: String,
+    val title: String,
+    val description: String,
+    val priority: Int,
+    val background: Int?,
+    val textColor: Int?,
+    val date: String,
+    val lastEdit: String,
+    val archived: Boolean,
+    val blocks: String,
+    val tasks: String,
+    val medias: String,
+    val audios: String,
+    val reminders: String
 )

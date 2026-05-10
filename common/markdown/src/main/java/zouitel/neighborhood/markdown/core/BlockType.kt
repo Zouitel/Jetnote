@@ -1,0 +1,127 @@
+package zouitel.neighborhood.markdown.core
+
+import kotlinx.serialization.Serializable
+
+/**
+ * Sealed interface representing the type of a block.
+ * Built-in types are defined as nested objects/classes.
+ * Custom blocks should implement [CustomBlockType].
+ */
+
+@Serializable
+ sealed interface BlockType {
+    /**
+     * Unique identifier for this block type.
+     */
+     val typeId: String
+
+    /**
+     * Human-readable name for display in UI.
+     */
+     val displayName: String
+
+    /**
+     * Whether this block type supports text content.
+     */
+     val supportsText: Boolean get() = false
+
+    /**
+     * Whether this block can be converted to/from other block types.
+     * Typically true for text-supporting blocks.
+     */
+     val isConvertible: Boolean get() = supportsText
+
+    /**
+     * Whether this block type participates in v1 document indentation semantics.
+     */
+     val supportsIndentation: Boolean get() = false
+
+    /**
+     * Standard paragraph block.
+     */
+    @Serializable
+     data object Paragraph : BlockType {
+        override val typeId: String = "paragraph"
+        override val displayName: String = "Paragraph"
+        override val supportsText: Boolean = true
+        override val supportsIndentation: Boolean = true
+    }
+
+    /**
+     * Heading block with level 1-6.
+     */
+    @Serializable
+     data class Heading(val level: Int) : BlockType {
+        init {
+            require(level in 1..6) { "Heading level must be between 1 and 6, got $level" }
+        }
+
+        override val typeId: String = "heading_$level"
+        override val displayName: String = "Heading $level"
+        override val supportsText: Boolean = true
+    }
+
+    /**
+     * Todo/checkbox block with checked state.
+     */
+    @Serializable
+     data class Todo(val checked: Boolean = false) : BlockType {
+        override val typeId: String = "todo"
+        override val displayName: String = "To-do"
+        override val supportsText: Boolean = true
+        override val supportsIndentation: Boolean = true
+    }
+
+    /**
+     * Bullet list item.
+     */
+    @Serializable
+     data object BulletList : BlockType {
+        override val typeId: String = "bullet_list"
+        override val displayName: String = "Bullet List"
+        override val supportsText: Boolean = true
+        override val supportsIndentation: Boolean = true
+    }
+
+    /**
+     * Numbered list item with sequential number.
+     */
+    @Serializable
+     data class NumberedList(val number: Int = 1) : BlockType {
+        init {
+            require(number >= 1) { "NumberedList number must be >= 1, got $number" }
+        }
+
+        override val typeId: String = "numbered_list"
+        override val displayName: String = "Numbered List"
+        override val supportsText: Boolean = true
+        override val supportsIndentation: Boolean = true
+    }
+
+    /**
+     * Quote block.
+     */
+    @Serializable
+     data object Quote : BlockType {
+        override val typeId: String = "quote"
+        override val displayName: String = "Quote"
+        override val supportsText: Boolean = true
+    }
+
+    /**
+     * Horizontal divider/separator.
+     */
+    @Serializable
+     data object Divider : BlockType {
+        override val typeId: String = "divider"
+        override val displayName: String = "Divider"
+        override val supportsText: Boolean = false
+        override val isConvertible: Boolean = false
+    }
+}
+
+/**
+ * Extension point for custom block types.
+ * Implement this interface to create your own block types.
+ */
+ interface CustomBlockType : BlockType

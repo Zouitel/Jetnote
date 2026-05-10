@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.common.permissions)
     implementation(projects.common.ui)
     implementation(projects.common.logic)
+    implementation(projects.common.markdown)
     implementation(projects.core.datastore)
     implementation(projects.presentation.workspace)
     implementation(projects.presentation.link)

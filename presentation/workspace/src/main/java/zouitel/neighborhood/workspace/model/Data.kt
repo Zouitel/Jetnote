@@ -6,6 +6,7 @@ import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_BOOLEAN
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_INT
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_TXT
 import kotlinx.serialization.Serializable
+import zouitel.neighborhood.markdown.core.Block
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -22,6 +23,7 @@ data class Data (
     val date: Instant = Clock.System.now(),
     val lastEdit: Instant = Clock.System.now(),
     val archived: Boolean = DEFAULT_BOOLEAN,
+    val blocks: List<Block> = emptyList(),
     val tasks: List<Task> = emptyList(),
     val medias: List<Media> = emptyList(),
     val audios: List<Audio> = emptyList(),

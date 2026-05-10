@@ -14,6 +14,7 @@ dependencies {
     implementation(projects.common.ui)
     implementation(projects.common.logic)
     implementation(projects.common.permissions)
+    implementation(projects.common.markdown)
     implementation(projects.domain)
     implementation(projects.core.datastore)
     implementation(projects.presentation.recorder)

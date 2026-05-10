@@ -4,20 +4,19 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -45,12 +44,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.UiComposable
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -63,15 +62,33 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
+import com.skydoves.cloudy.cloudy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.utils.Action
+import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreen
 import zouitel.neighborhood.link.ui.LinkScreenModel
-import zouitel.neighborhood.ui.CommonTextField
-import zouitel.neighborhood.ui.SettingsScreenModel
+import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.markdown.core.BlockContent
+import zouitel.neighborhood.markdown.core.BlockId
+import zouitel.neighborhood.markdown.core.BlockType
+import zouitel.neighborhood.markdown.core.SpanStyle
+import zouitel.neighborhood.markdown.core.TextSpan
+import zouitel.neighborhood.markdown.state.BlockTextStates
+import zouitel.neighborhood.markdown.state.rememberEditorState
+import zouitel.neighborhood.markdown.theme.CascadeEditorColors
+import zouitel.neighborhood.markdown.theme.CascadeEditorTheme
+import zouitel.neighborhood.markdown.ui.CascadeEditor
 import zouitel.neighborhood.tag.model.NoteAndTag
 import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
+import zouitel.neighborhood.ui.CommonTextField
+import zouitel.neighborhood.ui.SettingsScreenModel
+import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Reminder
 import zouitel.neighborhood.workspace.model.Task
@@ -82,17 +99,7 @@ import zouitel.neighborhood.workspace.ui.features.AudioScreen
 import zouitel.neighborhood.workspace.ui.features.MediaTop
 import zouitel.neighborhood.workspace.ui.utils.TaskItem
 import zouitel.neighborhood.workspace.ui.utils.remindersContext
-import com.skydoves.cloudy.cloudy
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import zouitel.neighborhood.feedback.reportable
-import zouitel.neighborhood.logic.R
-import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 data class WorkplaceScreen(
@@ -130,6 +137,17 @@ data class WorkplaceScreen(
         val navBottomSheet = LocalBottomSheetNavigator.current
         val keyboard = LocalSoftwareKeyboardController.current
 
+        val editorState = rememberEditorState(
+            data.blocks
+        //            listOf(
+//            Block(
+//                BlockId("98764"),
+//                BlockType.Paragraph,
+//                BlockContent.Text("land rover", listOf(TextSpan(0, 8, SpanStyle.Underline)))
+//                )
+//        )
+        )
+
         val titleState = rememberTextFieldState(data.title)
         val descriptionState = rememberTextFieldState(data.description)
         val defaultBackground = MaterialTheme.colorScheme.surface.toArgb()
@@ -150,6 +168,9 @@ data class WorkplaceScreen(
                 dataModel.sendAction(Action.Insert(currentData.value.copy(uid = uid)))
             }
         }
+
+        println(editorState.state.blocks)
+
         val focus = remember { FocusRequester() }
 
         val observeNotesAndLabels by remember(
@@ -175,11 +196,28 @@ data class WorkplaceScreen(
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
+        // Build the editor theme from the note's own background / text colours so
+        // typed text is always visible regardless of dark mode or custom note colours.
+        val cascadeTheme = remember(currentData.value.background, currentData.value.textColor) {
+            val bg = Color(currentData.value.background ?: defaultBackground)
+            val noteText = Color(currentData.value.textColor ?: defaultTextColor)
+            val isDark = bg.luminance() < 0.5f
+            if (isDark) {
+                CascadeEditorTheme.dark().copy(
+                    colors = CascadeEditorColors.dark().copy(text = noteText)
+                )
+            } else {
+                CascadeEditorTheme.light().copy(
+                    colors = CascadeEditorColors.light().copy(text = noteText)
+                )
+            }
+        }
+
         // Replace your existing LaunchedEffect(screen.value) for focus with this:
         LaunchedEffect(Unit) { // Use Unit or a specific "Open" trigger
             if (isNew) {
                 // 1. Wait for the composition to settle and the window to be ready
-                kotlinx.coroutines.delay(200)
+                delay(200)
                 // 2. Request focus on the TextField
                 focus.requestFocus()
                 // 3. Explicitly tell the keyboard controller to show
@@ -197,6 +235,7 @@ data class WorkplaceScreen(
                 BottomBar(
                     data = currentData,
                     titleState = titleState,
+                    editorState = editorState,
                     descriptionState = descriptionState,
                     isSound = settings.isSound,
                     dataModel = dataModel,
@@ -214,20 +253,18 @@ data class WorkplaceScreen(
                 }
             }
         ) {
-            LazyColumn(
-                Modifier
-                    .animateContentSize()
-                    .statusBarsPadding()
-                    .then(height),
-                lazyListState
-            ) {
-                // medias display.
-                item {
-                    MediaTop(currentData)
-                }
+            // Hoist the text states so we can observe if the editor is empty for our placeholder
+            val textStates = remember { BlockTextStates() }
 
-                // The Title.
-                item {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding()
+            ) {
+                // --- 1. TOP SECTION (Media & Title) ---
+                Column(modifier = Modifier.statusBarsPadding()) {
+                    MediaTop(currentData)
+
                     CommonTextField(
                         state = titleState,
                         modifier = Modifier
@@ -246,203 +283,215 @@ data class WorkplaceScreen(
                     }
                 }
 
-                // The Description.
-                item {
-                    CommonTextField(
-                        state = descriptionState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(50.dp),
-                        textSize = MaterialTheme.typography.titleLarge.fontSize,
-                        placeholder = stringResource(R.string.note),
-                        textColor = Color(currentData.value.textColor ?: defaultTextColor)
-                    ) {
-                        workplaceModel.handleContentReceiver(currentData, it)
-                    }
-                }
-
-                // display reminder chips.
-                remindersContext(
-                    alarmModel,
-                    snackbarState,
-                    toolTipState,
-                    currentData,
-                    scope,
-                    deletedReminders,
-                    jobCounter
-                )
-
-                // display the tags.
-                tagsContext(
-                    currentData.value.uid,
-                    filteredTags,
-                    noteAndTagModel,
-                    snackbarState,
-                    scope,
-                    deletedTagId,
-                    jobCounter
-                )
-
-                // Audios display.
-                item {
-                    Navigator(AudioScreen(currentData, snackbarState))
-                }
-
-                // Link display.
-                item {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Navigator(LinkScreen(currentData.value.uid, snackbarState))
-                    }
-                }
-
-                // display the tasks list.
-                tasksList(snackbarState, currentData, scope, deletedTask, jobCounter)
-
-                // void space.
-                item {
-                    Box(modifier = Modifier
+                // --- 2. BOTTOM WORKPLACE COMPONENTS ---
+                // This section wraps its content height. It pushes down as needed.
+                LazyColumn(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .height(170.dp))
-                }
-            }
-        }
-    }
+                        .animateContentSize()
+                ) {
+                    remindersContext(
+                        alarmModel,
+                        snackbarState,
+                        toolTipState,
+                        currentData,
+                        scope,
+                        deletedReminders,
+                        jobCounter
+                    )
 
-    private fun LazyListScope.tasksList(
-        snackbarState: SnackbarHostState,
-        currentData: MutableState<Data>,
-        scope: CoroutineScope,
-        deletedTask: SnapshotStateList<Pair<Task, Int>>,
-        jobCounter: MutableIntState
-    ) {
-        var orderedList = currentData.value.tasks.sortedBy { it.isDone }
+                    tagsContext(
+                        currentData.value.uid,
+                        filteredTags,
+                        noteAndTagModel,
+                        snackbarHostState = snackbarState,
+                        scope = scope,
+                        deletedTagId = deletedTagId,
+                        jobCounter = jobCounter
+                    )
 
-        items(orderedList, key = { it.id }) { task ->
-            val deleteResource = stringResource(R.string.delete)
-            val undoResource = stringResource(R.string.action_undo)
+                    item {
+                        Navigator(AudioScreen(currentData, snackbarState))
+                    }
 
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                Spacer(modifier = Modifier.height(3.dp))
-                TaskItem(
-                    currentData = currentData,
-                    task = task,
-                    onEdit = {
-                        it.show(AddTaskScreen(task, currentData))
-                    },
-                    onDelete = {
-                        orderedList = orderedList.filterNot { it.id == task.id }
-
-                        val currentJobId = jobCounter.intValue++
-                        deletedTask.add(Pair(task, currentJobId))
-                        val taskPair = deletedTask.firstOrNull { it.second == currentJobId }
-                        currentData.value = currentData.value.copy(
-                            tasks = currentData.value.tasks.minusElement(task)
-                        )
-
-                        scope.launch {
-                            snackbarState.currentSnackbarData?.dismiss()
-                            val result = snackbarState.showSnackbar(
-                                message = "${taskPair?.first?.item} $deleteResource",
-                                actionLabel = undoResource,
-                                duration = SnackbarDuration.Long
-                            )
-
-                            if (result == SnackbarResult.ActionPerformed) {
-                                taskPair?.first?.let { task ->
-                                    currentData.value = currentData.value.copy(
-                                        tasks = currentData.value.tasks.plusElement(task)
-                                    )
-                                }
-                            }
-                            taskPair?.let { deletedTask.remove(it) }
+                    item {
+                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Navigator(LinkScreen(currentData.value.uid, snackbarState))
                         }
                     }
-                )
+                }
+
+                // --- 3. CASCADE EDITOR SECTION (Takes remaining space) ---
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f) // Takes the "rest of height space"
+                ) {
+                    CascadeEditor(
+                        stateHolder = editorState,
+                        textStates = textStates,
+                        modifier = Modifier.fillMaxSize(),
+                        theme = cascadeTheme,
+                    )
+
+                    // Smart Note Placeholder Logic
+                    val showPlaceholder by remember {
+                        derivedStateOf {
+                            val blocks = editorState.state.blocks
+                            blocks.isEmpty() || (blocks.size == 1 && textStates.getVisibleText(blocks.first().id).isNullOrEmpty())
+                        }
+                    }
+
+                    if (showPlaceholder) {
+                        val horizontalPadding = cascadeTheme.dimensions.blockHorizontalPadding
+                        Text(
+                            text = "Note",
+                            color = Color(currentData.value.textColor ?: defaultTextColor).copy(alpha = 0.4f),
+                            style = MaterialTheme.typography.bodyLarge,
+                            // Vertical 4.dp accounts for the combined internal paddings in CascadeEditor.kt
+                            modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)
+                        )
+                    }
+                }
             }
         }
     }
+}
 
-    fun LazyListScope.tagsContext(
-        uid: String,
-        filteredTags: List<Tag>,
-        noteAndTagModel: NoteAndTagScreenModel,
-        snackbarHostState: SnackbarHostState,
-        scope: CoroutineScope,
-        deletedTagId: SnapshotStateList<Pair<Long, Int>>,
-        jobCounter: MutableIntState
-    ) {
-        item {
-            val deleteResource = stringResource(R.string.delete)
-            val undoResource = stringResource(R.string.action_undo)
+private fun LazyListScope.tasksList(
+    snackbarState: SnackbarHostState,
+    currentData: MutableState<Data>,
+    scope: CoroutineScope,
+    deletedTask: SnapshotStateList<Pair<Task, Int>>,
+    jobCounter: MutableIntState
+) {
+    var orderedList = currentData.value.tasks.sortedBy { it.isDone }
 
-            ContextualFlowRow(
-                itemCount = filteredTags.size,
+    items(orderedList, key = { it.id }) { task ->
+        val deleteResource = stringResource(R.string.delete)
+        val undoResource = stringResource(R.string.action_undo)
+
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Spacer(modifier = Modifier.height(3.dp))
+            TaskItem(
+                currentData = currentData,
+                task = task,
+                onEdit = {
+                    it.show(AddTaskScreen(task, currentData))
+                },
+                onDelete = {
+                    orderedList = orderedList.filterNot { it.id == task.id }
+
+                    val currentJobId = jobCounter.intValue++
+                    deletedTask.add(Pair(task, currentJobId))
+                    val taskPair = deletedTask.firstOrNull { it.second == currentJobId }
+                    currentData.value = currentData.value.copy(
+                        tasks = currentData.value.tasks.minusElement(task)
+                    )
+
+                    scope.launch {
+                        snackbarState.currentSnackbarData?.dismiss()
+                        val result = snackbarState.showSnackbar(
+                            message = "${taskPair?.first?.item} $deleteResource",
+                            actionLabel = undoResource,
+                            duration = SnackbarDuration.Long
+                        )
+
+                        if (result == SnackbarResult.ActionPerformed) {
+                            taskPair?.first?.let { task ->
+                                currentData.value = currentData.value.copy(
+                                    tasks = currentData.value.tasks.plusElement(task)
+                                )
+                            }
+                        }
+                        taskPair?.let { deletedTask.remove(it) }
+                    }
+                }
+            )
+        }
+    }
+}
+
+fun LazyListScope.tagsContext(
+    uid: String,
+    filteredTags: List<Tag>,
+    noteAndTagModel: NoteAndTagScreenModel,
+    snackbarHostState: SnackbarHostState,
+    scope: CoroutineScope,
+    deletedTagId: SnapshotStateList<Pair<Long, Int>>,
+    jobCounter: MutableIntState
+) {
+    item {
+        val deleteResource = stringResource(R.string.delete)
+        val undoResource = stringResource(R.string.action_undo)
+
+        ContextualFlowRow(
+            itemCount = filteredTags.size,
+            modifier = Modifier
+                .animateContentSize()
+                .padding(horizontal = 10.dp)
+        ) { index ->
+            SuggestionChip(
                 modifier = Modifier
-                    .animateContentSize()
-                    .padding(horizontal = 10.dp)
-            ) { index ->
-                SuggestionChip(
-                    modifier = Modifier
-                        .alpha(.8f)
-                        .padding(1.5.dp),
-                    onClick = {},
-                    label = {
-                        Text(
-                            modifier = Modifier
-                                .combinedClickable(onLongClick = {
-                                    val currentJobId = jobCounter.intValue++
-                                    deletedTagId.add(
-                                        Pair(
-                                            filteredTags.getOrNull(index)?.id
-                                                ?: return@combinedClickable, currentJobId
-                                        )
+                    .alpha(.8f)
+                    .padding(1.5.dp),
+                onClick = {},
+                label = {
+                    Text(
+                        modifier = Modifier
+                            .combinedClickable(onLongClick = {
+                                val currentJobId = jobCounter.intValue++
+                                deletedTagId.add(
+                                    Pair(
+                                        filteredTags.getOrNull(index)?.id
+                                            ?: return@combinedClickable, currentJobId
                                     )
-                                    val tagPair =
-                                        deletedTagId.firstOrNull { it.second == currentJobId }
+                                )
+                                val tagPair =
+                                    deletedTagId.firstOrNull { it.second == currentJobId }
 
-                                    noteAndTagModel.sendAction(
-                                        Action.DeleteById(
-                                            filteredTags.getOrNull(index)?.id
-                                                ?: return@combinedClickable
-                                        )
+                                noteAndTagModel.sendAction(
+                                    Action.DeleteById(
+                                        filteredTags.getOrNull(index)?.id
+                                            ?: return@combinedClickable
+                                    )
+                                )
+
+                                scope.launch {
+                                    snackbarHostState.currentSnackbarData?.dismiss()
+                                    val result = snackbarHostState.showSnackbar(
+                                        message = "${filteredTags.getOrNull(index)?.label} $deleteResource",
+                                        actionLabel = undoResource,
+                                        duration = SnackbarDuration.Long
                                     )
 
-                                    scope.launch {
-                                        snackbarHostState.currentSnackbarData?.dismiss()
-                                        val result = snackbarHostState.showSnackbar(
-                                            message = "${filteredTags.getOrNull(index)?.label} $deleteResource",
-                                            actionLabel = undoResource,
-                                            duration = SnackbarDuration.Long
-                                        )
 
-
-                                        if (result == SnackbarResult.ActionPerformed) {
-                                            tagPair?.first?.let { tag ->
-                                                noteAndTagModel.sendAction(
-                                                    Action.Insert(NoteAndTag(uid, tag))
-                                                )
-                                            }
+                                    if (result == SnackbarResult.ActionPerformed) {
+                                        tagPair?.first?.let { tag ->
+                                            noteAndTagModel.sendAction(
+                                                Action.Insert(NoteAndTag(uid, tag))
+                                            )
                                         }
-                                        tagPair?.let { deletedTagId.remove(it) }
                                     }
-                                }) {},
-                            text = filteredTags.getOrNull(index)?.label ?: ""
-                        )
-                    },
-                    border = SuggestionChipDefaults.suggestionChipBorder(false),
-                    colors = SuggestionChipDefaults.suggestionChipColors(
-                        Color(
-                            filteredTags.getOrNull(index)?.color
-                                ?: MaterialTheme.colorScheme.surfaceContainerHigh.toArgb()
-                        ).copy(alpha = .5f),
-                        Color(
-                            filteredTags.getOrNull(index)?.color
-                                ?: MaterialTheme.colorScheme.onSurface.toArgb()
-                        )
+                                    tagPair?.let { deletedTagId.remove(it) }
+                                }
+                            }) {},
+                        text = filteredTags.getOrNull(index)?.label ?: ""
+                    )
+                },
+                border = SuggestionChipDefaults.suggestionChipBorder(false),
+                colors = SuggestionChipDefaults.suggestionChipColors(
+                    Color(
+                        filteredTags.getOrNull(index)?.color
+                            ?: MaterialTheme.colorScheme.surfaceContainerHigh.toArgb()
+                    ).copy(alpha = .5f),
+                    Color(
+                        filteredTags.getOrNull(index)?.color
+                            ?: MaterialTheme.colorScheme.onSurface.toArgb()
                     )
                 )
-            }
+            )
         }
     }
 }

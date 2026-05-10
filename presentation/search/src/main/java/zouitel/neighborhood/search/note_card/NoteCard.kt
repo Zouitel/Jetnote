@@ -275,6 +275,29 @@ private fun Card(
             )
         }
 
+// ── Content: blocks (Cascade editor) or legacy description ───────────
+        when {
+            note.blocks.isNotEmpty() -> {
+                BlocksPreview(
+                    blocks = note.blocks,
+                    textColor = note.textColor?.let { Color(it) }
+                        ?: MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(start = 3.dp, end = 3.dp, bottom = 7.dp),
+                )
+            }
+            note.description.isNotEmpty() -> {
+                Text(
+                    text = note.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 10,
+                    overflow = TextOverflow.Ellipsis,
+                    color = note.textColor?.let { Color(it) }
+                        ?: MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(start = 3.dp, end = 3.dp, bottom = 7.dp),
+                )
+            }
+        }
+
         //display media player.
         audios.fastFirstOrNull {
             SmallAudioPlayer(audios.size, settingsModel, audioModel, it)

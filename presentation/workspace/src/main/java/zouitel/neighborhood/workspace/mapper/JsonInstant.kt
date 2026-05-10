@@ -6,5 +6,6 @@ val JsonInstant by lazy {
     Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
+        coerceInputValues = true
     }
 }

@@ -1,0 +1,104 @@
+package zouitel.neighborhood.markdown.slash
+
+import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.markdown.core.BlockId
+import zouitel.neighborhood.markdown.state.SlashQueryRange
+
+/**
+ * Execution context provided as the receiver for [SlashCommandAction.onExecute].
+ *
+ * Holds the session snapshot at execution time and a safe [editor] handle for mutations.
+ *
+ * @property anchorBlockId The block that owns the `/` trigger.
+ * @property query The query text the user typed after `/`.
+ * @property queryRange Visible-text range of the full `/…` token.
+ * @property editor Safe operations for mutating editor state during command execution.
+ */
+ data class SlashCommandContext(
+    val anchorBlockId: BlockId,
+    val query: String,
+    val queryRange: SlashQueryRange,
+    val editor: SlashCommandEditor,
+)
+
+/**
+ * Safe editor operations available to slash commands during execution.
+ *
+ * Implementations must guarantee that text, spans, and snapshot state remain aligned
+ * after each operation. Commands must not dispatch [EditorAction] directly.
+ */
+ interface SlashCommandEditor {
+
+    /** Returns the current anchor block, or null if it was deleted. */
+     fun getAnchorBlock(): Block?
+
+    /** Returns the visible text of the anchor block, or null if unavailable. */
+     fun getAnchorVisibleText(): String?
+
+    /**
+     * Replaces the query range (`/…`) in the anchor block with [replacement].
+     * When [replacement] is empty the query text is simply removed.
+     */
+     fun replaceQueryText(replacement: String = "")
+
+    /**
+     * Replaces the entire visible text of the anchor block.
+     *
+     * @param text The new text content.
+     * @param cursorPosition Target cursor offset inside the new text. When null the
+     *   implementation places the cursor at the end.
+     */
+     fun updateAnchorText(text: String, cursorPosition: Int? = null)
+
+    /**
+     * Replaces the anchor block with [block].
+     *
+     * @param block The replacement block.
+     * @param preserveAnchorId When true the anchor's block ID is kept on the replacement.
+     * @param requestFocus When true the replacement block receives focus.
+     * @param cursorPosition Target cursor offset inside the replacement. Null means end.
+     */
+     fun replaceAnchorBlock(
+        block: Block,
+        preserveAnchorId: Boolean = true,
+        requestFocus: Boolean = true,
+        cursorPosition: Int? = null,
+    )
+
+    /**
+     * Inserts [block] immediately after the anchor block.
+     *
+     * @param block The block to insert.
+     * @param requestFocus When true the inserted block receives focus.
+     * @param cursorPosition Target cursor offset inside the inserted block. Null means end.
+     */
+     fun insertBlockAfterAnchor(
+        block: Block,
+        requestFocus: Boolean = true,
+        cursorPosition: Int? = null,
+    )
+
+    /**
+     * Inserts [block] immediately before the anchor block.
+     *
+     * Focus remains on the anchor block, so this is ideal for inserting non-text
+     * blocks (e.g. dividers) without disrupting the user's editing position.
+     *
+     * @param block The block to insert.
+     */
+     fun insertBlockBeforeAnchor(block: Block)
+
+    /**
+     * Moves editor focus to the given block.
+     *
+     * @param blockId Target block.
+     * @param cursorPosition Target cursor offset. Null means end.
+     */
+     fun focusBlock(blockId: BlockId, cursorPosition: Int? = null)
+
+    /**
+     * Closes the slash menu. Called automatically after successful execution,
+     * but commands may call it early for immediate visual feedback.
+     */
+     fun closeMenu()
+}

@@ -28,10 +28,11 @@ data class Data(
     @ColumnInfo(DATE) val date: String,
     @ColumnInfo("last_edit") val lastEdit: String,
     @ColumnInfo(ARCHIVED) val archived: Boolean,
+    @ColumnInfo("blocks", defaultValue = "[]") val blocks: String,
     @ColumnInfo("tasks", defaultValue = "[]") val tasks: String,
     @ColumnInfo("medias", defaultValue = "[]") val medias: String,
     @ColumnInfo("audios", defaultValue = "[]") val audios: String,
-    @ColumnInfo("reminders", defaultValue = "[]") val reminders: String,
+    @ColumnInfo("reminders", defaultValue = "[]") val reminders: String
 ) {
     companion object {
         const val TABLE_NAME = "note_data_table"

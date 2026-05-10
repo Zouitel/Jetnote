@@ -42,50 +42,47 @@ fun HighlightText(
     overflow: TextOverflow = TextOverflow.Clip,
     softWrap: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
-    minLines: Int = 1,
+    minLines: Int = 1
 ) {
-    runCatching {
-        val highlighter = LocalHighlighter.current
-        var tokens: List<HighlightToken> by remember { mutableStateOf(emptyList()) }
-        var annotatedString by remember { mutableStateOf(AnnotatedString(code)) }
 
-        val updatedCode by rememberUpdatedState(code)
-        val updatedLanguage by rememberUpdatedState(language)
-        LaunchedEffect(Unit) {
-            snapshotFlow { updatedCode to updatedLanguage }.collect {
-                tokens = if (updatedCode.length <= MAX_CODE_LENGTH) {
-                    highlighter.highlight(updatedCode, updatedLanguage)
-                } else {
-                    listOf(
-                        HighlightToken.Plain(content = updatedCode)
-                    )
-                }
-                annotatedString = buildAnnotatedString {
-                    tokens.fastForEach { token ->
-                        buildHighlightText(token, colors)
-                    }
+    val highlighter = LocalHighlighter.current
+    var tokens: List<HighlightToken> by remember { mutableStateOf(emptyList()) }
+    var annotatedString by remember { mutableStateOf(AnnotatedString(code)) }
+
+    val updatedCode by rememberUpdatedState(code)
+    val updatedLanguage by rememberUpdatedState(language)
+    LaunchedEffect(Unit) {
+        snapshotFlow { updatedCode to updatedLanguage }.collect {
+            tokens = if (updatedCode.length <= MAX_CODE_LENGTH) {
+                highlighter.highlight(updatedCode, updatedLanguage)
+            } else {
+                listOf(
+                    HighlightToken.Plain(content = updatedCode)
+                )
+            }
+            annotatedString = buildAnnotatedString {
+                tokens.fastForEach { token ->
+                    buildHighlightText(token, colors)
                 }
             }
         }
-
-        Text(
-            modifier = modifier,
-            text = annotatedString,
-            fontSize = fontSize,
-            fontFamily = fontFamily,
-            fontStyle = fontStyle,
-            fontWeight = fontWeight,
-            lineHeight = lineHeight,
-            overflow = overflow,
-            softWrap = softWrap,
-            maxLines = maxLines,
-            minLines = minLines
-        )
-    }.onFailure {
-        println("*******************************************")
-        println("*******************************************")
     }
+
+    Text(
+        modifier = modifier,
+        text = annotatedString,
+        fontSize = fontSize,
+        fontFamily = fontFamily,
+        fontStyle = fontStyle,
+        fontWeight = fontWeight,
+        lineHeight = lineHeight,
+        overflow = overflow,
+        softWrap = softWrap,
+        maxLines = maxLines,
+        minLines = minLines
+    )
 }
+
 fun AnnotatedString.Builder.buildHighlightText(
     token: HighlightToken,
     colors: HighlightTextColorPalette

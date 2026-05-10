@@ -7,6 +7,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import kotlin.collections.addAll
 
 fun Project.configureAndroidLibrary(common: CommonExtension<*, *, *, *, *, *>) {
     common.apply {
@@ -41,7 +42,11 @@ fun Project.configureAndroidLibrary(common: CommonExtension<*, *, *, *, *, *>) {
         tasks.withType<KotlinJvmCompile>().configureEach {
             compilerOptions {
                 jvmTarget.set(JvmTarget.JVM_17)
-                freeCompilerArgs.addAll("-Xcontext-receivers")
+                freeCompilerArgs.addAll(
+                    "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
+                    "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+                    "-Xcontext-parameters"
+                )
             }
         }
 

@@ -1,0 +1,949 @@
+package zouitel.neighborhood.markdown.action
+
+import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.markdown.core.BlockAttributes
+import zouitel.neighborhood.markdown.core.BlockContent
+import zouitel.neighborhood.markdown.core.BlockId
+import zouitel.neighborhood.markdown.core.BlockType
+import zouitel.neighborhood.markdown.core.IndentationDirection
+import zouitel.neighborhood.markdown.core.SpanStyle
+import zouitel.neighborhood.markdown.core.TextSpan
+import zouitel.neighborhood.markdown.core.moveDragPayload
+import zouitel.neighborhood.markdown.core.normalizeIndentationOutline
+import zouitel.neighborhood.markdown.core.renumberNumberedLists
+import zouitel.neighborhood.markdown.core.resolveDragPayload
+import zouitel.neighborhood.markdown.core.shiftIndentation
+import zouitel.neighborhood.markdown.richtext.SpanAlgorithms
+import zouitel.neighborhood.markdown.slash.SlashCommandId
+import zouitel.neighborhood.markdown.state.DragState
+import zouitel.neighborhood.markdown.state.EditorState
+import zouitel.neighborhood.markdown.state.SlashCommandState
+import zouitel.neighborhood.markdown.state.SlashQueryRange
+import kotlin.math.max
+import kotlin.math.min
+
+/**
+ * Sealed interface for all editor actions.
+ * Actions are the only way to modify editor state, ensuring unidirectional data flow.
+ */
+sealed interface EditorAction {
+    /**
+     * Reduces the current state to a new state based on this action.
+     */
+    fun reduce(state: EditorState): EditorState
+}
+
+private fun BlockAttributes.forType(type: BlockType): BlockAttributes {
+    return if (type.supportsIndentation) {
+        this
+    } else {
+        copy(indentationLevel = BlockAttributes.DEFAULT_INDENTATION_LEVEL)
+    }
+}
+
+private fun BlockAttributes.forSplitContinuation(
+    sourceType: BlockType,
+    newType: BlockType,
+): BlockAttributes {
+    return if (sourceType.supportsIndentation && newType.supportsIndentation) {
+        this
+    } else {
+        copy(indentationLevel = BlockAttributes.DEFAULT_INDENTATION_LEVEL)
+    }
+}
+
+private fun normalizeOutlineAndRenumber(blocks: List<Block>): List<Block> {
+    return renumberNumberedLists(normalizeIndentationOutline(blocks))
+}
+
+// Block Manipulation Actions
+
+/**
+ * Inserts a block at the specified index.
+ * If [atIndex] is null, appends to the end.
+ */
+data class InsertBlock(
+    val block: Block,
+    val atIndex: Int? = null
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val index = atIndex?.coerceIn(0, state.blocks.size) ?: state.blocks.size
+        val newBlocks = state.blocks.toMutableList().apply {
+            add(index, block)
+        }
+        return state.copy(blocks = normalizeOutlineAndRenumber(newBlocks))
+    }
+}
+
+/**
+ * Inserts a block after the specified block ID.
+ * If [afterBlockId] is null, prepends to the beginning.
+ */
+data class InsertBlockAfter(
+    val block: Block,
+    val afterBlockId: BlockId?
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val index = if (afterBlockId == null) {
+            0
+        } else {
+            val afterIndex = state.indexOfBlock(afterBlockId)
+            if (afterIndex == -1) state.blocks.size else afterIndex + 1
+        }
+        val newBlocks = state.blocks.toMutableList().apply {
+            add(index, block)
+        }
+        return state.copy(blocks = normalizeOutlineAndRenumber(newBlocks))
+    }
+}
+
+/**
+ * Inserts a block before the specified block ID.
+ * If [beforeBlockId] is null or not found, appends to the end.
+ */
+data class InsertBlockBefore(
+    val block: Block,
+    val beforeBlockId: BlockId?
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val index = if (beforeBlockId == null) {
+            state.blocks.size
+        } else {
+            val beforeIndex = state.indexOfBlock(beforeBlockId)
+            if (beforeIndex == -1) state.blocks.size else beforeIndex
+        }
+        val newBlocks = state.blocks.toMutableList().apply {
+            add(index, block)
+        }
+        return state.copy(blocks = normalizeOutlineAndRenumber(newBlocks))
+    }
+}
+
+/**
+ * Deletes blocks with the specified IDs.
+ */
+data class DeleteBlocks(
+    val blockIds: Set<BlockId>
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val newBlocks = state.blocks.filterNot { it.id in blockIds }
+        val newFocusedId = if (state.focusedBlockId in blockIds) null else state.focusedBlockId
+        val newSelectedIds = state.selectedBlockIds - blockIds
+        return state.copy(
+            blocks = normalizeOutlineAndRenumber(newBlocks),
+            focusedBlockId = newFocusedId,
+            selectedBlockIds = newSelectedIds
+        )
+    }
+}
+
+/**
+ * Deletes a single block by ID.
+ */
+ data class DeleteBlock(
+    val blockId: BlockId
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return DeleteBlocks(setOf(blockId)).reduce(state)
+    }
+}
+
+/**
+ * Updates the content of a block.
+ */
+ data class UpdateBlockContent(
+    val blockId: BlockId,
+    val content: BlockContent
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val newBlocks = state.blocks.map { block ->
+            if (block.id == blockId) block.withContent(content) else block
+        }
+        return state.copy(blocks = newBlocks)
+    }
+}
+
+/**
+ * Updates the text content of a block.
+ * Convenience action for text-based blocks.
+ *
+ * **Span policy: reset.** This action replaces text content and clears all spans.
+ * If you need to preserve or transform spans, use [UpdateBlockContent] with a
+ * [BlockContent.Text] that includes the desired spans.
+ */
+ data class UpdateBlockText(
+    val blockId: BlockId,
+    val text: String
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return UpdateBlockContent(blockId, BlockContent.Text(text)).reduce(state)
+    }
+}
+
+/**
+ * Converts a block to a different type, preserving its content if compatible.
+ */
+ data class ConvertBlockType(
+    val blockId: BlockId,
+    val newType: BlockType
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val newBlocks = state.blocks.map { block ->
+            if (block.id == blockId) {
+                block
+                    .withType(newType)
+                    .withAttributes(block.attributes.forType(newType))
+            } else {
+                block
+            }
+        }
+        return state.copy(blocks = normalizeOutlineAndRenumber(newBlocks))
+    }
+}
+
+/**
+ * Moves blocks to a new index position.
+ */
+ data class MoveBlocks(
+    val blockIds: Set<BlockId>,
+    val toIndex: Int
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val blocksToMove = state.blocks.filter { it.id in blockIds }
+        val remainingBlocks = state.blocks.filterNot { it.id in blockIds }
+        val targetIndex = toIndex.coerceIn(0, remainingBlocks.size)
+        val newBlocks = remainingBlocks.toMutableList().apply {
+            addAll(targetIndex, blocksToMove)
+        }
+        return state.copy(blocks = normalizeOutlineAndRenumber(newBlocks))
+    }
+}
+
+/**
+ * Moves a drag payload as one structural operation.
+ *
+ * Unlike [MoveBlocks], this action treats [dragState.payloadBlockIds] as a subtree-aware
+ * payload and rewrites indentation in the same reducer step. Keeping reorder and depth
+ * changes atomic prevents transient flattened outlines from entering editor state.
+ */
+internal data class MoveDragPayload(
+    val dragState: DragState,
+    val visualGap: Int,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val primaryRootId = dragState.primaryRootId
+        val movedBlocks = moveDragPayload(
+            blocks = state.blocks,
+            payloadBlockIds = dragState.payloadBlockIds,
+            primaryRootId = primaryRootId,
+            originalPrimaryRootDepth = primaryRootId?.let {
+                dragState.originalRootIndentationLevels[it]
+            },
+            futurePrimaryRootDepth = dragState.futureRootIndentationLevel,
+            visualGap = visualGap,
+        )
+        if (movedBlocks === state.blocks) return state
+        return state.copy(blocks = normalizeOutlineAndRenumber(movedBlocks))
+    }
+}
+
+/**
+ * Indents the current supported target roots and their supported descendants by one level.
+ *
+ * Selection takes precedence over focus. Unsupported selected blocks are ignored, and
+ * selected supported descendants of another selected supported root are shifted only once
+ * as part of the ancestor subtree.
+ */
+ data object IndentForward : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val shiftedBlocks = shiftIndentation(
+            blocks = state.blocks,
+            focusedBlockId = state.focusedBlockId,
+            selectedBlockIds = state.selectedBlockIds,
+            direction = IndentationDirection.Forward,
+        )
+        if (shiftedBlocks === state.blocks) return state
+        return state.copy(blocks = renumberNumberedLists(shiftedBlocks))
+    }
+}
+
+/**
+ * Outdents the current supported target roots and their supported descendants by one level.
+ *
+ * Root targets already at depth 0 are left unchanged; selected supported descendants of
+ * another selected supported root are shifted only once as part of the ancestor subtree.
+ */
+ data object IndentBackward : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val shiftedBlocks = shiftIndentation(
+            blocks = state.blocks,
+            focusedBlockId = state.focusedBlockId,
+            selectedBlockIds = state.selectedBlockIds,
+            direction = IndentationDirection.Backward,
+        )
+        if (shiftedBlocks === state.blocks) return state
+        return state.copy(blocks = renumberNumberedLists(shiftedBlocks))
+    }
+}
+
+/**
+ * Merges the content of source block into target block, then deletes source.
+ * Only works for text-supporting blocks.
+ */
+ data class MergeBlocks(
+    val sourceId: BlockId,
+    val targetId: BlockId
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val sourceBlock = state.getBlock(sourceId) ?: return state
+        val targetBlock = state.getBlock(targetId) ?: return state
+
+        // Only merge text content
+        val sourceContent = sourceBlock.content as? BlockContent.Text ?: return state
+        val targetContent = targetBlock.content as? BlockContent.Text ?: return state
+
+        val mergedText = targetContent.text + sourceContent.text
+        val mergedSpans = SpanAlgorithms.mergeSpans(
+            firstSpans = targetContent.spans,
+            secondSpans = sourceContent.spans,
+            firstTextLength = targetContent.text.length,
+        )
+
+        // Update target with merged content
+        val newBlocks = state.blocks
+            .map { block ->
+                if (block.id == targetId) {
+                    block.withContent(BlockContent.Text(mergedText, mergedSpans))
+                } else {
+                    block
+                }
+            }
+            .filterNot { it.id == sourceId }
+        return state.copy(
+            blocks = normalizeOutlineAndRenumber(newBlocks),
+            focusedBlockId = targetId,
+            selectedBlockIds = state.selectedBlockIds - sourceId
+        )
+    }
+}
+
+/**
+ * Replaces a block with a new block.
+ */
+ data class ReplaceBlock(
+    val blockId: BlockId,
+    val newBlock: Block
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val newBlocks = state.blocks.map { block ->
+            if (block.id == blockId) newBlock else block
+        }
+        val newFocusedId = if (state.focusedBlockId == blockId) newBlock.id else state.focusedBlockId
+        val newSelectedIds = if (blockId in state.selectedBlockIds) {
+            state.selectedBlockIds - blockId + newBlock.id
+        } else {
+            state.selectedBlockIds
+        }
+        return state.copy(
+            blocks = normalizeOutlineAndRenumber(newBlocks),
+            focusedBlockId = newFocusedId,
+            selectedBlockIds = newSelectedIds
+        )
+    }
+}
+
+// Selection Actions
+
+/**
+ * Selects a single block, clearing any previous selection.
+ * No-op if [blockId] does not exist in the current block list.
+ *
+ * Invariant: clears [EditorState.focusedBlockId] — focus and selection are mutually exclusive.
+ */
+ data class SelectBlock(
+    val blockId: BlockId
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        if (state.blocks.none { it.id == blockId }) return state
+        return state.copy(
+            selectedBlockIds = setOf(blockId),
+            focusedBlockId = null,
+        )
+    }
+}
+
+/**
+ * Toggles selection of a block (for multi-select with Ctrl/Cmd).
+ * No-op if [blockId] does not exist in the current block list and would be added.
+ * Removing a non-existent ID from the set is harmless (set subtraction).
+ *
+ * Invariant: clears [EditorState.focusedBlockId] when the resulting selection is non-empty —
+ * focus and selection are mutually exclusive.
+ */
+ data class ToggleBlockSelection(
+    val blockId: BlockId
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val isRemoving = blockId in state.selectedBlockIds
+        if (!isRemoving && state.blocks.none { it.id == blockId }) return state
+        val newSelected = if (isRemoving) {
+            state.selectedBlockIds - blockId
+        } else {
+            state.selectedBlockIds + blockId
+        }
+        return state.copy(
+            selectedBlockIds = newSelected,
+            focusedBlockId = if (newSelected.isNotEmpty()) null else state.focusedBlockId,
+        )
+    }
+}
+
+/**
+ * Selects a range of blocks (for Shift+click).
+ * No-op if either endpoint does not exist (implicit via [EditorState.indexOfBlock] returning -1).
+ *
+ * Invariant: clears [EditorState.focusedBlockId] — focus and selection are mutually exclusive.
+ */
+ data class SelectBlockRange(
+    val fromId: BlockId,
+    val toId: BlockId
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val fromIndex = state.indexOfBlock(fromId)
+        val toIndex = state.indexOfBlock(toId)
+        // Implicit block existence validation: indexOfBlock returns -1 for missing IDs
+        if (fromIndex == -1 || toIndex == -1) return state
+
+        val startIndex = min(fromIndex, toIndex)
+        val endIndex = max(fromIndex, toIndex)
+        val rangeIds = state.blocks
+            .subList(startIndex, endIndex + 1)
+            .map { it.id }
+            .toSet()
+
+        return state.copy(
+            selectedBlockIds = rangeIds,
+            focusedBlockId = null,
+        )
+    }
+}
+
+/**
+ * Adds a range of blocks to the current selection.
+ * No-op if either endpoint does not exist (implicit via [EditorState.indexOfBlock] returning -1).
+ *
+ * Invariant: clears [EditorState.focusedBlockId] — focus and selection are mutually exclusive.
+ */
+ data class AddBlockRangeToSelection(
+    val fromId: BlockId,
+    val toId: BlockId
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val fromIndex = state.indexOfBlock(fromId)
+        val toIndex = state.indexOfBlock(toId)
+        // Implicit block existence validation: indexOfBlock returns -1 for missing IDs
+        if (fromIndex == -1 || toIndex == -1) return state
+
+        val startIndex = min(fromIndex, toIndex)
+        val endIndex = max(fromIndex, toIndex)
+        val rangeIds = state.blocks
+            .subList(startIndex, endIndex + 1)
+            .map { it.id }
+            .toSet()
+
+        return state.copy(
+            selectedBlockIds = state.selectedBlockIds + rangeIds,
+            focusedBlockId = null,
+        )
+    }
+}
+
+/**
+ * Clears all block selections.
+ */
+ data object ClearSelection : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return state.copy(selectedBlockIds = emptySet())
+    }
+}
+
+/**
+ * Selects all blocks.
+ *
+ * Invariant: clears [EditorState.focusedBlockId] — focus and selection are mutually exclusive.
+ */
+ data object SelectAll : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return state.copy(
+            selectedBlockIds = state.blocks.map { it.id }.toSet(),
+            focusedBlockId = null,
+        )
+    }
+}
+
+// Focus Actions
+
+/**
+ * Focuses a block.
+ *
+ * Invariant: clears [EditorState.selectedBlockIds] when [blockId] is non-null —
+ * focus and selection are mutually exclusive. When [blockId] is null (clearing focus),
+ * selection is left unchanged.
+ *
+ * Note: Cursor position is managed by BlockTextStates, not EditorState.
+ * Use BlockTextStates.setCursorPosition() for programmatic cursor control.
+ */
+ data class FocusBlock(
+    val blockId: BlockId?
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return if (blockId != null) {
+            state.copy(focusedBlockId = blockId, selectedBlockIds = emptySet())
+        } else {
+            state.copy(focusedBlockId = null)
+        }
+    }
+}
+
+/**
+ * Moves focus to the next block.
+ *
+ * Invariant: clears [EditorState.selectedBlockIds] — focus and selection are mutually exclusive.
+ */
+ data object FocusNextBlock : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val currentIndex = state.focusedBlockId?.let { state.indexOfBlock(it) } ?: -1
+        val nextIndex = (currentIndex + 1).coerceAtMost(state.blocks.size - 1)
+        if (nextIndex < 0 || state.blocks.isEmpty()) return state
+        return state.copy(
+            focusedBlockId = state.blocks[nextIndex].id,
+            selectedBlockIds = emptySet(),
+        )
+    }
+}
+
+/**
+ * Moves focus to the previous block.
+ *
+ * Invariant: clears [EditorState.selectedBlockIds] — focus and selection are mutually exclusive.
+ */
+ data object FocusPreviousBlock : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val currentIndex = state.focusedBlockId?.let { state.indexOfBlock(it) } ?: state.blocks.size
+        val prevIndex = (currentIndex - 1).coerceAtLeast(0)
+        if (prevIndex < 0 || state.blocks.isEmpty()) return state
+        return state.copy(
+            focusedBlockId = state.blocks[prevIndex].id,
+            selectedBlockIds = emptySet(),
+        )
+    }
+}
+
+/**
+ * Clears focus.
+ */
+ data object ClearFocus : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return state.copy(focusedBlockId = null)
+    }
+}
+
+// Drag & Drop Actions
+
+/**
+ * Starts dragging a block.
+ *
+ * The current drag Y position (high-frequency, updated every frame) is intentionally
+ * NOT stored in [DragState]/[EditorState]. It should be tracked as a local
+ * `mutableFloatStateOf` at the integration point (CascadeEditor) to avoid triggering
+ * full-tree recomposition on every pointer move (~60-120fps).
+ *
+ * @param blockId The ID of the block being dragged (the one user touched)
+ * @param touchOffsetY Y offset from the top of the block where the touch occurred.
+ *        Stored in DragState for preview positioning.
+ *
+ * If block selection mode is active and [blockId] is part of that selection,
+ * selected roots are de-duplicated and expanded to their full subtrees. Otherwise
+ * [blockId] itself becomes the single root and its subtree becomes the payload.
+ */
+ data class StartDrag(
+    val blockId: BlockId,
+    val touchOffsetY: Float
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val originalIndex = state.indexOfBlock(blockId)
+        if (originalIndex == -1) return state // Block not found
+
+        val payload = resolveDragPayload(
+            blocks = state.blocks,
+            touchedBlockId = blockId,
+            selectedBlockIds = state.selectedBlockIds,
+        ) ?: return state
+
+        val draggingBlockIds = linkedSetOf<BlockId>().apply {
+            add(payload.primaryRootId)
+            payload.payloadBlockIds
+                .filter { it != payload.primaryRootId }
+                .forEach(::add)
+        }
+
+        return state.copy(
+            dragState = DragState(
+                draggingBlockIds = draggingBlockIds,
+                targetIndex = null,
+                initialTouchOffsetY = touchOffsetY,
+                primaryBlockOriginalIndex = originalIndex,
+                dragRootIds = payload.dragRootIds,
+                payloadBlockIds = payload.payloadBlockIds,
+                payloadBlockIdSet = payload.payloadBlockIdSet,
+                payloadBlockIndices = payload.payloadBlockIndices,
+                payloadBlockIndexSet = payload.payloadBlockIndexSet,
+                payloadIndexRanges = payload.payloadIndexRanges,
+                primaryRootId = payload.primaryRootId,
+                primaryRootOriginalIndex = payload.primaryRootIndex,
+                primaryRootSupportsIndentation = payload.primaryRootSupportsIndentation,
+                originalRootIndentationLevels = payload.originalRootIndentationLevels,
+                payloadRelativeDepthOffsets = payload.payloadRelativeDepthOffsets,
+                payloadRootIdsByBlockId = payload.payloadRootIdsByBlockId,
+                futureRootIndentationLevel = payload.originalRootIndentationLevels
+                    .getValue(payload.primaryRootId),
+            )
+        )
+    }
+}
+
+/**
+ * Updates the drop target during a drag operation.
+ *
+ * [targetIndex] is the visual gap in the full list. `null` represents an invalid
+ * hover target and prevents [CompleteDrag] from mutating blocks. When
+ * [futureRootIndentationLevel] is omitted, the previous candidate depth is
+ * preserved so legacy Y-only callers do not erase the current resolved lane.
+ */
+ data class UpdateDragTarget(
+    val targetIndex: Int?,
+    val futureRootIndentationLevel: Int? = null,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val currentDrag = state.dragState ?: return state
+        return state.copy(
+            dragState = currentDrag.copy(
+                targetIndex = targetIndex,
+                futureRootIndentationLevel =
+                    futureRootIndentationLevel ?: currentDrag.futureRootIndentationLevel,
+            )
+        )
+    }
+}
+
+/**
+ * Completes a drag operation, moving blocks to the target.
+ *
+ * The [DragState.targetIndex] stores the visual gap position (where the drop indicator shows).
+ * Completion delegates to [MoveDragPayload] so payload removal, insertion, indentation
+ * rewrite, self-drop rejection, and ordered-list renumbering happen as one reducer step.
+ */
+ data object CompleteDrag : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val dragState = state.dragState ?: return state
+        val visualGap = dragState.targetIndex ?: return state.copy(dragState = null)
+
+        return MoveDragPayload(dragState, visualGap)
+            .reduce(state)
+            .copy(dragState = null)
+    }
+}
+
+/**
+ * Cancels a drag operation.
+ */
+ data object CancelDrag : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return state.copy(dragState = null)
+    }
+}
+
+// Slash Command Actions
+
+/**
+ * Opens a slash command session with an initial query and its visible-text range.
+ */
+ data class OpenSlashCommand(
+    val anchorBlockId: BlockId,
+    val queryRange: SlashQueryRange,
+    val initialQuery: String = "",
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return state.copy(
+            slashCommandState = SlashCommandState(
+                anchorBlockId = anchorBlockId,
+                query = initialQuery,
+                queryRange = queryRange,
+            )
+        )
+    }
+}
+
+/**
+ * Atomically updates the query text and its visible-text range for the active slash session.
+ * No-op if no session is active.
+ */
+ data class UpdateSlashCommandSession(
+    val query: String,
+    val queryRange: SlashQueryRange,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val current = state.slashCommandState ?: return state
+        return state.copy(
+            slashCommandState = current.copy(
+                query = query,
+                queryRange = queryRange,
+            )
+        )
+    }
+}
+
+/**
+ * Navigates into a submenu by pushing the given command ID onto the navigation path.
+ * Resets the highlighted item. No-op if no session is active.
+ */
+ data class NavigateSlashSubmenu(
+    val submenuId: SlashCommandId,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val current = state.slashCommandState ?: return state
+        return state.copy(
+            slashCommandState = current.copy(
+                navigationPath = current.navigationPath + submenuId,
+                highlightedCommandId = null,
+            )
+        )
+    }
+}
+
+/**
+ * Pops one level from the submenu navigation path (back navigation).
+ * Resets the highlighted item. No-op if no session is active or already at root.
+ */
+ data object NavigateSlashBack : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val current = state.slashCommandState ?: return state
+        if (current.navigationPath.isEmpty()) return state
+        return state.copy(
+            slashCommandState = current.copy(
+                navigationPath = current.navigationPath.dropLast(1),
+                highlightedCommandId = null,
+            )
+        )
+    }
+}
+
+/**
+ * Updates the highlighted slash command item (for keyboard/pointer navigation).
+ * No-op if no session is active.
+ */
+ data class HighlightSlashCommand(
+    val commandId: SlashCommandId?,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val current = state.slashCommandState ?: return state
+        return state.copy(
+            slashCommandState = current.copy(highlightedCommandId = commandId)
+        )
+    }
+}
+
+/**
+ * Closes the slash command menu and clears the entire session.
+ */
+ data object CloseSlashCommand : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        return state.copy(slashCommandState = null)
+    }
+}
+
+// Compound Actions
+
+/**
+ * Splits a block at the cursor position, creating a new block below.
+ *
+ * When [newBlockText] is provided (from BlockTextStates), it is used directly
+ * for the new block. The source block's content is NOT modified since
+ * TextFieldState is the source of truth during editing.
+ *
+ * When [newBlockText] is null, falls back to computing text from block content.
+ *
+ * @param blockId The block to split
+ * @param atPosition Cursor position where split occurs
+ * @param newBlockText Optional text for the new block (from BlockTextStates)
+ * @param newBlockId Optional pre-generated ID for deterministic runtime split handoff
+ * @param newBlockSpans Optional runtime spans for the new block snapshot.
+ * @param sourceBlockText Optional runtime source text for source block snapshot.
+ * @param sourceBlockSpans Optional runtime source spans for source block snapshot.
+ */
+ data class SplitBlock(
+    val blockId: BlockId,
+    val atPosition: Int,
+    val newBlockText: String? = null,
+    val newBlockId: BlockId? = null,
+    val newBlockSpans: List<TextSpan>? = null,
+    val sourceBlockText: String? = null,
+    val sourceBlockSpans: List<TextSpan>? = null,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val block = state.getBlock(blockId) ?: return state
+        val textContent = block.content as? BlockContent.Text ?: return state
+        val blockIndex = state.indexOfBlock(blockId)
+
+        val clampedPosition = atPosition.coerceIn(0, textContent.text.length)
+        val afterText = newBlockText ?: textContent.text.drop(clampedPosition)
+        val beforeText = sourceBlockText ?: textContent.text.take(clampedPosition)
+
+        // Split snapshot spans at cursor position
+        val (beforeSpans, afterSpansFallback) = SpanAlgorithms.splitAt(textContent.spans, clampedPosition)
+        // Use runtime-provided spans for new block when available
+        val resolvedBeforeSpans = SpanAlgorithms.normalize(
+            sourceBlockSpans ?: beforeSpans,
+            beforeText.length,
+        )
+        val resolvedAfterSpans = SpanAlgorithms.normalize(
+            newBlockSpans ?: afterSpansFallback,
+            afterText.length,
+        )
+
+        // Propagate list type to new block; non-list types default to Paragraph
+        val newBlockType = when (val srcType = block.type) {
+            is BlockType.NumberedList -> BlockType.NumberedList(number = srcType.number + 1)
+            is BlockType.BulletList -> BlockType.BulletList
+            is BlockType.Todo -> BlockType.Todo(checked = false)
+            else -> BlockType.Paragraph
+        }
+
+        val newBlock = Block(
+            id = newBlockId ?: BlockId.generate(),
+            type = newBlockType,
+            content = BlockContent.Text(afterText, resolvedAfterSpans),
+            attributes = block.attributes.forSplitContinuation(block.type, newBlockType),
+        )
+
+        val newBlocks = state.blocks.toMutableList().apply {
+            // Always update source block snapshot for consistency
+            this[blockIndex] = block.withContent(BlockContent.Text(beforeText, resolvedBeforeSpans))
+            add(blockIndex + 1, newBlock)
+        }
+
+        return state.copy(
+            blocks = normalizeOutlineAndRenumber(newBlocks),
+            focusedBlockId = newBlock.id
+        )
+    }
+}
+
+/**
+ * Deletes selected blocks, or the focused block if nothing selected.
+ */
+ data object DeleteSelectedOrFocused : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val toDelete = if (state.selectedBlockIds.isNotEmpty()) {
+            state.selectedBlockIds
+        } else {
+            state.focusedBlockId?.let { setOf(it) } ?: return state
+        }
+        return DeleteBlocks(toDelete).reduce(state)
+    }
+}
+
+// Block Type Mutation Actions
+
+/**
+ * Toggles the checked state of a Todo block.
+ * No-op if the block is not a Todo.
+ */
+ data class ToggleTodo(
+    val blockId: BlockId,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val block = state.getBlock(blockId) ?: return state
+        val todoType = block.type as? BlockType.Todo ?: return state
+        val newBlocks = state.blocks.map { b ->
+            if (b.id == blockId) b.withType(BlockType.Todo(checked = !todoType.checked)) else b
+        }
+        return state.copy(blocks = newBlocks)
+    }
+}
+
+// Span Style Actions
+
+/**
+ * Applies a span style to the specified range in a block's snapshot.
+ *
+ * **Warning: snapshot-only operation.** This reducer operates on the immutable
+ * [EditorState] snapshot and does NOT update runtime [BlockSpanStates]. The text
+ * length used for clamping comes from the snapshot, which may be stale during
+ * active editing.
+ *
+ * For interactive formatting, always use `SpanActionDispatcher` which coordinates
+ * runtime updates with snapshot sync via [UpdateBlockContent].
+ *
+ * No-op if the block does not exist or is not text-based.
+ */
+ data class ApplySpanStyle(
+    val blockId: BlockId,
+    val rangeStart: Int,
+    val rangeEnd: Int,
+    val style: SpanStyle,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val block = state.getBlock(blockId) ?: return state
+        val textContent = block.content as? BlockContent.Text ?: return state
+        val newSpans = SpanAlgorithms.applyStyle(
+            spans = textContent.spans,
+            rangeStart = rangeStart,
+            rangeEnd = rangeEnd,
+            style = style,
+            textLength = textContent.text.length,
+        )
+        return state.copy(
+            blocks = state.blocks.map { b ->
+                if (b.id == blockId) b.withContent(textContent.copy(spans = newSpans)) else b
+            }
+        )
+    }
+}
+
+/**
+ * Removes a span style from the specified range in a block's snapshot.
+ *
+ * **Warning: snapshot-only operation.** This reducer operates on the immutable
+ * [EditorState] snapshot and does NOT update runtime [BlockSpanStates]. The text
+ * length used for clamping comes from the snapshot, which may be stale during
+ * active editing.
+ *
+ * For interactive formatting, always use `SpanActionDispatcher` which coordinates
+ * runtime updates with snapshot sync via [UpdateBlockContent].
+ *
+ * No-op if the block does not exist or is not text-based.
+ */
+ data class RemoveSpanStyle(
+    val blockId: BlockId,
+    val rangeStart: Int,
+    val rangeEnd: Int,
+    val style: SpanStyle,
+) : EditorAction {
+    override fun reduce(state: EditorState): EditorState {
+        val block = state.getBlock(blockId) ?: return state
+        val textContent = block.content as? BlockContent.Text ?: return state
+        val removed = SpanAlgorithms.removeStyle(
+            spans = textContent.spans,
+            rangeStart = rangeStart,
+            rangeEnd = rangeEnd,
+            style = style,
+        )
+        val normalized = SpanAlgorithms.normalize(removed, textContent.text.length)
+        return state.copy(
+            blocks = state.blocks.map { b ->
+                if (b.id == blockId) b.withContent(textContent.copy(spans = normalized)) else b
+            }
+        )
+    }
+}

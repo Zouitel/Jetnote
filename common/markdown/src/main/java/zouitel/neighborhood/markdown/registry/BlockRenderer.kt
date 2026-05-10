@@ -1,0 +1,493 @@
+package zouitel.neighborhood.markdown.registry
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import zouitel.neighborhood.markdown.action.ClearFocus
+import zouitel.neighborhood.markdown.action.CompleteDrag
+import zouitel.neighborhood.markdown.action.ConvertBlockType
+import zouitel.neighborhood.markdown.action.DeleteBlock
+import zouitel.neighborhood.markdown.action.DeleteSelectedOrFocused
+import zouitel.neighborhood.markdown.action.EditorAction
+import zouitel.neighborhood.markdown.action.FocusBlock
+import zouitel.neighborhood.markdown.action.FocusNextBlock
+import zouitel.neighborhood.markdown.action.FocusPreviousBlock
+import zouitel.neighborhood.markdown.action.IndentBackward
+import zouitel.neighborhood.markdown.action.IndentForward
+import zouitel.neighborhood.markdown.action.MergeBlocks
+import zouitel.neighborhood.markdown.action.OpenSlashCommand
+import zouitel.neighborhood.markdown.action.SplitBlock
+import zouitel.neighborhood.markdown.state.SlashQueryRange
+import zouitel.neighborhood.markdown.action.StartDrag
+import zouitel.neighborhood.markdown.action.ToggleTodo
+import zouitel.neighborhood.markdown.action.UpdateBlockContent
+import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.markdown.core.BlockAttributes
+import zouitel.neighborhood.markdown.core.BlockContent
+import zouitel.neighborhood.markdown.core.BlockId
+import zouitel.neighborhood.markdown.core.BlockType
+import zouitel.neighborhood.markdown.state.BlockSpanStates
+import zouitel.neighborhood.markdown.state.BlockTextStates
+import zouitel.neighborhood.markdown.state.EditorState
+import zouitel.neighborhood.markdown.state.EditorStateHolder
+
+/**
+ * Callbacks for block interactions.
+ * These are provided to renderers to handle user interactions.
+ */
+ interface BlockCallbacks {
+    /**
+     * Dispatches an action to the editor.
+     */
+     fun dispatch(action: EditorAction)
+
+    /**
+     * Called when the block receives focus.
+     */
+     fun onFocus(blockId: BlockId)
+
+    /**
+     * Called when the user presses Enter.
+     * @param cursorPosition Position where Enter was pressed
+     */
+     fun onEnter(blockId: BlockId, cursorPosition: Int)
+
+    /**
+     * Called when the user presses Backspace at the start of a block.
+     */
+     fun onBackspaceAtStart(blockId: BlockId)
+
+    /**
+     * Called when the user presses Delete at the end of a block.
+     */
+     fun onDeleteAtEnd(blockId: BlockId)
+
+    /**
+     * Called when the user clicks the block (for selection).
+     */
+     fun onClick(blockId: BlockId)
+
+    /**
+     * Called when the user clicks the block (for drag and drop, usually).
+     *
+     */
+     fun onLongClick(blockId: BlockId)
+
+
+    /**
+     * Called when a drag operation starts on this block.
+     *
+     * @param blockId The ID of the block being dragged
+     * @param touchOffsetY Y offset from the top of the block where touch occurred
+     */
+     fun onDragStart(blockId: BlockId, touchOffsetY: Float)
+
+    /**
+     * Called when the user types '/' to open slash commands.
+     *
+     * @param blockId The anchor block where '/' was typed
+     * @param queryRange Visible-text range covering the '/' and any query characters
+     * @param initialQuery The query text after the leading '/' (empty at trigger time)
+     */
+     fun onSlashCommand(blockId: BlockId, queryRange: SlashQueryRange, initialQuery: String = "")
+}
+
+/**
+ * Default implementation of [BlockCallbacks] that delegates to dispatch.
+ *
+ * Uses [BlockTextStates] for text operations like merge and split, ensuring
+ * the TextFieldState is the single source of truth for text content.
+ *
+ * @param dispatchFn Function to dispatch actions
+ * @param stateProvider Optional provider for current editor state, enables merge/delete logic
+ * @param textStates Manager for per-block TextFieldState instances
+ * @param spanStates Manager for per-block runtime spans
+ * @param stateHolder Optional history-aware holder used to wrap built-in
+ *        structural edit sources into explicit structural transactions.
+ */
+ open class DefaultBlockCallbacks(
+    private val dispatchFn: (EditorAction) -> Unit,
+    private val stateProvider: (() -> EditorState)? = null,
+    private val textStates: BlockTextStates? = null,
+    private val spanStates: BlockSpanStates? = null,
+    private val stateHolder: EditorStateHolder? = null,
+) : BlockCallbacks {
+
+    override fun dispatch(action: EditorAction) {
+        if (action.shouldUseStructuralTransactionBoundary()) {
+            stateHolder?.dispatchStructuralAction(action, textStates, spanStates) ?: dispatchFn(action)
+            return
+        }
+        dispatchFn(action)
+    }
+
+    override fun onFocus(blockId: BlockId) {
+        // In selection mode, focus must not be granted - it would clear the selection
+        // via the focus/selection mutual exclusivity invariant.
+        val state = stateProvider?.invoke()
+        if (state != null && state.hasSelection) return
+        dispatch(FocusBlock(blockId))
+    }
+
+    override fun onEnter(blockId: BlockId, cursorPosition: Int) {
+        runStructuralMutation {
+            val state = stateProvider?.invoke()
+            if (state != null && state.hasSelection) return@runStructuralMutation
+
+            val currentBlock = state?.getBlock(blockId)
+
+            val blockType = currentBlock?.type
+            if (currentBlock != null) {
+                val visibleText = currentBlock.visibleText(blockId)
+                if (visibleText.isEmpty()) {
+                    if (blockType.isEmptyEnterOutdentType() && currentBlock.isSupportedIndented()) {
+                        dispatch(IndentBackward)
+                        return@runStructuralMutation
+                    }
+                    if (blockType.isEmptyRootEnterExitType()) {
+                        dispatch(ConvertBlockType(blockId, BlockType.Paragraph))
+                        return@runStructuralMutation
+                    }
+                }
+            }
+
+            if (textStates != null) {
+                val newBlockId = BlockId.generate()
+                // Get current text from TextFieldState (source of truth)
+                val fallbackText = (currentBlock?.content as? BlockContent.Text)?.text.orEmpty()
+                val currentText = textStates.getVisibleText(blockId) ?: fallbackText
+                val splitPosition = cursorPosition.coerceIn(0, currentText.length)
+
+                // Split the text
+                val beforeText = currentText.take(splitPosition)
+                val afterText = currentText.drop(splitPosition)
+
+                // Compute continuation styles BEFORE split (which clears pending on both blocks).
+                // Only for collapsed-cursor splits (ranged split → no continuation).
+                val selectionCollapsed = textStates.get(blockId)?.selection?.collapsed ?: true
+                val continuationStyles = if (selectionCollapsed) {
+                    spanStates?.let { spanStates ->
+                        val pending = spanStates.getPendingStyles(blockId)
+                        when {
+                            pending != null -> pending
+                            splitPosition == currentText.length && splitPosition > 0 ->
+                                spanStates.activeStylesAt(blockId, splitPosition - 1)
+                            else -> null
+                        }
+                    }
+                } else {
+                    null
+                }
+
+                // Runtime span split must happen before source text truncation.
+                spanStates?.split(
+                    sourceBlockId = blockId,
+                    newBlockId = newBlockId,
+                    position = splitPosition,
+                )
+
+                // Transfer continuation styles to the new block after split.
+                if (!continuationStyles.isNullOrEmpty()) {
+                    spanStates?.setPendingStyles(newBlockId, continuationStyles)
+                }
+
+                // Update current block's text to only have the "before" portion
+                textStates.setText(blockId, beforeText, beforeText.length)
+                val sourceRuntimeText = textStates.getVisibleText(blockId) ?: beforeText
+                val sourceRuntimeSpans = spanStates?.getSpans(blockId)
+
+                // Dispatch split action with the "after" text and runtime spans for the new block
+                dispatch(
+                    SplitBlock(
+                        blockId = blockId,
+                        atPosition = splitPosition,
+                        newBlockText = afterText,
+                        newBlockId = newBlockId,
+                        newBlockSpans = spanStates?.getSpans(newBlockId),
+                        sourceBlockText = sourceRuntimeText,
+                        sourceBlockSpans = sourceRuntimeSpans,
+                    )
+                )
+            } else {
+                // Fallback to original behavior
+                dispatch(SplitBlock(blockId, cursorPosition, null, BlockId.generate()))
+            }
+        }
+    }
+
+    override fun onBackspaceAtStart(blockId: BlockId) {
+        runStructuralMutation {
+            val state = stateProvider?.invoke()
+            if (state != null && state.hasSelection) return@runStructuralMutation
+
+            val currentBlock = state?.getBlock(blockId)
+
+            if (currentBlock != null && currentBlock.isSupportedIndented()) {
+                dispatch(IndentBackward)
+                return@runStructuralMutation
+            }
+
+            // List item un-list: convert to Paragraph instead of merging with previous block.
+            val blockType = currentBlock?.type
+            if (blockType is BlockType.BulletList || blockType is BlockType.NumberedList || blockType is BlockType.Todo) {
+                dispatch(ConvertBlockType(blockId, BlockType.Paragraph))
+                return@runStructuralMutation
+            }
+
+            if (state != null) {
+                val blockIndex = state.indexOfBlock(blockId)
+                if (blockIndex > 0) {
+                    val previousBlock = state.blocks[blockIndex - 1]
+                    // Only merge if previous block supports text
+                    if (previousBlock.type.supportsText && previousBlock.content is BlockContent.Text) {
+                        if (textStates != null) {
+                            val sourceContent =
+                                state.getBlock(blockId)?.content as? BlockContent.Text
+                            val targetContent = previousBlock.content
+                            textStates.getOrCreate(blockId, sourceContent?.text.orEmpty())
+                            textStates.getOrCreate(previousBlock.id, targetContent.text)
+
+                            // Ensure span states exist before merge (block may not have been rendered yet).
+                            spanStates?.getOrCreate(blockId, sourceContent?.spans.orEmpty(), sourceContent?.text?.length ?: 0)
+                            spanStates?.getOrCreate(previousBlock.id, targetContent.spans, targetContent.text.length)
+
+                            val targetTextLength = textStates.mergeInto(
+                                sourceId = blockId,
+                                targetId = previousBlock.id,
+                            )
+                            if (targetTextLength != null) {
+                                spanStates?.mergeInto(
+                                    sourceId = blockId,
+                                    targetId = previousBlock.id,
+                                    targetTextLength = targetTextLength,
+                                )
+
+                                // Sync snapshot with merged content before deleting source
+                                val mergedText = textStates.getVisibleText(previousBlock.id)
+                                if (mergedText != null) {
+                                    val mergedSpans = spanStates?.getSpans(previousBlock.id).orEmpty()
+                                    dispatch(UpdateBlockContent(previousBlock.id, BlockContent.Text(mergedText, mergedSpans)))
+                                }
+
+                                // Dispatch action to remove source block and update focus
+                                dispatch(DeleteBlock(blockId))
+                                dispatch(FocusBlock(previousBlock.id))
+                                return@runStructuralMutation
+                            }
+                        }
+
+                        // Fallback when runtime holders are unavailable.
+                        dispatch(MergeBlocks(sourceId = blockId, targetId = previousBlock.id))
+                        return@runStructuralMutation
+                    }
+                }
+            }
+            // Fallback: just move focus
+            dispatch(FocusPreviousBlock)
+        }
+    }
+
+    override fun onClick(blockId: BlockId) {
+        // TODO could be deleted in future versions
+    }
+
+    override fun onLongClick(blockId: BlockId) {
+        // TODO could be deleted in future versions
+    }
+
+    override fun onDeleteAtEnd(blockId: BlockId) {
+        runStructuralMutation {
+            val state = stateProvider?.invoke()
+
+            if (state != null) {
+                val blockIndex = state.indexOfBlock(blockId)
+                if (blockIndex < state.blocks.size - 1) {
+                    val nextBlock = state.blocks[blockIndex + 1]
+                    // Only merge if next block supports text
+                    if (nextBlock.type.supportsText && nextBlock.content is BlockContent.Text) {
+                        if (textStates != null) {
+                            val targetContent =
+                                state.getBlock(blockId)?.content as? BlockContent.Text
+                            val sourceContent = nextBlock.content
+                            textStates.getOrCreate(blockId, targetContent?.text.orEmpty())
+                            textStates.getOrCreate(nextBlock.id, sourceContent.text)
+
+                            // Ensure span states exist before merge (block may not have been rendered yet).
+                            spanStates?.getOrCreate(blockId, targetContent?.spans.orEmpty(), targetContent?.text?.length ?: 0)
+                            spanStates?.getOrCreate(nextBlock.id, sourceContent.spans, sourceContent.text.length)
+
+                            // Get cursor position before merge (end of current text)
+                            val cursorPos = textStates.getVisibleText(blockId)?.length
+
+                            // Perform text merge in BlockTextStates (nextBlock into current)
+                            val targetTextLength = textStates.mergeInto(
+                                sourceId = nextBlock.id,
+                                targetId = blockId,
+                            )
+                            if (targetTextLength != null) {
+                                spanStates?.mergeInto(
+                                    sourceId = nextBlock.id,
+                                    targetId = blockId,
+                                    targetTextLength = targetTextLength,
+                                )
+
+                                // Sync snapshot with merged content before deleting source
+                                val mergedText = textStates.getVisibleText(blockId)
+                                if (mergedText != null) {
+                                    val mergedSpans = spanStates?.getSpans(blockId).orEmpty()
+                                    dispatch(UpdateBlockContent(blockId, BlockContent.Text(mergedText, mergedSpans)))
+                                }
+
+                                // Dispatch action to remove source block
+                                dispatch(DeleteBlock(nextBlock.id))
+
+                                // Restore cursor position if needed
+                                if (cursorPos != null) {
+                                    textStates.setCursorPosition(blockId, cursorPos)
+                                }
+                                return@runStructuralMutation
+                            }
+                        }
+
+                        // Fallback when runtime holders are unavailable.
+                        dispatch(MergeBlocks(sourceId = nextBlock.id, targetId = blockId))
+                        return@runStructuralMutation
+                    }
+                }
+            }
+            // Fallback: just move focus
+            dispatch(FocusNextBlock)
+        }
+    }
+
+    override fun onDragStart(blockId: BlockId, touchOffsetY: Float) {
+        dispatch(ClearFocus)
+        dispatch(StartDrag(blockId, touchOffsetY))
+    }
+
+    override fun onSlashCommand(blockId: BlockId, queryRange: SlashQueryRange, initialQuery: String) {
+        dispatch(OpenSlashCommand(anchorBlockId = blockId, queryRange = queryRange, initialQuery = initialQuery))
+    }
+
+    private fun runStructuralMutation(mutation: () -> Unit) {
+        stateHolder?.runStructuralHistoryTransaction(textStates, spanStates, mutation) ?: mutation()
+    }
+
+    private fun Block.visibleText(blockId: BlockId): String {
+        return textStates?.getVisibleText(blockId)
+            ?: (content as? BlockContent.Text)?.text.orEmpty()
+    }
+
+    /**
+     * True when a block participates in indentation semantics and can be outdented.
+     */
+    private fun Block.isSupportedIndented(): Boolean {
+        return type.supportsIndentation &&
+            attributes.indentationLevel > BlockAttributes.MIN_INDENTATION_LEVEL
+    }
+
+    /**
+     * True for empty block types that should outdent instead of splitting when
+     * they are already nested.
+     */
+    private fun BlockType?.isEmptyEnterOutdentType(): Boolean {
+        return this is BlockType.BulletList ||
+            this is BlockType.NumberedList ||
+            this is BlockType.Todo
+    }
+
+    /**
+     * True for empty root block types where Enter exits the structural type and
+     * converts the current block to a paragraph.
+     */
+    private fun BlockType?.isEmptyRootEnterExitType(): Boolean {
+        return this is BlockType.BulletList ||
+            this is BlockType.NumberedList
+    }
+}
+
+private fun EditorAction.shouldUseStructuralTransactionBoundary(): Boolean {
+    return this is CompleteDrag ||
+        this is DeleteSelectedOrFocused ||
+        this is IndentBackward ||
+        this is IndentForward ||
+        this is ToggleTodo
+}
+
+/**
+ * Interface for rendering a specific block type.
+ *
+ * Implement this interface to provide custom rendering for block types.
+ * Renderers are registered with [BlockRegistry] and looked up by type ID.
+ *
+ * @param T The specific [BlockType] this renderer handles
+ */
+ interface BlockRenderer<T : BlockType> {
+    /**
+     * Whether this renderer provides its own selection visual.
+     *
+     * When `true`, the wrapper-level default selection overlay is suppressed
+     * and the renderer is fully responsible for indicating selection state
+     * (using the `isSelected` parameter in [Render]).
+     *
+     * When `false` (default), a semi-transparent background overlay is applied
+     * at the wrapper level automatically.
+     */
+     val handlesSelectionVisual: Boolean get() = false
+
+    /**
+     * Renders the block content.
+     *
+     * @param block The block to render
+     * @param isSelected Whether this block is selected
+     * @param isFocused Whether this block has focus
+     * @param modifier Modifier to apply to the root composable
+     * @param callbacks Callbacks for handling user interactions
+     */
+    @Composable
+     fun Render(
+        block: Block,
+        isSelected: Boolean,
+        isFocused: Boolean,
+        modifier: Modifier,
+        callbacks: BlockCallbacks
+    )
+}
+
+/**
+ * A simple renderer that delegates to a composable lambda.
+ * Useful for simple block types that don't need a full class.
+ */
+ class LambdaBlockRenderer<T : BlockType>(
+    private val render: @Composable (
+        block: Block,
+        isSelected: Boolean,
+        isFocused: Boolean,
+        modifier: Modifier,
+        callbacks: BlockCallbacks
+    ) -> Unit
+) : BlockRenderer<T> {
+
+    @Composable
+    override fun Render(
+        block: Block,
+        isSelected: Boolean,
+        isFocused: Boolean,
+        modifier: Modifier,
+        callbacks: BlockCallbacks
+    ) {
+        render(block, isSelected, isFocused, modifier, callbacks)
+    }
+}
+
+/**
+ * Factory function for creating a lambda-based renderer.
+ */
+ fun <T : BlockType> blockRenderer(
+    render: @Composable (
+        block: Block,
+        isSelected: Boolean,
+        isFocused: Boolean,
+        modifier: Modifier,
+        callbacks: BlockCallbacks
+    ) -> Unit
+): BlockRenderer<T> = LambdaBlockRenderer(render)

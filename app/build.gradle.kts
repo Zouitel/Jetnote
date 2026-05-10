@@ -15,10 +15,10 @@ android {
 
     defaultConfig {
         applicationId = "zouitel.neighborhood.jetnote"
-        minSdk = 27
+        minSdk = 28
         targetSdk = 36
-        versionCode = 10_3_24
-        versionName = "10.3.24"
+        versionCode = 10_4_25
+        versionName = "10.4.25"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,6 +57,7 @@ dependencies {
     implementation(projects.common.ui)
     implementation(projects.common.logic)
     implementation(projects.common.permissions)
+//    implementation(projects.common.markdown)
     implementation(projects.security)
     implementation(projects.presentation.navigator)
     implementation(projects.bin)

@@ -68,6 +68,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
+import zouitel.neighborhood.markdown.state.EditorStateHolder
 import zouitel.neighborhood.workspace.R
 import kotlin.math.abs
 
@@ -76,6 +77,7 @@ import kotlin.math.abs
 internal fun BottomBar(
     data: MutableState<Data>,
     titleState: TextFieldState?,
+    editorState: EditorStateHolder,
     descriptionState: TextFieldState?,
     isSound: Boolean?,
     dataModel: DataScreenModel,
@@ -143,7 +145,7 @@ internal fun BottomBar(
                                         data.value.copy(
                                             userUid = auth.uid.toString(),
                                             title = titleState?.text.toString().ifEmpty { untitledResource },
-                                            description = descriptionState?.text.toString(),
+                                            blocks = editorState.state.blocks
                                         )
                                     )
                                 )

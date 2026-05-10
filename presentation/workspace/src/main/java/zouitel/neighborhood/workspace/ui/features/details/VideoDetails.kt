@@ -243,22 +243,22 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
                     if (hasValidData) {
                         // Display date if available
                         properties.exifDateTimeOriginal?.let { dateTimeString ->
-                            runCatching {
+//                            runCatching {
                                 val parser = SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.getDefault())
                                 val date = parser.parse(dateTimeString)
                                 val formatter = SimpleDateFormat("EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault())
                                 Text(formatter.format(date), fontWeight = FontWeight.Bold)
-                            }.onFailure {
-                                // Try alternative date format
-                                runCatching {
-                                    val parser = SimpleDateFormat("yyyyMMdd'T'HHmmss.SSS'Z'", Locale.getDefault())
-                                    val date = parser.parse(dateTimeString)
-                                    val formatter = SimpleDateFormat("EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault())
-                                    Text(formatter.format(date), fontWeight = FontWeight.Bold)
-                                }.onFailure {
-                                    Text(dateTimeString, fontWeight = FontWeight.Bold)
-                                }
-                            }
+//                            }.onFailure {
+//                                // Try alternative date format
+//                                runCatching {
+//                                    val parser = SimpleDateFormat("yyyyMMdd'T'HHmmss.SSS'Z'", Locale.getDefault())
+//                                    val date = parser.parse(dateTimeString)
+//                                    val formatter = SimpleDateFormat("EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault())
+//                                    Text(formatter.format(date), fontWeight = FontWeight.Bold)
+//                                }.onFailure {
+//                                    Text(dateTimeString, fontWeight = FontWeight.Bold)
+//                                }
+//                            }
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))

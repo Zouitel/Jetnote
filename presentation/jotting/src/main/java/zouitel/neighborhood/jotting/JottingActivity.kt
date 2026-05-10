@@ -66,7 +66,6 @@ class JottingActivity: ComponentActivity(), KoinComponent {
                 mutableStateOf(Data(
                     uid = Uuid.random().toString(),
                     userUid = auth.uid.toString(),
-                    description = descriptionState.text.toString(),
                     background = backgroundColorState.intValue,
                     textColor = textColorState.intValue
                 ))

@@ -1,8 +1,12 @@
 package zouitel.nieborhood.source
 
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 internal fun Project.configureAndroidApplication(common: CommonExtension <*, *, *, *, *, *>) {
     common.apply {
@@ -25,7 +29,8 @@ internal fun Project.configureAndroidApplication(common: CommonExtension <*, *, 
             abi {
                 // AppBundle tasks usually contain "bundle" in their name
                 //noinspection WrongGradleMethod
-                val isBuildingBundle = gradle.startParameter.taskNames.any { it.lowercase().contains("bundle") }
+                val isBuildingBundle =
+                    gradle.startParameter.taskNames.any { it.lowercase().contains("bundle") }
                 isEnable = !isBuildingBundle
                 reset()
                 include("arm64-v8a", "x86_64")
@@ -52,9 +57,19 @@ internal fun Project.configureAndroidApplication(common: CommonExtension <*, *, 
                 )
             }
 
-            jniLibs.keepDebugSymbols.addAll(listOf("*/armeabi-v7a/*.so","*/arm64-v8a/*.so"))
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+
+            jniLibs.keepDebugSymbols.addAll(listOf("*/armeabi-v7a/*.so", "*/arm64-v8a/*.so"))
         }
 
+        tasks.withType<KotlinJvmCompile>().configureEach {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_17)
+            }
+        }
         dependencies {
             androidUiTestDependencies(libs)
         }

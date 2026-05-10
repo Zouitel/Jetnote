@@ -8,13 +8,6 @@ plugins {
 
 android {
     namespace = "zouitel.neighborhood.navigator"
-
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
-            "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api"
-        )
-    }
 }
 
 dependencies {

@@ -127,7 +127,7 @@ fun Jotting(
     val deletedReminders = remember { mutableStateListOf<Pair<Reminder, Int>>() }
     val jobCounter = remember { mutableIntStateOf(0) }
 
-    val descriptionState = rememberTextFieldState(data.value.description)
+    val descriptionState = rememberTextFieldState("")
     val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
     val backgroundColorState = rememberSaveable { mutableIntStateOf(backgroundColor) }
     val textColor = contentColorFor(MaterialTheme.colorScheme.surface).toArgb()
@@ -349,7 +349,7 @@ fun Jotting(
                                     data.value.copy(
                                         uid = data.value.uid,
                                         title = untitledResource,
-                                        description = descriptionState.text.toString(),
+//                                        description = descriptionState.text.toString(),
                                         background = backgroundColorState.intValue,
                                         textColor = textColorState.intValue
                                     )

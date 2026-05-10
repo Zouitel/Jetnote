@@ -1,0 +1,273 @@
+package zouitel.neighborhood.markdown.ui
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
+import zouitel.neighborhood.markdown.R
+import zouitel.neighborhood.markdown.core.SpanStyle
+import zouitel.neighborhood.markdown.indentation.IndentationActions
+import zouitel.neighborhood.markdown.indentation.IndentationState
+import zouitel.neighborhood.markdown.richtext.FormattingActions
+import zouitel.neighborhood.markdown.richtext.FormattingState
+import zouitel.neighborhood.markdown.richtext.StyleStatus
+import zouitel.neighborhood.markdown.theme.CascadeEditorColors
+import zouitel.neighborhood.markdown.theme.CascadeEditorStrings
+import zouitel.neighborhood.markdown.theme.CascadeEditorTypography
+import zouitel.neighborhood.markdown.theme.LocalCascadeStrings
+import zouitel.neighborhood.markdown.theme.LocalCascadeTheme
+
+/**
+ * Default config-driven rich text toolbar.
+ *
+ * Renders toggle buttons for each style in [config], plus structural indent
+ * controls driven by [indentationState] and [indentationActions].
+ *
+ * Buttons use [Modifier.focusProperties] to prevent stealing focus from the
+ * text field. The toolbar supports horizontal scrolling for overflow.
+ */
+@Composable
+fun RichTextToolbar(
+    formattingState: State<FormattingState>,
+    actions: FormattingActions,
+    indentationState: State<IndentationState>,
+    indentationActions: IndentationActions,
+    config: RichTextToolbarConfig,
+    onSlashInsert: () -> Unit,
+    onHideKeyboard: (() -> Unit)? = null,
+    modifier: Modifier = Modifier
+) {
+    val state = formattingState.value
+    val colors = LocalCascadeTheme.current.colors
+    val typography = LocalCascadeTheme.current.typography
+    val strings = LocalCascadeStrings.current
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .focusProperties { canFocus = false }
+            .imePadding(),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                SlashActionButton(
+                    enabled = state.canFormat,
+                    colors = colors,
+                    typography = typography,
+                    strings = strings,
+                    onClick = onSlashInsert,
+                )
+
+                if (config.showIndentation) {
+                    ToolbarIconButton(
+                        icon = R.drawable.ic_format_indent_decrease,
+                        label = strings.indentBackward,
+                        enabled = indentationState.value.canIndentBackward,
+                        colors = colors,
+                        onClick = indentationActions::indentBackward,
+                    )
+                    ToolbarIconButton(
+                        icon = R.drawable.ic_format_indent_increase,
+                        label = strings.indentForward,
+                        enabled = indentationState.value.canIndentForward,
+                        colors = colors,
+                        onClick = indentationActions::indentForward,
+                    )
+                }
+
+                config.buttons.forEach { spec ->
+                    ToolbarToggleButton(
+                        spec = spec,
+                        status = state.styleStatusOf(spec.style),
+                        enabled = state.canFormat,
+                        colors = colors,
+                        typography = typography,
+                        strings = strings,
+                        onClick = { actions.toggleStyle(spec.style) },
+                    )
+                }
+            }
+            if (onHideKeyboard != null) {
+                HideKeyboardToolbarButton(onClick = onHideKeyboard)
+            }
+        }
+    }
+}
+
+@Composable
+fun ToolbarIconButton(
+    icon: Int,
+    label: String,
+    enabled: Boolean,
+    colors: CascadeEditorColors,
+    onClick: () -> Unit,
+) {
+    val contentColor = if (enabled) colors.toolbarIcon else colors.toolbarIconDisabled
+    val shape = RoundedCornerShape(6.dp)
+
+    Box(
+        modifier = Modifier
+            .sizeIn(minWidth = 44.dp, minHeight = 44.dp)
+            .clip(shape)
+            .nonFocusableTap(enabled = enabled, onClick = onClick)
+            .semantics { contentDescription = label },
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(icon),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(contentColor),
+            modifier = Modifier.size(20.dp),
+        )
+    }
+}
+
+@Composable
+fun SlashActionButton(
+    enabled: Boolean,
+    colors: CascadeEditorColors,
+    typography: CascadeEditorTypography,
+    strings: CascadeEditorStrings,
+    onClick: () -> Unit,
+) {
+    val contentColor = if (enabled) colors.toolbarIcon else colors.toolbarIconDisabled
+    val shape = RoundedCornerShape(6.dp)
+
+    Box(
+        modifier = Modifier
+            .sizeIn(minWidth = 44.dp, minHeight = 44.dp)
+            .clip(shape)
+            .nonFocusableTap(enabled = enabled, onClick = onClick)
+            .semantics { contentDescription = strings.slashCommand },
+        contentAlignment = Alignment.Center,
+    ) {
+        BasicText(
+            text = "/",
+            style = typography.toolbarButton.copy(color = contentColor),
+        )
+    }
+}
+
+@Composable
+private fun ToolbarToggleButton(
+    spec: ToolbarButtonSpec,
+    status: StyleStatus,
+    enabled: Boolean,
+    colors: CascadeEditorColors,
+    typography: CascadeEditorTypography,
+    strings: CascadeEditorStrings,
+    onClick: () -> Unit,
+) {
+    val active = status == StyleStatus.FullyActive
+    val partial = status == StyleStatus.Partial
+
+    val backgroundColor = when {
+        !enabled -> Color.Transparent
+        active -> colors.primary
+        partial -> colors.primary.copy(alpha = 0.15f)
+        else -> Color.Transparent
+    }
+
+    val contentColor = when {
+        !enabled -> colors.toolbarIconDisabled
+        active -> colors.onPrimary
+        else -> colors.toolbarIcon
+    }
+
+    val shape = RoundedCornerShape(6.dp)
+
+    Box(
+        modifier = Modifier
+            .sizeIn(minWidth = 44.dp, minHeight = 44.dp)
+            .clip(shape)
+            .background(backgroundColor)
+            .nonFocusableTap(enabled = enabled, onClick = onClick)
+            .semantics { contentDescription = localizedLabel(spec, strings) },
+        contentAlignment = Alignment.Center,
+    ) {
+        BasicText(
+            text = buttonDisplayText(spec.style),
+            style = buttonTextStyle(spec.style, contentColor, typography),
+        )
+    }
+}
+
+/**
+ * Short display label that visually represents the style.
+ */
+fun buttonDisplayText(style: SpanStyle): String = when (style) {
+    SpanStyle.Bold -> "B"
+    SpanStyle.Italic -> "I"
+    SpanStyle.Underline -> "U"
+    SpanStyle.StrikeThrough -> "S"
+    SpanStyle.InlineCode -> "<>"
+    is SpanStyle.Highlight -> "H"
+    is SpanStyle.Custom -> style.customId.take(2).uppercase()
+}
+
+/**
+ * Resolves the localized accessibility label for a toolbar button.
+ * Falls back to [ToolbarButtonSpec.label] for custom span styles.
+ */
+fun localizedLabel(spec: ToolbarButtonSpec, strings: CascadeEditorStrings): String =
+    when (spec.style) {
+        SpanStyle.Bold -> strings.bold
+        SpanStyle.Italic -> strings.italic
+        SpanStyle.Underline -> strings.underline
+        SpanStyle.StrikeThrough -> strings.strikethrough
+        SpanStyle.InlineCode -> strings.inlineCode
+        is SpanStyle.Highlight -> strings.highlight
+        else -> spec.label
+    }
+
+/**
+ * Text style that self-describes the formatting (bold B, italic I, etc.).
+ */
+fun buttonTextStyle(style: SpanStyle, color: Color, typography: CascadeEditorTypography): TextStyle {
+    val base = typography.toolbarButton.copy(color = color)
+    return when (style) {
+        SpanStyle.Bold -> base.copy(fontWeight = FontWeight.Bold)
+        SpanStyle.Underline -> base.copy(textDecoration = TextDecoration.Underline)
+        SpanStyle.StrikeThrough -> base.copy(textDecoration = TextDecoration.LineThrough)
+        SpanStyle.InlineCode -> base.copy(
+            fontFamily = FontFamily.Monospace,
+        )
+        else -> base
+    }
+}

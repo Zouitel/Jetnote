@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 
-context(ScreenModel)
+context(model: ScreenModel)
 /**
  * Launches a new coroutine within the [screenModelScope] and returns its result as a [Deferred].
  *
@@ -26,5 +26,5 @@ context(ScreenModel)
  * @see screenModelScope
  */
 fun withAsync(scope: suspend CoroutineScope.() -> Unit): Deferred<Unit> {
-    return screenModelScope.async(block = scope)
+    return model.screenModelScope.async(block = scope)
 }

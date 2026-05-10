@@ -168,12 +168,12 @@ fun DocumentDetails(path: String?, onClose: () -> Unit) {
 
                     // ── Header: last-modified date ────────────────────────────
                     props.lastModified?.let { epoch ->
-                        runCatching {
+//                        runCatching {
                             val fmt = SimpleDateFormat(
                                 "EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault()
                             )
                             Text(fmt.format(epoch), fontWeight = FontWeight.Bold)
-                        }
+//                        }
                     }
 
                     // ── Subheader: file name + author ─────────────────────────

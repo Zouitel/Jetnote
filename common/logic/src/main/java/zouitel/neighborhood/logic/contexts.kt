@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import java.io.File
 
-context (Context)
+context (context: Context)
 /**
  * Plays a sound effect if the Boolean value is true.
  *
@@ -29,7 +29,7 @@ context (Context)
  * @throws SecurityException If the calling application is not allowed to play sound effects.
  */
 infix fun Boolean.makeSoundFor(audioManager: Int) {
-    val systemService = this@Context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val systemService = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     if (this) systemService.playSoundEffect(audioManager, 1.0f)
 }
@@ -42,9 +42,9 @@ infix fun Boolean.makeSoundFor(audioManager: Int) {
  *
  * @receiver The string to be displayed as the toast message.
  */
-context (Context)
+context (context: Context)
 fun String.asShortToast() {
-    Toast.makeText(this@Context, this, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
 }
 
 /**
@@ -55,9 +55,9 @@ fun String.asShortToast() {
  *
  * @receiver The string to be displayed in the toast.
  */
-context (Context)
+context (context: Context)
 fun String.asLongToast()  {
-    Toast.makeText(this@Context, this, Toast.LENGTH_LONG).show()
+    Toast.makeText(context, this, Toast.LENGTH_LONG).show()
 }
 
 /**
@@ -70,10 +70,10 @@ fun String.asLongToast()  {
  * @param initialValue The initial value of the state flow.
  * @return A [StateFlow] representing the latest value emitted by this flow.
  */
-context(ScreenModel)
+context(model: ScreenModel)
 fun <T> Flow<T>.withFlow(initialValue: T): StateFlow<T> {
     return stateIn(
-        scope = screenModelScope,
+        scope = model.screenModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = initialValue
     )
@@ -100,14 +100,14 @@ fun <T> Flow<T>.withFlow(initialValue: T): StateFlow<T> {
      * @return A [Flow] that shares its emissions, retains the latest value, starts lazily, and executes the [onStart] action.
      * @receiver The [Flow] to be converted into a logic flow.
      */
-    context(ScreenModel)
+    context(model: ScreenModel)
     fun <T> Flow<T>.withFlow(initialValue: T, onStart: suspend () -> Unit): StateFlow<T> {
         return this@withFlow
             .onStart {
-                screenModelScope.async { onStart() }
+                model.screenModelScope.async { onStart() }
 //                onStart()
             }.stateIn(
-                scope = screenModelScope,
+                scope = model.screenModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = initialValue
             )
