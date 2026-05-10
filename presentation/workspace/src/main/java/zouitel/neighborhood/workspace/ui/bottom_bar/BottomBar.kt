@@ -2,6 +2,9 @@ package zouitel.neighborhood.workspace.ui.bottom_bar
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,9 +12,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -90,103 +95,115 @@ internal fun BottomBar(
     val auth = FirebaseAuth.getInstance()
     val untitledResource = stringResource(zouitel.neighborhood.logic.R.string.untitled)
 
-    Surface(
-        shape = MaterialTheme.shapes.extraLarge,
-        color = data.value.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface,
-        modifier = Modifier
-            .padding(horizontal = 12.dp)
-            .navigationBarsPadding()
+    val isImeVisible = WindowInsets.isImeVisible
+
+    AnimatedVisibility(
+        visible = !isImeVisible,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it }),
     ) {
-        Column(modifier = Modifier
-            .background(Color.Black.copy(alpha = .6f))
+        Surface(
+            shape = MaterialTheme.shapes.extraLarge,
+            color = data.value.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface,
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .navigationBarsPadding()
         ) {
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                Row {
-                    CommonRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .imePadding()
-                    ) {
-                        IconButton(
-                            onClick = {
-                                sound.performSoundEffect(context, FOCUS_NAVIGATION, isSound)
-                                bottomNav.show(
-                                    OptionsScreen(
-                                        data = data,
-                                        titleState = titleState,
-                                        descriptionState = descriptionState,
-                                    )
-                                )
-                            }) {
-                            Icon(
-                                painter = painterResource(id = ADD),
-                                contentDescription = null,
-                                tint = Color.LightGray
-                            )
-                        }
-
-                        // undo
-                        UndoRedo(
-                            isSound = isSound,
-                            titleState = titleState,
-                            descriptionState = descriptionState
-                        )
-
-                        IconButton(
-                            onClick = {
-                                sound.performSoundEffect(
-                                    context,
-                                    CommonConstants.KEY_STANDARD,
-                                    isSound
-                                )
-                                dataModel.sendAction(
-                                    Action.Insert(
-                                        data.value.copy(
-                                            userUid = auth.uid.toString(),
-                                            title = titleState?.text.toString().ifEmpty { untitledResource },
-                                            blocks = editorState.state.blocks
+            Column(
+                modifier = Modifier
+                    .background(Color.Black.copy(alpha = .6f))
+            ) {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Row {
+                        CommonRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                                .align(Alignment.Bottom)
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    sound.performSoundEffect(context, FOCUS_NAVIGATION, isSound)
+                                    bottomNav.show(
+                                        OptionsScreen(
+                                            data = data,
+                                            titleState = titleState,
+                                            descriptionState = descriptionState,
                                         )
                                     )
+                                }) {
+                                Icon(
+                                    painter = painterResource(id = ADD),
+                                    contentDescription = null,
+                                    tint = Color.LightGray
                                 )
-                                linkModel.urlsProcessing(data.value.uid, descriptionState?.text.toString())
-                                navigator?.items?.size?.let {
-                                    if (it > 1) {
-                                        navigator.pop()
-                                    } else {
-                                        (context as Activity).finishAfterTransition()
-                                    }
-                                }
-                            }) {
-                            Icon(
-                                painter = painterResource(CommonIcons.CHECK),
-                                contentDescription = null,
-                                tint = Color.LightGray
+                            }
+
+                            // undo
+                            UndoRedo(
+                                isSound = isSound,
+                                titleState = titleState,
+                                descriptionState = descriptionState
                             )
+
+                            IconButton(
+                                onClick = {
+                                    sound.performSoundEffect(
+                                        context,
+                                        CommonConstants.KEY_STANDARD,
+                                        isSound
+                                    )
+                                    dataModel.sendAction(
+                                        Action.Insert(
+                                            data.value.copy(
+                                                userUid = auth.uid.toString(),
+                                                title = titleState?.text.toString()
+                                                    .ifEmpty { untitledResource },
+                                                blocks = editorState.state.blocks
+                                            )
+                                        )
+                                    )
+                                    linkModel.urlsProcessing(
+                                        data.value.uid,
+                                        descriptionState?.text.toString()
+                                    )
+                                    navigator?.items?.size?.let {
+                                        if (it > 1) {
+                                            navigator.pop()
+                                        } else {
+                                            (context as Activity).finishAfterTransition()
+                                        }
+                                    }
+                                }) {
+                                Icon(
+                                    painter = painterResource(CommonIcons.CHECK),
+                                    contentDescription = null,
+                                    tint = Color.LightGray
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            // row of background colors.
-            ColorsRow(
-                isSound = isSound,
-                colors = listOfBackgroundColors
-            ) { color ->
-                data.value = data.value.copy(background = color)
-            }
+                // row of background colors.
+                ColorsRow(
+                    isSound = isSound,
+                    colors = listOfBackgroundColors
+                ) { color ->
+                    data.value = data.value.copy(background = color)
+                }
 
-            // row of text colors.
-            ColorsRow(
-                isSound = isSound,
-                colors = listOfTextColors
-            ) { color ->
-                data.value = data.value.copy(textColor = color)
+                // row of text colors.
+                ColorsRow(
+                    isSound = isSound,
+                    colors = listOfTextColors
+                ) { color ->
+                    data.value = data.value.copy(textColor = color)
+                }
             }
         }
     }
 }
-
 @Composable
 private fun ColorsRow(
     isSound: Boolean?,
@@ -218,10 +235,12 @@ private fun ColorsRow(
                             scale.animateTo(1.2f, tween(100))
                             scale.animateTo(1f, tween(100))
                         }
+
                         1 -> {
                             scale.animateTo(1.1f, tween(100))
                             scale.animateTo(1f, tween(100))
                         }
+
                         2 -> {
                             scale.animateTo(1.05f, tween(100))
                             scale.animateTo(1f, tween(100))

@@ -137,18 +137,8 @@ data class WorkplaceScreen(
         val navBottomSheet = LocalBottomSheetNavigator.current
         val keyboard = LocalSoftwareKeyboardController.current
 
-        val editorState = rememberEditorState(
-            data.blocks
-        //            listOf(
-//            Block(
-//                BlockId("98764"),
-//                BlockType.Paragraph,
-//                BlockContent.Text("land rover", listOf(TextSpan(0, 8, SpanStyle.Underline)))
-//                )
-//        )
-        )
-
         val titleState = rememberTextFieldState(data.title)
+        val editorState = rememberEditorState(data.blocks)
         val descriptionState = rememberTextFieldState(data.description)
         val defaultBackground = MaterialTheme.colorScheme.surface.toArgb()
         val defaultTextColor = MaterialTheme.colorScheme.onSurface.toArgb()

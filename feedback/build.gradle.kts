@@ -14,6 +14,7 @@ dependencies {
     implementation(projects.domain)
     implementation(projects.common.ui)
     implementation(projects.common.logic)
+    implementation(projects.common.markdown)
 
     //Ktor.
     implementation(libs.ktor.client.core)

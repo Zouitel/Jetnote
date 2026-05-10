@@ -4,11 +4,16 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.navigator.Navigator
@@ -70,12 +75,14 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
                     SecurityCheckingScreen()
                 }
                 is SecurityState.Threat -> {
-                    SecurityThreatScreen(
-                        result = (securityState as SecurityState.Threat).result,
-                        onExit = {
-                            finish()
-                        }
-                    )
+                    MainApp()
+
+                //                    SecurityThreatScreen(
+//                        result = (securityState as SecurityState.Threat).result,
+//                        onExit = {
+//                            finish()
+//                        }
+//                    )
                 }
                 is SecurityState.Secure -> {
                     MainApp()
