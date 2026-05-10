@@ -5,178 +5,38 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.toColorLong
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import zouitel.neighborhood.markdown.R
-import zouitel.neighborhood.markdown.core.SpanStyle
-import zouitel.neighborhood.markdown.indentation.IndentationActions
-import zouitel.neighborhood.markdown.indentation.IndentationState
 import zouitel.neighborhood.markdown.richtext.FormattingActions
 import zouitel.neighborhood.markdown.richtext.FormattingState
 import zouitel.neighborhood.markdown.richtext.StyleStatus
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
 import zouitel.neighborhood.markdown.theme.CascadeEditorStrings
 import zouitel.neighborhood.markdown.theme.CascadeEditorTypography
-import zouitel.neighborhood.markdown.theme.LocalCascadeStrings
-import zouitel.neighborhood.markdown.theme.LocalCascadeTheme
-import zouitel.neighborhood.markdown.ui.RichTextToolbarConfig
-import zouitel.neighborhood.markdown.ui.SlashActionButton
 import zouitel.neighborhood.markdown.ui.ToolbarButtonSpec
-import zouitel.neighborhood.markdown.ui.ToolbarIconButton
 import zouitel.neighborhood.markdown.ui.buttonDisplayText
 import zouitel.neighborhood.markdown.ui.buttonTextStyle
 import zouitel.neighborhood.markdown.ui.localizedLabel
 import zouitel.neighborhood.markdown.ui.nonFocusableTap
-
-@Composable
-    fun WritersPaletteToolbar(
-        formattingState: State<FormattingState>,
-        actions: FormattingActions,
-//        onSlashInsert: () -> Unit,
-        onInsertDate: () -> Unit,
-    ) {
-        val state = formattingState.value
-        val canFormat = state.canFormat
-
-        val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
-    val colors = LocalCascadeTheme.current.colors
-    val typography = LocalCascadeTheme.current.typography
-    val strings = LocalCascadeStrings.current
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusProperties { canFocus = false }
-                .background(
-                    surfaceColor,
-                    RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-                )
-                .graphicsLayer { alpha = if (canFormat) 1f else 0.4f }
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            // Group 1: Text Style
-            ButtonGroup {
-//                SlashActionButton(
-//                    enabled = state.canFormat,
-//                    colors = colors,
-//                    typography = typography,
-//                    strings = strings,
-//                    onClick = onSlashInsert,
-//                )
-
-//                if (config.showIndentation) {
-//                    ToolbarIconButton(
-//                        icon = R.drawable.ic_format_indent_decrease,
-//                        label = strings.indentBackward,
-//                        enabled = indentationState.value.canIndentBackward,
-//                        colors = colors,
-//                        onClick = indentationActions::indentBackward,
-//                    )
-//                    ToolbarIconButton(
-//                        icon = R.drawable.ic_format_indent_increase,
-//                        label = strings.indentForward,
-//                        enabled = indentationState.value.canIndentForward,
-//                        colors = colors,
-//                        onClick = indentationActions::indentForward,
-//                    )
-//                }
-
-                StyleToggleButton(
-                    label = "B",
-                    textStyle = TextStyle(fontWeight = FontWeight.Bold),
-                    status = state.styleStatusOf(SpanStyle.Bold),
-                    enabled = canFormat,
-                    onClick = { actions.toggleStyle(SpanStyle.Bold) },
-                )
-                StyleToggleButton(
-                    label = "I",
-                    textStyle = TextStyle(fontStyle = FontStyle.Italic),
-                    status = state.styleStatusOf(SpanStyle.Italic),
-                    enabled = canFormat,
-                    onClick = { actions.toggleStyle(SpanStyle.Italic) },
-                )
-                StyleToggleButton(
-                    label = "U",
-                    textStyle = TextStyle(textDecoration = TextDecoration.Underline),
-                    status = state.styleStatusOf(SpanStyle.Underline),
-                    enabled = canFormat,
-                    onClick = { actions.toggleStyle(SpanStyle.Underline) },
-                )
-            }
-
-            // Group 2: Decoration
-            ButtonGroup {
-                StyleToggleButton(
-                    label = "S",
-                    textStyle = TextStyle(textDecoration = TextDecoration.LineThrough),
-                    status = state.styleStatusOf(SpanStyle.StrikeThrough),
-                    enabled = canFormat,
-                    onClick = { actions.toggleStyle(SpanStyle.StrikeThrough) },
-                )
-                StyleToggleButton(
-                    label = "<>",
-                    textStyle = TextStyle(fontFamily = FontFamily.Monospace),
-                    status = state.styleStatusOf(SpanStyle.InlineCode),
-                    enabled = canFormat,
-                    onClick = { actions.toggleStyle(SpanStyle.InlineCode) },
-                )
-                StyleToggleButton(
-                    label = "H",
-                    textStyle = TextStyle(fontFamily = FontFamily.Monospace),
-                    status = state.styleStatusOf(SpanStyle.Highlight(Color.Yellow.toColorLong())),
-                    enabled = canFormat,
-                    onClick = { actions.toggleStyle(SpanStyle.Highlight(Color.Yellow.toColorLong())) },
-                )
-            }
-
-            // Group 3: Insert
-            ButtonGroup {
-                ActionButton(
-                    label = "Date",
-                    enabled = canFormat,
-                    onClick = onInsertDate,
-                )
-            }
-
-            // Clear button
-            ClearFormattingButton(
-                state = state,
-                actions = actions,
-            )
-        }
-    }
 
 // Button Group (pill container)
 
