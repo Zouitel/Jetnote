@@ -145,15 +145,15 @@ fun TaskItem(
                 AnimatedCircleCheckbox(
                     checked = task.isDone,
                     onCheckedChange = {
-                        currentData.value = currentData.value.copy(
-                            tasks = currentData.value.tasks.map { t ->
-                                if (t.id == task.id) {
-                                    t.copy(isDone = it)
-                                } else {
-                                    t
-                                }
-                            }
-                        )
+//                        currentData.value = currentData.value.copy(
+//                            tasks = currentData.value.tasks.map { t ->
+//                                if (t.id == task.id) {
+//                                    t.copy(isDone = it)
+//                                } else {
+//                                    t
+//                                }
+//                            }
+//                        )
                     },
                     background = currentData.value.background?.let { Color(it) }
                         ?: MaterialTheme.colorScheme.surface,

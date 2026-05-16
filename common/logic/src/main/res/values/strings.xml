@@ -401,4 +401,5 @@
     <string name="creator_widget_description">This is creator layout widget</string>
     <string name="notes_list_description">This is a notes list</string>
     <string name="record_deleted">record deleted!</string>
+    <string name="language">Language</string>
 </resources>

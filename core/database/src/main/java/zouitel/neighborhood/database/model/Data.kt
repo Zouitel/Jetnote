@@ -5,31 +5,21 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import zouitel.neighborhood.database.model.Data.Companion.TABLE_NAME
-import zouitel.neighborhood.database.utils.Constants.ARCHIVED
-import zouitel.neighborhood.database.utils.Constants.COLOR
-import zouitel.neighborhood.database.utils.Constants.DATE
-import zouitel.neighborhood.database.utils.Constants.DESCRIPTION
-import zouitel.neighborhood.database.utils.Constants.PRIORITY
-import zouitel.neighborhood.database.utils.Constants.TITLE
-import zouitel.neighborhood.database.utils.Constants.TXT_COLOR
-import zouitel.neighborhood.database.utils.Constants.USER_UID
-import zouitel.neighborhood.database.utils.Constants.UUID
 
-@Entity(TABLE_NAME, [Index(UUID), Index(USER_UID)])
+@Entity(TABLE_NAME, [Index("uuid"), Index("user_uid")])
 data class Data(
     @PrimaryKey(false)
-    @ColumnInfo(UUID) val uid: String,
-    @ColumnInfo(USER_UID) val userUid: String,
-    @ColumnInfo(TITLE) val title: String,
-    @ColumnInfo(DESCRIPTION) val description: String,
-    @ColumnInfo(PRIORITY) val priority: Int,
-    @ColumnInfo(COLOR) val background: Int?,
-    @ColumnInfo(TXT_COLOR) val textColor: Int?,
-    @ColumnInfo(DATE) val date: String,
+    @ColumnInfo("uuid") val uid: String,
+    @ColumnInfo("user_uid") val userUid: String,
+    @ColumnInfo("title") val title: String,
+    @ColumnInfo("position") val position: Int,
+    @ColumnInfo("priority") val priority: Int,
+    @ColumnInfo("color") val background: Int?,
+    @ColumnInfo("text_color") val textColor: Int?,
+    @ColumnInfo("date") val date: String,
     @ColumnInfo("last_edit") val lastEdit: String,
-    @ColumnInfo(ARCHIVED) val archived: Boolean,
+    @ColumnInfo("archived") val archived: Boolean,
     @ColumnInfo("blocks", defaultValue = "[]") val blocks: String,
-    @ColumnInfo("tasks", defaultValue = "[]") val tasks: String,
     @ColumnInfo("medias", defaultValue = "[]") val medias: String,
     @ColumnInfo("audios", defaultValue = "[]") val audios: String,
     @ColumnInfo("reminders", defaultValue = "[]") val reminders: String

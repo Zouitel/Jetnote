@@ -82,7 +82,7 @@ fun SelectionTopBar(
                     sharNote(
                         context,
                         uiState.selectedNotes.single().title,
-                        uiState.selectedNotes.single().description
+                        "uiState.selectedNotes.single().description"
                     ) {
                         searchModel.clearSelectionNotes()
                         searchModel.updateSelection(false)
@@ -134,9 +134,7 @@ fun SelectionTopBar(
                     printNote(
                         context,
                         uiState.selectedNotes.single().title,
-                        uiState.selectedNotes.single().description,
-                        uiState.selectedNotes.single().tasks
-                            .map { Pair(it.item, it.isDone) }
+                        "uiState.selectedNotes.single().description"
                     )
                 }) {
                     Icon(

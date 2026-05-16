@@ -386,4 +386,5 @@
     <string name="creator_widget_description">これはクリエイターレイアウトウィジェットです</string>
     <string name="notes_list_description">これはノートリストです</string>
     <string name="record_deleted">レコードを削除しました！</string>
+    <string name="language">その言語</string>
 </resources>

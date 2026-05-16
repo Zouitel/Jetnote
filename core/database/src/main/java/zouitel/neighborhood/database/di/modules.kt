@@ -27,7 +27,6 @@ import zouitel.neighborhood.database.mapper.NoteAndTagMapper
 import zouitel.neighborhood.database.mapper.NoteMapper
 import zouitel.neighborhood.database.mapper.ProviderMapper
 import zouitel.neighborhood.database.mapper.TagMapper
-import zouitel.neighborhood.database.utils.Constants
 import zouitel.neighborhood.repository.datasource.AssistantDatasource
 import zouitel.neighborhood.repository.datasource.ConversationDatasource
 import zouitel.neighborhood.repository.datasource.DataDataSource
@@ -81,9 +80,9 @@ val databaseLazyModule = lazyModule {
         db = Room.databaseBuilder(
             androidContext(),
             Database::class.java,
-            Constants.DATABASE
+            "jetnote_database"
         )
-//            .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
+            .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
             .addCallback(TagsCallback { db })

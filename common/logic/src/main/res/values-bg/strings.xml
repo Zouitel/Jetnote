@@ -390,4 +390,5 @@
     <string name="creator_widget_description">Това е приспособление за оформление на създател</string>
     <string name="notes_list_description">Това е списък с бележки</string>
     <string name="record_deleted">записът е изтрит!</string>
+    <string name="language">Езикът</string>
 </resources>

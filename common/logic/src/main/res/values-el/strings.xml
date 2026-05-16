@@ -401,4 +401,5 @@
     <string name="creator_widget_description">Αυτό είναι το widget διάταξης δημιουργού</string>
     <string name="notes_list_description">Αυτή είναι μια λίστα σημειώσεων</string>
     <string name="record_deleted">η εγγραφή διαγράφηκε!</string>
+    <string name="language">Η γλώσσα</string>
 </resources>

@@ -10,7 +10,7 @@ data class Data(
     val uid: String,
     val userUid: String,
     val title: String,
-    val description: String,
+    val position: Int,
     val priority: Int,
     val background: Int?,
     val textColor: Int?,
@@ -18,7 +18,6 @@ data class Data(
     val lastEdit: String,
     val archived: Boolean,
     val blocks: String,
-    val tasks: String,
     val medias: String,
     val audios: String,
     val reminders: String

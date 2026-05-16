@@ -8,10 +8,6 @@ import kotlinx.coroutines.launch
 import zouitel.neighborhood.database.database.TagsCallback.Companion.DEFAULT_TAGS
 import zouitel.neighborhood.database.model.Tag
 
-/**
- * Room callback that seeds [DEFAULT_TAGS] once, the very first time
- * the database file is created on-device.
- */
 internal class TagsCallback(
     private val databaseProvider: () -> Database
 ) : RoomDatabase.Callback() {

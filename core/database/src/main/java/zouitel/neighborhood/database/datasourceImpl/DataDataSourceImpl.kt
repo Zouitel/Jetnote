@@ -40,4 +40,12 @@ class DataDataSourceImpl(
     override suspend fun sweepDrafts() {
         dao.sweepDrafts()
     }
+
+    override suspend fun reorderNote(userUid: String, position: Int) {
+        dao.reorderNote(userUid, position)
+    }
+
+    override suspend fun reorderNotes(positions: Map<String, Int>) {
+        dao.reorderNotes(positions)
+    }
 }

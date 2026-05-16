@@ -1,5 +1,6 @@
 package zouitel.neighborhood.database.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import zouitel.neighborhood.database.dao.DataDao
@@ -19,10 +20,14 @@ import zouitel.neighborhood.database.dao.AssistantDao
 import zouitel.neighborhood.database.dao.ConversationDao
 import zouitel.neighborhood.database.dao.ModelDao
 import zouitel.neighborhood.database.dao.ProviderDao
+import zouitel.neighborhood.database.utils.MIGRATION_8_9
 
 @Database(
-    version = 8,
-    autoMigrations = [],
+    version = 9,
+    autoMigrations = [
+        AutoMigration(8,9, MIGRATION_8_9::class)
+    ],
+
     entities = [
         Data::class,
         Tag::class,

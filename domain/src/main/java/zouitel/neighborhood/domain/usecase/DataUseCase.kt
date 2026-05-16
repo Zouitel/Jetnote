@@ -2,6 +2,7 @@ package zouitel.neighborhood.domain.usecase
 
 import zouitel.neighborhood.domain.model.Data
 import zouitel.neighborhood.domain.repository.DataRepository
+import zouitel.neighborhood.domain.repository.NoteRepository
 
 sealed class DataUseCase {
     data class Insert(private val repo: DataRepository): DataUseCase() {
@@ -34,5 +35,13 @@ sealed class DataUseCase {
 
     data class SweepDrafts(private val repo: DataRepository): DataUseCase() {
         suspend operator fun invoke() = repo.sweepDrafts()
+    }
+
+    class ReorderNote(private val repo: DataRepository) : DataUseCase() {
+        suspend operator fun invoke(userUid: String, position: Int) = repo.reorderNote(userUid, position)
+    }
+
+    class ReorderNotes(private val repo: DataRepository) : DataUseCase() {
+        suspend operator fun invoke(positions: Map<String, Int>) = repo.reorderNotes(positions)
     }
 }

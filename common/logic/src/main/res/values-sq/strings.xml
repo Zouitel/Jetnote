@@ -404,4 +404,5 @@
     <string name="creator_widget_description">Ky është widget-i i paraqitjes së krijuesit</string>
     <string name="notes_list_description">Kjo është një listë shënimesh</string>
     <string name="record_deleted">rekordi u fshi!</string>
+    <string name="language">Gjuha</string>
 </resources>

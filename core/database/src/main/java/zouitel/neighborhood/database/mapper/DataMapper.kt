@@ -10,7 +10,7 @@ class DataMapper {
         uid = data.uid,
         userUid = data.userUid,
         title = data.title,
-        description = data.description,
+        position = data.position,
         priority = data.priority,
         background = data.background,
         textColor = data.textColor,
@@ -18,7 +18,6 @@ class DataMapper {
         lastEdit = data.lastEdit,
         archived = data.archived,
         blocks = data.blocks,
-        tasks = data.tasks,
         medias = data.medias,
         audios = data.audios,
         reminders = data.reminders
@@ -28,7 +27,7 @@ class DataMapper {
         uid = data.uid,
         userUid = data.userUid,
         title = data.title,
-        description = data.description,
+        position = data.position,
         priority = data.priority,
         background = data.background,
         textColor = data.textColor,
@@ -36,7 +35,6 @@ class DataMapper {
         lastEdit = data.lastEdit,
         archived = data.archived,
         blocks = data.blocks,
-        tasks = data.tasks,
         medias = data.medias,
         audios = data.audios,
         reminders = data.reminders

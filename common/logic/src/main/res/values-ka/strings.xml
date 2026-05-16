@@ -420,4 +420,5 @@
     <string name="creator_widget_description">ეს არის შემქმნელის განლაგების ვიჯეტი</string>
     <string name="notes_list_description">ეს არის შენიშვნების სია</string>
     <string name="record_deleted">ჩანაწერი წაიშალა!</string>
+    <string name="language">ენა</string>
 </resources>

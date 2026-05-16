@@ -404,4 +404,5 @@
     <string name="creator_widget_description">Dies ist ein Ersteller-Widget-Layout</string>
     <string name="notes_list_description">Dies ist eine Notizenliste</string>
     <string name="record_deleted">Eintrag gelöscht!</string>
+    <string name="language">Die Sprache</string>
 </resources>

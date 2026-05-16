@@ -5,6 +5,7 @@ package zouitel.neighborhood.search.note_card
 import androidx.annotation.OptIn
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -53,6 +54,7 @@ import androidx.compose.ui.util.fastFirstOrNull
 import androidx.core.net.toUri
 import androidx.media3.common.util.UnstableApi
 import cafe.adriel.voyager.navigator.LocalNavigator
+import coil.compose.AsyncImage
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.audio.utils.SmallAudioPlayer
 import zouitel.neighborhood.link.ui.LinkCard
@@ -64,19 +66,10 @@ import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons.CIRCLE_18
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.video.SmallVideoPlayer
-import zouitel.neighborhood.workspace.model.Note
-import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
-import coil.compose.AsyncImage
-import android.graphics.Bitmap
-import androidx.compose.foundation.Image
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.runtime.produceState
-import androidx.compose.ui.graphics.asImageBitmap
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import zouitel.neighborhood.workspace.model.MediaType
+import zouitel.neighborhood.workspace.model.Note
 import zouitel.neighborhood.workspace.ui.features.DocumentThumbnail
-import zouitel.neighborhood.workspace.ui.features.LargeMediaScreen
+import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
 
 @Composable
 fun NoteCard(
@@ -84,7 +77,9 @@ fun NoteCard(
     audioModel: AudioScreenModel,
     linkModel: LinkScreenModel,
     searchModel: SearchScreenModel,
-    note: Note
+    note: Note,
+    isDragging: Boolean = false,
+    dragModifier: Modifier = Modifier
 ) {
     Card(
         settingsModel = settingsModel,
@@ -92,6 +87,8 @@ fun NoteCard(
         linkModel = linkModel,
         noteEntity = note,
         searchModel = searchModel,
+        isDragging = isDragging,
+        dragModifier = dragModifier
     )
 }
 
@@ -102,13 +99,17 @@ private fun Card(
     linkModel: LinkScreenModel,
     audioModel: AudioScreenModel,
     noteEntity: Note,
-    searchModel: SearchScreenModel
+    searchModel: SearchScreenModel,
+    isDragging: Boolean = false,
+    dragModifier: Modifier = Modifier
 ) {
     val note = noteEntity.data
     val labels = noteEntity.tags
 
     val haptic = LocalHapticFeedback.current
     val navigator = LocalNavigator.current
+
+    val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "drag_elev")
 
     val uiState by remember(searchModel, searchModel::uiState).collectAsState()
     val observerLinks by remember(linkModel, linkModel::observeAll).collectAsState()
@@ -127,9 +128,9 @@ private fun Card(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .then(if (uiState.isSelection) dragModifier else Modifier)
             .combinedClickable(
                 onLongClick = {
-                    // To make vibration.
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     searchModel.updateSelectedNotes(note)
                     searchModel.updateSelection(true)
@@ -139,10 +140,10 @@ private fun Card(
                     navigator?.push(WorkplaceScreen(note, false))
                 } else {
                     when {
-                        uiState.selectedNotes.contains(note)
-                            .not() -> uiState.selectedNotes.add(note)
-
-                        else -> uiState.selectedNotes.remove(note)
+                        uiState.selectedNotes.contains(note).not() ->
+                            uiState.selectedNotes.add(note)
+                        else ->
+                            uiState.selectedNotes.remove(note)
                     }
                 }
                 uiState.selectedNotes.ifEmpty {
@@ -150,41 +151,22 @@ private fun Card(
                 }
             }
             .drawBehind {
-                if (note.priority == 0) {
-                    normalNotePath(note)
-                } else {
-                    prioritizedNotePath(note)
-                }
+                if (note.priority == 0) normalNotePath(note)
+                else prioritizedNotePath(note)
             },
-//            .then(
-//                if (uiState.selectedNotes.contains(note)) {
-//                    Modifier.innerShadow(
-//                        RoundedCornerShape(20.dp),
-//                        Shadow(
-//                            13.dp,
-//                            color = CommonColors.prime,
-//                            spread = animatedSpread.value.dp,
-//                            alpha = .7f
-//                        ))
-//                } else {
-//                    Modifier
-//                }
-//            )
-        shape = AbsoluteRoundedCornerShape(15.dp),
-        border = if (uiState.selectedNotes.contains(note)) {
-             BorderStroke(3.dp, CommonColors.prime)
+        shape     = AbsoluteRoundedCornerShape(15.dp),
+        border    = if (uiState.selectedNotes.contains(note)) {
+            BorderStroke(3.dp, CommonColors.prime)
         } else {
             when (note.background == MaterialTheme.colorScheme.surface.toArgb()) {
-                true -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
+                true  -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
                 false -> BorderStroke(0.dp, Color.Transparent)
             }
         },
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
-        ),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation),
+        colors    = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
-        // Media display.
+
         if (note.medias.isNotEmpty()) {
             val containerColor = runCatching {
                 Color(note.medias[pagerState.currentPage].color)
@@ -198,8 +180,9 @@ private fun Card(
             ) {
                 HorizontalPager(
                     state = pagerState,
-                    modifier = Modifier
-                        .background(note.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface)
+                    modifier = Modifier.background(
+                        note.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface
+                    )
                 ) { index ->
                     Card(
                         modifier = Modifier.dropShadow(
@@ -216,28 +199,20 @@ private fun Card(
                         colors = CardDefaults.cardColors(containerColor)
                     ) {
                         val media = note.medias[index]
-
                         when (media.type) {
-                            MediaType.VIDEO -> {
-                                SmallVideoPlayer(media.uri.toUri())
-                            }
-                            MediaType.DOCUMENT -> {
-                                DocumentThumbnail(
-                                    filePath = media.uri,
-                                    onClick = {
-                                        navigator?.push(WorkplaceScreen(note, false))
-                                    },
-                                    onLongClick = {}
-                                )
-                            }
-                            MediaType.IMAGE -> {
-                                AsyncImage(
-                                    model = media.uri,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
+                            MediaType.VIDEO -> SmallVideoPlayer(media.uri.toUri())
+                            MediaType.DOCUMENT -> DocumentThumbnail(
+                                filePath = media.uri,
+                                onClick = { navigator?.push(WorkplaceScreen(note, false)) },
+                                onLongClick = {}
+                            )
+
+                            MediaType.IMAGE -> AsyncImage(
+                                model = media.uri,
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxWidth()
+                            )
                         }
                     }
                 }
@@ -264,18 +239,6 @@ private fun Card(
             )
         }
 
-        if (note.description.isNotEmpty()) {
-            Text(
-                text = note.description,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 10,
-                overflow = TextOverflow.Ellipsis,
-                color = note.textColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(start = 3.dp, end = 3.dp, bottom = 7.dp)
-            )
-        }
-
-// ── Content: blocks (Cascade editor) or legacy description ───────────
         when {
             note.blocks.isNotEmpty() -> {
                 BlocksPreview(
@@ -285,41 +248,26 @@ private fun Card(
                     modifier = Modifier.padding(start = 3.dp, end = 3.dp, bottom = 7.dp),
                 )
             }
-            note.description.isNotEmpty() -> {
-                Text(
-                    text = note.description,
-                    style = MaterialTheme.typography.bodyLarge,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis,
-                    color = note.textColor?.let { Color(it) }
-                        ?: MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = 3.dp, end = 3.dp, bottom = 7.dp),
-                )
-            }
         }
 
-        //display media player.
         audios.fastFirstOrNull {
             SmallAudioPlayer(audios.size, settingsModel, audioModel, it)
             true
         }
 
-        // todo button group instead of contextual flow row.
-        //display tags.
         ContextualFlowRow(
             itemCount = labels.size,
-            maxLines = 1,
-            overflow = ContextualFlowRowOverflow.expandOrCollapseIndicator(
+            maxLines  = 1,
+            overflow  = ContextualFlowRowOverflow.expandOrCollapseIndicator(
                 expandIndicator = {
                     AssistChip(
                         modifier = Modifier.alpha(.5f),
                         border = BorderStroke(0.dp, Color.Transparent),
                         onClick = { },
-                        label = {
-                            Text("+${totalItemCount - shownItemCount}", fontSize = 13.sp)
-                        },
+                        label = { Text("+${totalItemCount - shownItemCount}", fontSize = 13.sp) },
                         colors = AssistChipDefaults.assistChipColors(
-                            labelColor = note.textColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface
+                            labelColor = note.textColor?.let { Color(it) }
+                                ?: MaterialTheme.colorScheme.onSurface
                         ),
                         shape = CircleShape
                     )
@@ -328,14 +276,10 @@ private fun Card(
             )
         ) { index ->
             AssistChip(
-                modifier = Modifier
-                    .alpha(.8f)
-                    .padding(start = 5.dp, end = 5.dp),
+                modifier = Modifier.alpha(.8f).padding(start = 5.dp, end = 5.dp),
                 border = BorderStroke(0.dp, Color.Transparent),
                 onClick = { },
-                label = {
-                    Text(labels.getOrNull(index)?.label ?: "", fontSize = 11.sp)
-                },
+                label = { Text(labels.getOrNull(index)?.label ?: "", fontSize = 11.sp) },
                 leadingIcon = {
                     labels.getOrNull(index)?.color?.let {
                         Icon(
@@ -347,20 +291,20 @@ private fun Card(
                     }
                 },
                 colors = AssistChipDefaults.assistChipColors(
-                    labelColor = note.textColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface,
+                    labelColor = note.textColor?.let { Color(it) }
+                        ?: MaterialTheme.colorScheme.onSurface,
                     containerColor = Color.DarkGray.copy(alpha = .4f)
                 ),
                 shape = CircleShape
             )
         }
 
-        // display link card.
         filteredLinks.apply {
             if (isNotEmpty()) LinkCard(
                 first(),
                 count(),
                 note.background ?: MaterialTheme.colorScheme.surface.toArgb(),
-                note.textColor ?: MaterialTheme.colorScheme.onSurface.toArgb()
+                note.textColor  ?: MaterialTheme.colorScheme.onSurface.toArgb()
             )
         }
     }

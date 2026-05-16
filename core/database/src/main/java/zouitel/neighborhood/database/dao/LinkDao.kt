@@ -8,7 +8,6 @@ import androidx.room.Query
 import androidx.room.Upsert
 import zouitel.neighborhood.database.model.Link
 import zouitel.neighborhood.database.model.Link.Companion.TABLE_NAME
-import zouitel.neighborhood.database.utils.Constants.UUID
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,7 +18,7 @@ interface LinkDao {
     @get: Query("SELECT * FROM $TABLE_NAME")
     val getAll: List<Link>
 
-    @Query("SELECT * FROM $TABLE_NAME WHERE $UUID = :uid")
+    @Query("SELECT * FROM $TABLE_NAME WHERE UUID = :uid")
     fun observeByUid(uid: String): Flow<List<Link>>
 
     @Upsert(entity = Link::class)
@@ -31,6 +30,6 @@ interface LinkDao {
     @Delete
     suspend fun delete(link: Link)
 
-    @Query("DELETE FROM $TABLE_NAME WHERE $UUID NOT IN (SELECT $UUID FROM note_data_table)")
+    @Query("DELETE FROM $TABLE_NAME WHERE UUID NOT IN (SELECT UUID FROM note_data_table)")
     suspend fun deleteDrafts()
 }

@@ -5,18 +5,13 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import zouitel.neighborhood.database.model.Tag.Companion.TABLE_NAME
-import zouitel.neighborhood.database.utils.Constants.COLOR
-import zouitel.neighborhood.database.utils.Constants.DEFAULT_NUM
-import zouitel.neighborhood.database.utils.Constants.DEFAULT_TXT
-import zouitel.neighborhood.database.utils.Constants.ID
-import zouitel.neighborhood.database.utils.Constants.LABEL
 
-@Entity(TABLE_NAME, [Index(ID)])
+@Entity(TABLE_NAME, [Index("id")])
 data class Tag(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = ID, defaultValue = DEFAULT_NUM) val id: Long,
-    @ColumnInfo(name = LABEL, defaultValue = DEFAULT_TXT) val label: String,
-    @ColumnInfo(name = COLOR, defaultValue = "null") val color: Int?
+    @ColumnInfo(name = "id", defaultValue = "0") val id: Long,
+    @ColumnInfo(name = "label", defaultValue = "") val label: String,
+    @ColumnInfo(name = "color", defaultValue = "null") val color: Int?
 ) {
     companion object {
         const val TABLE_NAME = "tags_table"

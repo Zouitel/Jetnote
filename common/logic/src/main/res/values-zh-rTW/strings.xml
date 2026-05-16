@@ -370,4 +370,5 @@
     <string name="creator_widget_description">這是建立者版面配置小工具</string>
     <string name="notes_list_description">這是筆記清單</string>
     <string name="record_deleted">記錄已刪除！</string>
+    <string name="language">該語言</string>
 </resources>

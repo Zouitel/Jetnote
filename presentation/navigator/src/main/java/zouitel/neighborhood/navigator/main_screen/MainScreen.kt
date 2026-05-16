@@ -2,15 +2,8 @@ package zouitel.neighborhood.navigator.main_screen
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,10 +14,10 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.Text
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.LoadingIndicator
@@ -46,39 +39,39 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.skydoves.cloudy.cloudy
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import zouitel.neighborhood.account.ui.SyncScreenModel
+import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
-import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.domain.utils.Action
+import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
-import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
+import zouitel.neighborhood.navigator.utils.LazyVerticalGrid
+import zouitel.neighborhood.navigator.utils.LazyVerticalList
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
 import zouitel.neighborhood.navigator.utils.sound
-import zouitel.neighborhood.search.note_card.NoteCard
 import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.search.utils.SelectionTopBar
+import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
+import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonConstants
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
-import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
-import zouitel.neighborhood.tag.ui.TagScreenModel
-import zouitel.neighborhood.workspace.model.Data
-import com.skydoves.cloudy.cloudy
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
-import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import zouitel.neighborhood.ui.rememberAutoHeightCacheStaggeredGrid
+import zouitel.neighborhood.workspace.model.Data
+import zouitel.neighborhood.workspace.provider.SharedScreen
+import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 
 class MainScreen: Screen {
 
@@ -155,17 +148,16 @@ class MainScreen: Screen {
             }
         }
 
-        val notes =
-            when (settings.ordination) {
-                stringResource(zouitel.neighborhood.logic.R.string.name_sort) -> mainModel.observeNames.collectAsState()
-                stringResource(zouitel.neighborhood.logic.R.string.oldest_sort) -> mainModel.observeOldest.collectAsState()
-                stringResource(zouitel.neighborhood.logic.R.string.newest_sort) -> mainModel.observeNewest.collectAsState()
-                stringResource(zouitel.neighborhood.logic.R.string.priority_sort) -> mainModel.observePriorities.collectAsState()
-                else -> mainModel.observeDefaults.collectAsState()
-            }
+        val notes = when (settings.ordination) {
+            stringResource(zouitel.neighborhood.logic.R.string.name_sort) -> mainModel.nameNotes
+            stringResource(zouitel.neighborhood.logic.R.string.oldest_sort) -> mainModel.oldestNotes
+            stringResource(zouitel.neighborhood.logic.R.string.newest_sort) -> mainModel.newestNotes
+            stringResource(zouitel.neighborhood.logic.R.string.priority_sort) -> mainModel.priorityNotes
+            else -> mainModel.defaultNotes
+        }
+
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-//        val gridLayoutState = rememberLazyStaggeredGridState()
         val refreshState = rememberPullToRefreshState()
         val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
         val (gridState, gridHeight) = rememberAutoHeightCacheStaggeredGrid()
@@ -294,53 +286,23 @@ class MainScreen: Screen {
                         }
                     ) {
                         if (settings.layout == CommonConstants.LIST) {
-                            LazyColumn(
-                                state = lazyListState,
-                                modifier = Modifier
-                                    .animateContentSize()
-                                    .fillMaxSize()
-                                    .then(listHeight)
-                                    .padding((3.dp)),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                items(
-                                    items = notes.value,
-                                    key = { it.data.uid }
-                                ) { entity ->
-                                    NoteCard(
-                                        settingsModel = settingsModel,
-                                        audioModel = audioModel,
-                                        linkModel = linkModel,
-                                        searchModel = searchModel,
-                                        note = entity
-                                    )
-                                }
-                            }
+                            LazyVerticalList(
+                                mainModel,
+                                notes,
+                                settingsModel,
+                                audioModel,
+                                linkModel,
+                                searchModel
+                            )
                         } else {
-                            LazyVerticalStaggeredGrid(
-                                state = gridState,
-                                modifier = Modifier
-                                    .animateContentSize()
-                                    .fillMaxSize()
-                                    .then(gridHeight)
-                                    .padding(3.dp),
-                                columns = StaggeredGridCells.Fixed(2),
-                                verticalItemSpacing = 6.dp,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                items(
-                                    items = notes.value,
-                                    key = { it.data.uid }
-                                ) { entity ->
-                                    NoteCard(
-                                        settingsModel = settingsModel,
-                                        audioModel = audioModel,
-                                        linkModel = linkModel,
-                                        searchModel = searchModel,
-                                        note = entity
-                                    )
-                                }
-                            }
+                            LazyVerticalGrid(
+                                mainModel,
+                                notes,
+                                settingsModel,
+                                audioModel,
+                                linkModel,
+                                searchModel
+                            )
                         }
                     }
                 }

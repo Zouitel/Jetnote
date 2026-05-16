@@ -395,4 +395,5 @@
     <string name="creator_widget_description">Dette er en skaber-layout-widget</string>
     <string name="notes_list_description">Dette er en noteliste</string>
     <string name="record_deleted">post slettet!</string>
+    <string name="language">Sproget</string>
 </resources>

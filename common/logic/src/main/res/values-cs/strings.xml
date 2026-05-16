@@ -388,4 +388,5 @@
     <string name="creator_widget_description">Toto je widget rozvržení tvůrce</string>
     <string name="notes_list_description">Toto je seznam poznámek</string>
     <string name="record_deleted">záznam smazán!</string>
+    <string name="language">Ten jazyk</string>
 </resources>

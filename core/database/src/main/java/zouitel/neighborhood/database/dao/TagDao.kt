@@ -7,7 +7,6 @@ import androidx.room.Query
 import androidx.room.Upsert
 import zouitel.neighborhood.database.model.Tag
 import zouitel.neighborhood.database.model.Tag.Companion.TABLE_NAME
-import zouitel.neighborhood.database.utils.Constants.ID
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,6 +23,6 @@ interface TagDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(tags: List<Tag>)
 
-    @Query("DELETE FROM $TABLE_NAME WHERE $ID = :id")
+    @Query("DELETE FROM $TABLE_NAME WHERE ID = :id")
     suspend fun delete(id: Long)
 }

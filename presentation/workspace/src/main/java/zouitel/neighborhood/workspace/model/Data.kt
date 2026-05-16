@@ -16,7 +16,7 @@ data class Data (
     val uid: String = DEFAULT_TXT,
     val userUid: String = "null",
     val title: String = DEFAULT_TXT,
-    val description: String = DEFAULT_TXT,
+    val position: Int = 0,
     val priority: Int = DEFAULT_INT,
     val background: Int? = null,
     val textColor: Int? = null,
@@ -24,7 +24,6 @@ data class Data (
     val lastEdit: Instant = Clock.System.now(),
     val archived: Boolean = DEFAULT_BOOLEAN,
     val blocks: List<Block> = emptyList(),
-    val tasks: List<Task> = emptyList(),
     val medias: List<Media> = emptyList(),
     val audios: List<Audio> = emptyList(),
     val reminders: List<Reminder> = emptyList()

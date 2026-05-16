@@ -400,4 +400,5 @@
     <string name="creator_widget_description">Ito ay isang creator layout widget</string>
     <string name="notes_list_description">Ito ay isang listahan ng mga tala</string>
     <string name="record_deleted">nabura ang rekord!</string>
+    <string name="language">Ang wika</string>
 </resources>

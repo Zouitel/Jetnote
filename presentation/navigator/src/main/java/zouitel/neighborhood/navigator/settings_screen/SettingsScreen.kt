@@ -1,24 +1,37 @@
 package zouitel.neighborhood.navigator.settings_screen
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -37,8 +50,9 @@ import zouitel.neighborhood.assistant.ui.assistant.AssistantScreen
 import zouitel.neighborhood.assistant.ui.assistant.AssistantScreenModel
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
+import zouitel.neighborhood.logic.LanguageManager
 import zouitel.neighborhood.navigator.R
-import zouitel.neighborhood.navigator.about_screen.Licenses
+import zouitel.neighborhood.logic.R as LR
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
 import zouitel.neighborhood.navigator.utils.sound
@@ -91,6 +105,8 @@ class SettingsScreen: Screen {
         val snackbarState = remember { SnackbarHostState() }
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
+        var showLanguagesSheet by remember { mutableStateOf(false) }
+        val currentLang = remember { LanguageManager.getCurrentLanguage() }
 
         Scaffold(
             snackbarHost = {
@@ -130,7 +146,7 @@ class SettingsScreen: Screen {
                     },
                     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                         .reportable(settings.isShakable)
-                        .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen),
+                        .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen || showLanguagesSheet),
                 ) { paddingValues ->
                     LazyColumn(
                         state = lazyListState,
@@ -145,8 +161,8 @@ class SettingsScreen: Screen {
                                 description = stringResource(zouitel.neighborhood.logic.R.string.account_sync_description).trimIndent(),
                                 icon = {
                                     AsyncImage(
-                                        model = R.drawable.google_drive,
-                                        contentDescription = null
+                                        R.drawable.google_drive,
+                                        null
                                     )
                                 }
                             ) {
@@ -160,8 +176,8 @@ class SettingsScreen: Screen {
                                 description = stringResource(zouitel.neighborhood.logic.R.string.assistant_configuration_description).trimIndent(),
                                 icon = {
                                     AsyncImage(
-                                        model = R.drawable.star,
-                                        contentDescription = null
+                                        R.drawable.star,
+                                        null
                                     )
                                 }
                             ) {
@@ -176,8 +192,8 @@ class SettingsScreen: Screen {
                                 checked = settings.darkTheme,
                                 icon = {
                                     AsyncImage(
-                                        model = R.drawable.dark_mode,
-                                        contentDescription = null
+                                        R.drawable.dark_mode,
+                                        null
                                     )
                                 },
                                 onChecked = {
@@ -284,20 +300,50 @@ class SettingsScreen: Screen {
                             )
                         }
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
-//                        item {
-//                            NavigateItem(
-//                                title = stringResource(zouitel.neighborhood.logic.R.string.licenses),
-//                                description = stringResource(zouitel.neighborhood.logic.R.string.licenses_description).trimIndent(),
-//                                icon = {
-//                                    AsyncImage(
-//                                        model = R.drawable.certificate,
-//                                        contentDescription = null
-//                                    )
-//                                }
-//                            ) {
-//                                sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            }
-//                        }
+                        item {
+                            NavigateItem(
+                                title = stringResource(LR.string.language),
+                                description = null,
+                                icon = {
+                                    AsyncImage(
+                                        R.drawable.translate,
+                                        null
+                                    )
+                                }
+                                ) {
+                                showLanguagesSheet = true
+                            }
+                        }
+                        item { Spacer(Modifier.padding(10.dp, 20.dp)) }
+                    }
+
+                    if (showLanguagesSheet) {
+                        ModalBottomSheet({ showLanguagesSheet = false }) {
+                            LazyColumn {
+                                items(LanguageManager.AppLanguage.entries) { lang ->
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                LanguageManager.setLanguage(lang)
+                                                showLanguagesSheet = false
+                                            }
+                                            .padding(vertical = 12.dp)
+                                    ) {
+                                        RadioButton(
+                                            selected = lang == currentLang,
+                                            onClick = {
+                                                LanguageManager.setLanguage(lang)
+                                                showLanguagesSheet = false
+                                            }
+                                        )
+                                        Spacer(Modifier.width(8.dp))
+                                        Text(lang.displayName)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

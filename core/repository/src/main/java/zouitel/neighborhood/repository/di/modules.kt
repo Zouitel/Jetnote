@@ -81,6 +81,8 @@ val localRepoLazyModule = lazyModule {
     factoryOf(DataUseCase::Delete)
     factoryOf(DataUseCase::Erase)
     factoryOf(DataUseCase::SweepDrafts)
+    factoryOf(DataUseCase::ReorderNote)
+    factoryOf(DataUseCase::ReorderNotes)
 
     factoryOf(LinkUseCase::ObserveAll)
     factoryOf(LinkUseCase::GetAll)

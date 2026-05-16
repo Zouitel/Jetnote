@@ -397,4 +397,5 @@
     <string name="creator_widget_description">Tämä on luoja-asetteluwidget</string>
     <string name="notes_list_description">Tämä on muistiinpanoluettelo</string>
     <string name="record_deleted">tietue poistettu!</string>
+    <string name="language">Kieli</string>
 </resources>

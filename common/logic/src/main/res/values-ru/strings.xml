@@ -397,4 +397,5 @@
     <string name="creator_widget_description">Это виджет макета создателя</string>
     <string name="notes_list_description">Это список заметок</string>
     <string name="record_deleted">запись удалена!</string>
+    <string name="language">Этот язык</string>
 </resources>

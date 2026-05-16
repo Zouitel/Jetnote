@@ -390,4 +390,5 @@
     <string name="creator_widget_description">Ini adalah widget tata letak kreator</string>
     <string name="notes_list_description">Ini adalah daftar catatan</string>
     <string name="record_deleted">rekaman dihapus!</string>
+    <string name="language">Bahasa tersebut</string>
 </resources>

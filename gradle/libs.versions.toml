@@ -11,6 +11,7 @@ permissionsCompose = "0.20.1"
 playServicesAuth = "21.4.0"
 playServicesMlkitDocumentScanner = "16.0.0"
 print = "1.1.0"
+reorderable = "3.1.0"
 sqliteKtx = "2.6.1"
 targetSdk-version = "35"
 code-version = "810"
@@ -101,6 +102,7 @@ profileinstaller = "1.4.1"
 material = "1.13.0"
 identityJvm = "202411.1"
 revenuecat = "9.25.0"
+foundationLayout = "1.11.1"
 
 [libraries]
 #Kotlin.
@@ -134,6 +136,7 @@ permissions-microphone = { module = "dev.icerock.moko:permissions-microphone", v
 permissions-gallery = { module = "dev.icerock.moko:permissions-gallery", version.ref = "permissionsCompose" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-mlkit-document-scanner = { module = "com.google.android.gms:play-services-mlkit-document-scanner", version.ref = "playServicesMlkitDocumentScanner" }
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
 workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }

@@ -23,7 +23,6 @@ class DataMapper {
         val date = JsonInstant.encodeToString<Instant>(data.date)
         val lastEdit = JsonInstant.encodeToString<Instant>(now)
         val blocks = BlocksJson.encodeToString<List<Block>>(data.blocks)
-        val tasks = JsonInstant.encodeToString<List<Task>>(data.tasks)
         val medias = JsonInstant.encodeToString<List<Media>>(data.medias)
         val audios = JsonInstant.encodeToString<List<Audio>>(data.audios)
         val reminders = JsonInstant.encodeToString<List<Reminder>>(data.reminders)
@@ -31,7 +30,7 @@ class DataMapper {
             uid = data.uid,
             userUid = data.userUid,
             title = data.title,
-            description = data.description,
+            position = data.position,
             priority = data.priority,
             background = data.background,
             textColor = data.textColor,
@@ -39,7 +38,6 @@ class DataMapper {
             lastEdit = lastEdit,
             archived = data.archived,
             blocks = blocks,
-            tasks = tasks,
             medias = medias,
             audios = audios,
             reminders = reminders
@@ -50,7 +48,6 @@ class DataMapper {
         val date = JsonInstant.decodeFromString<Instant>(data.date)
         val lastEdit = JsonInstant.decodeFromString<Instant>(data.lastEdit)
         val blocks = BlocksJson.decodeFromString<List<Block>>(data.blocks)
-        val tasks = JsonInstant.decodeFromString<List<Task>>(data.tasks)
         val medias = JsonInstant.decodeFromString<List<Media>>(data.medias)
         val audios = JsonInstant.decodeFromString<List<Audio>>(data.audios)
         val reminders = JsonInstant.decodeFromString<List<Reminder>>(data.reminders)
@@ -58,7 +55,7 @@ class DataMapper {
             uid = data.uid,
             userUid = data.userUid,
             title = data.title,
-            description = data.description,
+            position = data.position,
             priority = data.priority,
             background = data.background,
             textColor = data.textColor,
@@ -66,7 +63,6 @@ class DataMapper {
             lastEdit = lastEdit,
             archived = data.archived,
             blocks = blocks,
-            tasks = tasks,
             medias = medias,
             audios = audios,
             reminders = reminders

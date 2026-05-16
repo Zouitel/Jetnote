@@ -393,4 +393,5 @@
     <string name="creator_widget_description">Ово је виџет распореда творца</string>
     <string name="notes_list_description">Ово је листа белешки</string>
     <string name="record_deleted">запис је обрисан!</string>
+    <string name="language">Тај језик</string>
 </resources>

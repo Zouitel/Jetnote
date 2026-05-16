@@ -384,4 +384,5 @@
     <string name="creator_widget_description">Þetta er sköpunarútlitsbúnaður</string>
     <string name="notes_list_description">Þetta er glósulisti</string>
     <string name="record_deleted">skrá eytt!</string>
+    <string name="language">Tungumálið</string>
 </resources>

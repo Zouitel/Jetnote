@@ -402,4 +402,5 @@
     <string name="creator_widget_description">Acesta este un widget de aspect creator</string>
     <string name="notes_list_description">Aceasta este o listă de note</string>
     <string name="record_deleted">înregistrare ștearsă!</string>
+    <string name="language">Limba</string>
 </resources>

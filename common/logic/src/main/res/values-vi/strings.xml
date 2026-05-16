@@ -361,4 +361,5 @@
     <string name="creator_widget_description">Đây là tiện ích bố cục người tạo</string>
     <string name="notes_list_description">Đây là danh sách ghi chú</string>
     <string name="record_deleted">Bản ghi đã xóa!</string>
+    <string name="language">Ngôn ngữ</string>
 </resources>

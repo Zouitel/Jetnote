@@ -400,4 +400,5 @@
     <string name="creator_widget_description">Bu bir oluşturucu düzeni widget\'ıdır</string>
     <string name="notes_list_description">Bu bir notlar listesidir</string>
     <string name="record_deleted">kayıt silindi!</string>
+    <string name="language">Bu dil</string>
 </resources>

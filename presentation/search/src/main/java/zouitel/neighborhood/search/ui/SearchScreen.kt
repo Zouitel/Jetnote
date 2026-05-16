@@ -2,10 +2,12 @@ package zouitel.neighborhood.search.ui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ContextualFlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
@@ -42,11 +46,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -114,7 +122,6 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
         val links by remember(linkModel, linkModel::observeAll).collectAsState()
         val notes by remember(searchModel, searchModel::notes).collectAsState()
         val medias = remember(notes) { notes.filter { it.data.medias.isNotEmpty() } }
-        val tasks = remember(notes) { notes.filter { it.data.tasks.isNotEmpty() } }
         val audios = remember(notes) { notes.filter { it.data.audios.isNotEmpty() } }
         val reminders = remember(notes) { notes.filter { it.data.reminders.isNotEmpty() } }
         val searchWithinResource = stringResource(R.string.search_within)
@@ -138,8 +145,8 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
         val uiState by remember(searchModel, searchModel::uiState).collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val listLayoutState = rememberLazyListState()
-        val gridLayoutState = rememberLazyStaggeredGridState()
+        val lazyListState = rememberLazyListState()
+        val lazyStaggeredGridState = rememberLazyStaggeredGridState()
 
         val filteredNotes by remember(notes) {
             derivedStateOf {
@@ -163,11 +170,8 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                         note.tags.any { tag -> tag.label == (uiState.typeState as SearchTypes.Tag).label }
                     }
 
-                    SearchTypes.Tasks -> tasks
-
                     is SearchTypes.Text -> notes.filter {
-                        it.data.title.contains(uiState.text, true) ||
-                                it.data.description.contains(uiState.text, true)
+                        it.data.title.contains(uiState.text, true) /*|| it.data.description.contains(uiState.text)*/
                     }
 
                     SearchTypes.Medias -> medias
@@ -209,49 +213,39 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                 modifier = Modifier.fillMaxSize()
             ) {
                 if (uiState.text.isNotEmpty() || uiState.typeState !is SearchTypes.Text) {
-                    if (settings.ordination == CommonConstants.LIST) {
+                    if (settings.layout == CommonConstants.LIST) {
                         LazyColumn(
-                            state = listLayoutState,
-                            contentPadding = paddingValues,
-                            modifier = Modifier
-                                .animateContentSize()
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                            state = lazyListState,
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
-                            items(
-                                items = filteredNotes,
-                                key = { it.data.uid }
-                            ) { entity ->
+                            items(notes, key = { it.data.uid }) { note ->
                                 NoteCard(
                                     settingsModel = settingsModel,
                                     audioModel = audioModel,
                                     linkModel = linkModel,
                                     searchModel = searchModel,
-                                    note = entity
+                                    note = note
                                 )
                             }
                         }
                     } else {
                         LazyVerticalStaggeredGrid(
-                            state = gridLayoutState,
-                            contentPadding = paddingValues,
-                            modifier = Modifier
-                                .animateContentSize()
-                                .fillMaxSize(),
+                            state = lazyStaggeredGridState,
+                            modifier = Modifier.fillMaxSize(),
                             columns = StaggeredGridCells.Fixed(2),
-                            verticalItemSpacing = 6.dp,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            contentPadding = PaddingValues(8.dp),
+                            verticalItemSpacing = 8.dp,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
-                            items(
-                                items = filteredNotes,
-                                key = { it.data.uid }
-                            ) { entity ->
+                            items(notes, key = { it.data.uid }) { note ->
                                 NoteCard(
                                     settingsModel = settingsModel,
                                     audioModel = audioModel,
                                     linkModel = linkModel,
                                     searchModel = searchModel,
-                                    note = entity
+                                    note = note
                                 )
                             }
                         }
@@ -268,7 +262,6 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                 stringResource(R.string.links),
                                 stringResource(R.string.reminders),
                                 stringResource(R.string.audios),
-                                stringResource(R.string.tasks),
                                 stringResource(R.string.medias),
                                 stringResource(R.string.priorities)
                             )
@@ -299,7 +292,7 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null): Screen {
                                             SearchTypes.Links -> links
                                             SearchTypes.Audios -> audios
                                             SearchTypes.Reminders -> reminders
-                                            SearchTypes.Tasks -> tasks
+//                                            SearchTypes.Tasks -> tasks
                                             is SearchTypes.Medias -> medias
                                             is SearchTypes.Properties -> notesByPriority
                                             else -> emptyList()

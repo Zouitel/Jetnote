@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import zouitel.neighborhood.database.model.NoteAndTag
 import zouitel.neighborhood.database.model.NoteAndTag.Companion.TABLE_NAME
-import zouitel.neighborhood.database.utils.Constants.UUID
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,6 +26,6 @@ interface NoteAndTagDao {
     @Query("DELETE FROM $TABLE_NAME WHERE id = :id")
     suspend fun delete(id: Long)
 
-    @Query("DELETE FROM $TABLE_NAME WHERE uid NOT IN (SELECT $UUID FROM note_data_table)")
+    @Query("DELETE FROM $TABLE_NAME WHERE uid NOT IN (SELECT UUID FROM note_data_table)")
     suspend fun deleteDrafts()
 }

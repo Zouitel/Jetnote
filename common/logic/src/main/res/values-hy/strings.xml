@@ -428,4 +428,5 @@
     <string name="creator_widget_description">Սա ստեղծողի դասավորության վիջեթն է</string>
     <string name="notes_list_description">Սա նշումների ցանկ է</string>
     <string name="record_deleted">գրառումը ջնջված է!</string>
+    <string name="language">Լեզուն</string>
 </resources>

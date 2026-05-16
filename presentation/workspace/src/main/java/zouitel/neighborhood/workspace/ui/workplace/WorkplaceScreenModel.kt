@@ -36,43 +36,37 @@ class WorkplaceScreenModel(val application: Application) : ScreenModel {
         content.consume {
             it.uri?.let { uri ->
                 screenModelScope.launch {
-                    // ── 1. Resolve the real media type from the URI's MIME ────
-                    val mime      = application.contentResolver.getType(uri) ?: ""
+                    val mime = application.contentResolver.getType(uri) ?: ""
                     val mediaType = when {
                         mime.startsWith("video/") -> MediaType.VIDEO
                         mime.startsWith("image/") -> MediaType.IMAGE
-                        else                      -> MediaType.DOCUMENT   // pdf, docx, xlsx, pptx …
+                        else -> MediaType.DOCUMENT
                     }
 
-                    // ── 2. Route to the correct app-private directory ─────────
                     val mediaDir = when (mediaType) {
-                        MediaType.DOCUMENT -> Environment.DIRECTORY_DOCUMENTS   // ← was always PICTURES
-                        MediaType.VIDEO    -> Environment.DIRECTORY_MOVIES
-                        MediaType.IMAGE    -> Environment.DIRECTORY_PICTURES
+                        MediaType.DOCUMENT -> Environment.DIRECTORY_DOCUMENTS
+                        MediaType.VIDEO -> Environment.DIRECTORY_MOVIES
+                        MediaType.IMAGE -> Environment.DIRECTORY_PICTURES
                     }.let { dir -> application.getExternalFilesDir(dir) }
 
-                    val mediaName       = getImageDisplayName(application, uri)
+                    val mediaName = getImageDisplayName(application, uri)
                     val destinationPath = File(mediaDir, mediaName).path
 
-                    // ── 3. Colour — only meaningful for images ────────────────
                     val averageColor = when (mediaType) {
                         MediaType.IMAGE -> getAverageColorFromImage(application, uri.toString())
-                        else            -> Color.DarkGray   // neutral placeholder for video/document
+                        else -> Color.DarkGray
                     }
 
-                    // ── 4. Optimistic insert with the original URI ────────────
-                    //      (visible immediately; replaced with local path once copied)
                     data.value = data.value.copy(
                         medias = data.value.medias.plusElement(
                             Media(
-                                uri   = uri.toString(),
-                                type  = mediaType,          // ← was missing, defaulted to IMAGE
+                                uri = uri.toString(),
+                                type = mediaType,
                                 color = averageColor.toArgb()
                             )
                         )
                     )
 
-                    // ── 5. Background copy → swap URI when done ───────────────
                     enqueueFileProcessing(uri, destinationPath) { copiedPath ->
                         data.value = data.value.copy(
                             medias = data.value.medias.map { media ->
@@ -88,9 +82,9 @@ class WorkplaceScreenModel(val application: Application) : ScreenModel {
     }
 
     fun enqueueFileProcessing(
-        uri            : Uri,
+        uri: Uri,
         destinationPath: String,
-        onComplete     : (String) -> Unit = {}
+        onComplete: (String) -> Unit = {}
     ) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
@@ -98,7 +92,7 @@ class WorkplaceScreenModel(val application: Application) : ScreenModel {
             .build()
 
         val inputData = workDataOf(
-            "CONTENT_URI"      to uri.toString(),
+            "CONTENT_URI" to uri.toString(),
             "DESTINATION_PATH" to destinationPath
         )
 

@@ -395,4 +395,5 @@
     <string name="creator_widget_description">Ovo je widget rasporeda kreatora</string>
     <string name="notes_list_description">Ovo je popis bilješki</string>
     <string name="record_deleted">zapis obrisan!</string>
+    <string name="language">Jezik</string>
 </resources>

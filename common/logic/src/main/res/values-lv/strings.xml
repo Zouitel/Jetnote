@@ -398,4 +398,5 @@
     <string name="creator_widget_description">Šis ir veidotāja izkārtojuma logrīks</string>
     <string name="notes_list_description">Šis ir piezīmju saraksts</string>
     <string name="record_deleted">ieraksts dzēsts!</string>
+    <string name="language">Šī valoda</string>
 </resources>

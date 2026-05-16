@@ -391,4 +391,5 @@
     <string name="creator_widget_description">Toto je widget rozloženia tvorcu</string>
     <string name="notes_list_description">Toto je zoznam poznámok</string>
     <string name="record_deleted">záznam zmazaný!</string>
+    <string name="language">Ten jazyk</string>
 </resources>

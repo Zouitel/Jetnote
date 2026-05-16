@@ -366,12 +366,6 @@ data class OptionsScreen(
                     }
                 }
                 item {
-                    FeatureItem(R.string.tasks, WR.drawable.check) {
-                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                        bottomNav.show(AddTaskScreen(null, data))
-                    }
-                }
-                item {
                     FeatureItem(R.string.recorder, WR.drawable.microphone) {
                         scope.launch {
                             permissionsModel.requestPermission(Permission.RECORD_AUDIO)
@@ -498,184 +492,6 @@ data class OptionsScreen(
                     }
                 }
             }
-//            LazyColumn(modifier = Modifier.navigationBarsPadding()) {
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.gallery), icon = GALLERY) {
-//                        scope.launch {
-//                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            galleryLauncher.launch(
-//                                PickVisualMediaRequest(
-//                                    ActivityResultContracts.PickVisualMedia.ImageAndVideo
-//                                )
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.audio), icon = WAVEFORM) {
-//                        scope.launch {
-//                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            permissionsModel.requestPermission(Permission.STORAGE).collect {
-//                                when (it) {
-//                                    PermissionResult.Denied -> Toast.makeText(
-//                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
-//                                    ).show()
-//
-//                                    is PermissionResult.Error -> Toast.makeText(
-//                                        context, it.message, Toast.LENGTH_SHORT
-//                                    ).show()
-//
-//                                    else -> navigator.push(AudioListScreen(data))
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.take_photo), icon = CAMERA) {
-//                        scope.launch {
-//                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            permissionsModel.requestPermission(Permission.CAMERA).collect {
-//                                when (it) {
-//                                    PermissionResult.Denied -> Toast.makeText(
-//                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
-//                                    ).show()
-//
-//                                    is PermissionResult.Error -> Toast.makeText(
-//                                        context, it.message, Toast.LENGTH_SHORT
-//                                    ).show()
-//
-//                                    PermissionResult.Granted ->
-//                                        cameraLauncher.launch(getPictureUri())
-//
-//                                    PermissionResult.PermanentlyDenied ->
-//                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.video_capture), icon = VIDEO_CAMERA) {
-//                        scope.launch {
-//                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                            permissionsModel.requestPermission(Permission.CAMERA).collect {
-//                                when (it) {
-//                                    PermissionResult.Denied -> Toast.makeText(
-//                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
-//                                    ).show()
-//
-//                                    is PermissionResult.Error -> Toast.makeText(
-//                                        context, it.message, Toast.LENGTH_SHORT
-//                                    ).show()
-//
-//                                    PermissionResult.Granted -> videoCapture.launch(
-//                                        Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
-//                                            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
-//                                        }
-//                                    )
-//
-//                                    PermissionResult.PermanentlyDenied ->
-//                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.recorder), icon = MIC) {
-//                        scope.launch {
-//                            permissionsModel.requestPermission(Permission.RECORD_AUDIO)
-//                                .collectLatest {
-//                                    when (it) {
-//                                        PermissionResult.Denied -> Toast.makeText(
-//                                            context, permissionDeniedResource, Toast.LENGTH_SHORT
-//                                        ).show()
-//
-//                                        is PermissionResult.Error -> Toast.makeText(
-//                                            context, it.message, Toast.LENGTH_SHORT
-//                                        ).show()
-//
-//                                        PermissionResult.Granted -> showRecorderSheet.value = true
-//                                        PermissionResult.PermanentlyDenied ->
-//                                            permissionsModel.permissionDeniedHandle(
-//                                                snackBarHostState
-//                                            )
-//                                    }
-//                                }
-//                        }
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.document), icon = DOCUMENT) {
-//                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                        documentLauncher.launch(
-//                            arrayOf(
-//                                "application/pdf",
-//                                "application/msword",
-//                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-//                                "application/vnd.ms-excel",
-//                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-//                                "application/vnd.ms-powerpoint",
-//                                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-//                                "text/plain"
-//                            )
-//                        )
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.scanner), icon = CommonIcons.DOCUMENT_SCANNER) {
-//                        navigator.push(OCRScreen(noteId = data.value.uid, data = data))
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.tags), icon = TAGS) {
-//                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                        bottomNav.show(tagsScreen)
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.tasks), icon = LIST_CHECK) {
-//                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-//                        bottomNav.show(AddTaskScreen(null, data))
-//                    }
-//                }
-//
-//                item {
-//                    CommonOptionItem(name = stringResource(R.string.reminder), icon = BELL) {
-//                        scope.launch {
-//                            permissionsModel.requestPermission(Permission.REMOTE_NOTIFICATION)
-//                                .collect {
-//                                    when (it) {
-//                                        PermissionResult.Denied -> Toast.makeText(
-//                                            context, permissionDeniedResource, Toast.LENGTH_SHORT
-//                                        ).show()
-//
-//                                        is PermissionResult.Error -> Toast.makeText(
-//                                            context, it.message, Toast.LENGTH_SHORT
-//                                        ).show()
-//
-//                                        PermissionResult.Granted -> showReminderSheet.value = true
-//                                        PermissionResult.PermanentlyDenied ->
-//                                            permissionsModel.permissionDeniedHandle(
-//                                                snackBarHostState
-//                                            )
-//                                    }
-//                                }
-//                        }
-//                    }
-//                }
-//
-//                item {
                     val currentPriority = Priorities.entries[data.value.priority]
                     val priority = when(Priorities.entries[data.value.priority].priority) {
                         "Low" -> stringResource(R.string.low_priority)
@@ -702,13 +518,7 @@ data class OptionsScreen(
                             data.value = data.value.copy(priority = priority.index)
                         }
                     )
-//                }
-//
-//                item {
                 NoteDates(data.value)
-//                }
-//
-//                item {
                     SnackbarHost(snackBarHostState) {
                         Snackbar(
                             snackbarData = it,
@@ -719,8 +529,6 @@ data class OptionsScreen(
                             actionColor = MaterialTheme.colorScheme.surface
                         )
                     }
-//                }
-//            }
 
             if (showRecorderSheet.value) {
                 ModalBottomSheet(

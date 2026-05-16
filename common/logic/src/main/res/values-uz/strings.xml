@@ -368,4 +368,5 @@
     <string name="creator_widget_description">Bu yaratuvchi tartibi vidjeti</string>
     <string name="notes_list_description">Bu eslatmalar ro\'yxati</string>
     <string name="record_deleted">Yozuv o\'chirildi!</string>
+    <string name="language">Bu til</string>
 </resources>

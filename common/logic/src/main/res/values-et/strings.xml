@@ -393,4 +393,5 @@
     <string name="creator_widget_description">See on looja paigutuse vidin</string>
     <string name="notes_list_description">See on märkmete loend</string>
     <string name="record_deleted">kirje kustutatud!</string>
+    <string name="language">Keel</string>
 </resources>

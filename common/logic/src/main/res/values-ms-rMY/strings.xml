@@ -391,4 +391,5 @@
     <string name="creator_widget_description">Ini ialah widget susun atur pencipta</string>
     <string name="notes_list_description">Ini ialah senarai nota</string>
     <string name="record_deleted">rekod dipadam!</string>
+    <string name="language">Bahasa itu</string>
 </resources>

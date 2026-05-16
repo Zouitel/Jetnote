@@ -61,7 +61,8 @@ class AddTaskScreen(val currentTask: Task?, val currentData: MutableState<Data>)
         val fieldState = rememberTextFieldState(currentTask?.item ?: "")
         val focusRequester = remember { FocusRequester() }
         val taskResource = stringResource(zouitel.neighborhood.logic.R.string.task_placeholder)
-        val taskCannotBeEmptyResource = stringResource(zouitel.neighborhood.logic.R.string.task_cannot_be_empty)
+        val taskCannotBeEmptyResource =
+            stringResource(zouitel.neighborhood.logic.R.string.task_cannot_be_empty)
         var placeholder by remember { mutableStateOf(taskResource) }
         val scope = rememberCoroutineScope()
 
@@ -93,25 +94,23 @@ class AddTaskScreen(val currentTask: Task?, val currentData: MutableState<Data>)
                         }
                     } else {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        currentTask?.let { task ->
-                            currentData.value = currentData.value.copy(
-                                tasks = currentData.value.tasks
-                                    .minusElement(task)
-                                    .plusElement(task.copy(item = inputTask))
-                            )
-                            bottomNav.hide()
-                        } ?: runCatching {
-                            currentData.value = currentData.value.copy(
-                                tasks = currentData.value.tasks.plusElement(
-                                    Task(Random.nextLong(), item = inputTask)
-                                )
-                            )
-                        }
-                        fieldState.clearText()
-                        currentTask = null
+//                        currentTask?.let { task ->
+//                            currentData.value = currentData.value.copy(
+//                                tasks = currentData.value.tasks
+//                                    .minusElement(task)
+//                                    .plusElement(task.copy(item = inputTask))
+//                            )
+//                            bottomNav.hide()
+//                        } ?: runCatching {
+//                            currentData.value = currentData.value.copy(
+//                                tasks = currentData.value.tasks.plusElement(
+//                                    Task(Random.nextLong(), item = inputTask)
+//                                )
+//                            )
                     }
-                }
-            )
+                    fieldState.clearText()
+                    currentTask = null
+                })
         }
     }
 }

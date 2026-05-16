@@ -40,4 +40,12 @@ class DataRepositoryImpl(
     override suspend fun sweepDrafts() {
         dataSource.sweepDrafts()
     }
+
+    override suspend fun reorderNote(userUid: String, position: Int) {
+        dataSource.reorderNote(userUid, position)
+    }
+
+    override suspend fun reorderNotes(positions: Map<String, Int>) {
+        dataSource.reorderNotes(positions)
+    }
 }

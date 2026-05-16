@@ -58,4 +58,7 @@ dependencies {
     implementation("com.google.api-client:google-api-client-android:2.0.0") {
         exclude("org.apache.httpcomponents")
     }
+
+    // Reorderable . drag to reorder.
+    implementation(libs.reorderable)
 }

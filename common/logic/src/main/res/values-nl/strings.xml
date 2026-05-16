@@ -397,4 +397,5 @@
     <string name="creator_widget_description">Dit is een maker-indeling widget</string>
     <string name="notes_list_description">Dit is een notitielijst</string>
     <string name="record_deleted">record verwijderd!</string>
+    <string name="language">De taal</string>
 </resources>

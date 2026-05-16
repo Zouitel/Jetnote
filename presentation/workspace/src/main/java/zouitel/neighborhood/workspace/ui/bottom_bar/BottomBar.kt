@@ -83,7 +83,6 @@ internal fun BottomBar(
     data: MutableState<Data>,
     titleState: TextFieldState?,
     editorState: EditorStateHolder,
-    descriptionState: TextFieldState?,
     isSound: Boolean?,
     dataModel: DataScreenModel,
     linkModel: LinkScreenModel
@@ -128,7 +127,7 @@ internal fun BottomBar(
                                         OptionsScreen(
                                             data = data,
                                             titleState = titleState,
-                                            descriptionState = descriptionState,
+                                            titleState
                                         )
                                     )
                                 }) {
@@ -143,7 +142,7 @@ internal fun BottomBar(
                             UndoRedo(
                                 isSound = isSound,
                                 titleState = titleState,
-                                descriptionState = descriptionState
+                                titleState,
                             )
 
                             IconButton(
@@ -157,15 +156,15 @@ internal fun BottomBar(
                                         Action.Insert(
                                             data.value.copy(
                                                 userUid = auth.uid.toString(),
-                                                title = titleState?.text.toString()
-                                                    .ifEmpty { untitledResource },
+                                                title = titleState?.text.toString().ifEmpty { untitledResource },
+                                                position = 2,
                                                 blocks = editorState.state.blocks
                                             )
                                         )
                                     )
                                     linkModel.urlsProcessing(
                                         data.value.uid,
-                                        descriptionState?.text.toString()
+                                        "..."
                                     )
                                     navigator?.items?.size?.let {
                                         if (it > 1) {

@@ -85,7 +85,7 @@ class NotificationReceiver: BroadcastReceiver(), KoinComponent {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(false)
             .setContentTitle(note.title)
-            .setContentText(note.description)
+            .setContentText("note.description")
             .build()
 
         notifyManager.notify(

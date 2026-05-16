@@ -12,18 +12,16 @@ class QuickDataMapper {
 
     fun toDomain(data: QuickData): OutData {
         val blocks = JsonInstant.encodeToString<List<Block>>(data.blocks)
-        val tasks = JsonInstant.encodeToString<List<Task>>(data.tasks)
         val medias = JsonInstant.encodeToString<List<Media>>(data.medias)
         return OutData(
             uid = data.uid,
             title = data.title,
-            description = data.description,
+            position = data.position,
             priority = data.priority,
             background = data.background,
             textColor = data.textColor,
             archived = data.archived,
             blocks = blocks,
-            tasks = tasks,
             medias = medias,
             userUid = "",
             date = "",

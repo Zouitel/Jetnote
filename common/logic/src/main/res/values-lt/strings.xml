@@ -399,4 +399,5 @@
     <string name="creator_widget_description">Tai kūrėjo išdėstymo valdiklis</string>
     <string name="notes_list_description">Tai užrašų sąrašas</string>
     <string name="record_deleted">įrašas ištrintas!</string>
+    <string name="language">Ta kalba</string>
 </resources>

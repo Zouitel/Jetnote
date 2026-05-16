@@ -397,4 +397,5 @@
     <string name="creator_widget_description">এটি একটি ক্রিয়েটর লেআউট উইজেট</string>
     <string name="notes_list_description">এটি একটি নোটের তালিকা</string>
     <string name="record_deleted">রেকর্ড মুছে ফেলা হয়েছে!</string>
+    <string name="language">ভাষাটি</string>
 </resources>

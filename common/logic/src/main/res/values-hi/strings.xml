@@ -404,4 +404,5 @@
     <string name="creator_widget_description">यह एक क्रिएटर लेआउट विजेट है</string>
     <string name="notes_list_description">यह नोट्स की सूची है</string>
     <string name="record_deleted">रिकॉर्ड हटाया गया!</string>
+    <string name="language">वह भाषा</string>
 </resources>

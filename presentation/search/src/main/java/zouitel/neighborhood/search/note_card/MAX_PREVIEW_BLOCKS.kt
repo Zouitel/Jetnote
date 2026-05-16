@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,21 +31,9 @@ import zouitel.neighborhood.markdown.core.Block
 import zouitel.neighborhood.markdown.core.BlockContent
 import zouitel.neighborhood.markdown.core.BlockType
 import zouitel.neighborhood.markdown.core.SpanStyle as CascadeSpanStyle
-import zouitel.neighborhood.ui.CommonIcons.CIRCLE_18 // reuse existing icon; swap for a checkbox res if available
 
 private const val MAX_PREVIEW_BLOCKS = 8
 
-/**
- * Read-only preview of a Cascade block list for display inside [NoteCard].
- *
- * Renders up to [MAX_PREVIEW_BLOCKS] blocks, then shows a "+N more…" hint.
- * Supports: Paragraph, Heading 1-6, Todo, BulletList, NumberedList, Quote, Divider.
- * Unknown / Custom blocks are silently skipped so they never cause crashes.
- *
- * @param blocks  The block list from [Data.blocks].
- * @param textColor  Resolved text colour (already accounts for note override vs theme).
- * @param modifier  Applied to the outer [Column].
- */
 @Composable
 fun BlocksPreview(
     blocks: List<Block>,
@@ -74,20 +58,17 @@ fun BlocksPreview(
     }
 }
 
-// ─── Per-block renderer ───────────────────────────────────────────────────────
-
 @Composable
 private fun BlockPreviewItem(block: Block, textColor: Color) {
     val indentPadding = (block.attributes.indentationLevel * 16).dp
 
     when (val type = block.type) {
 
-        // ── Paragraph ────────────────────────────────────────────────────────
         is BlockType.Paragraph -> {
             val text = block.annotatedText(textColor) ?: return
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium.copy(color = textColor),
                 maxLines = 5,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
@@ -96,7 +77,6 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
             )
         }
 
-        // ── Headings ─────────────────────────────────────────────────────────
         is BlockType.Heading -> {
             val text = block.annotatedText(textColor) ?: return
             val (weight, size) = when (type.level) {
@@ -112,6 +92,7 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = weight,
                     fontSize = size,
+                    color = textColor,
                 ),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -121,7 +102,6 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
             )
         }
 
-        // ── Todo ─────────────────────────────────────────────────────────────
         is BlockType.Todo -> {
             val text = block.annotatedText(textColor) ?: return
             Row(
@@ -130,8 +110,6 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
                     .fillMaxWidth()
                     .padding(start = indentPadding + 4.dp, end = 4.dp, bottom = 2.dp),
             ) {
-                // Simple square checkbox substitute using a Box; swap for
-                // your own CheckBox composable / icon resource if preferred.
                 Box(
                     modifier = Modifier
                         .size(13.dp)
@@ -163,7 +141,6 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
             }
         }
 
-        // ── Bullet list ───────────────────────────────────────────────────────
         is BlockType.BulletList -> {
             val text = block.annotatedText(textColor) ?: return
             Row(
@@ -180,7 +157,7 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
                 )
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = textColor),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
@@ -188,7 +165,6 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
             }
         }
 
-        // ── Numbered list ─────────────────────────────────────────────────────
         is BlockType.NumberedList -> {
             val text = block.annotatedText(textColor) ?: return
             Row(
@@ -205,7 +181,7 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
                 )
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = textColor),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
@@ -213,7 +189,6 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
             }
         }
 
-        // ── Quote ─────────────────────────────────────────────────────────────
         is BlockType.Quote -> {
             val text = block.annotatedText(textColor) ?: return
             Row(
@@ -244,7 +219,6 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
             }
         }
 
-        // ── Divider ───────────────────────────────────────────────────────────
         is BlockType.Divider -> {
             HorizontalDivider(
                 color = textColor.copy(alpha = 0.2f),
@@ -253,18 +227,10 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
             )
         }
 
-        // ── Custom / Unknown → skip silently ──────────────────────────────────
         else -> Unit
     }
 }
 
-// ─── Span → AnnotatedString conversion ───────────────────────────────────────
-
-/**
- * Extracts the [BlockContent.Text] from this block and builds an [AnnotatedString]
- * with all [CascadeSpanStyle]s mapped to Compose [SpanStyle]s.
- * Returns `null` if the content is not [BlockContent.Text] or the text is blank.
- */
 private fun Block.annotatedText(fallbackColor: Color): AnnotatedString? {
     val content = content as? BlockContent.Text ?: return null
     if (content.text.isBlank()) return null
@@ -278,20 +244,17 @@ private fun Block.annotatedText(fallbackColor: Color): AnnotatedString? {
     }
 }
 
-/**
- * Maps a [CascadeSpanStyle] to the equivalent Compose [SpanStyle].
- * Returns `null` for [CascadeSpanStyle.Custom] so unknown styles are skipped.
- */
 private fun CascadeSpanStyle.toComposeSpanStyle(textColor: Color): SpanStyle? = when (this) {
-    is CascadeSpanStyle.Bold        -> SpanStyle(fontWeight = FontWeight.Bold)
-    is CascadeSpanStyle.Italic      -> SpanStyle(fontStyle = FontStyle.Italic)
-    is CascadeSpanStyle.Underline   -> SpanStyle(textDecoration = TextDecoration.Underline)
+    is CascadeSpanStyle.Bold -> SpanStyle(fontWeight = FontWeight.Bold)
+    is CascadeSpanStyle.Italic -> SpanStyle(fontStyle = FontStyle.Italic)
+    is CascadeSpanStyle.Underline -> SpanStyle(textDecoration = TextDecoration.Underline)
     is CascadeSpanStyle.StrikeThrough -> SpanStyle(textDecoration = TextDecoration.LineThrough)
-    is CascadeSpanStyle.InlineCode  -> SpanStyle(
+    is CascadeSpanStyle.InlineCode -> SpanStyle(
         fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
         background = textColor.copy(alpha = 0.12f),
         fontSize = 12.sp,
     )
-    is CascadeSpanStyle.Highlight   -> SpanStyle(background = Color(colorArgb))
-    is CascadeSpanStyle.Custom      -> null   // extension styles: skip gracefully
+
+    is CascadeSpanStyle.Highlight -> SpanStyle(background = Color(colorArgb))
+    is CascadeSpanStyle.Custom -> null
 }

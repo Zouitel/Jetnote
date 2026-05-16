@@ -393,4 +393,5 @@
     <string name="creator_widget_description">Este é um widget de layout criador</string>
     <string name="notes_list_description">Esta é uma lista de notas</string>
     <string name="record_deleted">registro excluído!</string>
+    <string name="language">O idioma</string>
 </resources>

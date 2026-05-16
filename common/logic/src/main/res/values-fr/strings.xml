@@ -405,4 +405,5 @@
     <string name="creator_widget_description">Ceci est un widget de mise en page créateur</string>
     <string name="notes_list_description">Ceci est une liste de notes</string>
     <string name="record_deleted">Enregistrement supprimé !</string>
+    <string name="language">La langue</string>
 </resources>

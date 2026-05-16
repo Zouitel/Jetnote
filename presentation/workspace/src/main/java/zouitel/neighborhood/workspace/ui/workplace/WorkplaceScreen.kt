@@ -139,19 +139,19 @@ data class WorkplaceScreen(
 
         val titleState = rememberTextFieldState(data.title)
         val editorState = rememberEditorState(data.blocks)
-        val descriptionState = rememberTextFieldState(data.description)
         val defaultBackground = MaterialTheme.colorScheme.surface.toArgb()
         val defaultTextColor = MaterialTheme.colorScheme.onSurface.toArgb()
+
         val currentData = remember(data) {
             mutableStateOf(
                 data.copy(
                     title = titleState.text.toString(),
-                    description = descriptionState.text.toString(),
                     background = data.background ?: defaultBackground,
                     textColor = data.textColor ?: defaultTextColor
                 )
             )
         }
+
         LaunchedEffect(isNew) {
             if (isNew) {
                 currentData.value = currentData.value.copy(uid = uid)
@@ -159,14 +159,13 @@ data class WorkplaceScreen(
             }
         }
 
-        println(editorState.state.blocks)
-
         val focus = remember { FocusRequester() }
 
         val observeNotesAndLabels by remember(
             noteAndTagModel,
             noteAndTagModel::observeAll
         ).collectAsState()
+
         val observeLabels by remember(tagModel, tagModel::observeAll).collectAsState()
 
         val filteredTags by remember {
@@ -181,13 +180,10 @@ data class WorkplaceScreen(
         val scope = rememberCoroutineScope()
         val deletedReminders = remember { mutableStateListOf<Pair<Reminder, Int>>() }
         val deletedTagId = remember { mutableStateListOf<Pair<Long, Int>>() }
-        val deletedTask = remember { mutableStateListOf<Pair<Task, Int>>() }
         val jobCounter = remember { mutableIntStateOf(0) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
-        // Build the editor theme from the note's own background / text colours so
-        // typed text is always visible regardless of dark mode or custom note colours.
         val cascadeTheme = remember(currentData.value.background, currentData.value.textColor) {
             val bg = Color(currentData.value.background ?: defaultBackground)
             val noteText = Color(currentData.value.textColor ?: defaultTextColor)
@@ -204,13 +200,10 @@ data class WorkplaceScreen(
         }
 
         // Replace your existing LaunchedEffect(screen.value) for focus with this:
-        LaunchedEffect(Unit) { // Use Unit or a specific "Open" trigger
+        LaunchedEffect(Unit) {
             if (isNew) {
-                // 1. Wait for the composition to settle and the window to be ready
                 delay(200)
-                // 2. Request focus on the TextField
                 focus.requestFocus()
-                // 3. Explicitly tell the keyboard controller to show
                 keyboard?.show()
             }
         }
@@ -226,7 +219,6 @@ data class WorkplaceScreen(
                     data = currentData,
                     titleState = titleState,
                     editorState = editorState,
-                    descriptionState = descriptionState,
                     isSound = settings.isSound,
                     dataModel = dataModel,
                     linkModel = linkModel
@@ -243,7 +235,6 @@ data class WorkplaceScreen(
                 }
             }
         ) {
-            // Hoist the text states so we can observe if the editor is empty for our placeholder
             val textStates = remember { BlockTextStates() }
 
             Column(
@@ -251,7 +242,6 @@ data class WorkplaceScreen(
                     .fillMaxSize()
                     .imePadding()
             ) {
-                // --- 1. TOP SECTION (Media & Title) ---
                 Column(modifier = Modifier.statusBarsPadding()) {
                     MediaTop(currentData)
 
@@ -273,8 +263,6 @@ data class WorkplaceScreen(
                     }
                 }
 
-                // --- 2. BOTTOM WORKPLACE COMPONENTS ---
-                // This section wraps its content height. It pushes down as needed.
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -345,60 +333,6 @@ data class WorkplaceScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-private fun LazyListScope.tasksList(
-    snackbarState: SnackbarHostState,
-    currentData: MutableState<Data>,
-    scope: CoroutineScope,
-    deletedTask: SnapshotStateList<Pair<Task, Int>>,
-    jobCounter: MutableIntState
-) {
-    var orderedList = currentData.value.tasks.sortedBy { it.isDone }
-
-    items(orderedList, key = { it.id }) { task ->
-        val deleteResource = stringResource(R.string.delete)
-        val undoResource = stringResource(R.string.action_undo)
-
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            Spacer(modifier = Modifier.height(3.dp))
-            TaskItem(
-                currentData = currentData,
-                task = task,
-                onEdit = {
-                    it.show(AddTaskScreen(task, currentData))
-                },
-                onDelete = {
-                    orderedList = orderedList.filterNot { it.id == task.id }
-
-                    val currentJobId = jobCounter.intValue++
-                    deletedTask.add(Pair(task, currentJobId))
-                    val taskPair = deletedTask.firstOrNull { it.second == currentJobId }
-                    currentData.value = currentData.value.copy(
-                        tasks = currentData.value.tasks.minusElement(task)
-                    )
-
-                    scope.launch {
-                        snackbarState.currentSnackbarData?.dismiss()
-                        val result = snackbarState.showSnackbar(
-                            message = "${taskPair?.first?.item} $deleteResource",
-                            actionLabel = undoResource,
-                            duration = SnackbarDuration.Long
-                        )
-
-                        if (result == SnackbarResult.ActionPerformed) {
-                            taskPair?.first?.let { task ->
-                                currentData.value = currentData.value.copy(
-                                    tasks = currentData.value.tasks.plusElement(task)
-                                )
-                            }
-                        }
-                        taskPair?.let { deletedTask.remove(it) }
-                    }
-                }
-            )
         }
     }
 }

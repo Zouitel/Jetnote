@@ -436,4 +436,5 @@
     <string name="creator_widget_description">នេះជា widget ប្លង់អ្នកបង្កើត</string>
     <string name="notes_list_description">នេះជាបញ្ជីកំណត់ចំណាំ</string>
     <string name="record_deleted">កំណត់ត្រាត្រូវបានលុប!</string>
+    <string name="language">ភាសានេះ</string>
 </resources>

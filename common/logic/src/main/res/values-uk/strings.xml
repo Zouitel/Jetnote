@@ -395,4 +395,5 @@
     <string name="creator_widget_description">Це віджет макета творця</string>
     <string name="notes_list_description">Це список нотаток</string>
     <string name="record_deleted">запис видалено!</string>
+    <string name="language">Ця мова</string>
 </resources>
