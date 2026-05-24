@@ -2,6 +2,11 @@ package zouitel.neighborhood.assistant.ui.configurations
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
@@ -31,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -64,6 +71,7 @@ import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsList
+import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.assistant.R as AR
 import zouitel.neighborhood.logic.R as LR
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
@@ -98,6 +106,19 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
+
+
+        val infiniteTransition = rememberInfiniteTransition()
+
+        // Ring fades as it expands
+        val ringAlpha by infiniteTransition.animateFloat(
+            initialValue = 0.7f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1500),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
 
         LaunchedEffect(Unit) {
             providerModel.upsert(provider)
@@ -240,14 +261,20 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                             enabled = currentProvider.vertexAI.not(),
                             placeholder = { Text(placeholder, fontSize = 19.sp) },
                             trailingIcon = {
-                                IconButton({
-                                    runCatching {
-                                        val link = currentProvider.apiLink.ifEmpty { "https://www.google.com" }
-                                        uriHandler.openUri(link)
-                                    }.getOrElse {
-                                        navigator?.push(WebViewPageScreen(currentProvider.apiLink.ifEmpty { "" }))
-                                    }
-                                }) {
+                                IconButton(
+                                    {
+                                        runCatching {
+                                            val link =
+                                                currentProvider.apiLink.ifEmpty { "https://www.google.com" }
+                                            uriHandler.openUri(link)
+                                        }.getOrElse {
+                                            navigator?.push(WebViewPageScreen(currentProvider.apiLink.ifEmpty { "" }))
+                                        }
+                                    },
+                                    Modifier
+                                        .clip(CircleShape)
+                                        .background(CommonColors.prime.copy(alpha = ringAlpha))
+                                ) {
                                     Icon(painterResource(CommonIcons.INFO), null)
                                 }
                             },
