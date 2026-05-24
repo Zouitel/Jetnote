@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import zouitel.neighborhood.database.model.Data.Companion.TABLE_NAME
 
-@Entity(TABLE_NAME, [Index("uuid"), Index("user_uid")])
+@Entity(TABLE_NAME, [Index("user_uid")])
 data class Data(
     @PrimaryKey(false)
     @ColumnInfo("uuid") val uid: String,

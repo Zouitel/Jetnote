@@ -17,7 +17,7 @@ import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.navigator.archive_screen.EraseScreen
 import zouitel.neighborhood.search.ui.SearchScreen
 import zouitel.neighborhood.ui.CommonIcons
-import zouitel.neighborhood.ui.Open_Drawer
+import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
 
 @Composable
@@ -31,7 +31,7 @@ internal fun ArchiveTopAppBar(
 
     TopAppBar(
         navigationIcon = {
-            Open_Drawer(settingsModel, drawerState)
+            OpenDrawer(settingsModel, drawerState)
         },
         title = {
             Text(text = stringResource(R.string.archive))

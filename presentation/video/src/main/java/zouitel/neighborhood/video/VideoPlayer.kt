@@ -20,7 +20,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 
 @OptIn(UnstableApi::class)
 @Composable
-fun VideoPlayer(uri: Uri, onLongClock:(BottomSheetNavigator) -> Unit, onClick:(BottomSheetNavigator) -> Unit) {
+fun VideoPlayer(uri: Uri, modifier: Modifier = Modifier, onLongClock:(BottomSheetNavigator) -> Unit, onClick:(BottomSheetNavigator) -> Unit) {
     val context = LocalContext.current
     val bottomNav = LocalBottomSheetNavigator.current
     val exoPlayer = remember(context, uri) { // Add uri as a key
@@ -47,7 +47,7 @@ fun VideoPlayer(uri: Uri, onLongClock:(BottomSheetNavigator) -> Unit, onClick:(B
     }
 
     AndroidView(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         factory = {
             PlayerView(context).apply {
                 player = exoPlayer

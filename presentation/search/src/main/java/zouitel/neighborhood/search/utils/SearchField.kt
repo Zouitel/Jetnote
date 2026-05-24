@@ -1,6 +1,5 @@
 package zouitel.neighborhood.search.utils
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
@@ -9,6 +8,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,44 +24,46 @@ import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.ui.CommonIcons.CROSS_SMALL
 import zouitel.neighborhood.ui.CommonTextField
 
-@OptIn(ExperimentalFoundationApi::class)
+/**
+ * Inline search field (used in legacy non-SearchBar top-bar layouts).
+ *
+ * All text is read from / written to [searchModel.fieldState] — the single
+ * stable [TextFieldState] on the ScreenModel.  It is NEVER read from UiState,
+ * which no longer holds a fieldState reference.
+ */
 @Composable
 internal fun SearchField(searchModel: SearchScreenModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester by lazy { FocusRequester() }
-    val uiState by remember(searchModel, searchModel::uiState).collectAsState()
+    val focusRequester     = remember { FocusRequester() }
+    val uiState            by remember(searchModel, searchModel::uiState).collectAsState()
 
-    LaunchedEffect(Unit) {
-        searchModel.updateSearchTitle("")
-        focusRequester.requestFocus()
+    // True when there is content to clear (field text OR active tag filter).
+    val hasClearableContent by remember {
+        derivedStateOf {
+            searchModel.fieldState.text.isNotBlank() || uiState.tag.isNotEmpty()
+        }
     }
+
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
 
     Row {
         CommonTextField(
-            value = uiState.text,
-            onValueChange = {
-                searchModel.updateSearchTitle(it)
-                            },
-            modifier = Modifier
-                .fillMaxWidth(.8f)
+            value         = searchModel.fieldState.text.toString(),
+            onValueChange = { searchModel.setFieldText(it) },
+            modifier      = Modifier
+                .fillMaxWidth(0.8f)
                 .focusRequester(focusRequester),
-            placeholder = stringResource(R.string.search_in_notes),
-            imeAction = ImeAction.Search,
-            keyboardActions = KeyboardActions {
-                keyboardController?.hide()
-            }
+            placeholder     = stringResource(R.string.search_in_notes),
+            imeAction       = ImeAction.Search,
+            keyboardActions = KeyboardActions { keyboardController?.hide() },
         )
-        if (uiState.text.isNotEmpty() || uiState.tag.isNotEmpty()) {
-            IconButton({
-                searchModel.updateSearchTitle(DEFAULT_TXT)
-                searchModel.updateSearchTag(null)
-                searchModel.updateSearchType(SearchTypes.Text(DEFAULT_TXT))
+
+        if (hasClearableContent) {
+            IconButton(onClick = {
+                searchModel.clearSearch()
                 keyboardController?.hide()
             }) {
-                Icon(
-                    painter = painterResource(CROSS_SMALL),
-                    contentDescription = null
-                )
+                Icon(painterResource(CROSS_SMALL), contentDescription = null)
             }
         }
     }

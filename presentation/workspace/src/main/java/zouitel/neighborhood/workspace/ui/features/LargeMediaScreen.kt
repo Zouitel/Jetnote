@@ -14,8 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +27,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
+import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -45,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -85,6 +87,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
         MediaLarge(getScreenModel())
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun MediaLarge(settingsModel: SettingsScreenModel) {
         val vibe = LocalHapticFeedback.current
@@ -98,7 +101,11 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
         val scope = rememberCoroutineScope()
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
 
-        val pagerState = rememberPagerState(index) { data.value.medias.size }
+        // ── Carousel state replaces rememberPagerState ────────────────────────
+        val carouselState = rememberCarouselState(initialItem = index) { data.value.medias.size }
+        // Convenience alias — mirrors pagerState.currentPage usage throughout
+        val currentPage = carouselState.currentItem
+
         val menuExpanded = remember { mutableStateOf(false) }
         val deletedMedia = remember { mutableStateListOf<Pair<Media, Int>>() }
         val jobCounter = remember { mutableIntStateOf(0) }
@@ -109,6 +116,9 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
         var documentDetailsSheet by remember { mutableStateOf(false) }
         val mediaDeletedResource = stringResource(R.string.media_deleted)
         val undoResource = stringResource(R.string.action_undo)
+
+        // Used to size each carousel item at full screen width (full-screen viewer feel)
+        val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
         Scaffold(
             snackbarHost = {
@@ -127,11 +137,12 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .reportable(settings.isShakable)
                 .cloudy(
-                    enabled = imageDetailsSheet || videoDetailsSheet || menuExpanded.value || documentDetailsSheet
+                    enabled = imageDetailsSheet || videoDetailsSheet ||
+                            menuExpanded.value || documentDetailsSheet
                 )
                 .background(
                     try {
-                        Color(data.value.medias[pagerState.currentPage].color)
+                        Color(data.value.medias[currentPage].color)
                     } catch (_: IndexOutOfBoundsException) {
                         Color.DarkGray
                     }
@@ -142,7 +153,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                     TopAppBar(
                         navigationIcon = {
                             Text(
-                                text = "${pagerState.currentPage.inc()} ${stringResource(R.string.of)} ${pagerState.pageCount}",
+                                text = "${currentPage.inc()} ${stringResource(R.string.of)} ${data.value.medias.size}",
                                 fontSize = 19.sp,
                                 modifier = Modifier.padding(20.dp)
                             )
@@ -157,7 +168,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 onDuplicate = {
                                     data.value = data.value.copy(
                                         medias = data.value.medias.plusElement(
-                                            data.value.medias[pagerState.currentPage]
+                                            data.value.medias[currentPage]
                                                 .copy(id = Random.nextLong())
                                         )
                                     )
@@ -165,18 +176,18 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 onSend = {
                                     sendMedia(
                                         context,
-                                        data.value.medias[pagerState.currentPage].uri.toUri()
+                                        data.value.medias[currentPage].uri.toUri()
                                     )
                                 },
                                 onPrint = {
-                                    val media = data.value.medias[pagerState.currentPage]
+                                    val media = data.value.medias[currentPage]
                                     when (media.type) {
                                         MediaType.DOCUMENT -> printDocumentFromUri(context, media.uri)
                                         else -> printImageFromUri(context, media.uri)
                                     }
                                 },
                                 onDetails = {
-                                    when (data.value.medias[pagerState.currentPage].type) {
+                                    when (data.value.medias[currentPage].type) {
                                         MediaType.VIDEO -> videoDetailsSheet = true
                                         MediaType.IMAGE -> imageDetailsSheet = true
                                         MediaType.DOCUMENT -> documentDetailsSheet = true
@@ -185,7 +196,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 onDelete = {
                                     val currentJobId = jobCounter.intValue++
                                     deletedMedia.add(
-                                        Pair(data.value.medias[pagerState.currentPage], currentJobId)
+                                        Pair(data.value.medias[currentPage], currentJobId)
                                     )
                                     val mediaPair =
                                         deletedMedia.firstOrNull { it.second == currentJobId }
@@ -197,12 +208,13 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                     scope.launch {
                                         snackbarState.currentSnackbarData?.dismiss()
                                         val result = snackbarState.showSnackbar(
-                                            mediaDeletedResource, undoResource, true, SnackbarDuration.Long
+                                            mediaDeletedResource, undoResource, true,
+                                            SnackbarDuration.Long
                                         )
                                         if (result == SnackbarResult.ActionPerformed) {
                                             data.value = data.value.copy(
                                                 medias = data.value.medias
-                                                    .plusElement(mediaPair.first)
+                                                    .plusElement(mediaPair!!.first)
                                             )
                                         }
                                         deletedMedia.remove(mediaPair)
@@ -219,8 +231,14 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
             }
         ) { paddingValues ->
             Box {
-                HorizontalPager(
-                    state = pagerState,
+                // ── HorizontalUncontainedCarousel replaces HorizontalPager ────
+                // Each item fills the screen width; one item peeks at the edge,
+                // giving the classic Material 3 carousel look while preserving
+                // the full-screen media viewer UX.
+                HorizontalUncontainedCarousel(
+                    state = carouselState,
+                    itemWidth = screenWidth,
+                    itemSpacing = 8.dp,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
@@ -228,7 +246,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                             detectVerticalDragGestures { change, dragAmount ->
                                 change.consume()
                                 if (dragAmount < -20) {
-                                    when (data.value.medias.getOrNull(pagerState.currentPage)?.type) {
+                                    when (data.value.medias.getOrNull(currentPage)?.type) {
                                         MediaType.VIDEO -> videoDetailsSheet = true
                                         MediaType.IMAGE -> imageDetailsSheet = true
                                         MediaType.DOCUMENT -> documentDetailsSheet = true
@@ -241,7 +259,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                 ) { page ->
                     if (page >= data.value.medias.size) {
                         Spacer(Modifier.fillMaxSize())
-                        return@HorizontalPager
+                        return@HorizontalUncontainedCarousel
                     }
 
                     val media = data.value.medias[page]
@@ -252,16 +270,24 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                         MediaType.VIDEO -> {
                             VideoPlayer(
                                 uri = media.uri.toUri(),
+                                // maskClip must be applied inside a CarouselItemScope
+                                // to get the animated clip/mask effect from Material 3
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .maskClip(MaterialTheme.shapes.extraLarge),
                                 onLongClock = {
                                     vibe.performHapticFeedback(HapticFeedbackType.LongPress)
                                 }
                             ) {}
                         }
 
-                        // ── Document — first-page thumbnail; tap = open viewer
+                        // ── Document — first-page thumbnail; tap = open viewer ─
                         MediaType.DOCUMENT -> {
                             DocumentThumbnail(
                                 filePath = media.uri,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .maskClip(MaterialTheme.shapes.extraLarge),
                                 onClick = {
                                     (context as? AppCompatActivity)?.let { activity ->
                                         DocViewerActivity.launchDocViewer(
@@ -273,7 +299,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 },
                                 onLongClick = {
                                     vibe.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    documentDetailsSheet = true   // ← long-press opens details
+                                    documentDetailsSheet = true
                                 }
                             )
                         }
@@ -285,6 +311,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                                 contentDescription = null,
                                 modifier = Modifier
                                     .fillMaxSize()
+                                    .maskClip(MaterialTheme.shapes.extraLarge)
                                     .combinedClickable(
                                         onLongClick = {
                                             vibe.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -297,18 +324,17 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
 
                 // ── Detail sheets ─────────────────────────────────────────────
                 if (imageDetailsSheet) {
-                    ImageDetails(data.value.medias[pagerState.currentPage].uri) {
+                    ImageDetails(data.value.medias[currentPage].uri) {
                         imageDetailsSheet = false
                     }
                 }
                 if (videoDetailsSheet) {
-                    VideoDetails(data.value.medias[pagerState.currentPage].uri) {
+                    VideoDetails(data.value.medias[currentPage].uri) {
                         videoDetailsSheet = false
                     }
                 }
-                // ↓ new document metadata sheet
                 if (documentDetailsSheet) {
-                    DocumentDetails(data.value.medias[pagerState.currentPage].uri) {
+                    DocumentDetails(data.value.medias[currentPage].uri) {
                         documentDetailsSheet = false
                     }
                 }

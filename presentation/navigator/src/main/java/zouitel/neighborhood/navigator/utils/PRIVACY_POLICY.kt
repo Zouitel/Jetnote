@@ -19,7 +19,7 @@ val PRIVACY_POLICY = """
 
                     ### 1.2 User-Generated Content
                     Jetnote is built around your content. We store:
-                    - **Notes, tasks, and checklists** — text content you create within the App.
+                    - **Notes, tasks, and checklists** — fieldState content you create within the App.
                     - **Audio recordings** — voice notes captured via our audio waveform player feature.
                     - **Media attachments** — images or files you attach to your notes.
                     - **Tags and project labels** — organizational metadata you assign to your notes (e.g., `[project 🏗️]`).

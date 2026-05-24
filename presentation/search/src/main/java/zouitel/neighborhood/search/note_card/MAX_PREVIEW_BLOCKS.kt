@@ -200,7 +200,7 @@ private fun BlockPreviewItem(block: Block, textColor: Color) {
                     modifier = Modifier
                         .width(3.dp)
                         .height(with(androidx.compose.ui.platform.LocalDensity.current) {
-                            // intrinsic height of roughly 2 text lines
+                            // intrinsic height of roughly 2 fieldState lines
                             (MaterialTheme.typography.bodyMedium.fontSize.value * 2 * 1.5f).dp
                         })
                         .background(textColor.copy(alpha = 0.4f)),

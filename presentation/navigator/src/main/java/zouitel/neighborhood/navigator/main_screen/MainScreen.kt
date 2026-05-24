@@ -2,8 +2,14 @@ package zouitel.neighborhood.navigator.main_screen
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -19,9 +26,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.LoadingIndicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberContainedSearchBarState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -35,37 +44,45 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import zouitel.neighborhood.account.ui.AccountScreen
+import zouitel.neighborhood.account.ui.SyncScreen
 import zouitel.neighborhood.account.ui.SyncScreenModel
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
+import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.LazyVerticalGrid
 import zouitel.neighborhood.navigator.utils.LazyVerticalList
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
 import zouitel.neighborhood.navigator.utils.sound
 import zouitel.neighborhood.search.ui.SearchScreenModel
+import zouitel.neighborhood.search.utils.SearchTopBar
 import zouitel.neighborhood.search.utils.SelectionTopBar
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonConstants
 import zouitel.neighborhood.ui.CommonIcons
+import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import zouitel.neighborhood.ui.rememberAutoHeightCacheStaggeredGrid
@@ -113,7 +130,7 @@ class MainScreen: Screen {
 
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
-        val navBottomSheet = LocalBottomSheetNavigator.current
+        val navBottom = LocalBottomSheetNavigator.current
 
         val syncState by remember(syncModel, syncModel::syncDataState).collectAsState()
         val isDownloading by remember(syncModel, syncModel::isDownloading).collectAsState()
@@ -149,19 +166,17 @@ class MainScreen: Screen {
         }
 
         val notes = when (settings.ordination) {
-            stringResource(zouitel.neighborhood.logic.R.string.name_sort) -> mainModel.nameNotes
-            stringResource(zouitel.neighborhood.logic.R.string.oldest_sort) -> mainModel.oldestNotes
-            stringResource(zouitel.neighborhood.logic.R.string.newest_sort) -> mainModel.newestNotes
-            stringResource(zouitel.neighborhood.logic.R.string.priority_sort) -> mainModel.priorityNotes
+            stringResource(R.string.name_sort) -> mainModel.nameNotes
+            stringResource(R.string.oldest_sort) -> mainModel.oldestNotes
+            stringResource(R.string.newest_sort) -> mainModel.newestNotes
+            stringResource(R.string.priority_sort) -> mainModel.priorityNotes
             else -> mainModel.defaultNotes
         }
 
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val refreshState = rememberPullToRefreshState()
-        val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
-        val (gridState, gridHeight) = rememberAutoHeightCacheStaggeredGrid()
+        val searchBarBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
 
+        val refreshState = rememberPullToRefreshState()
+        val user by remember(syncModel, syncModel::userState).collectAsState()
 
         val workplaceScreen = rememberScreen(
             SharedScreen.Workplace(Data(),true)
@@ -196,9 +211,9 @@ class MainScreen: Screen {
             ) {
                 Scaffold(
                     modifier = Modifier
-                        .cloudy(enabled = navBottomSheet.isVisible || drawerState.isOpen)
+                        .cloudy(enabled = navBottom.isVisible || drawerState.isOpen)
                         .reportable(settings.isShakable)
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                        .nestedScroll(searchBarBehavior.nestedScrollConnection),
                     topBar = {
                         if (uiState.isSelection) {
                             SelectionTopBar(
@@ -207,7 +222,6 @@ class MainScreen: Screen {
                                 noteAndTagModel = noteAndTagModel,
                                 tagModel = tagModel
                             ) {
-                                // to.do cancel the alarm manager reminder.
                                 val currentJobId = jobCounter++
                                 deletedNotes.add(Pair(it, currentJobId))
                                 val notePair = deletedNotes.firstOrNull { note -> note.second == currentJobId }
@@ -230,12 +244,39 @@ class MainScreen: Screen {
                                 }
                             }
                         } else {
-                            MainTopAppBar(
-                                settingsModel = settingsModel,
+                            SearchTopBar(
+                                scrollBehavior = searchBarBehavior,
                                 searchModel = searchModel,
-                                scrollBehavior = scrollBehavior,
-                                drawerState = drawerState,
-                                syncModel = syncModel
+                                settingsModel = settingsModel,
+                                tagModel = tagModel,
+                                audioModel = audioModel,
+                                linkModel = linkModel,
+                                dataModel = dataModel,
+                                noteAndTagModel = noteAndTagModel,
+                                navigationIcon = {
+                                    OpenDrawer(settingsModel, drawerState)
+                                },
+                                actions = {
+                                    user?.let {
+                                        Row {
+                                            AsyncImage(
+                                                model = it.photoUrl,
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .clip(CircleShape)
+                                                    .sizeIn(maxHeight = 35.dp, maxWidth = 35.dp)
+                                                    .combinedClickable(
+                                                        onLongClick = {
+                                                            navBottom.show(SyncScreen())
+                                                        }
+                                                    ) {
+                                                        navigator.push(AccountScreen())
+                                                    }
+                                            )
+                                            Spacer(Modifier.width(10.dp))
+                                        }
+                                    }
+                                }
                             )
                         }
                     },
@@ -258,7 +299,7 @@ class MainScreen: Screen {
                                 )
                                 navigator.push(workplaceScreen)
                             },
-                            expanded = scrollBehavior.state.collapsedFraction != 1f,
+                            expanded = searchBarBehavior.scrollOffset == 0f,
                             containerColor = CommonColors.prime,
                             contentColor = MaterialTheme.colorScheme.surface
                         )

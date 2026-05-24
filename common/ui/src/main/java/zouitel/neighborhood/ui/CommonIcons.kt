@@ -97,4 +97,5 @@ object CommonIcons {
     val TEXT_BOX_EDIT = R.drawable.text_box_edit_24
     val DOCUMENT = R.drawable.document_24
     val DOCUMENT_SCANNER = R.drawable.document_scanner_24
+    val GRIP_DOTS = R.drawable.grip_dots_vertical_24
 }

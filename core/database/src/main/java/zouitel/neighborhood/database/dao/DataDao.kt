@@ -17,7 +17,7 @@ interface DataDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(data: List<Data>)
 
-    @Query("UPDATE $TABLE_NAME SET UUID = :userUid WHERE USER_UID = 'null'")
+    @Query("UPDATE $TABLE_NAME SET USER_UID  = :userUid WHERE USER_UID = 'null'")
     suspend fun combineUser(userUid: String?)
 
     @Query("UPDATE $TABLE_NAME SET ARCHIVED = 1 WHERE UUID = :uid")

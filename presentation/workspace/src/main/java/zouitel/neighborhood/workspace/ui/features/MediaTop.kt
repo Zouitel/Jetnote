@@ -10,13 +10,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
+import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
@@ -56,47 +58,59 @@ import kotlin.math.absoluteValue
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(UnstableApi::class)
+@ExperimentalMaterial3Api
 @Composable
 fun MediaTop(data: MutableState<Data>) {
     val vibe      = LocalHapticFeedback.current
     val bottomNav = LocalBottomSheetNavigator.current
     val context   = LocalContext.current
 
-    val pagerState = rememberPagerState { data.value.medias.size }
+    // ── Carousel state replaces rememberPagerState ────────────────────────────
+    val carouselState = rememberCarouselState { data.value.medias.size }
+    // Convenience alias — mirrors every pagerState.currentPage usage below
+    val currentPage = carouselState.currentItem
+
     var avgColor by remember { mutableStateOf(Color.Black) }
 
+    // Full screen width drives itemWidth so each item fills the carousel slot
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
+    // ── Scroll to last item on first composition ──────────────────────────────
     LaunchedEffect(Unit) {
         if (data.value.medias.isNotEmpty()) {
             delay(50)
-            pagerState.scrollToPage(data.value.medias.size - 1)
+            carouselState.scrollToItem(data.value.medias.size - 1)
         }
     }
 
+    // ── Animate to last item whenever a new media is added ───────────────────
     LaunchedEffect(data.value.medias.size) {
         if (data.value.medias.isNotEmpty()) {
             delay(50)
-            pagerState.animateScrollToPage(data.value.medias.size - 1)
+            carouselState.animateScrollToItem(data.value.medias.size - 1)
         }
     }
 
-    LaunchedEffect(pagerState.currentPage, data.value.medias) {
-        val media = data.value.medias.getOrNull(pagerState.currentPage)
-        if (media != null && pagerState.currentPage in data.value.medias.indices) {
+    // ── Update average background colour when the visible page changes ────────
+    LaunchedEffect(currentPage, data.value.medias) {
+        val media = data.value.medias.getOrNull(currentPage)
+        if (media != null && currentPage in data.value.medias.indices) {
             avgColor = getAverageColorFromImage(context, media.uri)
         }
     }
 
-    LaunchedEffect(data.value.medias.size, pagerState.currentPage) {
+    // ── Auto-advance slideshow every 7 seconds ────────────────────────────────
+    LaunchedEffect(data.value.medias.size, currentPage) {
         if (data.value.medias.size > 1) {
             delay(7000)
-            val nextPage = (pagerState.currentPage + 1) % data.value.medias.size
-            pagerState.animateScrollToPage(nextPage)
+            val nextPage = (currentPage + 1) % data.value.medias.size
+            carouselState.animateScrollToItem(nextPage)
         }
     }
 
     if (data.value.medias.isNotEmpty()) {
         val containerColor = runCatching {
-            data.value.medias.getOrNull(pagerState.currentPage)?.color
+            data.value.medias.getOrNull(currentPage)?.color
                 ?.let { Color(it) } ?: Color.DarkGray
         }.getOrElse { Color.DarkGray }
 
@@ -109,13 +123,19 @@ fun MediaTop(data: MutableState<Data>) {
                 shape  = MaterialTheme.shapes.large,
                 colors = CardDefaults.cardColors(containerColor = containerColor),
             ) {
-                HorizontalPager(
-                    state = pagerState,
-                    key   = { index -> data.value.medias.getOrNull(index)?.id ?: index }
+                // ── HorizontalUncontainedCarousel replaces HorizontalPager ────
+                // itemWidth = screenWidth keeps one item fully visible at a time
+                // while naturally peeking the edge of the next item — the core
+                // Material 3 carousel UX. The key lambda is not supported by the
+                // carousel API and is therefore dropped.
+                HorizontalUncontainedCarousel(
+                    state       = carouselState,
+                    itemWidth   = screenWidth,
+                    itemSpacing = 8.dp,
                 ) { index ->
+                    // Mirror the original page-offset scale/alpha animation
                     val pageOffset = (
-                            (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
-                            ).absoluteValue
+                            (currentPage - index) + 0f).absoluteValue
 
                     val media = data.value.medias.getOrNull(index)
 
@@ -128,6 +148,11 @@ fun MediaTop(data: MutableState<Data>) {
                                 scaleY = 1f - (pageOffset * .15f)
                                 scaleX = 1f - (pageOffset * .15f)
                             }
+                            // maskClip must live inside CarouselItemScope;
+                            // it drives the animated mask/clip effect as items
+                            // scroll in and out — replaces the plain .clip()
+                            // that a non-carousel Card would use.
+                            .maskClip(MaterialTheme.shapes.large)
                             .fillMaxWidth()
                             .heightIn(100.dp, 220.dp),
                         colors = CardDefaults.cardColors(containerColor)
@@ -136,7 +161,7 @@ fun MediaTop(data: MutableState<Data>) {
                             // ── Video ─────────────────────────────────────────
                             MediaType.VIDEO -> {
                                 VideoPlayer(
-                                    uri         = media.uri.toUri(),
+                                    uri = media.uri.toUri(),
                                     onLongClock = {
                                         vibe.performHapticFeedback(HapticFeedbackType.LongPress)
                                         it.show(LargeMediaScreen(index, data))
@@ -187,6 +212,7 @@ fun MediaTop(data: MutableState<Data>) {
                 }
             }
 
+            // ── Dot indicators — driven by currentPage alias ──────────────────
             if (data.value.medias.size > 1) {
                 Row(
                     Modifier.padding(bottom = 12.dp),
@@ -195,13 +221,13 @@ fun MediaTop(data: MutableState<Data>) {
                 ) {
                     repeat(data.value.medias.size) { iteration ->
                         val color by animateColorAsState(
-                            targetValue   = if (pagerState.currentPage == iteration) Color.White
+                            targetValue   = if (currentPage == iteration) Color.White
                             else Color.White.copy(alpha = 0.5f),
                             animationSpec = tween(durationMillis = 300),
                             label         = "dotColorAnimation"
                         )
                         val width by animateDpAsState(
-                            targetValue   = if (pagerState.currentPage == iteration) 20.dp else 8.dp,
+                            targetValue   = if (currentPage == iteration) 20.dp else 8.dp,
                             animationSpec = tween(durationMillis = 300),
                             label         = "dotWidthAnimation"
                         )
@@ -230,6 +256,7 @@ fun MediaTop(data: MutableState<Data>) {
 @Composable
 fun DocumentThumbnail(
     filePath   : String,
+    modifier   : Modifier = Modifier,
     onClick    : () -> Unit,
     onLongClick: () -> Unit
 ) {
@@ -247,7 +274,7 @@ fun DocumentThumbnail(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .combinedClickable(onLongClick = onLongClick, onClick = onClick),

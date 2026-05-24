@@ -1,8 +1,11 @@
 package zouitel.neighborhood.account.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,8 +14,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,11 +38,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -71,6 +78,7 @@ class AccountScreen: Screen {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val isUploading by remember(syncModel, syncModel::isUploading).collectAsState()
         val isDownloading by remember(syncModel, syncModel::isDownloading).collectAsState()
+        val storageInfo by remember(accountModel, accountModel::storageInfo).collectAsState()
 
         Scaffold(
             modifier = Modifier
@@ -157,6 +165,14 @@ class AccountScreen: Screen {
 
                 item {
                     Spacer(modifier = Modifier.height(40.dp))
+                }
+
+                item {
+                    StorageCard(storageInfo)
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
                 item {
@@ -307,5 +323,137 @@ class AccountScreen: Screen {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun StorageCard(info: StorageInfo) {
+        val totalFraction = if (info.quotaBytes > 0) {
+            (info.usedBytes.toFloat() / info.quotaBytes.toFloat()).coerceIn(0f, 1f)
+        } else 0f
+        val notesFraction  = if (info.quotaBytes > 0) (info.notesBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
+        val mediaFraction  = if (info.quotaBytes > 0) (info.mediaBytes.toFloat()  / info.quotaBytes).coerceIn(0f, 1f) else 0f
+        val cacheFraction  = if (info.quotaBytes > 0) (info.cacheBytes.toFloat()  / info.quotaBytes).coerceIn(0f, 1f) else 0f
+
+        val animatedTotal by animateFloatAsState(
+            targetValue = totalFraction,
+            animationSpec = tween(durationMillis = 900),
+            label = "storage_total"
+        )
+
+        val safeTotal = totalFraction.coerceAtLeast(0.001f)
+        val notesColor = CommonColors.prime
+        val mediaColor = Color(0xFF4FC3F7)   // light blue
+        val cacheColor = Color(0xFFFFB74D)   // amber
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(MaterialTheme.shapes.extraLarge)
+                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = .08f))
+                .padding(20.dp)
+        ) {
+            // Header
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(CommonIcons.UPLOAD_CLOUD),
+                    contentDescription = null,
+                    tint = CommonColors.prime,
+                    modifier = Modifier.size(22.dp)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = "storage",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Used / quota headline
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = formatBytes(info.usedBytes),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "/ ${formatBytes(info.quotaBytes)} used",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
+                    modifier = Modifier.padding(bottom = 3.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Segmented progress bar
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = .12f))
+            ) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    val nW = (notesFraction * animatedTotal / safeTotal).coerceAtLeast(0f)
+                    val mW = (mediaFraction  * animatedTotal / safeTotal).coerceAtLeast(0f)
+                    val cW = (cacheFraction  * animatedTotal / safeTotal).coerceAtLeast(0f)
+                    val fW = (1f - nW - mW - cW).coerceAtLeast(0f)
+
+                    if (nW > 0f) Box(modifier = Modifier.weight(nW).height(10.dp).background(notesColor))
+                    if (mW > 0f) Box(modifier = Modifier.weight(mW).height(10.dp).background(mediaColor))
+                    if (cW > 0f) Box(modifier = Modifier.weight(cW).height(10.dp).background(cacheColor))
+                    if (fW > 0f) Box(modifier = Modifier.weight(fW).height(10.dp))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Legend
+            StorageLegendRow(notesColor, "Notes & data", info.notesBytes)
+            Spacer(modifier = Modifier.height(8.dp))
+            StorageLegendRow(mediaColor, "Media files", info.mediaBytes)
+            Spacer(modifier = Modifier.height(8.dp))
+            StorageLegendRow(cacheColor, "Cache", info.cacheBytes)
+            Spacer(modifier = Modifier.height(8.dp))
+            StorageLegendRow(
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .25f),
+                label = "Free",
+                bytes = info.freeBytes
+            )
+        }
+    }
+
+    @Composable
+    private fun StorageLegendRow(color: Color, label: String, bytes: Long) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(10.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(color)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .7f),
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = formatBytes(bytes),
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+
+    private fun formatBytes(bytes: Long): String = when {
+        bytes >= 1024L * 1024 * 1024 -> "%.2f GB".format(bytes / (1024.0 * 1024 * 1024))
+        bytes >= 1024L * 1024        -> "%.1f MB".format(bytes / (1024.0 * 1024))
+        bytes >= 1024L               -> "%.0f KB".format(bytes / 1024.0)
+        else                         -> "$bytes B"
     }
 }

@@ -28,6 +28,8 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,6 +66,7 @@ import zouitel.neighborhood.search.utils.normalNotePath
 import zouitel.neighborhood.search.utils.prioritizedNotePath
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons.CIRCLE_18
+import zouitel.neighborhood.ui.CommonIcons.GRIP_DOTS
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.video.SmallVideoPlayer
 import zouitel.neighborhood.workspace.model.MediaType
@@ -125,187 +128,207 @@ private fun Card(
         )
     }
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(if (uiState.isSelection) dragModifier else Modifier)
-            .combinedClickable(
-                onLongClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    searchModel.updateSelectedNotes(note)
-                    searchModel.updateSelection(true)
-                }
-            ) {
-                if (uiState.isSelection.not()) {
-                    navigator?.push(WorkplaceScreen(note, false))
-                } else {
-                    when {
-                        uiState.selectedNotes.contains(note).not() ->
-                            uiState.selectedNotes.add(note)
-                        else ->
-                            uiState.selectedNotes.remove(note)
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .combinedClickable(
+                    onLongClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        searchModel.updateSelectedNotes(note)
+                        searchModel.updateSelection(true)
+                    }
+                ) {
+                    if (uiState.isSelection.not()) {
+                        navigator?.push(WorkplaceScreen(note, false))
+                    } else {
+                        when {
+                            uiState.selectedNotes.contains(note).not() ->
+                                uiState.selectedNotes.add(note)
+                            else ->
+                                uiState.selectedNotes.remove(note)
+                        }
+                    }
+                    uiState.selectedNotes.ifEmpty {
+                        searchModel.updateSelection(false)
                     }
                 }
-                uiState.selectedNotes.ifEmpty {
-                    searchModel.updateSelection(false)
+                .drawBehind {
+                    if (note.priority == 0) normalNotePath(note)
+                    else prioritizedNotePath(note)
+                },
+            shape = AbsoluteRoundedCornerShape(15.dp),
+            border = if (uiState.selectedNotes.contains(note)) {
+                BorderStroke(3.dp, CommonColors.prime)
+            } else {
+                when (note.background == MaterialTheme.colorScheme.surface.toArgb()) {
+                    true -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
+                    false -> BorderStroke(0.dp, Color.Transparent)
                 }
-            }
-            .drawBehind {
-                if (note.priority == 0) normalNotePath(note)
-                else prioritizedNotePath(note)
             },
-        shape     = AbsoluteRoundedCornerShape(15.dp),
-        border    = if (uiState.selectedNotes.contains(note)) {
-            BorderStroke(3.dp, CommonColors.prime)
-        } else {
-            when (note.background == MaterialTheme.colorScheme.surface.toArgb()) {
-                true  -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
-                false -> BorderStroke(0.dp, Color.Transparent)
-            }
-        },
-        elevation = CardDefaults.cardElevation(defaultElevation = elevation),
-        colors    = CardDefaults.cardColors(containerColor = Color.Transparent)
-    ) {
+            elevation = CardDefaults.cardElevation(defaultElevation = elevation),
+            colors    = CardDefaults.cardColors(containerColor = Color.Transparent)
+        ) {
+            if (note.medias.isNotEmpty()) {
+                val containerColor = runCatching {
+                    Color(note.medias[pagerState.currentPage].color)
+                }.getOrElse { Color.DarkGray }
 
-        if (note.medias.isNotEmpty()) {
-            val containerColor = runCatching {
-                Color(note.medias[pagerState.currentPage].color)
-            }.getOrElse { Color.DarkGray }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(100.dp, 220.dp)
+                        .background(note.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface)
+                ) {
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.background(
+                            note.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface
+                        )
+                    ) { index ->
+                        Card(
+                            modifier = Modifier.dropShadow(
+                                RoundedCornerShape(20.dp),
+                                Shadow(
+                                    10.dp,
+                                    color = Color(note.medias[index].color),
+                                    spread = 9.dp,
+                                    alpha = .5f
+                                )
+                            ),
+                            shape = AbsoluteRoundedCornerShape(15.dp),
+                            elevation = CardDefaults.cardElevation(),
+                            colors = CardDefaults.cardColors(containerColor)
+                        ) {
+                            val media = note.medias[index]
+                            when (media.type) {
+                                MediaType.VIDEO -> SmallVideoPlayer(media.uri.toUri())
+                                MediaType.DOCUMENT -> DocumentThumbnail(
+                                    filePath = media.uri,
+                                    onClick = { navigator?.push(WorkplaceScreen(note, false)) },
+                                    onLongClick = {}
+                                )
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(100.dp, 220.dp)
-                    .background(note.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface)
-            ) {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.background(
-                        note.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface
-                    )
-                ) { index ->
-                    Card(
-                        modifier = Modifier.dropShadow(
-                            RoundedCornerShape(20.dp),
-                            Shadow(
-                                10.dp,
-                                color = Color(note.medias[index].color),
-                                spread = 9.dp,
-                                alpha = .5f
-                            )
-                        ),
-                        shape = AbsoluteRoundedCornerShape(15.dp),
-                        elevation = CardDefaults.cardElevation(),
-                        colors = CardDefaults.cardColors(containerColor)
-                    ) {
-                        val media = note.medias[index]
-                        when (media.type) {
-                            MediaType.VIDEO -> SmallVideoPlayer(media.uri.toUri())
-                            MediaType.DOCUMENT -> DocumentThumbnail(
-                                filePath = media.uri,
-                                onClick = { navigator?.push(WorkplaceScreen(note, false)) },
-                                onLongClick = {}
-                            )
+                                MediaType.IMAGE -> AsyncImage(
+                                    model = media.uri,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+                    }
 
-                            MediaType.IMAGE -> AsyncImage(
-                                model = media.uri,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                    if (note.medias.count() > 1) {
+                        Badge(
+                            modifier = Modifier.align(Alignment.TopStart).padding(3.dp),
+                            contentColor = Color.White.copy(alpha = .5f),
+                            containerColor = Color.Black.copy(alpha = .5f)
+                        ) {
+                            Text(text = "${pagerState.currentPage + 1}/${note.medias.count()}")
                         }
                     }
                 }
-                if (note.medias.count() > 1) {
-                    Badge(
-                        modifier = Modifier.align(Alignment.TopStart).padding(3.dp),
-                        contentColor = Color.White.copy(alpha = .5f),
-                        containerColor = Color.Black.copy(alpha = .5f)
-                    ) {
-                        Text(text = "${pagerState.currentPage + 1}/${note.medias.count()}")
-                    }
-                }
             }
-        }
 
-        if (note.title.isNotEmpty()) {
-            Text(
-                text = note.title,
-                style = MaterialTheme.typography.titleLarge,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                color = note.textColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(3.dp)
-            )
-        }
-
-        when {
-            note.blocks.isNotEmpty() -> {
-                BlocksPreview(
-                    blocks = note.blocks,
-                    textColor = note.textColor?.let { Color(it) }
-                        ?: MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = 3.dp, end = 3.dp, bottom = 7.dp),
+            if (note.title.isNotEmpty()) {
+                Text(
+                    text = note.title,
+                    style = MaterialTheme.typography.titleLarge,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    color = note.textColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(3.dp)
                 )
             }
-        }
 
-        audios.fastFirstOrNull {
-            SmallAudioPlayer(audios.size, settingsModel, audioModel, it)
-            true
-        }
-
-        ContextualFlowRow(
-            itemCount = labels.size,
-            maxLines  = 1,
-            overflow  = ContextualFlowRowOverflow.expandOrCollapseIndicator(
-                expandIndicator = {
-                    AssistChip(
-                        modifier = Modifier.alpha(.5f),
-                        border = BorderStroke(0.dp, Color.Transparent),
-                        onClick = { },
-                        label = { Text("+${totalItemCount - shownItemCount}", fontSize = 13.sp) },
-                        colors = AssistChipDefaults.assistChipColors(
-                            labelColor = note.textColor?.let { Color(it) }
-                                ?: MaterialTheme.colorScheme.onSurface
-                        ),
-                        shape = CircleShape
+            when {
+                note.blocks.isNotEmpty() -> {
+                    BlocksPreview(
+                        blocks = note.blocks,
+                        textColor = note.textColor?.let { Color(it) }
+                            ?: MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(start = 3.dp, end = 3.dp, bottom = 7.dp),
                     )
-                },
-                collapseIndicator = { }
-            )
-        ) { index ->
-            AssistChip(
-                modifier = Modifier.alpha(.8f).padding(start = 5.dp, end = 5.dp),
-                border = BorderStroke(0.dp, Color.Transparent),
-                onClick = { },
-                label = { Text(labels.getOrNull(index)?.label ?: "", fontSize = 11.sp) },
-                leadingIcon = {
-                    labels.getOrNull(index)?.color?.let {
-                        Icon(
-                            painter = painterResource(id = CIRCLE_18),
-                            contentDescription = null,
-                            tint = Color(it),
-                            modifier = Modifier.size(10.dp)
-                        )
-                    }
-                },
-                colors = AssistChipDefaults.assistChipColors(
-                    labelColor = note.textColor?.let { Color(it) }
-                        ?: MaterialTheme.colorScheme.onSurface,
-                    containerColor = Color.DarkGray.copy(alpha = .4f)
-                ),
-                shape = CircleShape
-            )
-        }
+                }
+            }
 
-        filteredLinks.apply {
-            if (isNotEmpty()) LinkCard(
-                first(),
-                count(),
-                note.background ?: MaterialTheme.colorScheme.surface.toArgb(),
-                note.textColor  ?: MaterialTheme.colorScheme.onSurface.toArgb()
-            )
+            audios.fastFirstOrNull {
+                SmallAudioPlayer(audios.size, settingsModel, audioModel, it)
+                true
+            }
+
+            ContextualFlowRow(
+                itemCount = labels.size,
+                maxLines  = 1,
+                overflow  = ContextualFlowRowOverflow.expandOrCollapseIndicator(
+                    expandIndicator = {
+                        AssistChip(
+                            modifier = Modifier.alpha(.5f),
+                            border = BorderStroke(0.dp, Color.Transparent),
+                            onClick = { },
+                            label = { Text("+${totalItemCount - shownItemCount}", fontSize = 13.sp) },
+                            colors = AssistChipDefaults.assistChipColors(
+                                labelColor = note.textColor?.let { Color(it) }
+                                    ?: MaterialTheme.colorScheme.onSurface
+                            ),
+                            shape = CircleShape
+                        )
+                    },
+                    collapseIndicator = { }
+                )
+            ) { index ->
+                AssistChip(
+                    modifier = Modifier.alpha(.8f).padding(start = 5.dp, end = 5.dp),
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    onClick = { },
+                    label = { Text(labels.getOrNull(index)?.label ?: "", fontSize = 11.sp) },
+                    leadingIcon = {
+                        labels.getOrNull(index)?.color?.let {
+                            Icon(
+                                painter = painterResource(id = CIRCLE_18),
+                                contentDescription = null,
+                                tint = Color(it),
+                                modifier = Modifier.size(10.dp)
+                            )
+                        }
+                    },
+                    colors = AssistChipDefaults.assistChipColors(
+                        labelColor = note.textColor?.let { Color(it) }
+                            ?: MaterialTheme.colorScheme.onSurface,
+                        containerColor = Color.DarkGray.copy(alpha = .4f)
+                    ),
+                    shape = CircleShape
+                )
+            }
+
+            filteredLinks.apply {
+                if (isNotEmpty()) LinkCard(
+                    first(),
+                    count(),
+                    note.background ?: MaterialTheme.colorScheme.surface.toArgb(),
+                    note.textColor  ?: MaterialTheme.colorScheme.onSurface.toArgb()
+                )
+            }
+
+        }
+        if (uiState.isSelection) {
+            IconButton(
+                {},
+                Modifier.then(dragModifier)
+                    .align(Alignment.TopEnd),
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = note.background?.let { Color(it) } ?: Color.Unspecified,
+                    contentColor = Color.White.copy(alpha = .5f)
+                )
+            ) {
+                Icon(
+                    painter = painterResource(id = GRIP_DOTS),
+                    contentDescription = null,
+                    tint = note.textColor?.let { Color(it) }
+                        ?: MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }

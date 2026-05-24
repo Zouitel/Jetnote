@@ -26,7 +26,7 @@ fun CommonTopAppBar(
                 CommonRow(
                     Modifier.padding(start = 10.dp, end = 10.dp),
                 ) {
-                    Open_Drawer(settingsModel, drawerState = drawerState)
+                    OpenDrawer(settingsModel, drawerState = drawerState)
                 }
             }
         },

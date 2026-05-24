@@ -9,11 +9,10 @@ import org.koin.dsl.module
 val searchModule = module {
     factory {
         SearchScreenModel(
-            _notes_ = get(),
-            observeDefaultNotes = get(),
-            priorities = get(),
-            noteMapper = get(),
-            firebaseAuth = get(),
+            get(),
+            get(),
+            get(),
+            get()
         )
     }
 

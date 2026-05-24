@@ -2,10 +2,8 @@ package zouitel.neighborhood.workspace.ui.workplace
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,25 +13,17 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.SuggestionChip
-import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -42,9 +32,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -63,27 +51,18 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.skydoves.cloudy.cloudy
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreen
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.logic.R
-import zouitel.neighborhood.markdown.core.Block
-import zouitel.neighborhood.markdown.core.BlockContent
-import zouitel.neighborhood.markdown.core.BlockId
-import zouitel.neighborhood.markdown.core.BlockType
-import zouitel.neighborhood.markdown.core.SpanStyle
-import zouitel.neighborhood.markdown.core.TextSpan
 import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.rememberEditorState
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
 import zouitel.neighborhood.markdown.theme.CascadeEditorTheme
 import zouitel.neighborhood.markdown.ui.CascadeEditor
 import zouitel.neighborhood.tag.model.NoteAndTag
-import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonTextField
@@ -91,14 +70,12 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Reminder
-import zouitel.neighborhood.workspace.model.Task
 import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
 import zouitel.neighborhood.workspace.ui.bottom_bar.BottomBar
-import zouitel.neighborhood.workspace.ui.features.AddTaskScreen
 import zouitel.neighborhood.workspace.ui.features.AudioScreen
 import zouitel.neighborhood.workspace.ui.features.MediaTop
-import zouitel.neighborhood.workspace.ui.utils.TaskItem
 import zouitel.neighborhood.workspace.ui.utils.remindersContext
+import zouitel.neighborhood.workspace.ui.utils.tagsContext
 import kotlin.time.ExperimentalTime
 import kotlin.uuid.Uuid
 
@@ -142,6 +119,11 @@ data class WorkplaceScreen(
         val defaultBackground = MaterialTheme.colorScheme.surface.toArgb()
         val defaultTextColor = MaterialTheme.colorScheme.onSurface.toArgb()
 
+        // Isolated color states — changes here do NOT invalidate currentData,
+        // so CascadeEditor / LazyColumn are skipped by Compose on every color pick.
+        val backgroundState = remember { mutableStateOf(data.background ?: defaultBackground) }
+        val textColorState  = remember { mutableStateOf(data.textColor  ?: defaultTextColor) }
+
         val currentData = remember(data) {
             mutableStateOf(
                 data.copy(
@@ -184,9 +166,9 @@ data class WorkplaceScreen(
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
-        val cascadeTheme = remember(currentData.value.background, currentData.value.textColor) {
-            val bg = Color(currentData.value.background ?: defaultBackground)
-            val noteText = Color(currentData.value.textColor ?: defaultTextColor)
+        val cascadeTheme = remember(backgroundState.value, textColorState.value) {
+            val bg = Color(backgroundState.value)
+            val noteText = Color(textColorState.value)
             val isDark = bg.luminance() < 0.5f
             if (isDark) {
                 CascadeEditorTheme.dark().copy(
@@ -209,11 +191,11 @@ data class WorkplaceScreen(
         }
 
         Scaffold(
-            containerColor = Color(currentData.value.background ?: defaultBackground),
+            containerColor = Color(backgroundState.value),
             modifier = Modifier
                 .fillMaxSize()
                 .cloudy(enabled = navBottomSheet.isVisible)
-                .reportable(settings.isShakable, currentData.value.background),
+                .reportable(settings.isShakable, backgroundState.value),
             bottomBar = {
                 BottomBar(
                     data = currentData,
@@ -221,7 +203,9 @@ data class WorkplaceScreen(
                     editorState = editorState,
                     isSound = settings.isSound,
                     dataModel = dataModel,
-                    linkModel = linkModel
+                    linkModel = linkModel,
+                    backgroundState = backgroundState,
+                    textColorState = textColorState
                 )
             },
             snackbarHost = {
@@ -253,7 +237,7 @@ data class WorkplaceScreen(
                             .focusRequester(focus),
                         placeholder = stringResource(R.string.title),
                         textSize = MaterialTheme.typography.headlineMedium.fontSize,
-                        textColor = Color(currentData.value.textColor ?: defaultTextColor),
+                        textColor = Color(textColorState.value),
                         imeAction = ImeAction.Next,
                         keyboardActions = {
                             keyboardManager.moveFocus(FocusDirection.Next)
@@ -325,7 +309,7 @@ data class WorkplaceScreen(
                         val horizontalPadding = cascadeTheme.dimensions.blockHorizontalPadding
                         Text(
                             text = "Note",
-                            color = Color(currentData.value.textColor ?: defaultTextColor).copy(alpha = 0.4f),
+                            color = Color(textColorState.value).copy(alpha = 0.4f),
                             style = MaterialTheme.typography.bodyLarge,
                             // Vertical 4.dp accounts for the combined internal paddings in CascadeEditor.kt
                             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)
@@ -333,89 +317,6 @@ data class WorkplaceScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-fun LazyListScope.tagsContext(
-    uid: String,
-    filteredTags: List<Tag>,
-    noteAndTagModel: NoteAndTagScreenModel,
-    snackbarHostState: SnackbarHostState,
-    scope: CoroutineScope,
-    deletedTagId: SnapshotStateList<Pair<Long, Int>>,
-    jobCounter: MutableIntState
-) {
-    item {
-        val deleteResource = stringResource(R.string.delete)
-        val undoResource = stringResource(R.string.action_undo)
-
-        ContextualFlowRow(
-            itemCount = filteredTags.size,
-            modifier = Modifier
-                .animateContentSize()
-                .padding(horizontal = 10.dp)
-        ) { index ->
-            SuggestionChip(
-                modifier = Modifier
-                    .alpha(.8f)
-                    .padding(1.5.dp),
-                onClick = {},
-                label = {
-                    Text(
-                        modifier = Modifier
-                            .combinedClickable(onLongClick = {
-                                val currentJobId = jobCounter.intValue++
-                                deletedTagId.add(
-                                    Pair(
-                                        filteredTags.getOrNull(index)?.id
-                                            ?: return@combinedClickable, currentJobId
-                                    )
-                                )
-                                val tagPair =
-                                    deletedTagId.firstOrNull { it.second == currentJobId }
-
-                                noteAndTagModel.sendAction(
-                                    Action.DeleteById(
-                                        filteredTags.getOrNull(index)?.id
-                                            ?: return@combinedClickable
-                                    )
-                                )
-
-                                scope.launch {
-                                    snackbarHostState.currentSnackbarData?.dismiss()
-                                    val result = snackbarHostState.showSnackbar(
-                                        message = "${filteredTags.getOrNull(index)?.label} $deleteResource",
-                                        actionLabel = undoResource,
-                                        duration = SnackbarDuration.Long
-                                    )
-
-
-                                    if (result == SnackbarResult.ActionPerformed) {
-                                        tagPair?.first?.let { tag ->
-                                            noteAndTagModel.sendAction(
-                                                Action.Insert(NoteAndTag(uid, tag))
-                                            )
-                                        }
-                                    }
-                                    tagPair?.let { deletedTagId.remove(it) }
-                                }
-                            }) {},
-                        text = filteredTags.getOrNull(index)?.label ?: ""
-                    )
-                },
-                border = SuggestionChipDefaults.suggestionChipBorder(false),
-                colors = SuggestionChipDefaults.suggestionChipColors(
-                    Color(
-                        filteredTags.getOrNull(index)?.color
-                            ?: MaterialTheme.colorScheme.surfaceContainerHigh.toArgb()
-                    ).copy(alpha = .5f),
-                    Color(
-                        filteredTags.getOrNull(index)?.color
-                            ?: MaterialTheme.colorScheme.onSurface.toArgb()
-                    )
-                )
-            )
         }
     }
 }

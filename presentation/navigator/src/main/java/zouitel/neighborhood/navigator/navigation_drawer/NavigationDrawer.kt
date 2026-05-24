@@ -586,7 +586,7 @@ fun NavigationDrawer(
 //                NavigationDrawerItem(
 //                    label = {
 //                        Text(
-//                            text = AppScreen.WIDGETS_SCREEN.screen,
+//                            fieldState = AppScreen.WIDGETS_SCREEN.screen,
 //                            style = MaterialTheme.typography.titleLarge
 //                        )
 //                    },

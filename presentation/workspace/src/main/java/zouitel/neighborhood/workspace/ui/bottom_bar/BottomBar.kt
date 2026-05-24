@@ -85,7 +85,9 @@ internal fun BottomBar(
     editorState: EditorStateHolder,
     isSound: Boolean?,
     dataModel: DataScreenModel,
-    linkModel: LinkScreenModel
+    linkModel: LinkScreenModel,
+    backgroundState: MutableState<Int>,
+    textColorState: MutableState<Int>
 ) {
     val context = LocalContext.current
     val navigator = LocalNavigator.current
@@ -103,7 +105,7 @@ internal fun BottomBar(
     ) {
         Surface(
             shape = MaterialTheme.shapes.extraLarge,
-            color = data.value.background?.let { Color(it) } ?: MaterialTheme.colorScheme.surface,
+            color = Color(backgroundState.value),
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .navigationBarsPadding()
@@ -158,7 +160,9 @@ internal fun BottomBar(
                                                 userUid = auth.uid.toString(),
                                                 title = titleState?.text.toString().ifEmpty { untitledResource },
                                                 position = 2,
-                                                blocks = editorState.state.blocks
+                                                blocks = editorState.state.blocks,
+                                                background = backgroundState.value,
+                                                textColor = textColorState.value
                                             )
                                         )
                                     )
@@ -189,7 +193,7 @@ internal fun BottomBar(
                     isSound = isSound,
                     colors = listOfBackgroundColors
                 ) { color ->
-                    data.value = data.value.copy(background = color)
+                    backgroundState.value = color
                 }
 
                 // row of text colors.
@@ -197,7 +201,7 @@ internal fun BottomBar(
                     isSound = isSound,
                     colors = listOfTextColors
                 ) { color ->
-                    data.value = data.value.copy(textColor = color)
+                    textColorState.value = color
                 }
             }
         }

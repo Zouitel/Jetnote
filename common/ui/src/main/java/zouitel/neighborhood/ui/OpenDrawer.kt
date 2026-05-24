@@ -21,33 +21,23 @@ import kotlinx.coroutines.launch
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Open_Drawer(
+fun OpenDrawer(
     settingsModel: SettingsScreenModel,
     drawerState: DrawerState,
 ) {
     val context = LocalContext.current
-    val haptic = LocalHapticFeedback.current
 
     val scope = rememberCoroutineScope()
     val settings by remember(settingsModel, settingsModel::observe).collectAsState()
-        IconButton(
-            modifier = Modifier.combinedClickable(
-                onLongClick = {
-                    // To make vibration.
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-
-                    /*it.showAlignBottom()*/
-                }
-            ){},
-            onClick = {
-            scope.launch {
-                SoundEffect().performSoundEffect(context, CommonConstants.KEY_CLICK, settings.isSound)
-                drawerState.open()
-            }
-        }) {
-            Icon(
-                painterResource(CommonIcons.MENU_BURGER),
-                null
-            )
+    IconButton({
+        scope.launch {
+            SoundEffect().performSoundEffect(context, CommonConstants.KEY_CLICK, settings.isSound)
+            drawerState.open()
         }
+    }) {
+        Icon(
+            painterResource(CommonIcons.MENU_BURGER),
+            null
+        )
+    }
 }

@@ -174,7 +174,7 @@ class AboutScreen: Screen {
 //                "\n" +
 //                "### Why Jetnote? ✨\n" +
 //                "\n" +
-//                "* **Capture Everything:** From quick text snippets to media-rich entries featuring our built-in **audio waveform player** \uD83C\uDF99\uFE0F\uD83C\uDFB5.\n" +
+//                "* **Capture Everything:** From quick fieldState snippets to media-rich entries featuring our built-in **audio waveform player** \uD83C\uDF99\uFE0F\uD83C\uDFB5.\n" +
 //                "* **Integrated Task Management:** Turn ideas into action with integrated checklists and smart project tags like `[project \uD83C\uDFD7\uFE0F]`.\n" +
 //                "* **Ironclad Security:** Work with peace of mind using our **Secure Mock Mode** to keep your most sensitive data under wraps \uD83D\uDD12\uD83D\uDEE1\uFE0F.\n" +
 //                "* **Cloud Sync:** Your \"brain\" stays updated across all your devices, ensuring you're always in flow ☁\uFE0F\uD83D\uDD04.\n" +

@@ -110,7 +110,7 @@ fun QuickMediaTop(data: MutableState<Data>, onDelete: (Media) -> Unit) {
                             true -> {
                                 VideoPlayer(
                                     uri = data.value.medias[index].uri.toUri(),
-                                    {}
+                                    onLongClock = {}
                                 ) {}
                             }
                             else -> {
