@@ -23,7 +23,10 @@ import zouitel.neighborhood.database.dao.ProviderDao
 import zouitel.neighborhood.database.utils.MIGRATION_8_9
 
 @Database(
-    version = 11,
+    version = 10,
+    autoMigrations = [
+        AutoMigration(8,9, MIGRATION_8_9::class)
+    ],
     entities = [
         Data::class,
         Tag::class,

@@ -5,6 +5,14 @@ plugins {
 
 android {
     namespace = "zouitel.neighborhood.database"
+
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
+            }
+        }
+    }
 }
 
 ksp {
