@@ -31,7 +31,7 @@ class PlaybackManager (
     val events: MutableSharedFlow<Event> = MutableSharedFlow()
 
     private var lastEmittedPosition: Long = 0
-    private var playlist: MutableList<MediaItem> = mutableListOf() // Use a list for multiple items
+    private var playlist: MutableList<MediaItem> = mutableListOf()
     private var currentMediaItem: MediaItem? = null
     private var controllerFuture: ListenableFuture<MediaController>? = null
     private val controller: MediaController?

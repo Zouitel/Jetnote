@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -52,14 +53,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.ai.provider.CustomBody
@@ -102,9 +102,9 @@ class AssistantScreen(val assistant: Assistant?): Screen {
     @Composable
     override fun Content() {
         AssistantConfiguration(
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 
@@ -191,7 +191,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                                     navigator?.pop()
                                 }
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         },
                         scrollBehavior = scrollBehavior
@@ -267,11 +267,7 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         stringResource(LR.string.learning_mode),
                         stringResource(LR.string.learning_mode_description).trimIndent(),
                         {
-                            AsyncImage(
-                                AR.drawable.creative_brain,
-                                null,
-                                contentScale = ContentScale.Crop
-                            )
+                            AsyncImage(AR.drawable.mortarboard, null)
                         },
                         currentAssistant.value.learningMode,
                         {
@@ -285,7 +281,13 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                     CommonActivationItem(
                         stringResource(LR.string.temperature),
                         stringResource(LR.string.temperature_description).trimIndent(),
-                        null,
+                        {
+                            AsyncImage(
+                                AR.drawable.temperature_sensor,
+                                null,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        },
                         checked = currentAssistant.value.temperature != null,
                         onChecked = {
                             if (it) {
@@ -457,6 +459,9 @@ class AssistantScreen(val assistant: Assistant?): Screen {
                         currentAssistant,
                         stringResource(LR.string.thinking_budget),
                         stringResource(LR.string.thinking_budget_description).trimIndent(),
+                        {
+                            AsyncImage(AR.drawable.creative_brain, null)
+                        },
                         currentAssistant.value.thinkingBudget != null
                     ) {
                         currentAssistant.value = if (it) {

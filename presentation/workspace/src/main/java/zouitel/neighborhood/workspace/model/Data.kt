@@ -1,6 +1,7 @@
 package zouitel.neighborhood.workspace.model
 
 import androidx.annotation.Keep
+import androidx.compose.runtime.Stable
 import zouitel.neighborhood.audio.model.Audio
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_BOOLEAN
 import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_INT
@@ -10,6 +11,7 @@ import zouitel.neighborhood.markdown.core.Block
 import kotlin.time.Clock
 import kotlin.time.Instant
 
+@Stable
 @Keep
 @Serializable
 data class Data (

@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -50,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import coil.compose.AsyncImage
+import zouitel.neighborhood.account.model.StorageInfo
 import zouitel.neighborhood.account.utils.PhotoProfile
 import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.ui.CommonColors
@@ -98,7 +99,7 @@ class AccountScreen: Screen {
                                 navigator?.pop()
                             }) {
                                 Icon(
-                                    painter = painterResource(CommonIcons.ARROW_LEFT),
+                                    painter = painterResource(CommonIcons.ANGLE_LEFT_20),
                                     contentDescription = null
                                 )
                             }
@@ -161,14 +162,6 @@ class AccountScreen: Screen {
                             modifier = Modifier.padding(vertical = 15.dp)
                         )
                     }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(40.dp))
-                }
-
-                item {
-                    StorageCard(storageInfo)
                 }
 
                 item {
@@ -319,7 +312,16 @@ class AccountScreen: Screen {
                                 )
                             }
                         }
+
                     }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(40.dp))
+                }
+
+                item {
+                    StorageCard(storageInfo)
                 }
             }
         }
@@ -330,20 +332,19 @@ class AccountScreen: Screen {
         val totalFraction = if (info.quotaBytes > 0) {
             (info.usedBytes.toFloat() / info.quotaBytes.toFloat()).coerceIn(0f, 1f)
         } else 0f
-        val notesFraction  = if (info.quotaBytes > 0) (info.notesBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
-        val mediaFraction  = if (info.quotaBytes > 0) (info.mediaBytes.toFloat()  / info.quotaBytes).coerceIn(0f, 1f) else 0f
-        val cacheFraction  = if (info.quotaBytes > 0) (info.cacheBytes.toFloat()  / info.quotaBytes).coerceIn(0f, 1f) else 0f
+        val notesFraction = if (info.quotaBytes > 0) (info.notesBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
+        val mediaFraction = if (info.quotaBytes > 0) (info.mediaBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
+        val cacheFraction = if (info.quotaBytes > 0) (info.cacheBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
 
         val animatedTotal by animateFloatAsState(
             targetValue = totalFraction,
-            animationSpec = tween(durationMillis = 900),
-            label = "storage_total"
+            animationSpec = tween(durationMillis = 1000)
         )
 
         val safeTotal = totalFraction.coerceAtLeast(0.001f)
         val notesColor = CommonColors.prime
-        val mediaColor = Color(0xFF4FC3F7)   // light blue
-        val cacheColor = Color(0xFFFFB74D)   // amber
+        val mediaColor = Color(0xFF4FC3F7)
+        val cacheColor = Color(0xFFFFB74D)
 
         Column(
             modifier = Modifier
@@ -354,16 +355,14 @@ class AccountScreen: Screen {
         ) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(CommonIcons.UPLOAD_CLOUD),
-                    contentDescription = null,
-                    tint = CommonColors.prime,
-                    modifier = Modifier.size(22.dp)
+                AsyncImage(
+                    zouitel.neighborhood.account.R.drawable.cloud,
+                    null
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = "storage",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -452,8 +451,8 @@ class AccountScreen: Screen {
 
     private fun formatBytes(bytes: Long): String = when {
         bytes >= 1024L * 1024 * 1024 -> "%.2f GB".format(bytes / (1024.0 * 1024 * 1024))
-        bytes >= 1024L * 1024        -> "%.1f MB".format(bytes / (1024.0 * 1024))
-        bytes >= 1024L               -> "%.0f KB".format(bytes / 1024.0)
-        else                         -> "$bytes B"
+        bytes >= 1024L * 1024 -> "%.1f MB".format(bytes / (1024.0 * 1024))
+        bytes >= 1024L -> "%.0f KB".format(bytes / 1024.0)
+        else -> "$bytes B"
     }
 }

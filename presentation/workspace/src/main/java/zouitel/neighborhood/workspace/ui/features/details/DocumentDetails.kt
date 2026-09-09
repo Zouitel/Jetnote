@@ -36,20 +36,8 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.compose.ui.platform.LocalLocale
 
-/**
- * A [ModalBottomSheet] that displays metadata for a document file — name,
- * type, size, page count, and any embedded PDF metadata (author, producer …).
- *
- * Mirrors [ImageDetails] in structure and visual style:
- *  • Loading spinner while IO work runs
- *  • Error text in red if something goes wrong
- *  • Date + author line at the top in bold
- *  • Tappable chips (tap to reveal the key label) via [ContextualFlowRow]
- *
- * @param path     Absolute file-system path to the document.
- * @param onClose  Called when the sheet should be dismissed.
- */
 @Composable
 fun DocumentDetails(path: String?, onClose: () -> Unit) {
     if (path == null) return
@@ -168,12 +156,10 @@ fun DocumentDetails(path: String?, onClose: () -> Unit) {
 
                     // ── Header: last-modified date ────────────────────────────
                     props.lastModified?.let { epoch ->
-//                        runCatching {
                             val fmt = SimpleDateFormat(
-                                "EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault()
+                                "EEEE, dd MMMM yyyy, HH:mm", LocalLocale.current.platformLocale
                             )
                             Text(fmt.format(epoch), fontWeight = FontWeight.Bold)
-//                        }
                     }
 
                     // ── Subheader: file name + author ─────────────────────────

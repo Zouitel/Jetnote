@@ -56,7 +56,7 @@ class JottingActivity: ComponentActivity(), KoinComponent {
         permissionModel.activityBind(this)
 
         setContent {
-            val descriptionState = rememberTextFieldState(description.value)
+//            val descriptionState = rememberTextFieldState(description.value)
             val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
             val backgroundColorState = rememberSaveable { mutableIntStateOf(backgroundColor) }
             val textColor = contentColorFor(MaterialTheme.colorScheme.surface).toArgb()

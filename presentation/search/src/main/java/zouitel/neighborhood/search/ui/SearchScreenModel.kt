@@ -24,30 +24,12 @@ import zouitel.neighborhood.search.utils.SearchTypes
 import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Note
-
-/**
- * ScreenModel for the search screen.
- *
- * Responsibilities
- * ────────────────
- * • Load notes for the signed-in user and expose them as raw StateFlows.
- * • Hold the single stable [TextFieldState] that the InputField is bound to.
- * • Manage selection / type / tag UI state.
- *
- * What this class does NOT do
- * ───────────────────────────
- * • Filter notes — filtering is done entirely in the Composable via
- *   [derivedStateOf] which automatically tracks all Compose snapshot reads
- *   (including [fieldState].text and [uiState].typeState).  Keeping filtering
- *   in the UI layer avoids the two-debounce / poisoned-query bugs that arose
- *   when filtering lived here.
- */
 @Stable
 class SearchScreenModel(
     private val observeDefaultNotes: NoteUseCase.ObserveByDefault,
     private val priorities: NoteUseCase.ObserveByPriority,
     private val noteMapper: NoteMapper,
-    private val firebaseAuth: FirebaseAuth,
+    private val firebaseAuth: FirebaseAuth
 ) : ScreenModel {
 
     // ── Search field ──────────────────────────────────────────────────────────

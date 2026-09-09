@@ -1,6 +1,8 @@
 package zouitel.neighborhood.navigator.settings_screen
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -58,6 +61,7 @@ import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
 import zouitel.neighborhood.navigator.utils.sound
 import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
+import zouitel.neighborhood.ui.AnimatedCircleCheckbox
 import zouitel.neighborhood.ui.CommonActivationItem
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
@@ -67,17 +71,18 @@ import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class SettingsScreen: Screen {
 
+    @RequiresApi(Build.VERSION_CODES.S)
     @Composable
     override fun Content() {
-        val settingsModel = getScreenModel<SettingsScreenModel>()
+        val settingsModel = koinScreenModel<SettingsScreenModel>()
         SystemBarsBehavior(settingsModel)
 
         Settings(
             settingsModel,
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 
@@ -130,8 +135,8 @@ class SettingsScreen: Screen {
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState,
-                        modelsModel = getScreenModel(),
-                        assistantModel = getScreenModel()
+                        modelsModel = koinScreenModel(),
+                        assistantModel = koinScreenModel()
                     )
                 }
             ) {
@@ -331,13 +336,25 @@ class SettingsScreen: Screen {
                                             }
                                             .padding(vertical = 12.dp)
                                     ) {
-                                        RadioButton(
-                                            selected = lang == currentLang,
-                                            onClick = {
-                                                LanguageManager.setLanguage(lang)
-                                                showLanguagesSheet = false
-                                            }
-                                        )
+//                                        RadioButton(
+//                                            selected = lang == currentLang,
+//                                            onClick = {
+//                                                LanguageManager.setLanguage(lang)
+//                                                showLanguagesSheet = false
+//                                            }
+//                                        )
+
+                                        Spacer(Modifier.width(8.dp))
+
+                                        AnimatedCircleCheckbox(
+                                            lang == currentLang,
+                                            MaterialTheme.colorScheme.onSurface,
+                                            MaterialTheme.colorScheme.surface
+                                        ) {
+                                            LanguageManager.setLanguage(lang)
+                                            showLanguagesSheet = false
+                                        }
+
                                         Spacer(Modifier.width(8.dp))
                                         Text(lang.displayName)
                                     }

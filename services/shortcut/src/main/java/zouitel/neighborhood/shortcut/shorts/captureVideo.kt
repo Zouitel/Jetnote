@@ -7,14 +7,14 @@ import androidx.core.graphics.drawable.IconCompat
 import zouitel.neighborhood.jotting.JottingActivity
 import zouitel.neighborhood.ui.CommonIcons
 
-fun captureVideo(context: Context): ShortcutInfo {
-    val intent = Intent(context, JottingActivity::class.java)
-    intent.action = Intent.ACTION_VIEW
-    intent.putExtra("quick_video", true)
-    return ShortcutInfo.Builder(context, "capture")
-        .setShortLabel("Capture Video")
-        .setLongLabel("Capture Video")
-        .setIcon(IconCompat.createWithResource(context, CommonIcons.VIDEO_CAMERA).toIcon(context))
-        .setIntent(intent)
-        .build()
-}
+//fun captureVideo(context: Context): ShortcutInfo {
+//    val intent = Intent(context, JottingActivity::class.java)
+//    intent.action = Intent.ACTION_VIEW
+//    intent.putExtra("quick_video", true)
+//    return ShortcutInfo.Builder(context, "capture")
+//        .setShortLabel("Capture Video")
+//        .setLongLabel("Capture Video")
+//        .setIcon(IconCompat.createWithResource(context, CommonIcons.VIDEO_CAMERA_36).toIcon(context))
+//        .setIntent(intent)
+//        .build()
+//}

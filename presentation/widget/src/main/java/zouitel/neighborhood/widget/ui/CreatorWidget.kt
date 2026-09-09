@@ -65,7 +65,7 @@ class  CreatorWidget: GlanceAppWidget(), Screen {
             Spacer(GlanceModifier.defaultWeight())
 
             CircleIconButton(
-                ImageProvider(CommonIcons.BELL),
+                ImageProvider(CommonIcons.BELL_RING),
                 null,
                 actionStartActivity(intent_reminder),
                 GlanceModifier.size(70.dp)

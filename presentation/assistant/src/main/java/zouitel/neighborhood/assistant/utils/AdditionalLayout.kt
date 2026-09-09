@@ -41,6 +41,8 @@ internal fun <T>AdditionalLayout(
     onClick: (T) -> Unit
 ) {
     val isVisible = remember { mutableStateOf(false) }
+    val isDarkMode = isSystemInDarkTheme()
+    val descriptionColor = if (isDarkMode) Color.LightGray else Color.DarkGray
 
     Column(
         modifier = Modifier
@@ -74,7 +76,7 @@ internal fun <T>AdditionalLayout(
                 Text(
                     text = description ?: "",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (isSystemInDarkTheme()) Color.LightGray else Color.DarkGray
+                    color = descriptionColor
                 )
             } else CommonDimmedText(description ?: "")
         }

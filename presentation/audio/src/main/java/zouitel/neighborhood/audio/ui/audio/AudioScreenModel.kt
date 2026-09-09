@@ -1,6 +1,7 @@
 package zouitel.neighborhood.audio.ui.audio
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.Stable
 import cafe.adriel.voyager.core.model.ScreenModel
 import zouitel.neighborhood.audio.audio.AudioRepository
 import zouitel.neighborhood.audio.model.Audio
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@Stable
 @Suppress("DeferredResultUnused")
 class AudioScreenModel(
     private val player: PlaybackManager,

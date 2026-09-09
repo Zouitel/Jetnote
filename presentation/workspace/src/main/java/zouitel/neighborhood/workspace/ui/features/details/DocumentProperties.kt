@@ -45,16 +45,12 @@ data class DocumentProperties(
             ?.let { put("Encryption", it) }
         metaCreationDate?.takeIf { it.isNotBlank() }?.let { put("Created", formatPdfDate(it)) }
         metaModDate?.takeIf { it.isNotBlank() }?.let { put("Modified", formatPdfDate(it)) }
-    }.filterValues { !it.isNullOrBlank() }
+    }.filterValues { it.isNotBlank() }
 }
 
-/**
- * Parses a PDF date string (D:YYYYMMDDHHmmSS) into a readable form.
- * Falls back to the raw string if parsing fails.
- */
 private fun formatPdfDate(raw: String): String {
     // PDF date format: D:YYYYMMDDHHmmSSOHH'mm'
-    val cleaned = raw.removePrefix("D:").take(14) // keep YYYYMMDDHHmmSS
+    val cleaned = raw.removePrefix("D:").take(14)
     return runCatching {
         val sdf = java.text.SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
         val date = sdf.parse(cleaned)
@@ -62,8 +58,4 @@ private fun formatPdfDate(raw: String): String {
     }.getOrElse { raw }
 }
 
-/**
- * Formats an exposure-time rational string like "1/100" → "1/100 s".
- * Reused by [ImageProperties] (declared here so it's available from the same package).
- */
 internal fun formatExposureTime(et: String): String = if (et.contains('/')) "$et s" else "${et}s"

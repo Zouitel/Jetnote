@@ -398,4 +398,8 @@
     <string name="notes_list_description">এটি একটি নোটের তালিকা</string>
     <string name="record_deleted">রেকর্ড মুছে ফেলা হয়েছে!</string>
     <string name="language">ভাষাটি</string>
+    <string name="confirm_color">রঙ নিশ্চিত করুন</string>
+    <string name="app_version">অ্যাপ সংস্করণ</string>
+    <string name="term_of_use">ব্যবহারের শর্তাবলী</string>
+    <string name="privacy_policy">গোপনীয়তা নীতি</string>
 </resources>

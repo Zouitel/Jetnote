@@ -405,4 +405,8 @@
     <string name="notes_list_description">यह नोट्स की सूची है</string>
     <string name="record_deleted">रिकॉर्ड हटाया गया!</string>
     <string name="language">वह भाषा</string>
+    <string name="confirm_color">रंग की पुष्टि करें</string>
+    <string name="app_version">ऐप संस्करण</string>
+    <string name="term_of_use">उपयोग की शर्तें</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
 </resources>

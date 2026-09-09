@@ -410,4 +410,8 @@
     <string name="notes_list_description">Din hija lista ta\' noti</string>
     <string name="record_deleted">rekord imħassar!</string>
     <string name="language">Il-lingwa</string>
+    <string name="confirm_color">Ikkonferma l-Kulur</string>
+    <string name="app_version">Verżjoni tal-App</string>
+    <string name="term_of_use">Termini tal-Użu</string>
+    <string name="privacy_policy">Politika ta\' Privatezza</string>
 </resources>

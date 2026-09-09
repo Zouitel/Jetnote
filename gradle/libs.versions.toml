@@ -1,108 +1,109 @@
 [versions]
-agp = "8.11.2"
+agp = "9.3.1"
 docviewer = "v3.0.3"
-exifinterface = "1.4.1"
+exifinterface = "1.4.2"
 googleApiServicesDrive = "v3-rev136-1.25.0"
 googleHttpClientGson = "1.47.1"
-kotlin = "2.3.20"
-compileSdk-version = "36"
+kotlin = "2.4.10"
+compileSdk-version = "37"
 minSdk-version = "27"
 permissionsCompose = "0.20.1"
-playServicesAuth = "21.4.0"
+playServicesAuth = "21.6.0"
 playServicesMlkitDocumentScanner = "16.0.0"
 print = "1.1.0"
 reorderable = "3.1.0"
-sqliteKtx = "2.6.1"
+sqliteKtx = "2.7.0"
 targetSdk-version = "35"
 code-version = "810"
 name-version = "8.1.0"
-compose-version = "1.5.14"
+compose-version = "1.9.0"
 
 #Android.
-core-ktx = "1.17.0"
+core-ktx = "1.19.0"
 junit = "4.13.2"
-lifecycle = "2.9.4"
+lifecycle = "2.11.0"
 glance = "1.1.1"
 security = "1.1.0"
-workmanager = "2.11.0"
+workmanager = "2.11.2"
 biometric = "1.2.0-alpha05"
 appcompat = "1.7.1"
-recyclerview = "1.3.2"
+recyclerview = "1.4.0"
 
 #Compose.
-compose-bom = "2026.01.01"
-material3 = "1.5.0-alpha13"
+compose-bom = "2026.06.01"
+material3 = "1.5.0-alpha25"
 compose-constraintlayout = "1.1.1"
 
 #Plugins.
 ksp = "2.3.7"
-dependencyanalysis = "3.4.0"
-chaquo-python = "16.1.0"
+dependencyanalysis = "3.18.0"
+chaquo-python = "17.0.0"
 
 #KotlinX.
-coroutines = "1.10.2"
-serialization-json = "1.9.0"
-markdown = "0.7.3"
-kotlinx-datetime = "0.7.1"
+coroutines = "1.11.0"
+serialization-json = "1.11.0"
+markdown = "0.7.8"
+kotlinx-datetime = "0.8.0"
 
 #Koin.
-koin = "4.1.1"
+koin = "4.2.2"
 
 #Room.
 room = "2.8.4"
 
 #Datastore.
-datastore = "1.1.7"
+datastore = "1.2.1"
 datastore-security = "1.0.0"
 
 #Coil
 coil-compose = "2.7.0"
 coil-svg = "2.7.0"
 coil-gif = "2.7.0"
-zoomable-coil = "0.16.0"
+zoomable-coil = "0.19.0"
 
 #License.
-license = "13.1.0"
+license = "15.0.4"
 
 #Voyager.
-voyager = "1.0.1"
+voyager = "2.2.21-1.10.3"
 
 #Google.
-googleid = "1.1.1"
+googleid = "1.2.0"
+appupdate = "2.1.0"
 
 #Network.
-okhttp = "5.3.0"
-firebase-bom = "34.6.0"
-firebaseCrashlyticsGradle = "3.0.6" # Use the latest stable version
-ktorClientCore = "3.3.1"
-ktorClientCio = "3.3.1"
-ktorClientContentNegotiation = "3.3.1"
-ktorSerializationKotlinxJson = "3.3.1"
+okhttp = "5.4.0"
+firebase-bom = "34.16.0"
+firebaseCrashlyticsGradle = "3.0.7"
+ktorClientCore = "3.5.1"
+ktorClientCio = "3.5.1"
+ktorClientContentNegotiation = "3.5.1"
+ktorSerializationKotlinxJson = "3.5.1"
 
 #Others.
-enigma = "1.0.0.8"
-media3 = "1.8.0"
-cloudy = "0.2.7"
-ktorClientAndroid = "3.3.1"
+media3 = "1.11.0"
+cloudy = "0.7.1"
+ktorClientAndroid = "3.5.2"
 metaprobeKmp = "1.0.1"
-gmsGoogleServices = "4.4.4"
-media3CommonKtx = "1.8.0"
+gmsGoogleServices = "4.5.0"
+media3CommonKtx = "1.11.0"
 jlatexmath = "1.2"
-jsoup = "1.21.2"
+jsoup = "1.23.1"
 sonner = "0.4.0"
 quickjs = "3.2.3"
 junitVersion = "1.3.0"
-commons-text = "1.14.0"
-pebble = "3.2.4"
+commons-text = "1.15.0"
+pebble = "4.1.2"
 ucrop = "2.2.11-native"
 espressoCore = "3.7.0"
-uiautomator = "2.3.0"
+uiautomator = "2.4.0"
 benchmarkMacroJunit4 = "1.4.1"
 profileinstaller = "1.4.1"
-material = "1.13.0"
+material = "1.14.0"
 identityJvm = "202411.1"
-revenuecat = "9.25.0"
-foundationLayout = "1.11.1"
+foundationLayout = "1.12.0"
+#revenuecat = "9.25.0"
+#foundationLayout = "1.11.1"
 
 [libraries]
 #Kotlin.
@@ -176,7 +177,6 @@ room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 #DataStore.
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
-datastore-security = { module = "io.github.osipxd:security-crypto-datastore-preferences", version.ref = "datastore-security" }
 
 #Coil.
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
@@ -198,6 +198,8 @@ voyager-bottom-sheet = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navi
 media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
 media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3" }
 media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
+media3-compose = { group = "androidx.media3", name = "media3-ui-compose", version.ref = "media3" }
+media3-compose-material3 = { group = "androidx.media3", name = "media3-ui-compose-material3", version.ref = "media3" }
 
 #Glance.
 glance = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
@@ -205,6 +207,7 @@ glance-material3 = { module = "androidx.glance:glance-material3", version.ref = 
 
 #Google.
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+appupdate-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appupdate" }
 
 #Network.
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
@@ -217,10 +220,9 @@ firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
 #Others.
-#enigma = { module = "gradle.plugin.chrisney:enigma", version.ref = "enigma" }
 compose-cloudy = { module = "com.github.skydoves:cloudy", version.ref = "cloudy" }
-revenuecat = { module = "com.revenuecat.purchases:purchases", version.ref = "revenuecat" }
-revenuecat-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "revenuecat" }
+#revenuecat = { module = "com.revenuecat.purchases:purchases", version.ref = "revenuecat" }
+#revenuecat-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "revenuecat" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
 metaprobe-kmp = { module = "tech.dev-scion:metaprobe-kmp", version.ref = "metaprobeKmp" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
@@ -240,6 +242,7 @@ androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchm
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 identity-jvm = { group = "com.android.identity", name = "identity-jvm", version.ref = "identityJvm" }
+androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 
 [bundles]
 compose = ["ui", "ui-tooling-preview", "material3"]
@@ -253,16 +256,12 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 licenses = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "license" }
-enigma = { id = "com.chrisney.enigma", version.ref = "enigma" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
 #Local.
 zouitel-androidLibrary = { id = "zouitel.android.library", version = "unspecified" }
 zouitel-androidCompose = { id = "zouitel.android.compose", version = "unspecified" }
 zouitel-androidApplication = { id = "zouitel.android.application", version = "unspecified" }
 zouitel-composeVoyager = { id = "zouitel.compose.voyager", version = "unspecified" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServices" }
-stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.5.0" }
-chaquo-python = { id = "com.chaquo.python", version.ref = "chaquo-python" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
 android-test = { id = "com.android.test", version.ref = "agp" }

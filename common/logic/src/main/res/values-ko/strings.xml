@@ -390,4 +390,8 @@
     <string name="notes_list_description">메모 목록입니다</string>
     <string name="record_deleted">기록 삭제됨!</string>
     <string name="language">그 언어</string>
+    <string name="confirm_color">색상 확인</string>
+    <string name="app_version">앱 버전</string>
+    <string name="term_of_use">이용약관</string>
+    <string name="privacy_policy">개인정보처리방침</string>
 </resources>

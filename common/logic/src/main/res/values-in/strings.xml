@@ -391,4 +391,8 @@
     <string name="notes_list_description">Ini adalah daftar catatan</string>
     <string name="record_deleted">rekaman dihapus!</string>
     <string name="language">Bahasa tersebut</string>
+    <string name="confirm_color">Konfirmasi Warna</string>
+    <string name="app_version">Versi Aplikasi</string>
+    <string name="term_of_use">Syarat Penggunaan</string>
+    <string name="privacy_policy">Kebijakan Privasi</string>
 </resources>

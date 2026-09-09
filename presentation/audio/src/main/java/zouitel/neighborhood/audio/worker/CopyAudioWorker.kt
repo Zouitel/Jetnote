@@ -32,7 +32,6 @@ class CopyAudioWorker(
         } catch (_: Exception) {
             Result.failure()
         }
-
     }
 
     @WorkerThread

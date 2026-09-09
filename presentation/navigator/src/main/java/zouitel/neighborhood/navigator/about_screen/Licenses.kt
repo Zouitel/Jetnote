@@ -50,10 +50,11 @@ class Licenses: Screen {
                     .fillMaxSize()
                     .cloudy(enabled = bottomNav.isVisible)
                     .reportable(settings.isShakable),
-                showDescription = true,
-                showFundingBadges = true,
+//                showDescription = true,
+//                showFundingBadges = true,
                 onLibraryClick = {
-                    navigator?.push(WebViewPageScreen(it.website ?: return@LibrariesContainer))
+                    navigator?.push(WebViewPageScreen(it.website ?: return@LibrariesContainer false ))
+                    true
                 },
                 colors = LibraryDefaults.libraryColors(
                     libraryBackgroundColor = MaterialTheme.colorScheme.surface,

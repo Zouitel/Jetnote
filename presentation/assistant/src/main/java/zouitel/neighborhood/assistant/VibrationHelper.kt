@@ -20,7 +20,7 @@ object VibrationHelper {
         // Gentle vibration for AI response
         vibrator.vibrate(
             VibrationEffect.createOneShot(
-                100, // 100ms - short and gentle
+                100,
                 VibrationEffect.DEFAULT_AMPLITUDE
             )
         )

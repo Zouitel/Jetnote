@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -38,9 +39,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import zouitel.neighborhood.ai.provider.Model
@@ -232,67 +235,69 @@ private fun AddModels(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 10.dp)
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = "${stringResource(zouitel.neighborhood.logic.R.string.available_models)}: ${loadedModels.size}",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        ContextualFlowColumn(
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .animateContentSize(),
-            itemCount = loadedModels.size,
-            maxLines = 1,
+                .padding(horizontal = 10.dp)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalArrangement = Arrangement.Center,
-            itemHorizontalAlignment = Alignment.CenterHorizontally
-        ) { index ->
-            val model = loadedModels.getOrNull(index) ?: return@ContextualFlowColumn
+        ) {
+            Text(
+                text = "${stringResource(zouitel.neighborhood.logic.R.string.available_models)}: ${loadedModels.size}",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
 
-            // O(1) lookup using Set instead of O(n) with any()
-            val modelKey = model.modelId
-            val isExisting = modelKey in existingModelIds
+            Spacer(modifier = Modifier.height(10.dp))
 
-            Box(modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(45.dp)
-                        .clickable { onClicked(model) }
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .align(Alignment.Center),
-                    colors = CardDefaults.cardColors(
-                        containerColor = if (isExisting) CommonColors.prime
-                        else MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = if (isExisting) MaterialTheme.colorScheme.surface
-                        else MaterialTheme.colorScheme.onSurface
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().heightIn(45.dp).padding(5.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Avatar(
-                            isLoading = false,
-                            logo = model.logoUrl,
-                            modelName = model.displayName
-                        ) { }
+            ContextualFlowColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(),
+                itemCount = loadedModels.size,
+                maxLines = 1,
+                verticalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.Center,
+                itemHorizontalAlignment = Alignment.CenterHorizontally
+            ) { index ->
+                val model = loadedModels.getOrNull(index) ?: return@ContextualFlowColumn
 
-                        Text(
-                            text = model.modelId,
-                            style = TextStyle(
-                                fontSize = 19.sp,
-                            )
+                // O(1) lookup using Set instead of O(n) with any()
+                val modelKey = model.modelId
+                val isExisting = modelKey in existingModelIds
+
+                Box(modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(45.dp)
+                            .clickable { onClicked(model) }
+                            .clip(MaterialTheme.shapes.extraLarge)
+                            .align(Alignment.Center),
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isExisting) CommonColors.prime
+                            else MaterialTheme.colorScheme.surfaceContainer,
+                            contentColor = if (isExisting) MaterialTheme.colorScheme.surface
+                            else MaterialTheme.colorScheme.onSurface
                         )
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().heightIn(45.dp).padding(5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Avatar(
+                                isLoading = false,
+                                logo = model.logoUrl,
+                                modelName = model.displayName
+                            ) { }
+
+                            Text(
+                                text = model.modelId,
+                                style = TextStyle(
+                                    fontSize = 19.sp,
+                                )
+                            )
+                        }
                     }
                 }
             }

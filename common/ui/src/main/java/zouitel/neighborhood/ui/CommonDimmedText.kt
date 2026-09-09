@@ -1,6 +1,5 @@
 package zouitel.neighborhood.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
@@ -16,37 +15,25 @@ fun CommonDimmedText(
     normalTextStyle: TextStyle = TextStyle.Default,
     graduatedLines: Int = 5
 ) {
-    val isDarkMode = isSystemInDarkTheme()
     val lines = text.lines()
     val contentColor = LocalContentColor.current
+    val baseSpanStyle = normalTextStyle.toSpanStyle().let { base ->
+        if (base.color == Color.Unspecified) base.copy(color = contentColor) else base
+    }
 
     val annotatedString = buildAnnotatedString {
         lines.forEachIndexed { index, line ->
-            val style = when {
+            val spanStyle = when {
                 index < graduatedLines -> {
-                    val ratio = index.toFloat() / graduatedLines.toFloat()
-                    val targetColor = if (isDarkMode) {
-                        // In dark mode, fade to transparent/dimmed
-                        contentColor.copy(alpha = 1f - ratio)
-                    } else {
-                        // In light mode, fade to very light/transparent
-                        contentColor.copy(alpha = 1f - ratio)
-                    }
-                    normalTextStyle.copy(color = targetColor).toSpanStyle()
+                    val alpha = 1f - (index.toFloat() / graduatedLines.toFloat())
+                    baseSpanStyle.copy(color = baseSpanStyle.color.copy(alpha = alpha))
                 }
-                else -> {
-                    // Completely invisible lines
-                    normalTextStyle.copy(color = Color.Transparent).toSpanStyle()
-                }
+                else -> baseSpanStyle.copy(color = Color.Transparent)
             }
 
-            withStyle(style) {
-                append(line)
-            }
+            withStyle(spanStyle) { append(line) }
 
-            if (index < lines.size - 1) {
-                append("\n")
-            }
+            if (index < lines.size - 1) append("\n")
         }
     }
 

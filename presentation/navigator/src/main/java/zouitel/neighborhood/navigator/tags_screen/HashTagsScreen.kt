@@ -75,6 +75,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
@@ -97,15 +98,16 @@ import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.milliseconds
 
 class HashTagsScreen: Screen {
     @Composable
     override fun Content() {
         Tags(
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 
@@ -165,8 +167,8 @@ class HashTagsScreen: Screen {
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState,
-                        modelsModel = getScreenModel(),
-                        assistantModel = getScreenModel()
+                        modelsModel = koinScreenModel(),
+                        assistantModel = koinScreenModel()
                     )
                 }
             ) {
@@ -245,7 +247,7 @@ class HashTagsScreen: Screen {
                                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                         placeholderText = tagCannotBeEmptyResource
                                         scope.launch {
-                                            delay(3000)
+                                            delay(3000.milliseconds)
                                             placeholderText = tagResource
                                         }
                                     } else {

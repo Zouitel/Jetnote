@@ -42,6 +42,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.ui.getAverageColorFromImage
 import kotlin.math.absoluteValue
+import kotlin.time.Duration.Companion.milliseconds
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(UnstableApi::class)
@@ -54,7 +55,7 @@ fun QuickMediaTop(data: MutableState<Data>, onDelete: (Media) -> Unit) {
     LaunchedEffect(data.value.medias, pagerState.currentPage) {
         if (data.value.medias.size > 1) {
             while (true) {
-                delay(7000)
+                delay(7000.milliseconds)
                 val nextPage = (pagerState.currentPage + 1) % data.value.medias.size
                 pagerState.scrollToPage(page = nextPage)
             }

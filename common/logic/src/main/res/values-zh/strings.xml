@@ -376,4 +376,8 @@
     <string name="notes_list_description">这是笔记列表</string>
     <string name="record_deleted">记录已删除！</string>
     <string name="language">该语言</string>
+    <string name="confirm_color">确认颜色</string>
+    <string name="app_version">应用版本</string>
+    <string name="term_of_use">使用条款</string>
+    <string name="privacy_policy">隐私政策</string>
 </resources>

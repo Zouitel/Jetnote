@@ -1,8 +1,10 @@
 package zouitel.neighborhood.ai.provider
 
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Stable
 @Serializable
 data class Model(
     val uid: String? = "",
@@ -17,26 +19,26 @@ data class Model(
     val outputModalities: List<Modality> = listOf(Modality.TEXT),
     val abilities: List<ModelAbility> = emptyList(),
     val tools: Set<BuiltInTools> = emptySet(),
-    val providerOverwrite: ProviderSetting? = null,
+    val providerOverwrite: ProviderSetting? = null
 )
 
 @Serializable
 enum class ModelType {
     CHAT,
     IMAGE,
-    EMBEDDING,
+    EMBEDDING;
 }
 
 @Serializable
 enum class Modality {
     TEXT,
-    IMAGE,
+    IMAGE;
 }
 
 @Serializable
 enum class ModelAbility {
     TOOL,
-    REASONING,
+    REASONING;
 }
 
 // Built-in tool options provided by the model (provider).

@@ -22,7 +22,7 @@ class CopyMediaWorker(
 
     override suspend fun doWork(): Result {
         return try {
-            val mediaUri        = inputData.getString("CONTENT_URI") ?: return Result.failure()
+            val mediaUri = inputData.getString("CONTENT_URI") ?: return Result.failure()
             val destinationPath = inputData.getString("DESTINATION_PATH")
 
             if (destinationPath != null) {
@@ -39,12 +39,10 @@ class CopyMediaWorker(
     }
 
     // ── Targeted copy (preferred path — used by handleContentReceiver) ────────
-
     @WorkerThread
     private suspend fun copyMediaToDestination(uri: Uri, destinationPath: String) {
         val destinationFile = File(destinationPath)
 
-        // Skip if already present (e.g. worker retried after process death).
         if (destinationFile.exists()) return
 
         withContext(ioDeprecated) {
@@ -59,10 +57,9 @@ class CopyMediaWorker(
     }
 
     // ── Fallback copy (legacy path — no explicit destination supplied) ─────────
-
     @WorkerThread
     private suspend fun copyMediaToExternalStorage(uri: Uri) {
-        val context        = applicationContext
+        val context = applicationContext
         val fileDescriptor = context.contentResolver.openFileDescriptor(uri, "r") ?: return
 
         val inputStream = try {

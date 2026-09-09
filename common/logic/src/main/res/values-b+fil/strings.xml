@@ -401,4 +401,8 @@
     <string name="notes_list_description">Ito ay isang listahan ng mga tala</string>
     <string name="record_deleted">nabura ang rekord!</string>
     <string name="language">Ang wika</string>
+    <string name="confirm_color">Kumpirmahin ang Kulay</string>
+    <string name="app_version">Bersyon ng App</string>
+    <string name="term_of_use">Mga Tuntunin ng Paggamit</string>
+    <string name="privacy_policy">Patakaran sa Privacy</string>
 </resources>

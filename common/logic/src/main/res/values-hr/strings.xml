@@ -396,4 +396,8 @@
     <string name="notes_list_description">Ovo je popis bilješki</string>
     <string name="record_deleted">zapis obrisan!</string>
     <string name="language">Jezik</string>
+    <string name="confirm_color">Potvrdi boju</string>
+    <string name="app_version">Verzija aplikacije</string>
+    <string name="term_of_use">Uvjeti korištenja</string>
+    <string name="privacy_policy">Pravila o privatnosti</string>
 </resources>

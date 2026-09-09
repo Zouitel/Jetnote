@@ -13,21 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.io.File
-
-data class StorageInfo(
-    /** Raw bytes used by the notes database and app data files. */
-    val notesBytes: Long = 0L,
-    /** Raw bytes of cached media (images, videos, documents). */
-    val mediaBytes: Long = 0L,
-    /** Raw bytes in the system cache dir. */
-    val cacheBytes: Long = 0L,
-    /** Total quota in bytes shown on the bar (default 5 GB). */
-    val quotaBytes: Long = 5L * 1024 * 1024 * 1024
-) {
-    val usedBytes: Long get() = notesBytes + mediaBytes + cacheBytes
-    val freeBytes: Long get() = (quotaBytes - usedBytes).coerceAtLeast(0L)
-}
+import zouitel.neighborhood.account.model.StorageInfo
 
 @Stable
 class AccountScreenModel(
@@ -76,8 +62,6 @@ class AccountScreenModel(
             )
         }
     }
-
-    fun refreshStorage() = computeStorage()
 
     fun manageAccountOnThisDevice() {
         val intent = Intent(ACTION_SYNC_SETTINGS)

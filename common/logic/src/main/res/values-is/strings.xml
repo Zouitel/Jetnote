@@ -385,4 +385,8 @@
     <string name="notes_list_description">Þetta er glósulisti</string>
     <string name="record_deleted">skrá eytt!</string>
     <string name="language">Tungumálið</string>
+    <string name="confirm_color">Staðfesta lit</string>
+    <string name="app_version">Útgáfa forrits</string>
+    <string name="term_of_use">Notkunarskilmálar</string>
+    <string name="privacy_policy">Persónuverndarstefna</string>
 </resources>

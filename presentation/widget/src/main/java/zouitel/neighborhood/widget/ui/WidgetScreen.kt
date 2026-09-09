@@ -30,7 +30,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.widget.model.WidgetComponent
 import zouitel.neighborhood.widget.receivers.CreatorReceiver
-import zouitel.neighborhood.widget.receivers.ListReceiver
 import zouitel.neighborhood.widget.receivers.QuickReceiver
 import coil.compose.AsyncImage
 import zouitel.neighborhood.widget.R
@@ -78,7 +77,7 @@ class WidgetScreen: Screen {
                         IconButton({
                             navigator?.pop()
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                            Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                         }
                     }
                 )
@@ -94,7 +93,7 @@ class WidgetScreen: Screen {
                             .heightIn(50.dp)
                             .padding(20.dp)
                             .clickable {
-                                if (true && appWidgetManager.isRequestPinAppWidgetSupported) {
+                                if (appWidgetManager.isRequestPinAppWidgetSupported) {
                                     val success = appWidgetManager.requestPinAppWidget(
                                         it.componentName,
                                         null,

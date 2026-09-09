@@ -12,9 +12,11 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -26,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -35,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.stack.mutableStateStackOf
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.domain.utils.Action
@@ -44,9 +47,11 @@ import zouitel.neighborhood.navigator.archive_screen.utils.ArchiveTopAppBar
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.search.note_card.NoteCard
 import zouitel.neighborhood.search.ui.SearchScreenModel
+import zouitel.neighborhood.search.utils.SearchTopBar
 import zouitel.neighborhood.search.utils.SelectionTopBar
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonConstants
+import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.workspace.model.Data
@@ -64,19 +69,20 @@ class ArchiveScreen: Screen {
     @Composable
     override fun Content() {
         Archive(
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Archive(
         settingsModel: SettingsScreenModel,
@@ -98,6 +104,8 @@ class ArchiveScreen: Screen {
 
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+        val searchBarBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
+        val showSearch = remember { mutableStateOf(false) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val archives = remember(archiveModel, archiveModel::observeArchives).collectAsState()
         val uiState by remember(searchModel, searchModel::uiState).collectAsState()
@@ -110,6 +118,8 @@ class ArchiveScreen: Screen {
 
         val undoResource = stringResource(R.string.action_undo)
         val isDeletedResource = stringResource(R.string.deleted)
+
+        val showEraseSheet = remember { mutableStateOf(false) }
 
         Scaffold(
             snackbarHost = {
@@ -133,8 +143,9 @@ class ArchiveScreen: Screen {
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState,
-                        modelsModel = getScreenModel(),
-                        assistantModel = getScreenModel()
+                        modelsModel = koinScreenModel(),
+                        assistantModel = koinScreenModel(),
+                        onOpenSearch = { showSearch.value = true }
                     )
                 }
             ) {
@@ -169,12 +180,31 @@ class ArchiveScreen: Screen {
                                     }
                                 }
                             }
+                        } else if (showSearch.value) {
+                            SearchTopBar(
+                                scrollBehavior = searchBarBehavior,
+                                searchModel = searchModel,
+                                settingsModel = settingsModel,
+                                tagModel = tagModel,
+                                audioModel = audioModel,
+                                linkModel = linkModel,
+                                dataModel = dataModel,
+                                noteAndTagModel = noteAndTagModel,
+                                navigationIcon = {
+                                    OpenDrawer(settingsModel, drawerState)
+                                },
+                                expandRequestKey = true,
+                                onCollapsed = { showSearch.value = false }
+                            )
                         } else {
                             ArchiveTopAppBar(
                                 settingsModel = settingsModel,
                                 scrollBehavior = scrollBehavior,
-                                drawerState = drawerState
-                            )
+                                drawerState = drawerState,
+                                onSearchClick = { showSearch.value = true }
+                            ) {
+                                showEraseSheet.value = true
+                            }
                         }
                     }
                 ) { paddingValues ->
@@ -230,6 +260,15 @@ class ArchiveScreen: Screen {
                                 }
                             }
                         }
+                    }
+
+                }
+                if (showEraseSheet.value) {
+                    EraseSheet(
+                        koinScreenModel(),
+                        koinScreenModel()
+                    ) {
+                        showEraseSheet.value = false
                     }
                 }
             }

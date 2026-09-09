@@ -369,4 +369,8 @@
     <string name="notes_list_description">Bu eslatmalar ro\'yxati</string>
     <string name="record_deleted">Yozuv o\'chirildi!</string>
     <string name="language">Bu til</string>
+    <string name="confirm_color">Rangni tasdiqlash</string>
+    <string name="app_version">Ilova versiyasi</string>
+    <string name="term_of_use">Foydalanish shartlari</string>
+    <string name="privacy_policy">Maxfiylik siyosati</string>
 </resources>

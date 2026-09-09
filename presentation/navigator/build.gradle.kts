@@ -29,7 +29,6 @@ dependencies {
     api(projects.presentation.search)
     api(projects.feedback)
     api(projects.presentation.account)
-    api(projects.presentation.assistant)
     implementation(projects.security)
 
     //Material.
@@ -49,6 +48,7 @@ dependencies {
     implementation (libs.licenses)
 
     //Firebase.
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
     //Google Service.
@@ -59,6 +59,9 @@ dependencies {
         exclude("org.apache.httpcomponents")
     }
 
-    // Reorderable . drag to reorder.
+    //Reorderable . drag to reorder.
     implementation(libs.reorderable)
+
+    //Google app update.
+    implementation(libs.appupdate.ktx)
 }

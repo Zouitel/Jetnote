@@ -7,7 +7,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -22,16 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
-import zouitel.neighborhood.navigator.R
 import zouitel.neighborhood.navigator.utils.TERMS_OF_USE
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -41,7 +38,7 @@ import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 class TermsScreen: Screen {
     @Composable
     override fun Content() {
-        val settingsModel: SettingsScreenModel = getScreenModel()
+        val settingsModel: SettingsScreenModel = koinScreenModel()
 
         val bottomNav = LocalBottomSheetNavigator.current
         val navigator = LocalNavigator.current
@@ -62,7 +59,7 @@ class TermsScreen: Screen {
                             IconButton({
                                 navigator?.pop()
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         }
                     )

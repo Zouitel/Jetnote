@@ -1,7 +1,9 @@
 package zouitel.neighborhood.navigator.main_screen
 
 import android.annotation.SuppressLint
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,20 +27,17 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.LoadingIndicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.material3.rememberContainedSearchBarState
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -52,7 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -84,31 +83,29 @@ import zouitel.neighborhood.ui.CommonConstants
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
-import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
-import zouitel.neighborhood.ui.rememberAutoHeightCacheStaggeredGrid
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
+import kotlin.time.Duration.Companion.milliseconds
 
+@RequiresApi(Build.VERSION_CODES.S)
 class MainScreen: Screen {
-
     @Composable
     override fun Content() {
-        val settingsModel = getScreenModel<SettingsScreenModel>()
-
+        val settingsModel = koinScreenModel<SettingsScreenModel>()
         SystemBarsBehavior(settingsModel)
 
         Main(
-            getScreenModel(),
+            koinScreenModel(),
             settingsModel,
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 
@@ -139,6 +136,7 @@ class MainScreen: Screen {
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarState = remember { SnackbarHostState() }
+        var searchExpandRequest by remember { mutableStateOf<Any?>(null) }
         val deletedNotes = remember { mutableStateListOf<Pair<Data, Int>>() }
         var jobCounter by remember { mutableIntStateOf(0) }
         val scope = rememberCoroutineScope()
@@ -204,8 +202,9 @@ class MainScreen: Screen {
                         searchModel = searchModel,
                         drawerState = drawerState,
                         snackbarState = snackbarState,
-                        modelsModel = getScreenModel(),
-                        assistantModel = getScreenModel()
+                        modelsModel = koinScreenModel(),
+                        assistantModel = koinScreenModel(),
+                        onOpenSearch = { searchExpandRequest = Any() }
                     )
                 }
             ) {
@@ -253,6 +252,7 @@ class MainScreen: Screen {
                                 linkModel = linkModel,
                                 dataModel = dataModel,
                                 noteAndTagModel = noteAndTagModel,
+                                expandRequestKey = searchExpandRequest,
                                 navigationIcon = {
                                     OpenDrawer(settingsModel, drawerState)
                                 },
@@ -323,7 +323,7 @@ class MainScreen: Screen {
                                 containerColor = CommonColors.prime,
                                 color = MaterialTheme.colorScheme.surface
                             )
-                            scope.launch { delay(2000) }
+                            scope.launch { delay(2000.milliseconds) }
                         }
                     ) {
                         if (settings.layout == CommonConstants.LIST) {

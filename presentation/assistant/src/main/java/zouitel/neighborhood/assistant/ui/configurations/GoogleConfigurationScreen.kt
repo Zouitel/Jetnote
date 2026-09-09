@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.ai.provider.ProviderManager
 import zouitel.neighborhood.ai.provider.ProviderSetting
@@ -79,7 +79,7 @@ import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 data class GoogleConfigurationScreen(private val provider: ProviderSetting.Google): Screen {
     @Composable
     override fun Content() {
-        Configuration(getScreenModel(), getScreenModel())
+        Configuration(koinScreenModel(), koinScreenModel())
     }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -158,7 +158,7 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                     navigator?.pop()
                                 }
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         },
                         actions = {
@@ -184,18 +184,20 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
             ) {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
-                    CommonActivationItem(
-                        currentProvider.name,
-                        currentProvider.description,
-                        {
-                            AsyncImage(
-                                currentProvider.logoUrl,
-                                null,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        },
-                        null
-                    )
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        CommonActivationItem(
+                            currentProvider.name,
+                            currentProvider.description,
+                            {
+                                AsyncImage(
+                                    currentProvider.logoUrl,
+                                    null,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            },
+                            null
+                        )
+                    }
                 }
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
@@ -271,9 +273,15 @@ data class GoogleConfigurationScreen(private val provider: ProviderSetting.Googl
                                             navigator?.push(WebViewPageScreen(currentProvider.apiLink.ifEmpty { "" }))
                                         }
                                     },
-                                    Modifier
-                                        .clip(CircleShape)
-                                        .background(CommonColors.prime.copy(alpha = ringAlpha))
+                                    Modifier.then(
+                                        if (currentProvider.apiKey.isEmpty()) {
+                                            Modifier
+                                                .clip(CircleShape)
+                                                .background(CommonColors.prime.copy(alpha = ringAlpha))
+                                        } else {
+                                            Modifier
+                                        }
+                                    )
                                 ) {
                                     Icon(painterResource(CommonIcons.INFO), null)
                                 }

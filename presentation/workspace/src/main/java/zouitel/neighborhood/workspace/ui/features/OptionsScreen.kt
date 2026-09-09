@@ -12,21 +12,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Snackbar
@@ -43,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -58,7 +49,6 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import coil.compose.AsyncImage
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.camera.CAMERA
 import dev.icerock.moko.permissions.microphone.RECORD_AUDIO
@@ -69,22 +59,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import zouitel.neighborhood.logic.R
-import zouitel.neighborhood.workspace.R as WR
 import zouitel.neighborhood.permissions.PermissionResult
 import zouitel.neighborhood.permissions.PermissionScreenModel
 import zouitel.neighborhood.ui.CommonBottomSheet
 import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
 import zouitel.neighborhood.ui.CommonIcons
-import zouitel.neighborhood.ui.CommonIcons.BELL
-import zouitel.neighborhood.ui.CommonIcons.CAMERA
-import zouitel.neighborhood.ui.CommonIcons.DOCUMENT
-import zouitel.neighborhood.ui.CommonIcons.GALLERY
-import zouitel.neighborhood.ui.CommonIcons.LIST_CHECK
-import zouitel.neighborhood.ui.CommonIcons.MIC
-import zouitel.neighborhood.ui.CommonIcons.TAGS
-import zouitel.neighborhood.ui.CommonIcons.VIDEO_CAMERA
-import zouitel.neighborhood.ui.CommonIcons.WAVEFORM
-import zouitel.neighborhood.ui.CommonOptionItem
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.SoundEffect
 import zouitel.neighborhood.ui.getAverageColorFromImage
@@ -171,8 +150,8 @@ data class OptionsScreen(
                         )
                     }
                 }
-                // ─────────────────────────────────────────────────────────────
 
+                // ─────────────────────────────────────────────────────────────
                 val destUri = createMediaUri(context, ext)
 
                 val destPath = withContext(Dispatchers.IO) {
@@ -194,7 +173,7 @@ data class OptionsScreen(
                     return@launch
                 }
 
-                // Save to database — type = DOCUMENT, no auto-open
+                // Save to database — type = DOCUMENT_36, no auto-open
                 data.value = data.value.copy(
                     medias = data.value.medias.plusElement(
                         Media(
@@ -204,13 +183,11 @@ data class OptionsScreen(
                         )
                     )
                 )
-
-                // ✦ Do NOT open DocViewer here — user taps the thumbnail to open it
                 bottomNav.hide()
             }
         }
-        // ─────────────────────────────────────────────────────────────────────
 
+        // ─────────────────────────────────────────────────────────────────────
         val galleryLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickMultipleVisualMedia()
         ) { uris ->
@@ -321,52 +298,31 @@ data class OptionsScreen(
                 Modifier.navigationBarsPadding()
             ) {
                 item {
-                    FeatureItem(R.string.tags, WR.drawable.tags) {
-                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                        bottomNav.show(tagsScreen)
-                    }
-                }
-                item {
-                    FeatureItem(R.string.document, WR.drawable.document) {
-                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                        documentLauncher.launch(
-                            arrayOf(
-                                "application/pdf",
-                                "application/msword",
-                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                "application/vnd.ms-excel",
-                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                "application/vnd.ms-powerpoint",
-                                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                                "text/plain"
-                            )
-                        )
-                    }
-                }
-                item {
-                    FeatureItem(R.string.audios, WR.drawable.headphones) {
+                    FeatureItem(R.string.camera, CommonIcons.CAMERA_36, Triple(0, 127, 255)) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                            permissionsModel.requestPermission(Permission.STORAGE).collect {
+                            permissionsModel.requestPermission(Permission.CAMERA).collect {
                                 when (it) {
                                     PermissionResult.Denied -> Toast.makeText(
-                                        context,
-                                        permissionDeniedResource,
-                                        Toast.LENGTH_SHORT
+                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
                                     ).show()
 
                                     is PermissionResult.Error -> Toast.makeText(
                                         context, it.message, Toast.LENGTH_SHORT
                                     ).show()
 
-                                    else -> navigator.push(AudioListScreen(data))
+                                    PermissionResult.Granted ->
+                                        cameraLauncher.launch(getPictureUri())
+
+                                    PermissionResult.PermanentlyDenied ->
+                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
                                 }
                             }
                         }
                     }
                 }
                 item {
-                    FeatureItem(R.string.recorder, WR.drawable.microphone) {
+                    FeatureItem(R.string.recorder, CommonIcons.MIC_36, Triple(255, 32, 82)) {
                         scope.launch {
                             permissionsModel.requestPermission(Permission.RECORD_AUDIO)
                                 .collectLatest {
@@ -395,7 +351,63 @@ data class OptionsScreen(
                     }
                 }
                 item {
-                    FeatureItem(R.string.videos, WR.drawable.video) {
+                    FeatureItem(R.string.document, CommonIcons.DOCUMENT_36, Triple(0, 255, 127)) {
+                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                        documentLauncher.launch(
+                            arrayOf(
+                                "application/pdf",
+                                "application/msword",
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                "application/vnd.ms-excel",
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "application/vnd.ms-powerpoint",
+                                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                "text/plain"
+                            )
+                        )
+                    }
+                }
+                item {
+                    FeatureItem(R.string.scanner, CommonIcons.DOCUMENT_SCANNER_40, Triple(0, 204, 153)) {
+                        navigator.push(OCRScreen(noteId = data.value.uid, data = data))
+                    }
+                }
+                item {
+                    FeatureItem(R.string.gallery, CommonIcons.IMAGES_36, Triple(148, 87, 235)) {
+                        scope.launch {
+                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                            galleryLauncher.launch(
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageAndVideo
+                                )
+                            )
+                        }
+                    }
+                }
+                item {
+                    FeatureItem(R.string.audios, CommonIcons.HEADPHONE_36, Triple(255, 244, 79)) {
+                        scope.launch {
+                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                            permissionsModel.requestPermission(Permission.STORAGE).collect {
+                                when (it) {
+                                    PermissionResult.Denied -> Toast.makeText(
+                                        context,
+                                        permissionDeniedResource,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    is PermissionResult.Error -> Toast.makeText(
+                                        context, it.message, Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    else -> navigator.push(AudioListScreen(data))
+                                }
+                            }
+                        }
+                    }
+                }
+                item {
+                    FeatureItem(R.string.videos, CommonIcons.VIDEO_CAMERA_36, Triple(230, 232, 250)) {
                         scope.launch {
                             sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                             permissionsModel.requestPermission(Permission.CAMERA).collect {
@@ -427,48 +439,13 @@ data class OptionsScreen(
                     }
                 }
                 item {
-                    FeatureItem(R.string.camera, WR.drawable.camera) {
-                        scope.launch {
-                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                            permissionsModel.requestPermission(Permission.CAMERA).collect {
-                                when (it) {
-                                    PermissionResult.Denied -> Toast.makeText(
-                                        context, permissionDeniedResource, Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    is PermissionResult.Error -> Toast.makeText(
-                                        context, it.message, Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    PermissionResult.Granted ->
-                                        cameraLauncher.launch(getPictureUri())
-
-                                    PermissionResult.PermanentlyDenied ->
-                                        permissionsModel.permissionDeniedHandle(snackBarHostState)
-                                }
-                            }
-                        }
+                    FeatureItem(R.string.tags, CommonIcons.TAGS_36, Triple(15, 192,     252)) {
+                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                        bottomNav.show(tagsScreen)
                     }
                 }
                 item {
-                    FeatureItem(R.string.scanner, WR.drawable.scan) {
-                        navigator.push(OCRScreen(noteId = data.value.uid, data = data))
-                    }
-                }
-                item {
-                    FeatureItem(R.string.gallery, WR.drawable.gallery) {
-                        scope.launch {
-                            sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                            galleryLauncher.launch(
-                                PickVisualMediaRequest(
-                                    ActivityResultContracts.PickVisualMedia.ImageAndVideo
-                                )
-                            )
-                        }
-                    }
-                }
-                item {
-                    FeatureItem(R.string.reminder, WR.drawable.bell) {
+                    FeatureItem(R.string.reminder, CommonIcons.BELL_RING_36, Triple(255, 130, 67)) {
                         scope.launch {
                             permissionsModel.requestPermission(Permission.REMOTE_NOTIFICATION)
                                 .collect {
@@ -569,7 +546,6 @@ data class OptionsScreen(
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
-
     @SuppressLint("SimpleDateFormat")
     private fun createMediaUri(context: Context, pattern: String): Uri {
         val type = MediaType.fromExtension(pattern)
@@ -615,11 +591,6 @@ data class OptionsScreen(
             }
         }.getOrNull() ?: "document_${System.currentTimeMillis()}"
 
-    /**
-     * Extension from MIME — used only when the display-name has no extension.
-     * Explicit MIME checks come before any "contains" checks to avoid
-     * xlsx/pptx matching "text" on devices that return ambiguous types.
-     */
     private fun extensionFromMime(mime: String): String = when (mime) {
         "application/pdf" -> "pdf"
         "application/msword" -> "doc"
@@ -632,7 +603,7 @@ data class OptionsScreen(
         else -> when {
             mime.startsWith("video/") -> "mp4"
             mime.startsWith("image/") -> "jpg"
-            else -> "pdf"      // safe fallback
+            else -> "pdf"
         }
     }
 

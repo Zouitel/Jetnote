@@ -29,7 +29,7 @@ internal fun includeLog(): String {
         appendLine("HOST: ${Build.HOST}")
         appendLine("SUPPORTED_32_BIT_ABIS: ${Build.SUPPORTED_32_BIT_ABIS}")
         appendLine("SUPPORTED_64_BIT_ABIS: ${Build.SUPPORTED_64_BIT_ABIS}")
-        appendLine("TAGS: ${Build.TAGS}")
+        appendLine("TAGS_36: ${Build.TAGS}")
         appendLine("TIME: ${Build.TIME}")
         appendLine("TYPE: ${Build.TYPE}")
         appendLine("UNKNOWN: ${Build.UNKNOWN}")

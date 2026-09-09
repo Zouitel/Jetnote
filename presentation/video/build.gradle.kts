@@ -9,7 +9,12 @@ android {
 }
 
 dependencies {
+    //Modules.
+    implementation(projects.common.ui)
+
     //Media3.
     implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
+//    implementation(libs.media3.ui)
+    implementation(libs.media3.compose)
+    implementation(libs.media3.compose.material3)
 }

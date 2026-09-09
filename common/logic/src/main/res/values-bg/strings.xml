@@ -391,4 +391,8 @@
     <string name="notes_list_description">Това е списък с бележки</string>
     <string name="record_deleted">записът е изтрит!</string>
     <string name="language">Езикът</string>
+    <string name="confirm_color">Төҫтө раҫлау</string>
+    <string name="app_version">Ҡушымта версияһы</string>
+    <string name="term_of_use">Ҡулланыу шарттары</string>
+    <string name="privacy_policy">Сер һаҡлау сәйәсәте</string>
 </resources>

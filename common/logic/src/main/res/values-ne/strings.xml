@@ -395,4 +395,8 @@
     <string name="notes_list_description">यो नोटहरूको सूची हो</string>
     <string name="record_deleted">रेकर्ड मेटाइयो!</string>
     <string name="language">त्यो भाषा</string>
+    <string name="confirm_color">रङ पुष्टि गर्नुहोस्</string>
+    <string name="app_version">एपको संस्करण</string>
+    <string name="term_of_use">प्रयोगका सर्तहरू</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
 </resources>

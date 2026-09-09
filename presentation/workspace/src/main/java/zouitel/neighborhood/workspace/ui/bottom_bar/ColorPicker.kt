@@ -186,7 +186,7 @@ data class ColorPicker(val onConfirmColor: (Int) -> Unit): Screen {
                     shape = MaterialTheme.shapes.extraLarge
                 ) {
                     Text(
-                        text = "Confirm Color",
+                        text = stringResource(R.string.confirm_color),
                         style = MaterialTheme.typography.titleLarge,
                         color = if (brightness > 0.5f) Color.Black else Color.White,
                         fontWeight = FontWeight.Bold

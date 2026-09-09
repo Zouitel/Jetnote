@@ -50,12 +50,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import org.koin.compose.koinInject
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
@@ -69,7 +71,7 @@ import zouitel.neighborhood.search.utils.typesList
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonConstants
-import zouitel.neighborhood.ui.CommonIcons.CIRCLE
+import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonIcons.CIRCLE_18
 import zouitel.neighborhood.ui.CommonIcons.CIRCLE_48
 import zouitel.neighborhood.ui.CommonIcons.TINT_SLASH
@@ -84,13 +86,13 @@ class SearchScreen(val currentTag: SearchTypes.Tag? = null) : Screen {
     override fun Content() {
         Search(
             currentTag,
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 }
@@ -109,17 +111,16 @@ fun BrowseContent(
     links: List<zouitel.neighborhood.link.model.Link>,
 ) {
     val searchWithinRes = stringResource(R.string.search_within)
-    val priorityRes     = stringResource(R.string.priority)
-    val mediaRes        = stringResource(R.string.media)
-    val colourRes       = stringResource(R.string.colour)
+    val priorityRes = stringResource(R.string.priority)
+    val mediaRes = stringResource(R.string.media)
+    val colourRes = stringResource(R.string.colour)
 
     LazyColumn(
         modifier = Modifier
             .animateContentSize()
             .fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 80.dp), // FAB clearance only
+        contentPadding = PaddingValues(bottom = 80.dp)
     ) {
-
         // ── Types ──────────────────────────────────────────────────────────────
         item {
             SectionTitle(stringResource(R.string.types))
@@ -129,21 +130,21 @@ fun BrowseContent(
             ) { index ->
                 val type  = typesList[index]
                 val label = when (index) {
-                    0    -> stringResource(R.string.links)
-                    1    -> stringResource(R.string.reminders)
-                    2    -> stringResource(R.string.audios)
-                    3    -> stringResource(R.string.medias)
-                    4    -> stringResource(R.string.priorities)
+                    0 -> stringResource(R.string.links)
+                    1 -> stringResource(R.string.reminders)
+                    2 -> stringResource(R.string.audios)
+                    3 -> stringResource(R.string.medias)
+                    4 -> stringResource(R.string.priorities)
                     else -> type.title
                 }
                 val available = type.isAvailable(
                     when (type.types) {
-                        SearchTypes.Links         -> links
-                        SearchTypes.Audios        -> audioNotes
-                        SearchTypes.Reminders     -> reminderNotes
-                        SearchTypes.Medias        -> mediaNotes
+                        SearchTypes.Links -> links
+                        SearchTypes.Audios -> audioNotes
+                        SearchTypes.Reminders -> reminderNotes
+                        SearchTypes.Medias -> mediaNotes
                         is SearchTypes.Properties -> notesByPriority
-                        else                      -> emptyList()
+                        else -> emptyList()
                     }
                 )
                 FilterChip(
@@ -179,18 +180,18 @@ fun BrowseContent(
                     itemCount = tags.size,
                     modifier  = Modifier.padding(horizontal = 10.dp),
                 ) { index ->
-                    val tag          = tags[index]
+                    val tag = tags[index]
                     val isUsedInNotes = allNotes.fastAny { note ->
                         note.tags.fastAny { it.label == tag.label }
                     }
                     FilterChip(
-                        selected    = false,
-                        enabled     = isUsedInNotes,
-                        onClick     = {
+                        selected = false,
+                        enabled = isUsedInNotes,
+                        onClick = {
                             searchModel.updateSearchType(SearchTypes.Tag(tag.label))
                             searchModel.setFieldText("$searchWithinRes \"${tag.label}\"")
                         },
-                        label       = {
+                        label = {
                             Text(tag.label, style = MaterialTheme.typography.labelLarge)
                         },
                         leadingIcon = {
@@ -202,7 +203,7 @@ fun BrowseContent(
                                 )
                             }
                         },
-                        shape    = MaterialTheme.shapes.large,
+                        shape = MaterialTheme.shapes.large,
                         modifier = Modifier.padding(horizontal = 3.dp),
                     )
                 }
@@ -219,11 +220,11 @@ fun BrowseContent(
                     stringResource(R.string.low_priority),
                     stringResource(R.string.medium_priority),
                     stringResource(R.string.high_priority),
-                    stringResource(R.string.urgent_priority),
+                    stringResource(R.string.urgent_priority)
                 )
                 SectionTitle(stringResource(R.string.priority))
                 Row(
-                    modifier              = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp),
                     horizontalArrangement = Arrangement.Absolute.Left,
                 ) {
                     prioritiesList
@@ -240,15 +241,15 @@ fun BrowseContent(
                                     )
                                 }) {
                                     Icon(
-                                        painterResource(CIRCLE),
+                                        painterResource(CommonIcons.STICKER_18),
                                         contentDescription = null,
                                         tint = Color(property.color),
                                     )
                                 }
                                 Text(
-                                    text      = priorityLabels[property.index],
+                                    text = priorityLabels[property.index],
                                     fontStyle = MaterialTheme.typography.labelSmall.fontStyle,
-                                    color     = Color(property.color).copy(alpha = .55f),
+                                    color = Color(property.color).copy(alpha = .55f),
                                 )
                             }
                             Spacer(Modifier.width(5.dp))
@@ -264,16 +265,16 @@ fun BrowseContent(
             item {
                 SectionTitle(stringResource(R.string.medias))
                 ContextualFlowRow(
-                    itemCount             = imageUris.size,
-                    modifier              = Modifier.padding(horizontal = 10.dp),
+                    itemCount = imageUris.size,
+                    modifier = Modifier.padding(horizontal = 10.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) { index ->
                     val uri = imageUris[index]
                     AsyncImage(
-                        model              = uri,
+                        model = uri,
                         contentDescription = null,
-                        contentScale       = ContentScale.Crop,
-                        modifier           = Modifier
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
                             .size(80.dp)
                             .clip(CircleShape)
                             .clickable {
@@ -293,7 +294,7 @@ fun BrowseContent(
                 SectionTitle(stringResource(R.string.colours))
                 ContextualFlowRow(
                     itemCount = noteColors.size,
-                    modifier  = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp),
                 ) { index ->
                     val color = noteColors[index]
                     IconButton(onClick = {
@@ -326,7 +327,7 @@ fun Search(
     audioModel: AudioScreenModel,
     linkModel: LinkScreenModel,
     dataModel: DataScreenModel,
-    noteAndTagModel: NoteAndTagScreenModel,
+    noteAndTagModel: NoteAndTagScreenModel
 ) {
     val bottomNav = LocalBottomSheetNavigator.current
 
@@ -340,18 +341,18 @@ fun Search(
         }
     }
 
-    val settings        by remember(settingsModel, settingsModel::observe).collectAsState()
-    val tags            by remember(tagModel, tagModel::observeAll).collectAsState()
-    val links           by remember(linkModel, linkModel::observeAll).collectAsState()
-    val uiState         by remember(searchModel, searchModel::uiState).collectAsState()
-    val allNotes        by remember(searchModel, searchModel::allNotes).collectAsState()
+    val settings by remember(settingsModel, settingsModel::observe).collectAsState()
+    val tags by remember(tagModel, tagModel::observeAll).collectAsState()
+    val links by remember(linkModel, linkModel::observeAll).collectAsState()
+    val uiState by remember(searchModel, searchModel::uiState).collectAsState()
+    val allNotes by remember(searchModel, searchModel::allNotes).collectAsState()
     val notesByPriority by remember(searchModel, searchModel::notesByPriority).collectAsState()
 
-    val audioNotes    = remember(allNotes) { allNotes.filter { it.data.audios.isNotEmpty() } }
+    val audioNotes = remember(allNotes) { allNotes.filter { it.data.audios.isNotEmpty() } }
     val reminderNotes = remember(allNotes) { allNotes.filter { it.data.reminders.isNotEmpty() } }
-    val mediaNotes    = remember(allNotes) { allNotes.filter { it.data.medias.isNotEmpty() } }
-    val noteColors    = remember(allNotes) { allNotes.map { it.data.background }.distinct() }
-    val imageUris     = remember(mediaNotes) {
+    val mediaNotes = remember(allNotes) { allNotes.filter { it.data.medias.isNotEmpty() } }
+    val noteColors = remember(allNotes) { allNotes.map { it.data.background }.distinct() }
+    val imageUris = remember(mediaNotes) {
         mediaNotes
             .flatMap { it.data.medias }
             .filter { it.type == MediaType.IMAGE }
@@ -367,7 +368,7 @@ fun Search(
         combine(searchModel.uiState, queryFlow) { state, query ->
             when (state.typeState) {
                 is SearchTypes.Text -> query.isNotBlank()
-                else                -> true
+                else -> true
             }
         }
     }.collectAsState(initial = false)
@@ -379,16 +380,19 @@ fun Search(
                     if (query.isBlank()) emptyList()
                     else allNotes.filter { it.matchesQuery(query) }
                 }
-                is SearchTypes.Tag  -> allNotes.filter { note ->
+
+                is SearchTypes.Tag -> allNotes.filter { note ->
                     note.tags.any { it.label.equals(type.label, ignoreCase = true) }
                 }
-                SearchTypes.Audios    -> audioNotes
+
+                SearchTypes.Audios -> audioNotes
                 SearchTypes.Reminders -> reminderNotes
-                SearchTypes.Medias    -> mediaNotes
-                SearchTypes.Links     -> {
+                SearchTypes.Medias -> mediaNotes
+                SearchTypes.Links -> {
                     val linkedUids = links.map { it.uid }.toHashSet()
                     allNotes.filter { it.data.uid in linkedUids }
                 }
+
                 is SearchTypes.Image -> allNotes.filter { note ->
                     if (type.path.isBlank())
                         note.data.medias.any { it.type == MediaType.IMAGE }
@@ -398,11 +402,13 @@ fun Search(
                                     media.uri.contains(type.path, ignoreCase = true)
                         }
                 }
+
                 is SearchTypes.Color -> allNotes.filter { note ->
                     note.data.background == type.value
                 }
+
                 is SearchTypes.Properties -> when (type.value) {
-                    0    -> notesByPriority
+                    0 -> notesByPriority
                     else -> allNotes.filter { it.data.priority == type.value }
                 }
             }
@@ -432,79 +438,79 @@ fun Search(
         if (uiState.isSelection) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 SelectionTopBar(
-                    searchModel     = searchModel,
-                    dataModel       = dataModel,
+                    searchModel = searchModel,
+                    dataModel = dataModel,
                     noteAndTagModel = noteAndTagModel,
-                    tagModel        = tagModel,
-                    onDelete        = {},
+                    tagModel = tagModel,
+                    onDelete = {}
                 )
             }
         }
 
         Box(
             contentAlignment = Alignment.TopCenter,
-            modifier         = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             if (isActiveSearch) {
                 if (settings.layout == CommonConstants.LIST) {
                     LazyColumn(
-                        state               = rememberLazyListState(),
-                        modifier            = Modifier.fillMaxSize(),
-                        contentPadding      = PaddingValues(
-                            start  = 8.dp,
-                            end    = 8.dp,
-                            top    = 8.dp,
-                            bottom = 80.dp,   // FAB clearance
+                        state = rememberLazyListState(),
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(
+                            start = 8.dp,
+                            end = 8.dp,
+                            top = 8.dp,
+                            bottom = 80.dp
                         ),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         items(filteredNotes, key = { it.data.uid }) { note ->
                             NoteCard(
                                 settingsModel = settingsModel,
-                                audioModel    = audioModel,
-                                linkModel     = linkModel,
-                                searchModel   = searchModel,
-                                note          = note,
+                                audioModel = audioModel,
+                                linkModel = linkModel,
+                                searchModel = searchModel,
+                                note = note
                             )
                         }
                     }
                 } else {
                     LazyVerticalStaggeredGrid(
-                        state                 = rememberLazyStaggeredGridState(),
-                        modifier              = Modifier.fillMaxSize(),
-                        columns               = StaggeredGridCells.Fixed(2),
-                        contentPadding        = PaddingValues(
-                            start  = 8.dp,
-                            end    = 8.dp,
-                            top    = 8.dp,
-                            bottom = 80.dp,   // FAB clearance
+                        state = rememberLazyStaggeredGridState(),
+                        modifier = Modifier.fillMaxSize(),
+                        columns = StaggeredGridCells.Fixed(2),
+                        contentPadding = PaddingValues(
+                            start = 8.dp,
+                            end = 8.dp,
+                            top = 8.dp,
+                            bottom = 80.dp
                         ),
-                        verticalItemSpacing   = 8.dp,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalItemSpacing = 8.dp,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(filteredNotes, key = { it.data.uid }) { note ->
                             NoteCard(
                                 settingsModel = settingsModel,
-                                audioModel    = audioModel,
-                                linkModel     = linkModel,
-                                searchModel   = searchModel,
-                                note          = note,
+                                audioModel = audioModel,
+                                linkModel = linkModel,
+                                searchModel = searchModel,
+                                note = note
                             )
                         }
                     }
                 }
             } else {
                 BrowseContent(
-                    searchModel     = searchModel,
-                    tags            = tags,
-                    allNotes        = allNotes,
-                    audioNotes      = audioNotes,
-                    reminderNotes   = reminderNotes,
-                    mediaNotes      = mediaNotes,
-                    imageUris       = imageUris,
-                    noteColors      = noteColors,
+                    searchModel = searchModel,
+                    tags = tags,
+                    allNotes = allNotes,
+                    audioNotes = audioNotes,
+                    reminderNotes = reminderNotes,
+                    mediaNotes = mediaNotes,
+                    imageUris = imageUris,
+                    noteColors = noteColors,
                     notesByPriority = notesByPriority,
-                    links           = links,
+                    links = links
                 )
             }
         }
@@ -516,10 +522,10 @@ fun Search(
 @Composable
 private fun SectionTitle(text: String) {
     Text(
-        text       = text,
-        fontSize   = MaterialTheme.typography.titleLarge.fontSize,
+        text = text,
+        fontSize = MaterialTheme.typography.titleLarge.fontSize,
         fontWeight = FontWeight.Bold,
-        modifier   = Modifier.padding(horizontal = 10.dp),
+        modifier = Modifier.padding(horizontal = 10.dp)
     )
 }
 

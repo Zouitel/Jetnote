@@ -1,6 +1,7 @@
 package zouitel.neighborhood.assistant.ui.conversation
 
 import android.util.Log
+import androidx.compose.runtime.Stable
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import zouitel.neighborhood.ai.core.MessageRole
@@ -29,6 +30,7 @@ import kotlin.uuid.Uuid
 
 private const val TAG = "ChatScreenModel"
 
+@Stable
 class ChatScreenModel(
     private val _observeAll_: ConversationUseCase.ObserveAll,
     private val _observeById_: ConversationUseCase.ObserveById,

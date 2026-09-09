@@ -1,7 +1,6 @@
 package zouitel.neighborhood.ui
 
 object CommonIcons {
-    val ADD = R.drawable.add_24
     val CAMERA = R.drawable.camera_24
     val CAMERA_36 = R.drawable.camera_36
     val CHECK = R.drawable.check_24
@@ -19,15 +18,13 @@ object CommonIcons {
     val STOP_36 = R.drawable.stop_36
     val TRASH = R.drawable.trash_24
     val CIRCLE_48 = R.drawable.circle_48
-    val CIRCLE = R.drawable.circle_24
     val CIRCLE_18 = R.drawable.circle_18
     val PICTURE = R.drawable.picture_24
     val PICTURE_36 = R.drawable.picture_36
-    val BELL = R.drawable.bell_24
     val BELL_RING_18 = R.drawable.bell_ring_18
     val BELL_RING = R.drawable.bell_ring_24
+    val BELL_RING_36 = R.drawable.bell_ring_36
     val PLUS_20 = R.drawable.plus_20
-    val PLUS_18 = R.drawable.plus_18
     val PLUS = R.drawable.plus_24
     val REFRESH = R.drawable.refresh_24
     val MENU_BURGER = R.drawable.menu_burger_24
@@ -38,16 +35,14 @@ object CommonIcons {
     val USER = R.drawable.user_24
     val CLOCK = R.drawable.clock_24
     val TAGS = R.drawable.tags_24
+    val TAGS_36 = R.drawable.tags_36
     val BROOM = R.drawable.broom_24
-    val LIST_CHECK = R.drawable.list_check_24
     val CROSS_CIRCLE_18 = R.drawable.cross_circle_18
     val SHARE = R.drawable.share_24
     val CROSS_18 = R.drawable.cross_18
     val COPY = R.drawable.copy_24
     val COMMENT_EXCLAMATION = R.drawable.comment_exclamation_24
-    val GITHUB = R.drawable.github_24
     val CASSETTE = R.drawable.cassette_tape__24
-    val CLIP_36 = R.drawable.clip_36
     val SPARKLES = R.drawable.sparkles_24
     val INBOX = R.drawable.inbox_24
     val INBOX_IN = R.drawable.inbox_in_24
@@ -56,8 +51,9 @@ object CommonIcons {
     val WAVEFORM = R.drawable.waveform_path_24
     val WAVEFORM_36 = R.drawable.waveform_path_36
     val WAVEFORM_18 = R.drawable.waveform_path_18
-    val GALLERY = R.drawable.gallery_24
-    val VIDEO_CAMERA = R.drawable.video_camera_24
+    val IMAGES_18 = R.drawable.images_18
+    val IMAGES_36 = R.drawable.images_36
+    val VIDEO_CAMERA_36 = R.drawable.video_camera_36
     val ALARM_CLOCK = R.drawable.alarm_clock_18
     val SATURDAY = R.drawable.saturday_24
     val SUNDAY = R.drawable.sunday_24
@@ -73,8 +69,6 @@ object CommonIcons {
     val ARROW_LEFT = R.drawable.arrow_small_left_24
     val ARROW_RIGHT = R.drawable.arrow_small_right_24
     val ARROW_UP = R.drawable.arrow_small_up_24
-    val APPS_ADD = R.drawable.apps_add_24
-    val SHREDDER = R.drawable.shredder_24
     val PRINT = R.drawable.print_24
     val SEARCH = R.drawable.search_24
     val LINK = R.drawable.link_alt_24
@@ -92,10 +86,15 @@ object CommonIcons {
     val FILM_36 = R.drawable.film_36
     val FILM = R.drawable.film_24
     val CLIP = R.drawable.clip_24
-    val BOX_CONNECTION = R.drawable.box_connection_24
     val BOX_ADD = R.drawable.box_add_24
     val TEXT_BOX_EDIT = R.drawable.text_box_edit_24
-    val DOCUMENT = R.drawable.document_24
-    val DOCUMENT_SCANNER = R.drawable.document_scanner_24
-    val GRIP_DOTS = R.drawable.grip_dots_vertical_24
+    val DOCUMENT_36 = R.drawable.document_36
+    val DOCUMENT_SCANNER_40 = R.drawable.document_scanner_40px
+    val HEADPHONE_36 = R.drawable.headphones_36
+    val CUBES = R.drawable.cubes_24
+    val STICKER_18 = R.drawable.sticker_18
+    val DRAG_INDICATOR = R.drawable.drag_indicator_40px
+    val NOTE_STICKY_18 = R.drawable.note_sticky_18
+    val FULL_SIZE = R.drawable.arrow_up_right_and_arrow_down_left_from_center_24
+    val ANGLE_LEFT_20 = R.drawable.angle_left_20
 }

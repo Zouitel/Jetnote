@@ -57,6 +57,7 @@ import zouitel.neighborhood.ui.CommonIcons
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState): Screen {
     @Composable
@@ -163,7 +164,7 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
                         onClick = {
                             scope.launch {
                                 urlHandler.openUri(link.url)
-                                delay(100)
+                                delay(100.milliseconds)
                                 offsetX.animateTo(0f, tween(300))
                             }
                         },
@@ -186,7 +187,7 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
                         onClick = {
                             scope.launch {
                                 onDelete()
-                                delay(100)
+                                delay(100.milliseconds)
                                 offsetX.animateTo(0f, tween(300))
                             }
                         },

@@ -80,6 +80,9 @@
 # Java Management (for debugging detection)
 -dontwarn java.lang.management.**
 
+-dontwarn java.awt.Dimension
+-dontwarn java.awt.Rectangle
+
 # Keep all native methods
 -keepclasseswithmembernames class * {
     native <methods>;

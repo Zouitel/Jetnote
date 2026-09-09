@@ -18,7 +18,7 @@
     <string name="deleted">deleted!</string>
     <string name="erase_notes">Erase Notes?</string>
     <string name="confirm_erase_notes">"All notes in trash will be permanently deleted."</string>
-    <string name="search_in_notes">"Search in notes.."</string>
+    <string name="search_in_notes">"Search notes.."</string>
     <string name="select_layout">"Select layout"</string>
     <string name="settings">"Settings"</string>
     <string name="account_sync">"Account Sync"</string>
@@ -157,7 +157,7 @@
     <string name="take_a_screenshot">Don\'t forget to take a screenshot.</string>
     <string name="report_an_issue">Report an issue!</string>
     <string name="bug">Bug</string>
-    <string name="logs_title">\\uD83D\\uDCiE Android System Logs (Logcat) in a Feedback Report</string>
+    <string name="logs_title">🐞 Android System Logs (Logcat) in a Feedback Report</string>
     <string name="logs_description">Android system logs are a time-stamped stream of messages from the operating system, the kernel.\n    | When a user encounters an issue (like an app crash, freeze, or unexpected behavior), the logs capture the events leading up to and including the problem, providing developers with the context needed for diagnosis.</string>
     <string name="label_bug">Bug</string>
     <string name="label_feature">Feature</string>
@@ -205,34 +205,34 @@
            Higher values are more creative.
            "</string>
     <string name="top_p">Top P</string>
-    <string name="top_p_description">
+    <string name="top_p_description">"
             Controls which tokens are considered for
             output.
-            </string>
+            "</string>
     <string name="context_message_size">Context Message Size</string>
-    <string name="context_message_size_description">
+    <string name="context_message_size_description">"
             Maximum number of previous messages
             to include in the context.
-        </string>
+        "</string>
     <string name="stream_output">Stream output</string>
     <string name="stream_output_description">Display response as it\'s being generated.</string>
     <string name="thinking_budget">Thinking budget</string>
-    <string name="thinking_budget_description">
+    <string name="thinking_budget_description">"
                             Limits the computational resources used
                             for the response.
-                        </string>
+                        "</string>
     <string name="system_prompt">System prompt</string>
     <string name="prompt">Prompt..</string>
     <string name="properties">Properties</string>
     <string name="quick_messages">Quick messages</string>
     <string name="quick_messages_description">Configure quick message shortcuts.</string>
     <string name="regular_expressions">Regular expressions</string>
-    <string name="regular_expressions_description">
+    <string name="regular_expressions_description">"
                             Define regex patterns to transform
                             messages before sending/receiving.
-                        </string>
+                        "</string>
     <string name="headers">Headers</string>
-    <string name="headers_description">
+    <string name="headers_description">"
                             These are key-value pairs (key: value)
                             that are added to the request\'s header
                             block.
@@ -240,31 +240,31 @@
                             authentication (like API keys or tokens),
                             specifying the content type, or passing
                             metadata about the request or client.
-                        </string>
+                        "</string>
     <string name="bodies">Bodies</string>
-    <string name="bodies_description">
+    <string name="bodies_description">"
                             This refers to the data payload (key: value
                             JSON structure) sent within the request
                             itself.
                             It is the primary means of sending
                             inputs to the AI model.
                             These customizations are typically used to add specific.
-                        </string>
+                        "</string>
     <string name="memory">Memory</string>
-    <string name="memory_description">
+    <string name="memory_description">"
                             Allow the assistant to remember previous
                             turns in the conversation.
-                        </string>
+                        "</string>
     <string name="chats_reference">Recent Chats Reference</string>
-    <string name="chats_reference_description">
+    <string name="chats_reference_description">"
                         Reference data from your recent chats for
                         better contextual responses.
-                        </string>
+                        "</string>
     <string name="javascript">JavaScript engine</string>
-    <string name="javascript_description">
+    <string name="javascript_description">"
                             Execute JavaScript code with QuickJS
                             engine for calculations and scripting.
-                        </string>
+                        "</string>
     <string name="reset">Reset Settings!</string>
     <string name="providers">Providers</string>
     <string name="ask">Ask</string>
@@ -306,19 +306,19 @@
     <string name="output_modalities">Output Modalities</string>
     <string name="abilities">Abilities</string>
     <string name="provider_override">Add provider override</string>
-    <string name="provider_override_description">
+    <string name="provider_override_description">"
                             Configure custom provider settings for this
                             specific model.
                             This do use common properties from the
                             main provider of the model.
-                        </string>
+                        "</string>
     <string name="build_tools">Build Tools</string>
-    <string name="build_tools_description">
+    <string name="build_tools_description">"
                             Those tools are directly provided by the
                             API without requiring app support.
                             This feature is supported by Gemini API
                             only right now.
-                        </string>
+                        "</string>
     <string name="google_search">Search</string>
     <string name="google_search_description">Enable Google Search integration</string>
     <string name="url_context">URL Context</string>
@@ -402,4 +402,8 @@
     <string name="notes_list_description">This is a notes list</string>
     <string name="record_deleted">record deleted!</string>
     <string name="language">Language</string>
+    <string name="confirm_color">Confirm Color</string>
+    <string name="app_version">Version</string>
+    <string name="term_of_use">Terms of Use</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

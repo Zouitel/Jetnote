@@ -1,6 +1,6 @@
 package zouitel.neighborhood.account.mapper
 
-import zouitel.neighborhood.account.utils.JsonInstant
+import zouitel.neighborhood.logic.JsonInstant
 import zouitel.neighborhood.account.model.Audio
 
 
@@ -10,6 +10,6 @@ class AudioMapper {
         audios.forEach { audio ->
             res.add(JsonInstant.decodeFromString<List<Audio>>(audio))
         }
-        return res.flatMap { it }
+        return res.flatten()
     }
 }

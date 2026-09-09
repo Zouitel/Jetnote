@@ -405,4 +405,8 @@
     <string name="notes_list_description">Dies ist eine Notizenliste</string>
     <string name="record_deleted">Eintrag gelöscht!</string>
     <string name="language">Die Sprache</string>
+    <string name="confirm_color">Farbe bestätigen</string>
+    <string name="app_version">App-Version</string>
+    <string name="term_of_use">Nutzungsbedingungen</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
 </resources>

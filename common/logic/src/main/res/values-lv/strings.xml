@@ -399,4 +399,8 @@
     <string name="notes_list_description">Šis ir piezīmju saraksts</string>
     <string name="record_deleted">ieraksts dzēsts!</string>
     <string name="language">Šī valoda</string>
+    <string name="confirm_color">Apstiprināt krāsu</string>
+    <string name="app_version">Lietotnes versija</string>
+    <string name="term_of_use">Lietošanas noteikumi</string>
+    <string name="privacy_policy">Konfidencialitātes politika</string>
 </resources>

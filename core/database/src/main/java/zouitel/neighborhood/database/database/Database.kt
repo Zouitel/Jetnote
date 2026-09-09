@@ -20,7 +20,6 @@ import zouitel.neighborhood.database.dao.AssistantDao
 import zouitel.neighborhood.database.dao.ConversationDao
 import zouitel.neighborhood.database.dao.ModelDao
 import zouitel.neighborhood.database.dao.ProviderDao
-import zouitel.neighborhood.database.utils.MIGRATION_8_9
 
 @Database(
     version = 11,

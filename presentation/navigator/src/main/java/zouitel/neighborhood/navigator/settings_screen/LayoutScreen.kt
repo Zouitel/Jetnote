@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import zouitel.neighborhood.ui.CommonBottomSheet
 import zouitel.neighborhood.ui.CommonColors.prime
 import zouitel.neighborhood.ui.CommonConstants.GRID
@@ -37,7 +38,7 @@ class LayoutScreen: Screen {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     override fun Content() {
-        val settingsModel = getScreenModel<SettingsScreenModel>()
+        val settingsModel = koinScreenModel<SettingsScreenModel>()
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
 
         CommonBottomSheet(null) {

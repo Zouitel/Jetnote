@@ -165,7 +165,7 @@
     <string name="take_a_screenshot">Vergiesst net, e Screenshot ze maachen.</string>
     <string name="report_an_issue">E Problem mellen!</string>
     <string name="bug">Bug</string>
-    <string name="logs_title">\\uD83D\\uDCiE Android Systemlogbicher (Logcat) am Feedback-Rapport</string>
+    <string name="logs_title">\\uD83D\\uDC1E Android Systemlogbicher (Logcat) am Feedback-Rapport</string>
     <string name="logs_description">Android-Systemlogbicher sinn e Flux vun Zäitstempel-Messagen aus dem Betriebssystem an dem Kernel.\n    | Wann e Benotzer e Problem begéint (wéi App-Crash, Afréiere oder onerwaartem Verhalen), erfaassen d\'Logbicher d\'Evenementer ronderëm de Problem a ginn Entwéckler de néidege Kontext fir d\'Diagnostik.</string>
     <string name="label_bug">Bug</string>
     <string name="label_feature">Fonktioun</string>
@@ -405,4 +405,8 @@
     <string name="notes_list_description">Dëst ass eng Notizlëscht</string>
     <string name="record_deleted">Rekord geläscht!</string>
     <string name="language">D\'Sprooch</string>
+    <string name="confirm_color">Faarf bestätegen</string>
+    <string name="app_version">App Versioun</string>
+    <string name="term_of_use">Notzungsbedéngungen</string>
+    <string name="privacy_policy">Dateschutzerklärung</string>
 </resources>

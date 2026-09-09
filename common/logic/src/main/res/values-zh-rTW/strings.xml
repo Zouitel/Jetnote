@@ -371,4 +371,8 @@
     <string name="notes_list_description">這是筆記清單</string>
     <string name="record_deleted">記錄已刪除！</string>
     <string name="language">該語言</string>
+    <string name="confirm_color">確認顏色</string>
+    <string name="app_version">應用程式版本</string>
+    <string name="term_of_use">使用條款</string>
+    <string name="privacy_policy">隱私權政策</string>
 </resources>

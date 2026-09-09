@@ -402,4 +402,8 @@
     <string name="notes_list_description">Αυτή είναι μια λίστα σημειώσεων</string>
     <string name="record_deleted">η εγγραφή διαγράφηκε!</string>
     <string name="language">Η γλώσσα</string>
+    <string name="confirm_color">Επιβεβαίωση χρώματος</string>
+    <string name="app_version">Έκδοση εφαρμογής</string>
+    <string name="term_of_use">Όροι χρήσης</string>
+    <string name="privacy_policy">Πολιτική απορρήτου</string>
 </resources>

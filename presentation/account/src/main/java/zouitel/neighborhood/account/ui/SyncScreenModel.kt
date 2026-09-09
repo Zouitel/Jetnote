@@ -215,8 +215,8 @@ class SyncScreenModel(
                 .setQ(query)
                 .setSpaces("drive")
                 .setFields("files(id, name, createdTime)")
-                .setPageSize(10)  // ✅ Limit results
-                .setOrderBy("createdTime")  // ✅ Get oldest first
+                .setPageSize(10)
+                .setOrderBy("createdTime")
                 .execute()
 
             val folders = result.files

@@ -10,7 +10,7 @@ import kotlin.random.Random
 @Serializable
 data class Media(
     val id: Long = Random.nextLong(),
-    val uri: String = "",
+    val uri: String = DEFAULT_TXT,
     val isVideo: Boolean = false,
     val title: String? = DEFAULT_TXT,
     val color: Int = Color.BLACK

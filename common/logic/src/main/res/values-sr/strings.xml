@@ -394,4 +394,8 @@
     <string name="notes_list_description">Ово је листа белешки</string>
     <string name="record_deleted">запис је обрисан!</string>
     <string name="language">Тај језик</string>
+    <string name="confirm_color">Потврди боју</string>
+    <string name="app_version">Верзија апликације</string>
+    <string name="term_of_use">Услови коришћења</string>
+    <string name="privacy_policy">Политика приватности</string>
 </resources>

@@ -398,4 +398,8 @@
     <string name="notes_list_description">Dit is een notitielijst</string>
     <string name="record_deleted">record verwijderd!</string>
     <string name="language">De taal</string>
+    <string name="confirm_color">Kleur bevestigen</string>
+    <string name="app_version">App-versie</string>
+    <string name="term_of_use">Gebruiksvoorwaarden</string>
+    <string name="privacy_policy">Privacybeleid</string>
 </resources>

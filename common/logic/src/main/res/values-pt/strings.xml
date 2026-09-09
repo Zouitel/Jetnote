@@ -394,4 +394,8 @@
     <string name="notes_list_description">Esta é uma lista de notas</string>
     <string name="record_deleted">registro excluído!</string>
     <string name="language">O idioma</string>
+    <string name="confirm_color">Confirmar cor</string>
+    <string name="app_version">Versão do aplicativo</string>
+    <string name="term_of_use">Termos de Uso</string>
+    <string name="privacy_policy">Política de Privacidade</string>
 </resources>

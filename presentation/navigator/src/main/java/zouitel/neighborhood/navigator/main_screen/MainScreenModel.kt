@@ -50,7 +50,7 @@ class MainScreenModel(
                 defaults(auth.value ?: "null").collect { list ->
                     val mapped = mapper.fromDomain(list)
                     _observeDefaults.value = mapped
-                    if (!isDraggingActive) {                    // ← guard
+                    if (!isDraggingActive) {
                         defaultNotes.apply { clear(); addAll(mapped) }
                     }
                 }
@@ -151,7 +151,7 @@ class MainScreenModel(
                 defaults(userId).collect { list ->
                     val mapped = mapper.fromDomain(list)
                     _observeDefaults.value = mapped
-                    defaultNotes.apply { clear(); addAll(mapped) }  // ← sync snapshot list too
+                    defaultNotes.apply { clear(); addAll(mapped) }
                 }
             }
             launch {

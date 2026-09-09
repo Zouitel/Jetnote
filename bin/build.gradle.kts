@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "zouitel.neighborhood.bin"
-    compileSdk = 36
+    compileSdk = 37
 }
 
 dependencies {

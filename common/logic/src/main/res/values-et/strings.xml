@@ -394,4 +394,8 @@
     <string name="notes_list_description">See on märkmete loend</string>
     <string name="record_deleted">kirje kustutatud!</string>
     <string name="language">Keel</string>
+    <string name="confirm_color">Kinnita värv</string>
+    <string name="app_version">Rakenduse versioon</string>
+    <string name="term_of_use">Kasutustingimused</string>
+    <string name="privacy_policy">Privaatsuspoliitika</string>
 </resources>

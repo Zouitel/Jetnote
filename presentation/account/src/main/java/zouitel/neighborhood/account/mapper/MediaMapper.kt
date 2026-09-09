@@ -1,6 +1,6 @@
 package zouitel.neighborhood.account.mapper
 
-import zouitel.neighborhood.account.utils.JsonInstant
+import zouitel.neighborhood.logic.JsonInstant
 import zouitel.neighborhood.account.model.Media
 
 class MediaMapper {
@@ -9,6 +9,6 @@ class MediaMapper {
         medias.forEach { media ->
             res.add(JsonInstant.decodeFromString<List<Media>>(media))
         }
-        return res.flatMap { it }
+        return res.flatten()
     }
 }

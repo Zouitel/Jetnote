@@ -81,7 +81,7 @@ private val inputTransformers by lazy {
     listOf(
         PlaceholderTransformer,
         DocumentAsPromptTransformer,
-        OcrTransformer,
+        OcrTransformer
     )
 }
 
@@ -89,7 +89,7 @@ private val outputTransformers by lazy {
     listOf(
         ThinkTagTransformer,
         Base64ImageToLocalFileTransformer,
-        RegexOutputTransformer,
+        RegexOutputTransformer
     )
 }
 @OptIn(ExperimentalCoroutinesApi::class)

@@ -11,11 +11,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.logic.R
-import zouitel.neighborhood.navigator.archive_screen.EraseScreen
-import zouitel.neighborhood.search.ui.SearchScreen
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -24,11 +20,10 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 internal fun ArchiveTopAppBar(
     settingsModel: SettingsScreenModel,
     scrollBehavior: TopAppBarScrollBehavior,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    onSearchClick: () -> Unit,
+    onErase: () -> Unit
 ) {
-    val navBottomSheet = LocalBottomSheetNavigator.current
-    val navigator = LocalNavigator.current
-
     TopAppBar(
         navigationIcon = {
             OpenDrawer(settingsModel, drawerState)
@@ -37,20 +32,13 @@ internal fun ArchiveTopAppBar(
             Text(text = stringResource(R.string.archive))
         },
         actions = {
-            IconButton({
-                navigator?.push(SearchScreen())
-            }) {
+            IconButton(onClick = onSearchClick) {
                 Icon(
                     painter = painterResource(CommonIcons.SEARCH),
                     contentDescription = null
                 )
             }
-            IconButton(
-                onClick = {
-                    /*homeModel.updateErasing(true)*/
-                    navBottomSheet.show(EraseScreen {})
-                }
-            ) {
+            IconButton(onErase) {
                 Icon(
                     painterResource(CommonIcons.BROOM),
                     null

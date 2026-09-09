@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 fun RecordTimer(
     seconds: String,
     minutes: String,
-    hours: String,
+    hours: String
 ) {
     Row(
         modifier = Modifier

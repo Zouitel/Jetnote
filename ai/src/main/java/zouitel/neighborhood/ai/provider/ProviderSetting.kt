@@ -1,5 +1,6 @@
 package zouitel.neighborhood.ai.provider
 
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -10,7 +11,7 @@ data class HttpProxy(
     val address: String? = null,
     val port: Int = 8080,
     val username: String? = null,
-    val password: String? = null,
+    val password: String? = null
 )
 @Serializable
 data class BalanceOption(
@@ -19,6 +20,7 @@ data class BalanceOption(
     val resultPath: String = "data.total_usage"
 )
 
+@Stable
 @Serializable
 sealed class ProviderSetting {
     abstract val id: Long
@@ -46,7 +48,7 @@ sealed class ProviderSetting {
         proxy: HttpProxy = this.proxy,
         balanceOption: BalanceOption = this.balanceOption,
         builtIn: Boolean = this.builtIn,
-        description: String = this.description,
+        description: String = this.description
     ): ProviderSetting
 
     @Serializable
@@ -65,7 +67,7 @@ sealed class ProviderSetting {
         @Transient override val description: String = "",
         var baseUrl: String = "https://api.openai.com/v1",
         var chatCompletionsPath: String? = "/chat/completions",
-        var useResponseApi: Boolean = false,
+        var useResponseApi: Boolean = false
     ) : ProviderSetting() {
         override fun addModel(model: Model): ProviderSetting {
             return copy(models = models + model)
@@ -126,12 +128,12 @@ sealed class ProviderSetting {
         override val balanceOption: BalanceOption = BalanceOption(),
         @Transient override val builtIn: Boolean = false,
         override val description: String = "",
-        var baseUrl: String = "https://generativelanguage.googleapis.com/v1beta", // only for google AI
+        var baseUrl: String = "https://generativelanguage.googleapis.com/v1beta",
         var vertexAI: Boolean = false,
         var privateKey: String = "", // only for vertex AI
         var serviceAccountEmail: String = "", // only for vertex AI
         var location: String = "us-central1", // only for vertex AI
-        var projectId: String = "", // only for vertex AI
+        var projectId: String = "" // only for vertex AI
     ) : ProviderSetting() {
         override fun addModel(model: Model): ProviderSetting {
             return copy(models = models + model)
@@ -192,7 +194,7 @@ sealed class ProviderSetting {
         override val balanceOption: BalanceOption = BalanceOption(),
         @Transient override val builtIn: Boolean = false,
         @Transient override val description: String = "",
-        var baseUrl: String = "https://api.anthropic.com/v1",
+        var baseUrl: String = "https://api.anthropic.com/v1"
     ) : ProviderSetting() {
         override fun addModel(model: Model): ProviderSetting {
             return copy(models = models + model)
@@ -234,7 +236,7 @@ sealed class ProviderSetting {
                 proxy = proxy,
                 balanceOption = balanceOption,
                 builtIn = builtIn,
-                description = description,
+                description = description
             )
         }
     }
@@ -244,7 +246,7 @@ sealed class ProviderSetting {
             listOf(
                 GlobalAI::class,
                 Google::class,
-                Claude::class,
+                Claude::class
             )
         }
     }

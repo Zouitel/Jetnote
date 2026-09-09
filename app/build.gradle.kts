@@ -11,14 +11,14 @@ plugins {
 
 android {
     namespace = "zouitel.neighborhood.jetnote"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "zouitel.neighborhood.jetnote"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10_6_30
-        versionName = "10.6.30"
+        versionCode = 10_7_36
+        versionName = "10.7.36"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -84,7 +84,5 @@ dependencies {
     //RevenueCat.
 //    implementation(libs.revenuecat)
 //    implementation(libs.revenuecat.ui)
-
-    //
 //    implementation("com.android.billingclient:billing:8.3.0")
 }

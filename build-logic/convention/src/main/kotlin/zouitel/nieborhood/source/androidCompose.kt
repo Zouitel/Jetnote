@@ -6,16 +6,15 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-internal fun Project.configureAndroidCompose(common: CommonExtension<*, *, *, *, *, *>) {
+internal fun Project.configureAndroidCompose(common: CommonExtension) {
     common.apply {
-        buildFeatures {
+        buildFeatures.apply {
             compose = true
             buildConfig = true
         }
 
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.findVersion("compose-version").get().requiredVersion
-        }
+        composeOptions.kotlinCompilerExtensionVersion =
+            libs.findVersion("compose-version").get().requiredVersion
 
         dependencies {
             composeDependencies(libs)
@@ -37,11 +36,8 @@ internal fun Project.configureAndroidCompose(common: CommonExtension<*, *, *, *,
             )
         }
 
-        testOptions {
-            unitTests {
-                isIncludeAndroidResources = true
-            }
+        testOptions.unitTests {
+            isIncludeAndroidResources = true
         }
     }
 }
-

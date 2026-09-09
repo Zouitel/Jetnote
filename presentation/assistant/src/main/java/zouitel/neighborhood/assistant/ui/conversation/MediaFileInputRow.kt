@@ -90,7 +90,7 @@ internal fun MediaFileInputRow(state: ChatInputState) {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Icon(painterResource(CommonIcons.VIDEO_CAMERA), null)
+                        Icon(painterResource(CommonIcons.VIDEO_CAMERA_36), null)
                     }
                 }
                 Icon(

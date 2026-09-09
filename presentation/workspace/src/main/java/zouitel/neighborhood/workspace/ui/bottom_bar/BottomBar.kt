@@ -52,7 +52,6 @@ import zouitel.neighborhood.ui.CommonConstants
 import zouitel.neighborhood.ui.CommonConstants.FOCUS_NAVIGATION
 import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
 import zouitel.neighborhood.ui.CommonIcons
-import zouitel.neighborhood.ui.CommonIcons.ADD
 import zouitel.neighborhood.ui.CommonIcons.TINT_SLASH
 import zouitel.neighborhood.ui.CommonRow
 import zouitel.neighborhood.ui.SoundEffect
@@ -134,7 +133,7 @@ internal fun BottomBar(
                                     )
                                 }) {
                                 Icon(
-                                    painter = painterResource(id = ADD),
+                                    painter = painterResource(CommonIcons.PLUS),
                                     contentDescription = null,
                                     tint = Color.LightGray
                                 )

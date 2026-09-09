@@ -389,4 +389,8 @@
     <string name="notes_list_description">Toto je seznam poznámek</string>
     <string name="record_deleted">záznam smazán!</string>
     <string name="language">Ten jazyk</string>
+    <string name="confirm_color">Potvrdit barvu</string>
+    <string name="app_version">Verze aplikace</string>
+    <string name="term_of_use">Podmínky použití</string>
+    <string name="privacy_policy">Zásady ochrany osobních údajů</string>
 </resources>

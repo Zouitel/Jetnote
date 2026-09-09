@@ -191,10 +191,10 @@ internal val TERMS_OF_USE = """
 
                     If you have any questions, concerns, or feedback about these Terms, please contact us:
 
-                    - **Email:** support@jetnote.app
-                    - **App:** Use the in-app "Help &amp; Feedback" section under Settings.
+                    - **Email:** bourntivoli@gmail.com
+                    - **App:** Use the in-app "Help & Feedback" section under Settings.
 
                     ---
 
-                    *Jetnote — Your AI-Powered Universal Brain.*
+                    *Jetnote founder.*
                 """

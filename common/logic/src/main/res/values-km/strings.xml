@@ -437,4 +437,8 @@
     <string name="notes_list_description">នេះជាបញ្ជីកំណត់ចំណាំ</string>
     <string name="record_deleted">កំណត់ត្រាត្រូវបានលុប!</string>
     <string name="language">ភាសានេះ</string>
+    <string name="confirm_color">បញ្ជាក់ពណ៌</string>
+    <string name="app_version">កំណែកម្មវិធី</string>
+    <string name="term_of_use">លក្ខខណ្ឌនៃការប្រើប្រាស់</string>
+    <string name="privacy_policy">គោលការណ៍ឯកជនភាព</string>
 </resources>

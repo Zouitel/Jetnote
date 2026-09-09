@@ -405,4 +405,8 @@
     <string name="notes_list_description">Kjo është një listë shënimesh</string>
     <string name="record_deleted">rekordi u fshi!</string>
     <string name="language">Gjuha</string>
+    <string name="confirm_color">Konfirmo ngjyrën</string>
+    <string name="app_version">Versioni i aplikacionit</string>
+    <string name="term_of_use">Kushtet e përdorimit</string>
+    <string name="privacy_policy">Politika e privatësisë</string>
 </resources>

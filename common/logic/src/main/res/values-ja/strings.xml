@@ -387,4 +387,8 @@
     <string name="notes_list_description">これはノートリストです</string>
     <string name="record_deleted">レコードを削除しました！</string>
     <string name="language">その言語</string>
+    <string name="confirm_color">色を確認</string>
+    <string name="app_version">アプリのバージョン</string>
+    <string name="term_of_use">利用規約</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
 </resources>

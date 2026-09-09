@@ -403,4 +403,8 @@
     <string name="notes_list_description">Esta es una lista de notas</string>
     <string name="record_deleted">¡Registro eliminado!</string>
     <string name="language">El idioma</string>
+    <string name="confirm_color">Confirmar color</string>
+    <string name="app_version">Versión de la aplicación</string>
+    <string name="term_of_use">Términos de uso</string>
+    <string name="privacy_policy">Política de privacidad</string>
 </resources>

@@ -115,7 +115,6 @@ fun ReminderSheet(
 
     if (timePickerDialog.value) {
         TimeLayout(
-            settings,
             selectedTime,
             timeState,
             timePickerDialog

@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.coil.svg)
 
     //Firebase.
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
     //Serialization.

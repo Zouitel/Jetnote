@@ -362,4 +362,8 @@
     <string name="notes_list_description">Đây là danh sách ghi chú</string>
     <string name="record_deleted">Bản ghi đã xóa!</string>
     <string name="language">Ngôn ngữ</string>
+    <string name="confirm_color">Xác nhận màu</string>
+    <string name="app_version">Phiên bản ứng dụng</string>
+    <string name="term_of_use">Điều khoản sử dụng</string>
+    <string name="privacy_policy">Chính sách bảo mật</string>
 </resources>

@@ -397,4 +397,8 @@
     <string name="notes_list_description">Seo liosta nótaí</string>
     <string name="record_deleted">taifead scriosta!</string>
     <string name="language">An teanga</string>
+    <string name="confirm_color">Deimhnigh Dath</string>
+    <string name="app_version">Leagan Aipe</string>
+    <string name="term_of_use">Téarmaí Úsáide</string>
+    <string name="privacy_policy">Polasaí Príobháideachais</string>
 </resources>

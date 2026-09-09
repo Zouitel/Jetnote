@@ -353,4 +353,8 @@
     <string name="notes_list_description">Kay qillqakunap lista</string>
     <string name="record_deleted">Registro chinkarichisqa!</string>
     <string name="language">Rimasqa</string>
+    <string name="confirm_color">Llimpi chaskiy</string>
+    <string name="app_version">Ruwana niraq</string>
+    <string name="term_of_use">Llamk\'ana kamachiykuna</string>
+    <string name="privacy_policy">Sapan kawsay kamachiy</string>
 </resources>

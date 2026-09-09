@@ -392,4 +392,8 @@
     <string name="notes_list_description">Dette er en notat­liste</string>
     <string name="record_deleted">post slettet!</string>
     <string name="language">Språket</string>
+    <string name="confirm_color">Bekreft farge</string>
+    <string name="app_version">App-versjon</string>
+    <string name="term_of_use">Bruksvilkår</string>
+    <string name="privacy_policy">Personvernerklæring</string>
 </resources>

@@ -10,6 +10,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.foundation.layout)
     //Models.
     implementation(projects.domain)
     implementation(projects.common.ui)

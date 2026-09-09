@@ -35,9 +35,9 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import zouitel.neighborhood.logic.JsonInstant
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.widget.model.WidgetNote
-import zouitel.neighborhood.widget.utils.JsonInstant
 import zouitel.neighborhood.workspace.WorkplaceActivity
 import zouitel.neighborhood.workspace.model.Priorities
 
@@ -126,7 +126,6 @@ class ListWidget: GlanceAppWidget(), Screen {
                     .padding(bottom = 7.dp)
             ) {
                 priority(note.priority).let {
-                    // U+25CF, •
                     Text(
                         text = "\u25CF " + it.priority,
                         style = TextStyle(
@@ -226,17 +225,17 @@ class ListWidget: GlanceAppWidget(), Screen {
                 MetadataItem(
                     iconRes = CommonIcons.WAVEFORM_18,
                     count = audiosCount,
-                    showSeparator = true // First item after priority
+                    showSeparator = true
                 )
                 MetadataItem(
                     iconRes = CommonIcons.BELL_RING_18,
                     count = remindersCount,
-                    showSeparator = audiosCount > 0 // Only show separator if previous item was shown
+                    showSeparator = audiosCount > 0
                 )
                 labels.firstOrNull()?.let { firstLabel ->
                     MetadataItem(
                         iconRes = CommonIcons.HASTAG,
-                        count = labels.size, // Pass the total count of labels
+                        count = labels.size,
                         label = firstLabel.label,
                         showSeparator = audiosCount > 0 || remindersCount > 0
                     )
@@ -257,10 +256,10 @@ class ListWidget: GlanceAppWidget(), Screen {
 
     @Composable
     private fun MetadataItem(
-        iconRes: Int, // Or ImageProvider directly
+        iconRes: Int,
         count: Int,
-        label: String? = null, // For the main label text
-        showSeparator: Boolean = true // To control the initial separator
+        label: String? = null,
+        showSeparator: Boolean = true
     ) {
         if (count > 0) {
             if (showSeparator) {
@@ -270,14 +269,14 @@ class ListWidget: GlanceAppWidget(), Screen {
                         color = GlanceTheme.colors.surfaceVariant,
                         fontSize = 24.sp
                     ),
-                    modifier = GlanceModifier.Companion.padding(start = 6.dp, end = 6.dp)
+                    modifier = GlanceModifier.padding(start = 6.dp, end = 6.dp)
                 )
             }
             Image(
                 provider = ImageProvider(iconRes),
-                contentDescription = null, // Consider adding meaningful descriptions
+                contentDescription = null,
                 colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface),
-                modifier = GlanceModifier.size(if (label != null) 15.dp else 16.dp) // Adjust size if needed
+                modifier = GlanceModifier.size(if (label != null) 15.dp else 16.dp)
             )
             label?.let {
                 Text(
@@ -288,7 +287,7 @@ class ListWidget: GlanceAppWidget(), Screen {
                     )
                 )
             }
-            if (count > 1 && label == null) { // Only show "+N" if it's not the primary label display
+            if (count > 1 && label == null) {
                 Text(
                     text = " +${count - 1}",
                     style = TextStyle(
@@ -296,7 +295,7 @@ class ListWidget: GlanceAppWidget(), Screen {
                         fontSize = 12.sp,
                     )
                 )
-            } else if (label != null && count > 1) { // For tags, show the count differently
+            } else if (label != null && count > 1) {
                 Text(
                     text = " +${count - 1}",
                     style = TextStyle(

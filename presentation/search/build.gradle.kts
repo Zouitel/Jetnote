@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.compose.cloudy)
 
     //Firebase Auth.
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
     //Media3.

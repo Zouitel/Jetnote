@@ -393,4 +393,8 @@
     <string name="notes_list_description">Det här är en anteckningslista</string>
     <string name="record_deleted">post borttagen!</string>
     <string name="language">Språket</string>
+    <string name="confirm_color">Bekräfta färg</string>
+    <string name="app_version">Appversion</string>
+    <string name="term_of_use">Användarvillkor</string>
+    <string name="privacy_policy">Integritetspolicy</string>
 </resources>

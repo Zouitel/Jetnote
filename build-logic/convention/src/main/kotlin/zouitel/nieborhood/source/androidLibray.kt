@@ -4,19 +4,18 @@ import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import kotlin.collections.addAll
 
-fun Project.configureAndroidLibrary(common: CommonExtension<*, *, *, *, *, *>) {
+fun Project.configureAndroidLibrary(common: CommonExtension) {
     common.apply {
         compileSdk = libs.compileSdk
 
-        defaultConfig {
-            minSdk = libs.minSdk
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        }
+        defaultConfig.minSdk = libs.minSdk
+        defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
 
         buildTypes {
             getByName("release") {
@@ -27,17 +26,12 @@ fun Project.configureAndroidLibrary(common: CommonExtension<*, *, *, *, *, *>) {
             }
         }
 
-        packaging {
-            resources {
-                excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            }
+        packaging.resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
 
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
-        }
-
+        compileOptions.sourceCompatibility = JavaVersion.VERSION_17
+        compileOptions.targetCompatibility = JavaVersion.VERSION_17
 
         tasks.withType<KotlinJvmCompile>().configureEach {
             compilerOptions {

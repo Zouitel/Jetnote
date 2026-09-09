@@ -22,7 +22,7 @@ val PRIVACY_POLICY = """
                     - **Notes, tasks, and checklists** — fieldState content you create within the App.
                     - **Audio recordings** — voice notes captured via our audio waveform player feature.
                     - **Media attachments** — images or files you attach to your notes.
-                    - **Tags and project labels** — organizational metadata you assign to your notes (e.g., `[project 🏗️]`).
+                    - **Tags and project labels** — organizational metadata you assign to your notes (e.g., `project 🏗️`).
 
                     ### 1.3 AI Interaction Data
                     Jetnote integrates with third-party AI providers (Google Gemini, OpenAI GPT, and Anthropic Claude). When you use AI-powered features:
@@ -138,11 +138,10 @@ val PRIVACY_POLICY = """
 
                     If you have any questions, concerns, or requests regarding this Privacy Policy, please contact us:
 
-                    - **Email:** support@jetnote.app
-                    - **App:** Use the in-app "Help &amp; Feedback" section under Settings.
+                    - **Email:** bourntivoli@gmail.com
+                    - **App:** Use the in-app "Help & Feedback" section under Settings.
 
                     ---
 
-                    *Jetnote — Your AI-Powered Universal Brain.*
-
+                    *Jetnote founder.*
                 """

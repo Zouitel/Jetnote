@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import coil.compose.AsyncImage
@@ -87,9 +87,9 @@ class ModelConfigurationScreen(val model: Model): Screen {
     override fun Content() {
         ModelConfiguration(
             model,
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 
@@ -158,7 +158,7 @@ class ModelConfigurationScreen(val model: Model): Screen {
                                     navigator?.pop()
                                 }
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         },
                         scrollBehavior = scrollBehavior

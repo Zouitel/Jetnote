@@ -401,4 +401,8 @@
     <string name="notes_list_description">هذه قائمة الملاحظات</string>
     <string name="record_deleted">تمّ حذف السجل!</string>
     <string name="language">اللغة</string>
+    <string name="confirm_color">تأكيد اللون</string>
+    <string name="app_version">إصدار التطبيق</string>
+    <string name="term_of_use">شروط الاستخدام</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
 </resources>

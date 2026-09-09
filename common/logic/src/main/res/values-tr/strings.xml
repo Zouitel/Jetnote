@@ -401,4 +401,8 @@
     <string name="notes_list_description">Bu bir notlar listesidir</string>
     <string name="record_deleted">kayıt silindi!</string>
     <string name="language">Bu dil</string>
+    <string name="confirm_color">Rengi Onayla</string>
+    <string name="app_version">Uygulama Sürümü</string>
+    <string name="term_of_use">Kullanım Koşulları</string>
+    <string name="privacy_policy">Gizlilik Politikası</string>
 </resources>

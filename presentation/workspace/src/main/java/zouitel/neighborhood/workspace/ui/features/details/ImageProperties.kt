@@ -65,7 +65,7 @@ data class ImageProperties(
             "GPS Longitude" to (exifGpsLongitude?.let { formatGpsCoordinate(it, isLatitude = false) }),
             "Exposure Compensation" to (exifExposureCompensation?.let { parseRationalToString(it) }),
             "Megapixels" to (exifMegapixels?.let {
-                String.Companion.format(Locale.getDefault(), "%.2fMP", (width * height) / 1_000_000.0)
+                String.format(Locale.getDefault(), "%.2fMP", (width * height) / 1_000_000.0)
             }),
             "Orientation" to (exifOrientation?.let { mapOrientationToString(it) }),
             "Lens Model" to (exifLensModel),

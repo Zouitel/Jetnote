@@ -12,15 +12,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-/**
- * Copies a temporary ML Kit PDF URI into the app's private Documents directory.
- *
- * Input  keys : CONTENT_URI      — the content:// URI produced by GmsDocumentScanning
- *               DESTINATION_PATH — absolute path of the target .pdf file
- *
- * Output keys : OUTPUT_PATH      — the same destination path, echoed back on success
- *               ERROR_MESSAGE    — human-readable reason on failure
- */
 class SavePdfWorker(
     context: Context,
     params : WorkerParameters,
@@ -41,12 +32,9 @@ class SavePdfWorker(
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-
     private suspend fun copyPdf(src: Uri, destinationPath: String) {
         val destFile = File(destinationPath)
 
-        // Idempotent — skip if the file already exists (e.g. worker was retried).
         if (destFile.exists()) return
 
         withContext(Dispatchers.IO) {
@@ -68,14 +56,8 @@ class SavePdfWorker(
         const val KEY_OUTPUT_PATH      = "OUTPUT_PATH"
         const val KEY_ERROR            = "ERROR_MESSAGE"
 
-        /** Unique work-name prefix so multiple scans can queue without collision. */
         const val WORK_NAME = "save_ocr_pdf_"
 
-        /**
-         * Builds the app-private destination path for a scanned PDF.
-         *
-         * Result: <externalFilesDir>/Documents/<fileName>
-         */
         fun buildDestinationPath(context: Context, fileName: String): String {
             val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
                 ?: context.filesDir   // fallback to internal storage if SD unavailable

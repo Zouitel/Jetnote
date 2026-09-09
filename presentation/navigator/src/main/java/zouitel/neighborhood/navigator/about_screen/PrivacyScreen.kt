@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.skydoves.cloudy.cloudy
@@ -38,7 +38,7 @@ import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 class PrivacyScreen: Screen {
     @Composable
     override fun Content() {
-        val settingsModel: SettingsScreenModel = getScreenModel()
+        val settingsModel: SettingsScreenModel = koinScreenModel()
 
         val bottomNav = LocalBottomSheetNavigator.current
         val navigator = LocalNavigator.current
@@ -59,7 +59,7 @@ class PrivacyScreen: Screen {
                             IconButton({
                                 navigator?.pop()
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         }
                     )

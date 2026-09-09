@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.audio.state.ItemUiState
@@ -40,7 +41,7 @@ import kotlinx.coroutines.launch
 data class AudioListScreen(val data: MutableState<Data>): Screen {
     @Composable
     override fun Content() {
-        AudioList(audioListModel = getScreenModel())
+        AudioList(audioListModel = koinScreenModel())
     }
 
     @Composable
@@ -90,7 +91,7 @@ data class AudioListScreen(val data: MutableState<Data>): Screen {
                             audios = data.value.audios.plusElement(
                                 itemState.onClick()
                                     .copy(
-                                        amplitude = amp.map { it -> (it * 10).toInt() }.toString()
+                                        amplitude = amp.map { (it * 10).toInt() }.toString()
                                         .filter { it.isDigit() })
                             )
                         )

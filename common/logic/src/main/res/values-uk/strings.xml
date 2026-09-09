@@ -396,4 +396,8 @@
     <string name="notes_list_description">Це список нотаток</string>
     <string name="record_deleted">запис видалено!</string>
     <string name="language">Ця мова</string>
+    <string name="confirm_color">Підтвердити колір</string>
+    <string name="app_version">Версія додатка</string>
+    <string name="term_of_use">Умови використання</string>
+    <string name="privacy_policy">Політика конфіденційності</string>
 </resources>

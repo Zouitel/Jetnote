@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
@@ -86,7 +85,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -110,6 +108,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.ai.core.MessageRole
@@ -137,17 +136,18 @@ import zouitel.neighborhood.assistant.utils.Avatar
 import zouitel.neighborhood.assistant.utils.ModelSwitcherPopup
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.logic.R
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.uuid.Uuid
 
 class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
     @Composable
     override fun Content() {
         Chat(
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel(),
-            getScreenModel()
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel(),
+            koinScreenModel()
         )
     }
 
@@ -176,12 +176,12 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                     val exists = conversationModel.conversationExists(id)
                     if (!exists) {
                         conversationModel.upsert(Conversation(id))
-                        delay(200)
+                        delay(200.milliseconds)
                     }
                 }
 
                 conversationModel.initConversationIdService(id)
-                delay(100)
+                delay(100.milliseconds)
 
                 conversationModel.initConversationId(id)
                 isInitialized = true
@@ -320,7 +320,7 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
             val lastMessage = conversation?.nodes?.lastOrNull()?.messages?.lastOrNull()
 
             if (lastMessage?.role == MessageRole.USER && !isLoading.value) {
-                delay(3000)
+                delay(3000.milliseconds)
 
                 val stillWaiting = conversation?.nodes?.lastOrNull()?.messages?.lastOrNull()?.role == MessageRole.USER
                 isRetrying = stillWaiting && !isLoading.value
@@ -350,7 +350,7 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
                             IconButton({
                                 navigator?.pop()
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         },
                         actions = {
@@ -784,14 +784,14 @@ class ChatScreen(val isNew: Boolean, val id: Uuid = Uuid.random()): Screen {
     private fun InputBar(
         loading: State<Boolean>,
         model: Model?,
-        models: List<Model>,              // NEW — full list for the switcher
+        models: List<Model>,
         inputState: ChatInputState,
         modelSwitcher: MutableState<Boolean>,
         onSend: () -> Unit,
         onAttachClick: () -> Unit,
         onOptions: () -> Unit,
         onCancel: () -> Unit,
-        onModelSelect: (Model) -> Unit    // NEW — called when user picks a model
+        onModelSelect: (Model) -> Unit
     ) {
         val context = LocalContext.current
         var isFocused by remember { mutableStateOf(false) }

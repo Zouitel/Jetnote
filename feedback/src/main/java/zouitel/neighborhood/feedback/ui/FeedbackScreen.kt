@@ -5,6 +5,9 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,10 +16,13 @@ import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +46,7 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -72,10 +80,16 @@ import zouitel.neighborhood.feedback.Label
 import zouitel.neighborhood.feedback.defaultLabels
 import zouitel.neighborhood.feedback.includeLog
 import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.markdown.state.BlockTextStates
+import zouitel.neighborhood.markdown.state.rememberEditorState
+import zouitel.neighborhood.markdown.theme.CascadeEditorColors
+import zouitel.neighborhood.markdown.theme.CascadeEditorTheme
+import zouitel.neighborhood.markdown.ui.CascadeEditor
 import zouitel.neighborhood.ui.AnimatedCircleCheckbox
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonTextField
+import kotlin.time.Duration.Companion.milliseconds
 
 class FeedbackScreen : Screen {
     @Composable
@@ -91,7 +105,6 @@ class FeedbackScreen : Screen {
         val bottomNav = LocalBottomSheetNavigator.current
 
         val titleState = rememberTextFieldState()
-        val bodyState = rememberTextFieldState()
         val scope = rememberCoroutineScope()
         val systemLogs = remember { mutableStateOf(false) }
         val imageUri = remember { mutableStateOf<Uri?>(null) }
@@ -113,6 +126,23 @@ class FeedbackScreen : Screen {
         val uploadFailedResource = stringResource(R.string.upload_failed)
         val issueCreatedResource = stringResource(R.string.issue_created)
 
+        val bodyState = rememberEditorState()
+        val bg = MaterialTheme.colorScheme.surface
+        val noteText = MaterialTheme.colorScheme.onSurface
+        val cascadeTheme = remember {
+            val isDark = bg.luminance() < 0.5f
+            if (isDark) {
+                CascadeEditorTheme.dark().copy(
+                    colors = CascadeEditorColors.dark().copy(text = noteText)
+                )
+            } else {
+                CascadeEditorTheme.light().copy(
+                    colors = CascadeEditorColors.light().copy(text = noteText)
+                )
+            }
+        }
+        val isImeVisible = WindowInsets.isImeVisible
+
         LaunchedEffect(uploadStatus) {
             if (isSubmitting) {
                 when (uploadStatus) {
@@ -128,8 +158,8 @@ class FeedbackScreen : Screen {
                         // Submit the feedback with Drive link
                         feedbackModel.enqueueIssueProcessing(
                             title = titleState.text.toString(),
-                            body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
-                            else bodyState.text.toString(),
+                            body = if (systemLogs.value) bodyState.state.blocks.toString() + "\n\n" + includeLog()
+                            else bodyState.state.blocks.toString(),
                             labels = labels.map { it.name }.toTypedArray(),
                             imageUri = imageUri.value,
                             driveLink = driveLink
@@ -142,8 +172,8 @@ class FeedbackScreen : Screen {
                         // Submit without Drive link if upload failed
                         feedbackModel.enqueueIssueProcessing(
                             title = titleState.text.toString(),
-                            body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
-                            else bodyState.text.toString(),
+                            body = if (systemLogs.value) bodyState.state.blocks.toString() + "\n\n" + includeLog()
+                            else bodyState.state.blocks.toString(),
                             labels = labels.map { it.name }.toTypedArray(),
                             imageUri = imageUri.value,
                             driveLink = null
@@ -167,7 +197,7 @@ class FeedbackScreen : Screen {
                     submissionStage = issueCreatedResource
 
                     // Wait briefly to show success message
-                    delay(1000)
+                    delay(1000.milliseconds)
 
                     // Reset and close
                     isSubmitting = false
@@ -180,7 +210,7 @@ class FeedbackScreen : Screen {
                     submissionStage = "${failedResource}: ${failed.reason}"
 
                     // Wait to show error
-                    delay(3000)
+                    delay(3000.milliseconds)
 
                     // Reset state but don't close (let user retry)
                     isSubmitting = false
@@ -201,259 +231,303 @@ class FeedbackScreen : Screen {
 
         // Calculate if submit is enabled
         val isSendEnabled = titleState.text.isNotBlank() && !isSubmitting
+        val textStates = remember { BlockTextStates() }
 
         Scaffold(
             modifier = Modifier.fillMaxSize().cloudy(enabled = toolTipState.isVisible),
             bottomBar = {
-                BottomAppBar(
-                    contentPadding = PaddingValues(10.dp),
-                    containerColor = Color.Transparent
-                ) {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                if (isSendEnabled) {
-                                    isSubmitting = true
+                AnimatedVisibility(titleState.text.isNotEmpty()) {
+                    BottomAppBar(
+                        contentPadding = PaddingValues(10.dp),
+                        containerColor = Color.Transparent
+                    ) {
+                        Button(
+                            onClick = {
+                                scope.launch {
+                                    if (isSendEnabled) {
+                                        isSubmitting = true
 
-                                    // Check if there's an image to upload
-                                    if (imageUri.value != null && isAuthenticated) {
-                                        // Start upload first
-                                        feedbackModel.uploadScreenshotToDrive(imageUri.value!!)
-                                        // LaunchedEffect will handle the rest
-                                    } else {
-                                        // No image or not authenticated, submit directly
-                                        feedbackModel.enqueueIssueProcessing(
-                                            title = titleState.text.toString(),
-                                            body = if (systemLogs.value) bodyState.text.toString() + "\n\n" + includeLog()
-                                            else bodyState.text.toString(),
-                                            labels = labels.map { it.name }.toTypedArray(),
-                                            imageUri = imageUri.value,
-                                            driveLink = null
-                                        )
-                                        // LaunchedEffect will handle completion
+                                        // Check if there's an image to upload
+                                        if (imageUri.value != null && isAuthenticated) {
+                                            // Start upload first
+                                            feedbackModel.uploadScreenshotToDrive(imageUri.value!!)
+                                            // LaunchedEffect will handle the rest
+                                        } else {
+                                            // No image or not authenticated, submit directly
+                                            feedbackModel.enqueueIssueProcessing(
+                                                title = titleState.text.toString(),
+                                                body = if (systemLogs.value) bodyState.state.blocks.toString() + "\n\n" + includeLog()
+                                                else bodyState.state.blocks.toString(),
+                                                labels = labels.map { it.name }.toTypedArray(),
+                                                imageUri = imageUri.value,
+                                                driveLink = null
+                                            )
+                                        }
                                     }
                                 }
-                            }
-                        },
-                        enabled = isSendEnabled,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .navigationBarsPadding()
-                            .padding(horizontal = 10.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = CommonColors.prime,
-                            contentColor = MaterialTheme.colorScheme.surface
-                        )
-                    ) {
-                        if (isSubmitting) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                color = Color.White,
-                                strokeWidth = 2.dp
+                            },
+                            enabled = isSendEnabled,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                                .navigationBarsPadding()
+                                .padding(horizontal = 10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = CommonColors.prime,
+                                contentColor = MaterialTheme.colorScheme.surface
                             )
-                            Spacer(modifier = Modifier.size(8.dp))
-                            Text(submissionStage, style = MaterialTheme.typography.titleMedium)
-                        } else {
-                            Text(stringResource(R.string.submit_feedback), style = MaterialTheme.typography.titleMedium)
+                        ) {
+                            if (isSubmitting) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = Color.White,
+                                    strokeWidth = 2.dp
+                                )
+                                Spacer(modifier = Modifier.size(8.dp))
+                                Text(submissionStage, style = MaterialTheme.typography.titleMedium)
+                            } else {
+                                Text(
+                                    stringResource(R.string.submit_feedback),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
                         }
                     }
                 }
             }
         ) { paddingValues ->
-            LazyColumn(
-                contentPadding = paddingValues,
+
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .imePadding()
             ) {
-                item {
-                    CommonTextField(
-                        state = titleState,
-                        modifier = Modifier.fillMaxWidth(),
-                        placeholder = stringResource(R.string.issue_title),
-                        textSize = 23.sp,
-                        textColor = MaterialTheme.colorScheme.onSurface,
-                        imeAction = ImeAction.Next,
-                        keyboardActions = {
-                            keyboardManager.moveFocus(FocusDirection.Next)
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                item {
-                    val defaults = defaultLabels()
-                    ContextualFlowRow(defaults.size) { index ->
-                        InputChip(
-                            defaults[index] in labels,
-                            {
-                                if (labels.contains(defaults[index])) {
-                                    labels.minusAssign(defaults[index])
-                                } else {
-                                    labels.plusAssign(defaults[index])
-                                }
-                            },
-                            {
-                                Text(defaults[index].name)
-                            },
-                            Modifier.padding(2.dp),
-                            colors = InputChipDefaults.inputChipColors(
-                                selectedContainerColor = defaults[index].color.copy(alpha = .3f),
-                                disabledSelectedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                                selectedLabelColor = defaults[index].color,
-                                disabledLabelColor = MaterialTheme.colorScheme.onSurface
-                            )
-                        )
-                    }
-                }
-
-                item {
-                    Box(contentAlignment = Alignment.TopEnd) {
+                LazyColumn(
+                    contentPadding = paddingValues,
+                    modifier = Modifier
+                        .fillMaxWidth( )
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item {
                         CommonTextField(
-                            state = bodyState,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(220.dp),
-                            placeholder = stringResource(R.string.issue_description),
-                            textSize = 18.sp,
+                            state = titleState,
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = stringResource(R.string.issue_title),
+                            textSize = 23.sp,
                             textColor = MaterialTheme.colorScheme.onSurface,
-                            imeAction = ImeAction.Done,
+                            imeAction = ImeAction.Next,
                             keyboardActions = {
-                                keyboardController?.hide()
+                                keyboardManager.moveFocus(FocusDirection.Next)
                             }
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
 
-                item {
-                    ElevatedCard(
-                        onClick = {
-                            if (!isSubmitting) {
-                                galleryLauncher.launch(
-                                    PickVisualMediaRequest(
-                                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                                    )
+                    item {
+                        val defaults = defaultLabels()
+                        ContextualFlowRow(defaults.size) { index ->
+                            InputChip(
+                                defaults[index] in labels,
+                                {
+                                    if (labels.contains(defaults[index])) {
+                                        labels.minusAssign(defaults[index])
+                                    } else {
+                                        labels.plusAssign(defaults[index])
+                                    }
+                                },
+                                {
+                                    Text(defaults[index].name)
+                                },
+                                Modifier.padding(2.dp),
+                                colors = InputChipDefaults.inputChipColors(
+                                    selectedContainerColor = defaults[index].color.copy(alpha = .3f),
+                                    disabledSelectedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                    selectedLabelColor = defaults[index].color,
+                                    disabledLabelColor = MaterialTheme.colorScheme.onSurface
                                 )
-                            }
-                        },
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize().padding(16.dp),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            when {
-                                imageUri.value != null -> {
-                                    AsyncImage(
-                                        model = imageUri.value,
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    if (isAuthenticated) {
-                                        Text(
-                                            text = stringResource(R.string.screenshot_selected),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = Color(0xFF4CAF50)
-                                        )
-                                        Text(
-                                            text = stringResource(R.string.drive_submit),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            modifier = Modifier.alpha(.6f)
-                                        )
-                                    } else {
-                                        Text(
-                                            text = stringResource(R.string.noAccount),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = Color(0xFF4CAF50)
-                                        )
-                                    }
-                                }
-
-                                else -> {
-                                    Icon(
-                                        painter = painterResource(CommonIcons.PHOTO_CAPTURE),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(80.dp)
-                                            .alpha(.5f)
-                                            .padding(10.dp)
-                                    )
-
-                                    Spacer(modifier = Modifier.height(16.dp))
-
-                                    Text(
-                                        text = stringResource(R.string.select_screenshot),
-                                        modifier = Modifier.alpha(.5f)
-                                    )
-
-                                    if (isAuthenticated) {
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Text(
-                                            text = stringResource(R.string.drive_submit),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            modifier = Modifier.alpha(.4f)
-                                        )
-                                    } else {
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Text(
-                                            text = stringResource(R.string.noAccount),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            modifier = Modifier.alpha(.4f)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
-
-                item {
-                    TooltipBox(
-                        TooltipDefaults.rememberRichTooltipPositionProvider(),
-                        {
-                            RichTooltip(
-                                title = {
-                                    Text(stringResource(R.string.logs_title), style = MaterialTheme.typography.titleMedium)
-                                }
-                            ) {
-                                Text(stringResource(R.string.logs_description))
-                            }
-                        },
-                        toolTipState
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            AnimatedCircleCheckbox(
-                                systemLogs.value,
-                                MaterialTheme.colorScheme.onSurface,
-                                MaterialTheme.colorScheme.surface
-                            ) { value ->
-                                systemLogs.value = value
-                            }
-
-                            Text(
-                                text = stringResource(R.string.system_logs),
-                                textDecoration = TextDecoration.Underline,
-                                modifier = Modifier.clickable {
-                                    scope.launch {
-                                        toolTipState.show()
-                                    }
-                                }.padding(5.dp),
-                                style = MaterialTheme.typography.titleMedium
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(30.dp))
+
+
+
+                    item {
+                        AnimatedVisibility(
+                            visible = !isImeVisible,
+                            enter = slideInVertically(initialOffsetY = { it }),
+                            exit = slideOutVertically(targetOffsetY = { it })
+                        ) {
+                            Column(Modifier.fillMaxWidth()) {
+                                ElevatedCard(
+                                    onClick = {
+                                        if (!isSubmitting) {
+                                            galleryLauncher.launch(
+                                                PickVisualMediaRequest(
+                                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                                                )
+                                            )
+                                        }
+                                    },
+                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .heightIn(150.dp)
+                                            .padding(16.dp),
+                                        verticalArrangement = Arrangement.SpaceEvenly,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        when {
+                                            imageUri.value != null -> {
+                                                AsyncImage(
+                                                    model = imageUri.value,
+                                                    contentDescription = null,
+                                                    contentScale = ContentScale.Crop,
+                                                    modifier = Modifier.fillMaxWidth()
+                                                )
+                                                Spacer(modifier = Modifier.height(8.dp))
+
+                                                if (isAuthenticated) {
+                                                    Text(
+                                                        text = stringResource(R.string.screenshot_selected),
+                                                        style = MaterialTheme.typography.bodySmall,
+                                                        color = Color(0xFF4CAF50)
+                                                    )
+                                                    Text(
+                                                        text = stringResource(R.string.drive_submit),
+                                                        style = MaterialTheme.typography.bodySmall,
+                                                        modifier = Modifier.alpha(.6f)
+                                                    )
+                                                } else {
+                                                    Text(
+                                                        text = stringResource(R.string.noAccount),
+                                                        style = MaterialTheme.typography.bodySmall,
+                                                        color = Color(0xFF4CAF50)
+                                                    )
+                                                }
+                                            }
+
+                                            else -> {
+                                                Icon(
+                                                    painter = painterResource(CommonIcons.PHOTO_CAPTURE),
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .size(80.dp)
+                                                        .alpha(.5f)
+                                                        .padding(10.dp)
+                                                )
+
+                                                Spacer(modifier = Modifier.height(16.dp))
+
+                                                Text(
+                                                    text = stringResource(R.string.select_screenshot),
+                                                    modifier = Modifier.alpha(.5f)
+                                                )
+
+                                                if (isAuthenticated) {
+                                                    Spacer(modifier = Modifier.height(8.dp))
+                                                    Text(
+                                                        text = stringResource(R.string.drive_submit),
+                                                        style = MaterialTheme.typography.bodySmall,
+                                                        modifier = Modifier.alpha(.4f)
+                                                    )
+                                                } else {
+                                                    Spacer(modifier = Modifier.height(8.dp))
+                                                    Text(
+                                                        text = stringResource(R.string.noAccount),
+                                                        style = MaterialTheme.typography.bodySmall,
+                                                        modifier = Modifier.alpha(.4f)
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(20.dp))
+
+                                TooltipBox(
+                                    TooltipDefaults.rememberRichTooltipPositionProvider(),
+                                    {
+                                        RichTooltip(
+                                            title = {
+                                                Text(
+                                                    stringResource(R.string.logs_title),
+                                                    style = MaterialTheme.typography.titleMedium
+                                                )
+                                            }
+                                        ) {
+                                            Text(stringResource(R.string.logs_description))
+                                        }
+                                    },
+                                    toolTipState
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        AnimatedCircleCheckbox(
+                                            systemLogs.value,
+                                            MaterialTheme.colorScheme.onSurface,
+                                            MaterialTheme.colorScheme.surface
+                                        ) { value ->
+                                            systemLogs.value = value
+                                        }
+
+                                        Text(
+                                            text = stringResource(R.string.system_logs),
+                                            textDecoration = TextDecoration.Underline,
+                                            modifier = Modifier.clickable {
+                                                scope.launch {
+                                                    toolTipState.show()
+                                                }
+                                            }.padding(5.dp),
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(30.dp))
+                            }
+                        }
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .heightIn(160.dp, 300.dp)
+                ) {
+                    CascadeEditor(
+                        stateHolder = bodyState,
+                        textStates = textStates,
+                        modifier = Modifier.fillMaxSize(),
+                        theme = cascadeTheme
+                    )
+
+                    // Smart Note Placeholder Logic
+                    val showPlaceholder by remember {
+                        derivedStateOf {
+                            val blocks = bodyState.state.blocks
+                            blocks.isEmpty() || (blocks.size == 1 && textStates.getVisibleText(
+                                blocks.first().id
+                            ).isNullOrEmpty())
+                        }
+                    }
+
+                    if (showPlaceholder) {
+                        val horizontalPadding = cascadeTheme.dimensions.blockHorizontalPadding
+                        Text(
+                            text = "Describe the issue",
+                            color = noteText.copy(alpha = 0.4f),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(
+                                horizontal = horizontalPadding,
+                                vertical = 4.dp
+                            )
+                        )
+                    }
                 }
             }
         }

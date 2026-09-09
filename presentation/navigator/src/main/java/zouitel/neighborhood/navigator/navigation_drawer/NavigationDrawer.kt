@@ -20,6 +20,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.SnackbarDuration
@@ -62,7 +63,6 @@ import zouitel.neighborhood.navigator.about_screen.AboutScreen
 import zouitel.neighborhood.navigator.archive_screen.ArchiveScreen
 import zouitel.neighborhood.navigator.tags_screen.HashTagsScreen
 import zouitel.neighborhood.navigator.utils.sound
-import zouitel.neighborhood.search.ui.SearchScreen
 import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.search.utils.AppScreen
 import zouitel.neighborhood.search.utils.SearchTypes
@@ -98,7 +98,8 @@ fun NavigationDrawer(
     modelsModel: ModelsScreenModel,
     assistantModel: AssistantScreenModel,
     drawerState: DrawerState,
-    snackbarState: SnackbarHostState
+    snackbarState: SnackbarHostState,
+    onOpenSearch: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val navigator = LocalNavigator.current
@@ -151,7 +152,7 @@ fun NavigationDrawer(
     val mainScreen = rememberScreen(SharedScreen.MainScreen)
     val feedbackScreen = rememberScreen(SharedScreen.FeedbackScreen)
 
-    DismissibleDrawerSheet(
+    ModalDrawerSheet(
         drawerState = drawerState,
         modifier = Modifier.padding(end = 100.dp),
         drawerShape = RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp)
@@ -467,13 +468,10 @@ fun NavigationDrawer(
                         onClick = {
                             scope.launch {
                                 sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                navigator?.push(
-                                    SearchScreen(
-                                        SearchTypes.Tag(
-                                            tags.getOrNull(index)?.label ?: return@launch
-                                        )
-                                    )
-                                )
+                                val label = tags.getOrNull(index)?.label ?: return@launch
+                                searchModel.updateSearchType(SearchTypes.Tag(label))
+                                searchModel.setFieldText("\"$label\"")
+                                onOpenSearch()
                                 drawerState.close()
                             }
                         },
@@ -517,13 +515,10 @@ fun NavigationDrawer(
                                         onClick = {
                                             scope.launch {
                                                 sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
-                                                navigator?.push(
-                                                    SearchScreen(
-                                                        SearchTypes.Tag(
-                                                            tags.getOrNull(index)?.label ?: return@launch
-                                                        )
-                                                    )
-                                                )
+                                                val label = tags.getOrNull(index)?.label ?: return@launch
+                                                searchModel.updateSearchType(SearchTypes.Tag(label))
+                                                searchModel.setFieldText("\"$label\"")
+                                                onOpenSearch()
                                                 drawerState.close()
                                             }
                                         }

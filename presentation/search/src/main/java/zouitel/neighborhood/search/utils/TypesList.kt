@@ -6,8 +6,8 @@ val typesList = listOf(
     Type(SearchTypes.Links, "Links", CommonIcons.LINK),
     Type(SearchTypes.Reminders, "Reminders", CommonIcons.BELL_RING),
     Type(SearchTypes.Audios, "Audios", CommonIcons.WAVEFORM),
-    Type(SearchTypes.Medias, "Medias", CommonIcons.GALLERY),
-    Type(SearchTypes.Properties(0), "Priorities", CommonIcons.CIRCLE_18)
+    Type(SearchTypes.Medias, "Medias", CommonIcons.IMAGES_18),
+    Type(SearchTypes.Properties(0), "Priorities", CommonIcons.STICKER_18)
 )
 
 data class Type(

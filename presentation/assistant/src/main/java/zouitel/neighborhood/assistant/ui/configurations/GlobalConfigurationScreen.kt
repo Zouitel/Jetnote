@@ -1,6 +1,11 @@
 package zouitel.neighborhood.assistant.ui.configurations
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
@@ -30,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -48,7 +55,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import zouitel.neighborhood.ai.provider.ProviderManager
 import zouitel.neighborhood.ai.provider.ProviderSetting
@@ -64,12 +71,13 @@ import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsList
 import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI): Screen  {
     @Composable
     override fun Content() {
-        Global(getScreenModel(), getScreenModel())
+        Global(koinScreenModel(), koinScreenModel())
     }
 
     @Composable
@@ -95,6 +103,18 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
+
+        val infiniteTransition = rememberInfiniteTransition()
+
+        // Ring fades as it expands
+        val ringAlpha by infiniteTransition.animateFloat(
+            initialValue = 0.7f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1500),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
 
         LaunchedEffect(provider) {
             providerModel.upsert(provider)
@@ -145,7 +165,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                     navigator?.pop()
                                 }
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         },
                         actions = {
@@ -170,18 +190,20 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                 contentPadding = contentPadding) {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
-                    CommonActivationItem(
-                        currentProvider.name,
-                        currentProvider.description,
-                        {
-                            AsyncImage(
-                                currentProvider.logoUrl,
-                                null,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        },
-                        null
-                    )
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        CommonActivationItem(
+                            currentProvider.name,
+                            currentProvider.description,
+                            {
+                                AsyncImage(
+                                    currentProvider.logoUrl,
+                                    null,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            },
+                            null
+                        )
+                    }
                 }
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
@@ -207,7 +229,17 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 }.getOrElse {
                                     navigator?.push(WebViewPageScreen(currentProvider.apiLink.ifEmpty { "" }))
                                 }
-                            }) {
+                            },
+                                Modifier.then(
+                                    if (currentProvider.apiKey.isEmpty()) {
+                                        Modifier
+                                            .clip(CircleShape)
+                                            .background(CommonColors.prime.copy(alpha = ringAlpha))
+                                    } else {
+                                        Modifier
+                                    }
+                                )
+                            ) {
                                 Icon(painterResource(CommonIcons.INFO), null)
                             }
                         },
@@ -294,7 +326,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                         {
                             currentProvider =
                                 currentProvider.copy(proxy = currentProvider.proxy.copy(enabled = it))
-                        },
+                        }
                     )
                     Column(Modifier.cloudy(enabled = currentProvider.proxy.enabled.not())) {
                         CommonTextField(
@@ -305,7 +337,8 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            stringResource(R.string.host)
+                            stringResource(R.string.host),
+                            currentProvider.proxy.enabled
                         )
 
                         BasicTextField(
@@ -317,6 +350,7 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                             modifier = Modifier
                                 .padding(7.dp)
                                 .background(Color.Transparent),
+                            enabled = currentProvider.proxy.enabled,
                             textStyle = TextStyle(
                                 fontSize =  TextUnit(19f, TextUnitType.Sp),
                                 fontWeight = FontWeight.Normal,
@@ -339,7 +373,8 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            stringResource(R.string.username_option)
+                            stringResource(R.string.username_option),
+                            currentProvider.proxy.enabled
                         )
 
                         CommonTextField(
@@ -350,7 +385,8 @@ class GlobalConfigurationScreen(private val provider: ProviderSetting.GlobalAI):
                                 )
                             },
                             Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                            stringResource(R.string.pass_option)
+                            stringResource(R.string.pass_option),
+                            currentProvider.proxy.enabled
                         )
                     }
                 }

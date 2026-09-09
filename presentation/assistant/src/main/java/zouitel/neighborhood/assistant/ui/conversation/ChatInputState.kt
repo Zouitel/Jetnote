@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
@@ -25,7 +26,7 @@ import kotlin.uuid.Uuid
 fun rememberChatInputState(
     textContent: String = "",
     message: List<UIMessagePart> = emptyList(),
-    loading: Boolean = false,
+    loading: Boolean = false
 ): ChatInputState {
     return rememberSaveable(textContent, message, loading, saver = ChatInputStateSaver) {
         ChatInputState().apply {
@@ -36,6 +37,7 @@ fun rememberChatInputState(
     }
 }
 
+@Stable
 class ChatInputState {
     val textContent = TextFieldState()
     var messageContent by mutableStateOf(listOf<UIMessagePart>())
@@ -78,12 +80,6 @@ class ChatInputState {
     fun isEmpty(): Boolean {
         return textContent.text.isEmpty() && messageContent.isEmpty()
     }
-
-//    fun addLogo(logo: String) {
-//        val newMessage = messageContent.toMutableList()
-//        newMessage.add(UIMessagePart.Logo(logo))
-//        messageContent = newMessage
-//    }
 
     fun addImages(uris: List<Uri>) {
         val newMessage = messageContent.toMutableList()

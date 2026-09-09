@@ -42,7 +42,7 @@ fun CommonActivationItem(
             .clickable(onClick = onClick)
             .clip(MaterialTheme.shapes.large)
             .padding(horizontal = 10.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

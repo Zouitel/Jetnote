@@ -7,6 +7,7 @@ object ModelLogoProvider {
 
     private val logoMappings = hashMapOf(
         "gemini" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/gemini-color.png",
+        "antigravity" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/antigravity-color.png",
         "gemma" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/gemma-color.png",
         "banana" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/nanobanana-color.png",
         "claude" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/claude-color.png",
@@ -29,7 +30,7 @@ object ModelLogoProvider {
         "bedrock" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/bedrock-color.png",
         "qwen" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/qwen-color.png",
         "grok" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/grok.png",
-        "openrouter" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/openrouter.png",
+        "openrouter" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/openrouter-color.png",
         "zhipu" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/zhipu-color.png",
         "glm" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/zhipu-color.png",
         "alibaba" to "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/dark/alibaba-color.png",
@@ -67,5 +68,9 @@ object ModelLogoProvider {
         "deepcogito" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/deepcogito-color.png",
         "inception" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/inception.png",
         "groq" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/groq.png",
+        "azure" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/azureai-color.png",
+        "agnes" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/agnesai.png",
+        "poolside" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/poolside-color.png",
+        "tencent" to "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/tencent-color.png"
     )
 }

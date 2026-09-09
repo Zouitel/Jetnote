@@ -81,7 +81,7 @@ fun FullModels(
                         IconButton({
                             navigator?.pop()
                         }) {
-                            Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                            Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                         }
                     },
                     title = { Text(stringResource(R.string.ai_models)) },

@@ -1,12 +1,19 @@
 package zouitel.neighborhood.assistant.ui.configurations
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -53,6 +61,7 @@ import com.skydoves.cloudy.cloudy
 import org.koin.compose.koinInject
 import zouitel.neighborhood.assistant.ui.ai_model.ModelsList
 import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): Screen {
@@ -83,6 +92,18 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val (lazyListState, listHeight) = rememberAutoHeightCacheLazyList()
+
+        val infiniteTransition = rememberInfiniteTransition()
+
+        // Ring fades as it expands
+        val ringAlpha by infiniteTransition.animateFloat(
+            initialValue = 0.7f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1500),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
 
         LaunchedEffect(Unit) {
             providerModel.upsert(provider)
@@ -122,7 +143,7 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
                                     navigator?.pop()
                                 }
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         },
                         actions = {
@@ -147,18 +168,20 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
                 contentPadding = contentPadding) {
                 item { Spacer(Modifier.padding(vertical = 10.dp)) }
                 item {
-                    CommonActivationItem(
-                        currentProvider.name,
-                        currentProvider.description,
-                        {
-                            AsyncImage(
-                                currentProvider.logoUrl,
-                                null,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        },
-                        null
-                    )
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        CommonActivationItem(
+                            currentProvider.name,
+                            currentProvider.description,
+                            {
+                                AsyncImage(
+                                    currentProvider.logoUrl,
+                                    null,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            },
+                            null
+                        )
+                    }
                 }
                 item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                 item {
@@ -184,7 +207,17 @@ class ClaudeConfigurationScreen(private val provider: ProviderSetting.Claude): S
                                 }.getOrElse {
                                     navigator?.push(WebViewPageScreen(currentProvider.apiLink.ifEmpty { "" }))
                                 }
-                            }) {
+                            },
+                                Modifier.then(
+                                        if (currentProvider.apiKey.isEmpty()) {
+                                            Modifier
+                                            .clip(CircleShape)
+                                            .background(CommonColors.prime.copy(alpha = ringAlpha))
+                                        } else {
+                                            Modifier
+                                        }
+                                    )
+                            ) {
                                 Icon(painterResource(CommonIcons.INFO), null)
                             }
                         },

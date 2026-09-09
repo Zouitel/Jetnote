@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.AsyncImage
@@ -46,7 +47,7 @@ import zouitel.neighborhood.workspace.model.MediaType
  * Drop this into your NavHost like:
  *
  *   composable("scan?noteId={noteId}") { backStack ->
- *       val noteId = backStack.arguments?.getString("noteId")?.toLongOrNull() ?: -1L
+ *       val noteId = backStack. arguments?.getString("noteId")?.toLongOrNull() ?: -1L
  *       OCRScreen(
  *           noteId = noteId,
  *           onNavigateBack = { navController.popBackStack() }
@@ -58,7 +59,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
 
     @Composable
     override fun Content() {
-        OCR(getScreenModel())
+        OCR(koinScreenModel())
     }
 
     @Composable
@@ -108,7 +109,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
         LaunchedEffect(uiState.savedPdfPath) {
             val path = uiState.savedPdfPath ?: return@LaunchedEffect
             if (path.isNotBlank()) {
-                data?.value = data?.value?.copy(
+                data?.value = data.value.copy(
                     medias = data.value.medias.plusElement(
                         Media(
                             uri   = path,
@@ -116,7 +117,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
                             color = Color.Transparent.toArgb()
                         )
                     )
-                ) ?: return@LaunchedEffect
+                )
                 navigator.pop()
             }
         }
@@ -128,7 +129,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
                     navigationIcon = {
                         IconButton(onClick = {}) {
                             Icon(
-                                painter = painterResource(CommonIcons.DOCUMENT),
+                                painter = painterResource(CommonIcons.DOCUMENT_36),
                                 contentDescription = "Back"
                             )
                         }
@@ -156,7 +157,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
                         modifier = Modifier.padding(32.dp)
                     ) {
                         Icon(
-                            painter = painterResource(CommonIcons.DOCUMENT),
+                            painter = painterResource(CommonIcons.DOCUMENT_36),
                             contentDescription = null,
                             modifier = Modifier.size(72.dp),
                             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
@@ -184,7 +185,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
                             }
                         ) {
                             Icon(
-                                painter = painterResource(CommonIcons.DOCUMENT),
+                                painter = painterResource(CommonIcons.DOCUMENT_36),
                                 contentDescription = null
                             )
                             Spacer(Modifier.width(8.dp))
@@ -262,7 +263,6 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
     }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
-
     @Composable
     private fun ScanSummaryCard(pageCount: Int, hasPdf: Boolean) {
         Card(

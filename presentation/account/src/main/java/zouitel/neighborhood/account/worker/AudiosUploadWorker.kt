@@ -42,13 +42,10 @@ class AudiosUploadWorker(
         try {
             val credential = GoogleAccountCredential.usingOAuth2(
                 applicationContext,
-                listOf(DriveScopes.DRIVE_FILE) // Changed from DRIVE_PHOTOS_READONLY to DRIVE_FILE
+                listOf(DriveScopes.DRIVE_FILE)
             )
 
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(applicationContext)
-            if (lastAccount == null) {
-                return@withContext null
-            }
+            val lastAccount = GoogleSignIn.getLastSignedInAccount(applicationContext) ?: return@withContext null
 
             credential.selectedAccount = lastAccount.account
             credential.run {

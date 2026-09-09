@@ -398,4 +398,8 @@
     <string name="notes_list_description">Tämä on muistiinpanoluettelo</string>
     <string name="record_deleted">tietue poistettu!</string>
     <string name="language">Kieli</string>
+    <string name="confirm_color">Vahvista väri</string>
+    <string name="app_version">Sovelluksen versio</string>
+    <string name="term_of_use">Käyttöehdot</string>
+    <string name="privacy_policy">Tietosuojakäytäntö</string>
 </resources>

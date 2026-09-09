@@ -1,5 +1,6 @@
 package zouitel.neighborhood.assistant.model
 
+import androidx.compose.runtime.Stable
 import zouitel.neighborhood.ai.provider.CustomBody
 import zouitel.neighborhood.ai.provider.CustomHeader
 import zouitel.neighborhood.ai.ui.UIMessage
@@ -7,6 +8,7 @@ import kotlinx.serialization.Serializable
 import zouitel.neighborhood.assistant.ai.LocalToolOption
 import kotlin.uuid.Uuid
 
+@Stable
 @Serializable
 data class Assistant(
     val id: Short = 1,

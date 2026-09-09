@@ -398,4 +398,8 @@
     <string name="notes_list_description">Это список заметок</string>
     <string name="record_deleted">запись удалена!</string>
     <string name="language">Этот язык</string>
+    <string name="confirm_color">Подтвердить цвет</string>
+    <string name="app_version">Версия приложения</string>
+    <string name="term_of_use">Условия использования</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
 </resources>

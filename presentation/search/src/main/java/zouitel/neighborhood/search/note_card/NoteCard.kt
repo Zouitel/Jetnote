@@ -65,8 +65,8 @@ import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.search.utils.normalNotePath
 import zouitel.neighborhood.search.utils.prioritizedNotePath
 import zouitel.neighborhood.ui.CommonColors
+import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.CommonIcons.CIRCLE_18
-import zouitel.neighborhood.ui.CommonIcons.GRIP_DOTS
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.video.SmallVideoPlayer
 import zouitel.neighborhood.workspace.model.MediaType
@@ -323,7 +323,7 @@ private fun Card(
                 )
             ) {
                 Icon(
-                    painter = painterResource(id = GRIP_DOTS),
+                    painter = painterResource(id = CommonIcons.DRAG_INDICATOR),
                     contentDescription = null,
                     tint = note.textColor?.let { Color(it) }
                         ?: MaterialTheme.colorScheme.onSurface

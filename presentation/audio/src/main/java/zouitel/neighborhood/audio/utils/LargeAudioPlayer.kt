@@ -50,6 +50,7 @@ import zouitel.neighborhood.waveform.model.WaveformAlignment
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun LargeAudioPlayer(playerModel: AudioScreenModel, item: Audio, onDelete: () -> Unit) {
@@ -71,7 +72,7 @@ fun LargeAudioPlayer(playerModel: AudioScreenModel, item: Audio, onDelete: () ->
                         onClick = {
                             scope.launch {
                                 offsetX.animateTo(0f, tween(300))
-                                delay(100)
+                                delay(100.milliseconds)
                                 onDelete()
                             }
                         },

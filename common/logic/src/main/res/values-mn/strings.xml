@@ -393,4 +393,8 @@
     <string name="notes_list_description">Энэ бол тэмдэглэлийн жагсаалт</string>
     <string name="record_deleted">бичлэг устгасан!</string>
     <string name="language">Тэр хэл</string>
+    <string name="confirm_color">Өнгө баталгаажуулах</string>
+    <string name="app_version">Аппын хувилбар</string>
+    <string name="term_of_use">Ашиглах нөхцөл</string>
+    <string name="privacy_policy">Нууцлалын бодлого</string>
 </resources>

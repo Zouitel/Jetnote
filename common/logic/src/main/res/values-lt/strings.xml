@@ -400,4 +400,8 @@
     <string name="notes_list_description">Tai užrašų sąrašas</string>
     <string name="record_deleted">įrašas ištrintas!</string>
     <string name="language">Ta kalba</string>
+    <string name="confirm_color">Patvirtinti spalvą</string>
+    <string name="app_version">Programos versija</string>
+    <string name="term_of_use">Naudojimo sąlygos</string>
+    <string name="privacy_policy">Privatumo politika</string>
 </resources>

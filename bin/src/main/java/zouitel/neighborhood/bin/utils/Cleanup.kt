@@ -105,7 +105,6 @@ suspend fun cleanupOrphanedImages(
     }.onFailure {
         it.printStackTrace()
     }
-
     return@withContext deletedCount
 }
 
@@ -156,7 +155,6 @@ suspend fun cleanupOrphanedVideos(
                 }
             }
         }
-
     }.onFailure {
         it.printStackTrace()
     }

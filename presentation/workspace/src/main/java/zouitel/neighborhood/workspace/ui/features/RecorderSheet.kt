@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import java.io.File
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 
 @Composable
@@ -99,7 +100,7 @@ fun RecorderSheet(
                         recorderModel.stop()
 
                         // Small delay to ensure file is written
-                        delay(200)
+                        delay(200.milliseconds)
 
                         // Verify file exists before adding to data
                         if (audioFile.exists()) {
@@ -119,7 +120,7 @@ fun RecorderSheet(
                         recorderModel.reset()
 
                         // Notify completion
-                        delay(200)
+                        delay(200.milliseconds)
                         onRecordingComplete?.invoke()
                     }
                 }

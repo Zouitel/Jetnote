@@ -4,16 +4,11 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.navigator.Navigator
@@ -34,9 +29,8 @@ import zouitel.neighborhood.security.applock.LockModeHandler
 import zouitel.neighborhood.security.detection.SecurityCheckingScreen
 import zouitel.neighborhood.security.detection.SecurityHandler
 import zouitel.neighborhood.security.detection.SecurityState
-import zouitel.neighborhood.security.detection.SecurityThreatScreen
 import zouitel.neighborhood.security.screenshot.ScreenshotHandler
-import zouitel.neighborhood.shortcut.checkNoteActivityShortcut
+import zouitel.neighborhood.shortcut.utils.checkNoteActivityShortcut
 import zouitel.neighborhood.ui.MainTheme
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.hightlight.Highlighter

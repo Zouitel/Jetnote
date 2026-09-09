@@ -40,17 +40,14 @@ class BinWorker(
             val allNotes = notes().first()
 
             // 3. Extract valid paths using your mappers
-            val validAudioPaths = audioMapper.fromDomain(
-                allNotes.map { it.data.audios }
-            ).map { it.path } // Extracting the 'path' property from Audio model
+            val validAudioPaths = audioMapper.fromDomain(allNotes.map { it.data.audios })
+                .map { it.path }
 
-            val videoPaths = mediaMapper.fromDomain(
-                allNotes.map { it.data.medias }
-            ).filter { it.isVideo }.map { it.uri }
+            val videoPaths = mediaMapper.fromDomain(allNotes.map { it.data.medias })
+                .map { it.uri }
 
-            val imagePaths = mediaMapper.fromDomain(
-                allNotes.map { it.data.medias }
-            ).map { it.uri }
+            val imagePaths = mediaMapper.fromDomain(allNotes.map { it.data.medias })
+                .map { it.uri }
 
             // 4. Run File System Cleanup
             cleanupOrphanedAudios(context, validAudioPaths, ioDispatcher)

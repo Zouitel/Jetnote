@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.skydoves.cloudy.cloudy
@@ -76,6 +77,7 @@ import zouitel.neighborhood.workspace.ui.features.AudioScreen
 import zouitel.neighborhood.workspace.ui.features.MediaTop
 import zouitel.neighborhood.workspace.ui.utils.remindersContext
 import zouitel.neighborhood.workspace.ui.utils.tagsContext
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 import kotlin.uuid.Uuid
 
@@ -87,13 +89,13 @@ data class WorkplaceScreen(
     @Composable
     override fun Content() {
         Workplace(
-            dataModel = getScreenModel(),
-            tagModel = getScreenModel(),
-            noteAndTagModel = getScreenModel(),
-            linkModel = getScreenModel(),
-            alarmModel = getScreenModel(),
-            workplaceModel = getScreenModel(),
-            settingsModel = getScreenModel()
+            dataModel = koinScreenModel(),
+            tagModel = koinScreenModel(),
+            noteAndTagModel = koinScreenModel(),
+            linkModel = koinScreenModel(),
+            alarmModel = koinScreenModel(),
+            workplaceModel = koinScreenModel(),
+            settingsModel = koinScreenModel()
         )
     }
 
@@ -119,8 +121,6 @@ data class WorkplaceScreen(
         val defaultBackground = MaterialTheme.colorScheme.surface.toArgb()
         val defaultTextColor = MaterialTheme.colorScheme.onSurface.toArgb()
 
-        // Isolated color states — changes here do NOT invalidate currentData,
-        // so CascadeEditor / LazyColumn are skipped by Compose on every color pick.
         val backgroundState = remember { mutableStateOf(data.background ?: defaultBackground) }
         val textColorState  = remember { mutableStateOf(data.textColor  ?: defaultTextColor) }
 
@@ -164,7 +164,7 @@ data class WorkplaceScreen(
         val deletedTagId = remember { mutableStateListOf<Pair<Long, Int>>() }
         val jobCounter = remember { mutableIntStateOf(0) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
-        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
+//        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
         val cascadeTheme = remember(backgroundState.value, textColorState.value) {
             val bg = Color(backgroundState.value)
@@ -184,7 +184,7 @@ data class WorkplaceScreen(
         // Replace your existing LaunchedEffect(screen.value) for focus with this:
         LaunchedEffect(Unit) {
             if (isNew) {
-                delay(200)
+                delay(200.milliseconds)
                 focus.requestFocus()
                 keyboard?.show()
             }
@@ -220,7 +220,6 @@ data class WorkplaceScreen(
             }
         ) {
             val textStates = remember { BlockTextStates() }
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -288,13 +287,13 @@ data class WorkplaceScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f) // Takes the "rest of height space"
+                        .weight(1f)
                 ) {
                     CascadeEditor(
                         stateHolder = editorState,
                         textStates = textStates,
                         modifier = Modifier.fillMaxSize(),
-                        theme = cascadeTheme,
+                        theme = cascadeTheme
                     )
 
                     // Smart Note Placeholder Logic
@@ -311,7 +310,6 @@ data class WorkplaceScreen(
                             text = "Note",
                             color = Color(textColorState.value).copy(alpha = 0.4f),
                             style = MaterialTheme.typography.bodyLarge,
-                            // Vertical 4.dp accounts for the combined internal paddings in CascadeEditor.kt
                             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)
                         )
                     }

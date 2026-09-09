@@ -241,24 +241,9 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
                             properties.sizeBytes != null && properties.sizeBytes > 0
 
                     if (hasValidData) {
-                        // Display date if available
                         properties.exifDateTimeOriginal?.let { dateTimeString ->
-//                            runCatching {
-                                val parser = SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.getDefault())
-                                val date = parser.parse(dateTimeString)
-                                val formatter = SimpleDateFormat("EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault())
-                                Text(formatter.format(date), fontWeight = FontWeight.Bold)
-//                            }.onFailure {
-//                                // Try alternative date format
-//                                runCatching {
-//                                    val parser = SimpleDateFormat("yyyyMMdd'T'HHmmss.SSS'Z'", Locale.getDefault())
-//                                    val date = parser.parse(dateTimeString)
-//                                    val formatter = SimpleDateFormat("EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault())
-//                                    Text(formatter.format(date), fontWeight = FontWeight.Bold)
-//                                }.onFailure {
-//                                    Text(dateTimeString, fontWeight = FontWeight.Bold)
-//                                }
-//                            }
+                            val formattedDate = remember(dateTimeString) { formatVideoDateTime(dateTimeString) }
+                            Text(formattedDate, fontWeight = FontWeight.Bold)
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -299,4 +284,21 @@ fun VideoDetails(path: String?, onClose: () -> Unit) {
             }
         }
     }
+}
+
+/** Plain function, no composable calls — try/catch is completely fine here. */
+private fun formatVideoDateTime(dateTimeString: String): String {
+    val formatter = SimpleDateFormat("EEEE, dd MMMM yyyy, HH:mm", Locale.getDefault())
+
+    val primary = runCatching {
+        SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.getDefault()).parse(dateTimeString)
+    }.getOrNull()
+    if (primary != null) return formatter.format(primary)
+
+    val fallback = runCatching {
+        SimpleDateFormat("yyyyMMdd'T'HHmmss.SSS'Z'", Locale.getDefault()).parse(dateTimeString)
+    }.getOrNull()
+    if (fallback != null) return formatter.format(fallback)
+
+    return dateTimeString
 }

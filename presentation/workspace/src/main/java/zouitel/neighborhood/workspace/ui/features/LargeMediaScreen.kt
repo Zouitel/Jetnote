@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.cherry.lib.doc.DocViewerActivity
 import com.cherry.lib.doc.bean.DocSourceType
@@ -84,7 +85,7 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
 
     @Composable
     override fun Content() {
-        MediaLarge(getScreenModel())
+        MediaLarge(koinScreenModel())
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -231,10 +232,6 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
             }
         ) { paddingValues ->
             Box {
-                // ── HorizontalUncontainedCarousel replaces HorizontalPager ────
-                // Each item fills the screen width; one item peeks at the edge,
-                // giving the classic Material 3 carousel look while preserving
-                // the full-screen media viewer UX.
                 HorizontalUncontainedCarousel(
                     state = carouselState,
                     itemWidth = screenWidth,
@@ -270,8 +267,6 @@ data class LargeMediaScreen(val index: Int = 0, val data: MutableState<Data>) : 
                         MediaType.VIDEO -> {
                             VideoPlayer(
                                 uri = media.uri.toUri(),
-                                // maskClip must be applied inside a CarouselItemScope
-                                // to get the animated clip/mask effect from Material 3
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .maskClip(MaterialTheme.shapes.extraLarge),

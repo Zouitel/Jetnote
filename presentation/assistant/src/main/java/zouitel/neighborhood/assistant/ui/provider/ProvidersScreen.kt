@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.ai.provider.ProviderSetting
@@ -37,12 +37,11 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import com.skydoves.cloudy.cloudy
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.logic.R
-import zouitel.neighborhood.ui.rememberAutoHeightCacheStaggeredGrid
 
 class ProvidersScreen: Screen {
     @Composable
     override fun Content() {
-        Providers(getScreenModel(), getScreenModel())
+        Providers(koinScreenModel(), koinScreenModel())
     }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -66,7 +65,7 @@ class ProvidersScreen: Screen {
                             IconButton({
                                 navigator?.pop()
                             }) {
-                                Icon(painterResource(CommonIcons.ARROW_LEFT), null)
+                                Icon(painterResource(CommonIcons.ANGLE_LEFT_20), null)
                             }
                         },
                         scrollBehavior = scrollBehavior

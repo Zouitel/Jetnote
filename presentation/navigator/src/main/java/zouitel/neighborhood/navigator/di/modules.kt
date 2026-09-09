@@ -25,12 +25,14 @@ import org.koin.core.module.dsl.withOptions
 import org.koin.core.qualifier.named
 import org.koin.dsl.lazyModule
 import org.koin.dsl.module
+import zouitel.neighborhood.navigator.about_screen.UpdateScreenModel
 
 val screensModule = module {
     factoryOf(::MainScreenModel)
     factoryOf(::NoteMapper)
     factoryOf(::ArchiveScreen)
     factoryOf(::ArchiveScreenModel)
+    factory { UpdateScreenModel(androidContext()) }
 
     includes(
         audioPlayerModule,

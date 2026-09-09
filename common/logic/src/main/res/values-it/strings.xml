@@ -401,4 +401,8 @@
     <string name="notes_list_description">Questo è un elenco di note</string>
     <string name="record_deleted">record eliminato!</string>
     <string name="language">La lingua</string>
+    <string name="confirm_color">Conferma colore</string>
+    <string name="app_version">Versione app</string>
+    <string name="term_of_use">Termini di utilizzo</string>
+    <string name="privacy_policy">Informativa sulla privacy</string>
 </resources>

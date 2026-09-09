@@ -421,4 +421,8 @@
     <string name="notes_list_description">ეს არის შენიშვნების სია</string>
     <string name="record_deleted">ჩანაწერი წაიშალა!</string>
     <string name="language">ენა</string>
+    <string name="confirm_color">ფერის დადასტურება</string>
+    <string name="app_version">აპის ვერსია</string>
+    <string name="term_of_use">გამოყენების პირობები</string>
+    <string name="privacy_policy">კონფიდენციალურობის პოლიტიკა</string>
 </resources>

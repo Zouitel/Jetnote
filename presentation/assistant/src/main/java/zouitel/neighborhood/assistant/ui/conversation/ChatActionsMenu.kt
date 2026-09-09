@@ -65,7 +65,7 @@ internal fun ChatActionsMenu(
             { navigator?.push(ProvidersScreen()) },
             Modifier.padding(horizontal = 10.dp),
             {
-                Icon(painterResource(CommonIcons.BOX_CONNECTION), null)
+                Icon(painterResource(CommonIcons.CUBES), null)
             }
         )
         DropdownMenuItem(

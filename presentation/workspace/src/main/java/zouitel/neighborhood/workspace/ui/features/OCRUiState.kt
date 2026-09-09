@@ -2,6 +2,7 @@ package zouitel.neighborhood.workspace.ui.features
 
 import android.app.Application
 import android.net.Uri
+import androidx.compose.runtime.Stable
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -42,7 +43,7 @@ data class OCRUiState(
 )
 
 // ─── ViewModel ────────────────────────────────────────────────────────────────
-
+@Stable
 class OCRScreenModel(private val application: Application) : ScreenModel {
 
     private val _uiState = MutableStateFlow(OCRUiState())

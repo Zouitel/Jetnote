@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 @Stable
 class AudioListScreenModel(
@@ -73,13 +74,13 @@ class AudioListScreenModel(
                                         )
                                     }
 
-                                    delay(500).runCatching {
+                                    delay(500.milliseconds).runCatching {
                                         listUiState.value.bottomSheetNavigator?.hide()
                                     }
                                 }
                             } else {
                                 screenModelScope.launch {
-                                    delay(300).runCatching {
+                                    delay(300.milliseconds).runCatching {
                                         listUiState.value.bottomSheetNavigator?.hide()
                                     }
                                 }
