@@ -48,7 +48,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -106,7 +105,6 @@ fun ReminderSheet(
 
     if (datePickerDialog.value) {
         DateLayout(
-            settings,
             selectedDate,
             dateState,
             datePickerDialog

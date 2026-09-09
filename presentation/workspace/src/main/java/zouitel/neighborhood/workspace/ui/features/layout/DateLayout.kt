@@ -1,9 +1,7 @@
 package zouitel.neighborhood.workspace.ui.features.layout
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -11,30 +9,29 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import zouitel.neighborhood.ui.CommonColors
-import zouitel.neighborhood.ui.Settings
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 @Composable
 internal fun DateLayout(
-    settings: Settings,
     selectedDate: MutableState<Long>,
     dateState: DatePickerState,
     dateDialog: MutableState<Boolean>,
     onAction: () -> Unit
 ) {
-    val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+    val local = LocalLocale.current.platformLocale
+    val formatter = SimpleDateFormat("dd MMM yyyy", local)
+
     DatePickerDialog(
         onDismissRequest = {
             onAction.invoke()
