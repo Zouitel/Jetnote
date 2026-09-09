@@ -49,6 +49,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.util.ExperimentalApi
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.compose.ContentFrame
@@ -63,7 +64,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import kotlinx.coroutines.delay
 import zouitel.neighborhood.ui.CommonIcons
 
-@OptIn(UnstableApi::class)
+@OptIn(UnstableApi::class,  ExperimentalApi::class)
 @Composable
 fun VideoPlayer(
     uri: Uri,
@@ -264,11 +265,6 @@ fun VideoPlayer(
                         )
                     }
                 }
-//                MuteButton(
-//                    player = exoPlayer,
-//                    modifier = Modifier.size(40.dp),
-//                    tint = Color.White
-//                )
             }
         }
     }
