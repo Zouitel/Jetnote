@@ -52,6 +52,7 @@ import java.util.Locale
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 fun ReminderSheet(
@@ -62,6 +63,7 @@ fun ReminderSheet(
     val alarmManagerModel = koinInject<AlarmManagerScreenModel>()
 
     val context = LocalContext.current
+    val  local = LocalLocale.current.platformLocale
 
     /**
      * This id always should be an integer because of *IntentPadding.getBroadcast()*,
@@ -123,10 +125,10 @@ fun ReminderSheet(
         }
     }
 
-    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-    val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd MMM yyyy", local)
+    val timeFormat = SimpleDateFormat("hh:mm a", local)
 
-    val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+    val dayFormat = SimpleDateFormat("EEEE", local)
     val dayName = dayFormat.format(Date(selectedDate.longValue))
 
     val currentDay =

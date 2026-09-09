@@ -1,8 +1,10 @@
 package zouitel.neighborhood.jetnote
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
@@ -47,6 +49,7 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
     private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private lateinit var securityHandler: SecurityHandler
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -89,6 +92,7 @@ class NoteActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     @Composable
     private fun MainApp() {
         LockModeHandler(settingsModel)

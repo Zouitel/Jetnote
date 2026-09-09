@@ -1,5 +1,7 @@
 package zouitel.neighborhood.navigator.di
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import cafe.adriel.voyager.core.registry.screenModule
 import org.koin.android.ext.koin.androidContext
@@ -56,6 +58,7 @@ val initializerLazyModule = lazyModule {
         createdAtStart()
     }
 }
+@RequiresApi(Build.VERSION_CODES.S)
 val screensScreenModule = screenModule {
     register<SharedScreen.MainScreen> {
         MainScreen()
