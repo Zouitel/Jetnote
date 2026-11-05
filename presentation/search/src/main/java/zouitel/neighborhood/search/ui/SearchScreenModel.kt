@@ -10,11 +10,11 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.collectLatest
+import kotlinx.coroutines.coroutineScope
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 import zouitel.neighborhood.logic.withFlow
 import zouitel.neighborhood.search.mapper.NoteMapper
@@ -52,13 +52,11 @@ class SearchScreenModel(
 
     /** All notes for the current user. Filtering happens in the Composable. */
     val allNotes = _allNotes.asStateFlow()
-        .stateIn(screenModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val _notesByPriority = MutableStateFlow<List<Note>>(emptyList())
 
     /** Notes that have any priority set (priority > 0). */
     val notesByPriority = _notesByPriority.asStateFlow()
-        .stateIn(screenModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     // ── UI state ──────────────────────────────────────────────────────────────
 
@@ -80,35 +78,30 @@ class SearchScreenModel(
                 firebaseAuth.addAuthStateListener(listener)
                 trySend(firebaseAuth.currentUser?.uid)
                 awaitClose { firebaseAuth.removeAuthStateListener(listener) }
-            }.collect { uid ->
+            }.collectLatest { uid ->
                 Log.d(TAG, "Auth → uid=$uid")
-                loadNotesForUser(uid)
-            }
-        }
-    }
-
-    private fun loadNotesForUser(uid: String?) {
-        // 🔧 FIX: Use "null" string fallback just like MainScreenModel
-        val userId = uid ?: "null"
-
-        screenModelScope.launch {
-            launch {
-                observeDefaultNotes(userId).collect { domain ->
-                    _allNotes.value = noteMapper.fromDomain(domain)
-                    Log.d(TAG, "Loaded ${_allNotes.value.size} notes for user: $userId")
+                if (uid.isNullOrBlank()) {
+                    _allNotes.value = emptyList()
+                    _notesByPriority.value = emptyList()
+                } else {
+                    // collectLatest cancels both previous-user observers before
+                    // subscribing to the newly authenticated user's data.
+                    coroutineScope {
+                        launch {
+                            observeDefaultNotes(uid).collect { domain ->
+                                _allNotes.value = noteMapper.fromDomain(domain)
+                                Log.d(TAG, "Loaded ${_allNotes.value.size} notes for user: $uid")
+                            }
+                        }
+                        launch {
+                            priorities(uid).collect { domain ->
+                                _notesByPriority.value = noteMapper.fromDomain(domain)
+                            }
+                        }
+                    }
                 }
             }
-            launch {
-                priorities(userId).collect { domain ->
-                    _notesByPriority.value = noteMapper.fromDomain(domain)
-                }
-            }
         }
-    }
-
-    /** Called from [SearchScreen] LaunchedEffect on first composition. */
-    fun initializeUser(uid: String?) = screenModelScope.launch {
-        loadNotesForUser(uid)
     }
 
     // ── Field text helpers ────────────────────────────────────────────────────
