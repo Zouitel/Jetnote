@@ -6,7 +6,6 @@ import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import zouitel.neighborhood.audio.utils.AudioStorage
 import zouitel.neighborhood.audio.utils.Constants.INPUT_ID
@@ -60,11 +59,9 @@ class CopyAudioWorker(
                 ?: throw IOException("Unable to open source audio: $uri")
 
             input.use { source ->
-                withContext(Dispatchers.IO) {
-                    FileOutputStream(temporary).use { output ->
-                        source.copyTo(output)
-                        output.fd.sync()
-                    }
+                FileOutputStream(temporary).use { output ->
+                    source.copyTo(output)
+                    output.fd.sync()
                 }
             }
 
