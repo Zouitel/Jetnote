@@ -13,7 +13,6 @@ import zouitel.neighborhood.logic.withFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @Stable
 @Suppress("DeferredResultUnused")
@@ -36,6 +35,10 @@ class AudioScreenModel(
 
     private val currentAudio = MutableStateFlow<Audio?>(null)
 
+    init {
+        withAsync { observePlaybackEvents() }
+    }
+
     fun initAudio(audio: Audio) {
         withAsync {
             player.addAudio(audio)
@@ -56,13 +59,12 @@ class AudioScreenModel(
     }
 
     fun playbackItemState(item: Audio) {
+        currentAudio.value = item
         withAsync {
             when {
                 _uiState.value.isPlaying -> player.pauseItem(item)
                 else -> player.playItem(item)
             }
-            currentAudio.value = item
-            launch { observePlaybackEvents() }
         }
     }
 
@@ -100,6 +102,5 @@ class AudioScreenModel(
 
     override fun onDispose() {
         super.onDispose()
-        player.clearPlaylist()
     }
 }
