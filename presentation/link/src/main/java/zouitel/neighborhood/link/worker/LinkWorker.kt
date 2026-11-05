@@ -28,7 +28,7 @@ class LinkWorker(
         val uid = inputData.getString(UID)?.trim().orEmpty()
         val text = inputData.getString(TEXT).orEmpty()
 
-        if (uid.isBlank() || text.isBlank() || text.toByteArray(Charsets.UTF_8).size > MAX_TEXT_BYTES) {
+        if (uid.isBlank() || uid.length > MAX_UID_LENGTH || text.isBlank() || text.toByteArray(Charsets.UTF_8).size > MAX_TEXT_BYTES) {
             return@withContext Result.failure()
         }
 
@@ -169,6 +169,7 @@ class LinkWorker(
     private companion object {
         const val TEXT = "text"
         const val MAX_TEXT_BYTES = 7_500
+        const val MAX_UID_LENGTH = 256
         const val MAX_URL_LENGTH = 2_048
         const val MAX_URL_COUNT = 20
         const val MAX_METADATA_LENGTH = 2_000
