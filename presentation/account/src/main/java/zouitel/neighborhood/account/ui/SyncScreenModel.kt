@@ -126,16 +126,27 @@ class SyncScreenModel(
                 }
             }.collect { user ->
                 val previousUser = _userState.value
-                _userState.value = user
+                val previousUid = previousUser?.uid
+                val currentUid = user?.uid
 
+                if (previousUid != currentUid) {
+                    Log.d("SyncScreenModel", "Account changed; cancelling work owned by the previous session")
+                    try {
+                        cancelAccountWork()
+                    } catch (error: Exception) {
+                        Log.e("SyncScreenModel", "Could not cancel previous account work; refusing to start sync for the new account", error)
+                        return@collect
+                    }
+                    foldersCreatedThisSession = false
+                    _needsInitialSync.value = false
+                }
+
+                _userState.value = user
                 Log.d("SyncScreenModel", "User state updated: ${user?.email ?: "null"}")
 
-                if (user != null && previousUser == null) {
-                    Log.d("SyncScreenModel", "User just signed in, starting auto-sync")
+                if (currentUid != null && previousUid != currentUid) {
+                    Log.d("SyncScreenModel", "User signed in or switched accounts, starting auto-sync")
                     autoSyncOnSignIn()
-                } else if (user == null && previousUser != null) {
-                    Log.d("SyncScreenModel", "User signed out, resetting folder flag")
-                    foldersCreatedThisSession = false
                 }
             }
         }
@@ -198,6 +209,18 @@ class SyncScreenModel(
             Log.e("SyncScreenModel", "Error initializing Drive service", e)
             null
         }
+    }
+
+    /**
+     * Cancel every account-scoped chain before a different Firebase identity can
+     * start using the same WorkManager unique-work names.
+     */
+    private suspend fun cancelAccountWork() = withContext(Dispatchers.IO) {
+        // Await cancellation before the next identity enqueues work under these
+        // shared unique names; otherwise KEEP could retain the previous account's chain.
+        workManager.cancelUniqueWork(UPLOAD_WORK).result.get()
+        workManager.cancelUniqueWork(DOWNLOAD_WORK).result.get()
+        workManager.cancelUniqueWork(SYNCHRONIZE_WORK).result.get()
     }
 
     fun resetInitialSyncFlag() {

@@ -11,6 +11,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import zouitel.neighborhood.domain.utils.withAsync
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import zouitel.neighborhood.account.model.StorageInfo
@@ -26,10 +28,12 @@ class AccountScreenModel(
     private val _storageInfo: MutableStateFlow<StorageInfo> = MutableStateFlow(StorageInfo())
     val storageInfo: StateFlow<StorageInfo> = _storageInfo
 
+    private val authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+        _currentUser.value = firebaseAuth.currentUser
+    }
+
     init {
-        auth.addAuthStateListener { firebaseAuth ->
-            _currentUser.value = firebaseAuth.currentUser
-        }
+        auth.addAuthStateListener(authStateListener)
         computeStorage()
     }
 
@@ -84,7 +88,17 @@ class AccountScreenModel(
 
     fun signOut() {
         withAsync {
+            // Firebase and Google Drive credentials must be cleared together.
             auth.signOut()
+            GoogleSignIn.getClient(
+                context,
+                GoogleSignInOptions.DEFAULT_SIGN_IN
+            ).signOut()
         }
+    }
+
+    override fun onDispose() {
+        auth.removeAuthStateListener(authStateListener)
+        super.onDispose()
     }
 }
