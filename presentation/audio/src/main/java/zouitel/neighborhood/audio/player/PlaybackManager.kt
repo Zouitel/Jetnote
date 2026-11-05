@@ -34,7 +34,6 @@ class PlaybackManager(private val context: Context) : Player.Listener {
 
     private var lastEmittedPosition = 0L
     private val playlist = mutableListOf<MediaItem>()
-    private var currentMediaItem: MediaItem? = null
     private var controllerFuture: ListenableFuture<MediaController>? = null
 
     private val controller: MediaController?
@@ -72,7 +71,6 @@ class PlaybackManager(private val context: Context) : Player.Listener {
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-        currentMediaItem = mediaItem
         lastEmittedPosition = 0L
         events.tryEmit(Event.CurrentPath(mediaItem?.mediaId.orEmpty()))
         events.tryEmit(Event.PositionChanged(0L))
@@ -110,14 +108,10 @@ class PlaybackManager(private val context: Context) : Player.Listener {
             if (playerIndex != null) player.removeMediaItem(playerIndex)
         }
 
-        if (currentMediaItem?.mediaId == mediaId) {
-            currentMediaItem = controller?.currentMediaItem
-        }
     }
 
     fun clearPlaylist() {
         playlist.clear()
-        currentMediaItem = null
         lastEmittedPosition = 0L
         controller?.stop()
         controller?.clearMediaItems()
@@ -138,9 +132,9 @@ class PlaybackManager(private val context: Context) : Player.Listener {
 
         future.addListener(
             {
+                handler.post {
                 val connected = runCatching { future.get() }.getOrNull()
                 if (controllerFuture !== future) {
-                    connected?.release()
                     return@addListener
                 }
 
@@ -156,6 +150,7 @@ class PlaybackManager(private val context: Context) : Player.Listener {
                 }
                 events.tryEmit(Event.CurrentPath(connected.currentMediaItem?.mediaId.orEmpty()))
                 startPositionUpdates()
+                }
             },
             MoreExecutors.directExecutor()
         )
