@@ -110,7 +110,7 @@ class LinkWorker(
         if (text.length > MAX_TEXT_LENGTH) return emptyList()
 
         val urlPattern = Regex(
-            pattern = """(https?://[^\\s]+)|([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\\.)+[a-zA-Z]{2,}(/[^\\s]*)?""",
+            pattern = """(https?://[^\s]+)|([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.)+[a-zA-Z]{2,}(/[^\s]*)?""",
             options = setOf(RegexOption.IGNORE_CASE)
         )
 
