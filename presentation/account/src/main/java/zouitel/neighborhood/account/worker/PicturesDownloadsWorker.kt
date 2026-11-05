@@ -54,7 +54,7 @@ class PicturesDownloadsWorker(
                 Drive.Builder(
                     NetHttpTransport(),
                     GsonFactory.getDefaultInstance(),
-                    credential
+                    AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
                 ).setApplicationName("Drive File Manager").build()
             }
         } catch (_: Exception) {
