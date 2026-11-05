@@ -17,15 +17,10 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
-import java.io.IOException
+import kotlinx.coroutines.CancellationException
 
 private const val NOTE_MARGIN = 48f
-private const val NOTE_CONTENT_GAP = 18f
 
-/**
- * Opens the Android print preview for a note. Content is flowed across as many
- * pages as required, and the selected page ranges are respected.
- */
 fun printNote(
     context: Context,
     title: String,
@@ -33,9 +28,9 @@ fun printNote(
     tasks: List<Pair<String?, Boolean>> = emptyList()
 ) {
     val printManager = context.getSystemService(Context.PRINT_SERVICE) as? PrintManager
-    if (printManager == null) return
-
+        ?: return
     val jobTitle = title.ifBlank { "Untitled" }
+
     val printAdapter = object : PrintDocumentAdapter() {
         private var pdfDocument: PrintedPdfDocument? = null
         private var contentLayout: StaticLayout? = null
@@ -57,15 +52,21 @@ fun printNote(
             runCatching {
                 pdfDocument?.close()
                 val document = PrintedPdfDocument(context, newAttributes)
-                val measurePage = document.startPage(0)
-                val canvas = measurePage.canvas
-                val availableWidth = (canvas.width - NOTE_MARGIN * 2).toInt().coerceAtLeast(1)
-                contentHeight = (canvas.height - NOTE_MARGIN * 2).toInt().coerceAtLeast(1)
-                contentLayout = createContentLayout(availableWidth)
-                document.finishPage(measurePage)
-                pageCount = ((contentLayout?.height ?: 0) + contentHeight - 1) / contentHeight
-                pdfDocument = document
-                pageCount.coerceAtLeast(1)
+                try {
+                    val measurePage = document.startPage(0)
+                    val canvas = measurePage.canvas
+                    val availableWidth = (canvas.width - NOTE_MARGIN * 2).toInt().coerceAtLeast(1)
+                    contentHeight = (canvas.height - NOTE_MARGIN * 2).toInt().coerceAtLeast(1)
+                    contentLayout = createContentLayout(availableWidth)
+                    document.finishPage(measurePage)
+                    pageCount = (((contentLayout?.height ?: 0) + contentHeight - 1) / contentHeight)
+                        .coerceAtLeast(1)
+                    pdfDocument = document
+                    pageCount
+                } catch (error: Exception) {
+                    document.close()
+                    throw error
+                }
             }.onSuccess { count ->
                 val info = PrintDocumentInfo.Builder(jobTitle)
                     .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
@@ -100,26 +101,25 @@ fun printNote(
 
             try {
                 selectedPages.forEach { pageIndex ->
-                    if (cancellationSignal.isCanceled) {
-                        callback.onWriteCancelled()
-                        return
-                    }
+                    if (cancellationSignal.isCanceled) throw CancellationException()
                     val page = document.startPage(pageIndex)
-                    page.canvas.drawColor(Color.WHITE)
-                    page.canvas.save()
-                    page.canvas.translate(NOTE_MARGIN, NOTE_MARGIN - pageIndex * contentHeight)
-                    layout.draw(page.canvas)
-                    page.canvas.restore()
-                    document.finishPage(page)
+                    try {
+                        page.canvas.drawColor(Color.WHITE)
+                        page.canvas.save()
+                        page.canvas.translate(NOTE_MARGIN, NOTE_MARGIN - pageIndex * contentHeight)
+                        layout.draw(page.canvas)
+                        page.canvas.restore()
+                    } finally {
+                        document.finishPage(page)
+                    }
                 }
 
-                if (cancellationSignal.isCanceled) {
-                    callback.onWriteCancelled()
-                    return
-                }
-
+                if (cancellationSignal.isCanceled) throw CancellationException()
                 ParcelFileDescriptor.AutoCloseOutputStream(destination).use(document::writeTo)
                 callback.onWriteFinished(toPageRanges(selectedPages))
+            } catch (_: CancellationException) {
+                runCatching { destination.close() }
+                callback.onWriteCancelled()
             } catch (error: Exception) {
                 runCatching { destination.close() }
                 callback.onWriteFailed(error.message ?: "Unable to write the note.")
@@ -142,9 +142,7 @@ fun printNote(
             content.append(title.ifBlank { "Untitled" }).append("\n\n")
             content.setSpan(RelativeSizeSpan(1.35f), titleStart, content.length, 0)
 
-            if (description.isNotBlank()) {
-                content.append(description.trim()).append("\n\n")
-            }
+            if (description.isNotBlank()) content.append(description.trim()).append("\n\n")
 
             tasks.forEach { (task, completed) ->
                 content.append(if (completed) "☑ " else "□ ")
@@ -166,10 +164,7 @@ fun printNote(
                 .build()
         }
 
-        private fun expandPageRanges(
-            ranges: Array<out PageRange>,
-            totalPages: Int
-        ): List<Int> {
+        private fun expandPageRanges(ranges: Array<out PageRange>, totalPages: Int): List<Int> {
             val result = sortedSetOf<Int>()
             ranges.forEach { range ->
                 val start = if (range == PageRange.ALL_PAGES) 0 else range.start
