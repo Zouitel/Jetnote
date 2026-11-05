@@ -51,34 +51,42 @@ class DataUploadWorker(
     private val ioDispatcher: CoroutineDispatcher
 ) : CoroutineWorker(context, params) {
 
-    override suspend fun doWork(): Result = try {
-        // Read each source inside this work execution. No background collectors can
-        // race the upload and leave an empty/default snapshot behind.
-        val settingsSnapshot = settingsMapper.fromDomain(observeSettings().first())
-        val notesSnapshot = getNotes().map { note ->
-            dataMapper.fromDomain(note.data)
+    override suspend fun doWork(): Result {
+        if (!AccountWorkIdentity.belongsToCurrentUser(inputData)) {
+            Log.w("DataUploadWorker", "Skipping work because its Firebase account is missing or no longer active")
+            return Result.failure()
         }
-        val labelsSnapshot = labelMapper.fromDomain(getLabels())
-        val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags())
 
-        val driveService = initializeDriveService()
-            ?: throw IOException("Google Drive account is not available")
+        return try {
+            // Read each source inside this work execution. No background collectors can
+            // race the upload and leave an empty/default snapshot behind.
+            val settingsSnapshot = settingsMapper.fromDomain(observeSettings().first())
+            val notesSnapshot = getNotes().map { note ->
+                dataMapper.fromDomain(note.data)
+            }
+            val labelsSnapshot = labelMapper.fromDomain(getLabels())
+            val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags())
 
-        uploadsData(
-            context = applicationContext,
-            driveService = driveService,
-            settings = settingsSnapshot,
-            notes = notesSnapshot,
-            labels = labelsSnapshot,
-            noteAndTags = noteAndTagsSnapshot
-        )
+            val driveService = initializeDriveService()
+                ?: throw IOException("Google Drive account is not available")
 
-        Result.success()
-    } catch (cancelled: CancellationException) {
+            uploadsData(
+                context = applicationContext,
+                driveService = driveService,
+                settings = settingsSnapshot,
+                notes = notesSnapshot,
+                labels = labelsSnapshot,
+                noteAndTags = noteAndTagsSnapshot
+            )
+
+            Result.success()
+
+        } catch (cancelled: CancellationException) {
         throw cancelled
-    } catch (error: Exception) {
+        } catch (error: Exception) {
         Log.e("DataUploadWorker", "Data upload failed: ${error.message}", error)
         if (error is IOException) Result.retry() else Result.failure()
+        }
     }
 
     private suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {

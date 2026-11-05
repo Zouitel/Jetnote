@@ -29,6 +29,10 @@ class UploadsDataWorker(
     private val ioDispatcher: CoroutineDispatcher
 ): CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
+        if (!AccountWorkIdentity.belongsToCurrentUser(inputData)) {
+            Log.w("UploadsDataWorker", "Skipping work because its Firebase account is missing or no longer active")
+            return Result.failure()
+        }
         return try {
             uploadsData(applicationContext, initializeDriveService())
             Result.success()

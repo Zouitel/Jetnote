@@ -30,6 +30,10 @@ class AudiosUploadWorker(
 ): CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
+        if (!AccountWorkIdentity.belongsToCurrentUser(inputData)) {
+            Log.w("AudiosUploadWorker", "Skipping work because its Firebase account is missing or no longer active")
+            return Result.failure()
+        }
         return try {
             uploadsAudios(applicationContext, initializeDriveService())
             Result.success()

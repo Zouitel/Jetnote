@@ -48,6 +48,10 @@ class SyncDataWorker(
     }
 
     override suspend fun doWork(): Result {
+        if (!AccountWorkIdentity.belongsToCurrentUser(inputData)) {
+            Log.w("SyncDataWorker", "Skipping work because its Firebase account is missing or no longer active")
+            return Result.failure()
+        }
         return try {
             syncDatabaseFromDrive()
             Result.success()
