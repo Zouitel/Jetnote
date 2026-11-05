@@ -53,7 +53,6 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import coil.compose.AsyncImage
-import com.google.firebase.auth.FirebaseAuth
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
@@ -62,6 +61,7 @@ import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.markdown.core.BlockContent
 import zouitel.neighborhood.search.note_card.NoteCard
 import zouitel.neighborhood.search.utils.SearchTypes
@@ -143,7 +143,7 @@ fun BrowseContent(
                         SearchTypes.Audios -> audioNotes
                         SearchTypes.Reminders -> reminderNotes
                         SearchTypes.Medias -> mediaNotes
-                        is SearchTypes.Properties -> notesByPriority
+                        is SearchTypes.Properties -> allNotes
                         else -> emptyList()
                     }
                 )
@@ -213,7 +213,7 @@ fun BrowseContent(
         item { Spacer(Modifier.height(20.dp)) }
 
         // ── Priorities ─────────────────────────────────────────────────────────
-        if (notesByPriority.isNotEmpty()) {
+        if (prioritiesList.any { it.isAvailable(allNotes) }) {
             item {
                 val priorityLabels = listOf(
                     stringResource(R.string.non_priority),
@@ -331,9 +331,6 @@ fun Search(
 ) {
     val bottomNav = LocalBottomSheetNavigator.current
 
-    LaunchedEffect(Unit) {
-        searchModel.initializeUser(FirebaseAuth.getInstance().currentUser?.uid)
-    }
     LaunchedEffect(currentTag) {
         currentTag?.let { tag ->
             searchModel.updateSearchType(SearchTypes.Tag(tag.label))
@@ -408,7 +405,7 @@ fun Search(
                 }
 
                 is SearchTypes.Properties -> when (type.value) {
-                    0 -> notesByPriority
+                    0 -> allNotes.filter { it.data.priority == 0 }
                     else -> allNotes.filter { it.data.priority == type.value }
                 }
             }
@@ -442,7 +439,9 @@ fun Search(
                     dataModel = dataModel,
                     noteAndTagModel = noteAndTagModel,
                     tagModel = tagModel,
-                    onDelete = {}
+                    onDelete = { notes ->
+                        notes.forEach { dataModel.sendAction(Action.DeleteByUid(it.uid)) }
+                    }
                 )
             }
         }

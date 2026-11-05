@@ -27,6 +27,7 @@ import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.workspace.model.Data
+import zouitel.neighborhood.markdown.core.BlockContent
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import kotlin.uuid.Uuid
 
@@ -36,7 +37,7 @@ fun SelectionTopBar(
     dataModel: DataScreenModel,
     noteAndTagModel: NoteAndTagScreenModel,
     tagModel: TagScreenModel,
-    onDelete: (Data) -> Unit
+    onDelete: (List<Data>) -> Unit
 ) {
     val context = LocalContext.current
     val uiState by remember(searchModel, searchModel::uiState).collectAsState()
@@ -82,7 +83,7 @@ fun SelectionTopBar(
                     sharNote(
                         context,
                         uiState.selectedNotes.single().title,
-                        "uiState.selectedNotes.single().description"
+                        uiState.selectedNotes.single().plainText()
                     ) {
                         searchModel.clearSelectionNotes()
                         searchModel.updateSelection(false)
@@ -134,7 +135,7 @@ fun SelectionTopBar(
                     printNote(
                         context,
                         uiState.selectedNotes.single().title,
-                        "uiState.selectedNotes.single().description"
+                        uiState.selectedNotes.single().plainText()
                     )
                 }) {
                     Icon(
@@ -143,9 +144,9 @@ fun SelectionTopBar(
                     )
                 }
                 IconButton(
-                    enabled = uiState.selectedNotes.count() == 1,
+                    enabled = uiState.selectedNotes.isNotEmpty(),
                     onClick = {
-                        onDelete(uiState.selectedNotes.single())
+                        onDelete(uiState.selectedNotes.toList())
 
                         searchModel.clearSelectionNotes()
                         searchModel.updateSelection(false)
@@ -164,3 +165,6 @@ fun SelectionTopBar(
         }
     )
 }
+private fun Data.plainText(): String = blocks.mapNotNull { block ->
+    (block.content as? BlockContent.Text)?.text
+}.joinToString("\n")
