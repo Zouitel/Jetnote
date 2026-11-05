@@ -1,8 +1,6 @@
 package zouitel.neighborhood.account.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -329,19 +327,11 @@ class AccountScreen: Screen {
 
     @Composable
     private fun StorageCard(info: StorageInfo) {
-        val totalFraction = if (info.quotaBytes > 0) {
-            (info.usedBytes.toFloat() / info.quotaBytes.toFloat()).coerceIn(0f, 1f)
-        } else 0f
-        val notesFraction = if (info.quotaBytes > 0) (info.notesBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
-        val mediaFraction = if (info.quotaBytes > 0) (info.mediaBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
-        val cacheFraction = if (info.quotaBytes > 0) (info.cacheBytes.toFloat() / info.quotaBytes).coerceIn(0f, 1f) else 0f
-
-        val animatedTotal by animateFloatAsState(
-            targetValue = totalFraction,
-            animationSpec = tween(durationMillis = 1000)
-        )
-
-        val safeTotal = totalFraction.coerceAtLeast(0.001f)
+        // The bar shows the composition of local app storage, not a quota meter.
+        val totalBytes = info.usedBytes.coerceAtLeast(1L).toFloat()
+        val notesFraction = info.notesBytes.toFloat() / totalBytes
+        val mediaFraction = info.mediaBytes.toFloat() / totalBytes
+        val cacheFraction = info.cacheBytes.toFloat() / totalBytes
         val notesColor = CommonColors.prime
         val mediaColor = Color(0xFF4FC3F7)
         val cacheColor = Color(0xFFFFB74D)
@@ -361,7 +351,7 @@ class AccountScreen: Screen {
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "storage",
+                    text = "Local storage",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -376,9 +366,9 @@ class AccountScreen: Screen {
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "/ ${formatBytes(info.quotaBytes)} used",
+                    text = "used on this device",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f),
                     modifier = Modifier.padding(bottom = 3.dp)
@@ -396,31 +386,28 @@ class AccountScreen: Screen {
                     .background(MaterialTheme.colorScheme.onSurface.copy(alpha = .12f))
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    val nW = (notesFraction * animatedTotal / safeTotal).coerceAtLeast(0f)
-                    val mW = (mediaFraction  * animatedTotal / safeTotal).coerceAtLeast(0f)
-                    val cW = (cacheFraction  * animatedTotal / safeTotal).coerceAtLeast(0f)
-                    val fW = (1f - nW - mW - cW).coerceAtLeast(0f)
-
-                    if (nW > 0f) Box(modifier = Modifier.weight(nW).height(10.dp).background(notesColor))
-                    if (mW > 0f) Box(modifier = Modifier.weight(mW).height(10.dp).background(mediaColor))
-                    if (cW > 0f) Box(modifier = Modifier.weight(cW).height(10.dp).background(cacheColor))
-                    if (fW > 0f) Box(modifier = Modifier.weight(fW).height(10.dp))
+                    if (info.usedBytes > 0L) {
+                        if (notesFraction > 0f) Box(modifier = Modifier.weight(notesFraction).height(10.dp).background(notesColor))
+                        if (mediaFraction > 0f) Box(modifier = Modifier.weight(mediaFraction).height(10.dp).background(mediaColor))
+                        if (cacheFraction > 0f) Box(modifier = Modifier.weight(cacheFraction).height(10.dp).background(cacheColor))
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Legend
-            StorageLegendRow(notesColor, "Notes & data", info.notesBytes)
+            StorageLegendRow(notesColor, "App data", info.notesBytes)
             Spacer(modifier = Modifier.height(8.dp))
             StorageLegendRow(mediaColor, "Media files", info.mediaBytes)
             Spacer(modifier = Modifier.height(8.dp))
             StorageLegendRow(cacheColor, "Cache", info.cacheBytes)
-            Spacer(modifier = Modifier.height(8.dp))
-            StorageLegendRow(
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .25f),
-                label = "Free",
-                bytes = info.freeBytes
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "Local device usage only. This does not show your Google Drive storage quota.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .6f)
             )
         }
     }
