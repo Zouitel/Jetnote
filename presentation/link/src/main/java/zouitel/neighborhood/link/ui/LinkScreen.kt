@@ -59,10 +59,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState): Screen {
+data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState) : Screen {
     @Composable
     override fun Content() {
-
         val scope = rememberCoroutineScope()
         val linkModel = getScreenModel<LinkScreenModel>()
         val links = remember(linkModel, linkModel::observeByUid).collectAsState()
@@ -70,7 +69,7 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
         val deletedLink = remember { mutableStateListOf<Pair<Link, Int>>() }
         val jobCounter = remember { mutableIntStateOf(0) }
 
-        LaunchedEffect(true) {
+        LaunchedEffect(uid) {
             linkModel.initializeUid(uid)
         }
 
@@ -122,25 +121,24 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
 
             Link(link) {
                 val currentJobId = jobCounter.intValue++
-                deletedLink.add(Pair(link, currentJobId))
-                val linkPair = deletedLink.firstOrNull { it.second == currentJobId }
-
-                linkModel.sendAction(Action.Delete(link))
+                val linkPair = link to currentJobId
+                deletedLink.add(linkPair)
 
                 scope.launch {
-                    snackbarHostState.currentSnackbarData?.dismiss()
-                    val result = snackbarHostState.showSnackbar(
-                        message = "${linkPair?.first?.title} deleted",
-                        actionLabel = "Undo",
-                        duration = SnackbarDuration.Long
-                    )
-
-                    if (result == SnackbarResult.ActionPerformed) {
-                        linkPair?.first?.let { link ->
+                    try {
+                        linkModel.sendAction(Action.Delete(link))
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        val result = snackbarHostState.showSnackbar(
+                            message = "${link.title} deleted",
+                            actionLabel = "Undo",
+                            duration = SnackbarDuration.Long
+                        )
+                        if (result == SnackbarResult.ActionPerformed) {
                             linkModel.sendAction(Action.Insert(link))
                         }
+                    } finally {
+                        deletedLink.remove(linkPair)
                     }
-                    linkPair.let { deletedLink.remove(it) }
                 }
             }
         }
@@ -149,10 +147,10 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
     @Composable
     private fun Link(link: Link, onDelete: () -> Unit) {
         val urlHandler = LocalUriHandler.current
-
         val offsetX = remember { Animatable(0f) }
         val scope = rememberCoroutineScope()
         val maxSwipeDistance = -300f
+
         Box(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier.fillMaxWidth().align(Alignment.Center),
@@ -163,7 +161,7 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
                         modifier = Modifier.padding(horizontal = 3.dp),
                         onClick = {
                             scope.launch {
-                                urlHandler.openUri(link.url)
+                                runCatching { urlHandler.openUri(link.url) }
                                 delay(100.milliseconds)
                                 offsetX.animateTo(0f, tween(300))
                             }
@@ -208,9 +206,7 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .graphicsLayer {
-                        translationX = offsetX.value
-                    }
+                    .graphicsLayer { translationX = offsetX.value }
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
@@ -245,7 +241,6 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
                         contentDescription = null,
                         contentScale = ContentScale.Crop
                     )
-
                     Column {
                         Text(
                             text = link.title,
@@ -254,7 +249,6 @@ data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState)
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.padding(start = 5.dp, top = 5.dp)
                         )
-
                         Text(
                             text = link.description,
                             fontSize = 11.sp,
