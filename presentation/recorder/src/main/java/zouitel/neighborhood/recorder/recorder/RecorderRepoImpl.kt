@@ -7,40 +7,70 @@ import java.io.File
 import java.io.FileOutputStream
 
 @Suppress("DEPRECATION")
-class RecorderRepoImpl(private val context: Context): RecorderRepo {
+class RecorderRepoImpl(private val context: Context) : RecorderRepo {
     private var recorder: MediaRecorder? = null
+    private var outputStream: FileOutputStream? = null
 
-    private fun initRecorder() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        MediaRecorder(context)
-    } else {
-        MediaRecorder()
-    }
-
+    @Synchronized
     override fun start(outPutFile: File) {
-        initRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            setOutputFile(FileOutputStream(outPutFile).fd)
-            prepare()
+        check(recorder == null) { "A recording is already active" }
+        outPutFile.parentFile?.let { parent ->
+            check(parent.exists() || parent.mkdirs()) { "Unable to create recording directory" }
+        }
 
-            recorder = this
-            recorder?.start()
+        val stream = FileOutputStream(outPutFile)
+        val mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MediaRecorder(context)
+        } else {
+            MediaRecorder()
+        }
+
+        try {
+            mediaRecorder.apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                setOutputFile(stream.fd)
+                prepare()
+                start()
+            }
+            outputStream = stream
+            recorder = mediaRecorder
+        } catch (error: Throwable) {
+            runCatching { mediaRecorder.release() }
+            runCatching { stream.close() }
+            throw error
         }
     }
 
+    @Synchronized
     override fun stop() {
-        recorder?.stop()
-        recorder?.reset()
+        val activeRecorder = recorder ?: run {
+            closeOutput()
+            return
+        }
         recorder = null
+        try {
+            activeRecorder.stop()
+        } finally {
+            runCatching { activeRecorder.reset() }
+            activeRecorder.release()
+            closeOutput()
+        }
     }
 
+    @Synchronized
     override fun resume() {
-        recorder?.resume()
-
+        checkNotNull(recorder) { "No active recording to resume" }.resume()
     }
 
+    @Synchronized
     override fun pause() {
-        recorder?.pause()
+        checkNotNull(recorder) { "No active recording to pause" }.pause()
+    }
+
+    private fun closeOutput() {
+        runCatching { outputStream?.close() }
+        outputStream = null
     }
 }
