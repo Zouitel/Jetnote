@@ -98,8 +98,13 @@ class JottingActivity: ComponentActivity(), KoinComponent {
                         shareRevision = shareRevision.intValue,
                         sharedText = pendingSharedText.value,
                         incomingMedias = pendingSharedMedias.value,
-                        incomingAudios = pendingSharedAudios.value
-                   ) {
+                        incomingAudios = pendingSharedAudios.value,
+                        onShareConsumed = {
+                            pendingSharedText.value = null
+                            pendingSharedMedias.value = emptyList()
+                            pendingSharedAudios.value = emptyList()
+                        }
+                    ) {
                         finish()
                     }
                 }
