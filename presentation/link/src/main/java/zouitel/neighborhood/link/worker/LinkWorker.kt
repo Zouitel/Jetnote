@@ -10,7 +10,6 @@ import zouitel.neighborhood.link.model.Link
 import zouitel.neighborhood.link.utils.Constants.UID
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -169,7 +168,7 @@ class LinkWorker(
         } catch (failure: Exception) {
             throw LinkFetchException("Malformed URL", retryable = false, cause = failure)
         }
-        if (uri.scheme !in listOf("http", "https") || uri.host.isNullOrBlank() ||
+        if (uri.scheme?.lowercase() !in listOf("http", "https") || uri.host.isNullOrBlank() ||
             uri.userInfo != null || uri.port !in -1..65535
         ) {
             throw LinkFetchException("Unsupported URL", retryable = false)
