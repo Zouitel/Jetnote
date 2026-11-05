@@ -1,12 +1,9 @@
 package zouitel.neighborhood.ai.utils
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.core.net.toUri
 import zouitel.neighborhood.ai.ui.UIMessagePart
 import java.io.File
-import java.io.FileOutputStream
 
 private val supportedTypes = setOf(
     "image/jpeg",
@@ -14,8 +11,6 @@ private val supportedTypes = setOf(
     "image/gif",
     "image/webp",
 )
-
-private const val TAG = "FileEncoder"
 
 fun UIMessagePart.Image.encodeBase64(withPrefix: Boolean = true): Result<String> = runCatching {
     when {
@@ -79,26 +74,11 @@ fun UIMessagePart.Audio.encodeBase64(withPrefix: Boolean = true): Result<String>
     }
 }
 
-private fun convertToJpeg(file: File) = runCatching {
-    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-    FileOutputStream(file).use { outputStream ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
-    }
-}
-
-private fun File.isSupportedType(): Boolean {
-    val mimeType = guessMimeType().getOrNull() ?: return false
-    return mimeType in supportedTypes
-}
-
 private fun File.guessMimeType(): Result<String> = runCatching {
     inputStream().use { input ->
         val bytes = ByteArray(16)
         val read = input.read(bytes)
         if (read < 12) error("File too short to determine MIME type")
-
-        // 打印前16个字节（可选）
-        println("guessMimeType bytes = ${bytes.joinToString(",")}")
 
         // 判断 HEIC 格式：包含 "ftypheic"
         if (bytes.copyOfRange(4, 12).toString(Charsets.US_ASCII) == "ftypheic") {
