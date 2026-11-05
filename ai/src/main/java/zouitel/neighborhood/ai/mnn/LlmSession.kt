@@ -42,51 +42,9 @@ class LlmSession(
         check(nativeLibraryAvailable) {
             "On-device MNN inference is unavailable: the mnnllmapp native library is not packaged."
         }
-        error("On-device MNN session initialization is not implemented in this build.")
-//        Log.d(TAG, "MNN_DEBUG load begin")
-//        modelLoading = true
-//        var historyStringList: List<String>? = null
-//        val currentHistory = this.savedHistory
-//        if (!currentHistory.isNullOrEmpty()) {
-//            historyStringList =
-//                currentHistory.stream()
-//                    .map { obj: ChatDataItem -> obj.text }
-//                    .filter { obj: String? -> obj != null }
-//                    .map { obj: String? -> obj!! }
-//                    .collect(Collectors.toList())
-//        }
-//        val config = ModelConfig.loadMergedConfig(configPath, getExtraConfigFile(modelId))!!
-//        var rootCacheDir: String? = ""
-//        if (config.useMmap == true) {
-//            rootCacheDir = MmapUtils.getMmapDir(modelId)
-//            File(rootCacheDir).mkdirs()
-//        }
-//        val backend = config.backendType
-//        val configMap = HashMap<String, Any>().apply {
-//            put("is_r1", ModelUtils.isR1Model(modelId))
-//            put("mmap_dir", rootCacheDir ?: "")
-//            put("keep_history", keepHistory)
-//        }
-//        val extraConfig = ModelConfig.loadMergedConfig(configPath, getExtraConfigFile(modelId))?.apply {
-//            this.assistantPromptTemplate = extraAssistantPrompt
-//            this.backendType = backend
-//        }
-//        Log.d(TAG, "MNN_DEBUG load initNative")
-//        nativePtr = initNative(
-//            configPath,
-//            historyStringList,
-//            if (extraConfig != null) {
-//                Gson().toJson(extraConfig)
-//            } else {
-//                "{}"
-//            },
-//            Gson().toJson(configMap)
-//        )
-//        Log.d(TAG, "MNN_DEBUG load initNative end")
-//        modelLoading = false
-//        if (releaseRequested) {
-//            release()
-//        }
+        throw UnsupportedOperationException(
+            "On-device MNN session initialization is not implemented in this build."
+        )
     }
 
     private fun generateNewSessionId(): String {
@@ -181,7 +139,7 @@ class LlmSession(
     }
 
     override val debugInfo
-        get() = getDebugInfoNative(nativePtr) + "\n"
+        get() = if (nativePtr == 0L) "MNN session is not loaded." else getDebugInfoNative(nativePtr) + "\n"
 
     fun updateMaxNewTokens(maxNewTokens: Int) {
         check(nativePtr != 0L) { "MNN session is not loaded." }
@@ -233,8 +191,7 @@ class LlmSession(
             // 转换类型：kotlin.Pair -> android.util.Pair
             val androidHistory = history.map { Pair(it.first, it.second) }
             // 调用JNI方法，移除不必要的类型转换
-            val result = submitFullHistoryNative(nativePtr, androidHistory, progressListener)
-            return result
+            return submitFullHistoryNative(nativePtr, androidHistory, progressListener)
             } finally {
                 generating = false
                 if (releaseRequested) release()
