@@ -4,6 +4,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.io.IOException
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -48,17 +49,29 @@ class SingleFileCacheStore<K : Any, V : Any>(
     override fun keys(): Set<K> = lock.withLock { safeReadMap().keys }
 
     private fun safeReadMap(): Map<K, CacheEntry<V>> {
+        if (!file.exists()) return emptyMap()
+        val text = try {
+            file.readText()
+        } catch (failure: Exception) {
+            throw IOException("Unable to read cache file: $file", failure)
+        }
+        if (text.isBlank()) return emptyMap()
+
         try {
-            if (!file.exists()) return emptyMap()
-            val text = file.readText()
-            if (text.isBlank()) return emptyMap()
             return json.decodeFromString(mapEntrySerializer, text)
-        } catch (_: Exception) {
-            return try {
-                val legacyMap = json.decodeFromString(MapSerializer(keySerializer, valueSerializer), file.readText())
-                legacyMap.mapValues { CacheEntry(value = it.value, expiresAt = null) }
-            } catch (_: Exception) {
-                emptyMap()
+        } catch (currentFormatFailure: Exception) {
+            try {
+                val legacyMap = json.decodeFromString(
+                    MapSerializer(keySerializer, valueSerializer),
+                    text
+                )
+                return legacyMap.mapValues { CacheEntry(value = it.value, expiresAt = null) }
+            } catch (legacyFormatFailure: Exception) {
+                legacyFormatFailure.addSuppressed(currentFormatFailure)
+                throw IOException(
+                    "Cache file is corrupt or uses an unsupported format; refusing to overwrite it: $file",
+                    legacyFormatFailure
+                )
             }
         }
     }
@@ -69,4 +82,3 @@ class SingleFileCacheStore<K : Any, V : Any>(
         atomicWrite(file, text)
     }
 }
-
