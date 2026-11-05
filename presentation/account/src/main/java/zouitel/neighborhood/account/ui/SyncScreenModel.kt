@@ -200,11 +200,12 @@ class SyncScreenModel(
             }
 
             credential.selectedAccount = lastAccount.account
+            val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid, context)
 
             Drive.Builder(
                 NetHttpTransport(),
                 GsonFactory.getDefaultInstance(),
-                credential
+                AccountBoundDriveRequestInitializer(credential, context, accountWorkData)
             ).setApplicationName("Drive File Manager").build()
         } catch (e: Exception) {
             Log.e("SyncScreenModel", "Error initializing Drive service", e)
