@@ -12,40 +12,55 @@ import kotlinx.coroutines.flow.receiveAsFlow
 class LockModeManager(private val activity: AppCompatActivity) {
 
     private val biometricManager = BiometricManager.from(activity)
-
-    private val resultChannel = Channel<AuthResult>()
+    private val resultChannel = Channel<AuthResult>(Channel.BUFFERED)
     val resultFlow = resultChannel.receiveAsFlow()
 
-    private val authenticators = if (Build.VERSION.SDK_INT >= 30) {
+    private val authenticators = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         BIOMETRIC_WEAK or DEVICE_CREDENTIAL
-    } else BIOMETRIC_WEAK
+    } else {
+        BIOMETRIC_WEAK
+    }
 
     fun showAuthentication() {
+        when (biometricManager.canAuthenticate(authenticators)) {
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                resultChannel.trySend(AuthResult.NoHardware)
+                return
+            }
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+                resultChannel.trySend(AuthResult.HardwareUnavailable)
+                return
+            }
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                resultChannel.trySend(AuthResult.NoneEnrolled)
+                return
+            }
+            BiometricManager.BIOMETRIC_SUCCESS -> Unit
+            else -> {
+                resultChannel.trySend(AuthResult.Error("Biometric authentication is unavailable"))
+                return
+            }
+        }
+
         val info = BiometricPrompt.PromptInfo.Builder()
             .setTitle(Constants.TITLE)
             .setDescription(Constants.DESCRIPTION)
             .setConfirmationRequired(false)
             .setAllowedAuthenticators(authenticators)
-        if (Build.VERSION.SDK_INT < 30) info.setNegativeButtonText("Cancel")
 
-        when (biometricManager.canAuthenticate(authenticators)) {
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                resultChannel.trySend(AuthResult.NoHardware)
-            }
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                resultChannel.trySend(AuthResult.HardwareUnavailable)
-            }
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                resultChannel.trySend(AuthResult.NoneEnrolled)
-            }
-            else -> Unit
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            info.setNegativeButtonText("Cancel")
         }
+
         val prompt = BiometricPrompt(
             activity,
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
-                    if (errorCode == BiometricPrompt.ERROR_USER_CANCELED) {
+                    resultChannel.trySend(AuthResult.Error(errString.toString()))
+                    if (errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+                        errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON
+                    ) {
                         activity.finish()
                     }
                 }
@@ -64,16 +79,15 @@ class LockModeManager(private val activity: AppCompatActivity) {
         prompt.authenticate(info.build())
     }
 
-    fun isAvailable(): Boolean {
-        return biometricManager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
-    }
+    fun isAvailable(): Boolean =
+        biometricManager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
 
     sealed interface AuthResult {
-        data object NoneEnrolled: AuthResult
-        data object HardwareUnavailable: AuthResult
-        data object NoHardware: AuthResult
-        data class Error(val message: String): AuthResult
-        data object Success: AuthResult
-        data object Failed: AuthResult
+        data object NoneEnrolled : AuthResult
+        data object HardwareUnavailable : AuthResult
+        data object NoHardware : AuthResult
+        data class Error(val message: String) : AuthResult
+        data object Success : AuthResult
+        data object Failed : AuthResult
     }
 }
