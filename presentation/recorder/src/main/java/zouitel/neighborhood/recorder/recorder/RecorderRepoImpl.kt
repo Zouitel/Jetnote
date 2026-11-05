@@ -21,12 +21,13 @@ class RecorderRepoImpl(private val context: Context) : RecorderRepo {
         val stream = FileOutputStream(outPutFile)
         var mediaRecorder: MediaRecorder? = null
         try {
-            mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val createdRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 MediaRecorder(context)
             } else {
                 MediaRecorder()
             }
-            mediaRecorder.apply {
+            mediaRecorder = createdRecorder
+            createdRecorder.apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
