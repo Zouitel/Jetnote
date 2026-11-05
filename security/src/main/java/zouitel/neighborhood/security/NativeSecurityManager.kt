@@ -1,10 +1,10 @@
 package zouitel.neighborhood.security
 
 /**
- * Bridge class to call native C++ security functions
+ * Optional JNI bridge. Construction may fail when the native library is absent
+ * for the current ABI; callers must handle LinkageError and retain Kotlin checks.
  */
 class NativeSecurityManager {
-    // Load native library when class is first used
     init {
         System.loadLibrary("native-lib")
     }
