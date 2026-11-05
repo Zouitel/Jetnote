@@ -66,10 +66,10 @@ class DataUploadWorker(
             }
             val labelsSnapshot = labelMapper.fromDomain(getLabels())
             val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags())
-    
+
             val driveService = initializeDriveService()
                 ?: throw IOException("Google Drive account is not available")
-    
+
             uploadsData(
                 context = applicationContext,
                 driveService = driveService,
@@ -78,12 +78,12 @@ class DataUploadWorker(
                 labels = labelsSnapshot,
                 noteAndTags = noteAndTagsSnapshot
             )
-    
+
             Result.success()
-    
-    } catch (cancelled: CancellationException) {
+
+        } catch (cancelled: CancellationException) {
         throw cancelled
-    } catch (error: Exception) {
+        } catch (error: Exception) {
         Log.e("DataUploadWorker", "Data upload failed: ${error.message}", error)
         if (error is IOException) Result.retry() else Result.failure()
         }
