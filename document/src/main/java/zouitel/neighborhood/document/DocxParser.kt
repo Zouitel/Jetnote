@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-import java.util.zip.ZipInputStream
+import java.util.zip.ZipFile
 
 /**
  * Extracts the main document body from a DOCX package.
@@ -35,29 +35,35 @@ object DocxParser {
     }
 
     private fun readDocumentXml(file: File): ByteArray? {
-        ZipInputStream(file.inputStream().buffered()).use { zip ->
-            var entries = 0
-            while (true) {
-                val entry = zip.nextEntry ?: break
-                entries++
-                if (entries > MAX_ENTRIES) throw IOException("DOCX contains too many ZIP entries")
-
-                if (entry.name == "word/document.xml") {
-                    val output = ByteArrayOutputStream()
-                    val buffer = ByteArray(8 * 1024)
-                    var total = 0
-                    while (true) {
-                        val count = zip.read(buffer)
-                        if (count < 0) break
-                        total += count
-                        if (total > MAX_DOCUMENT_XML_BYTES) {
-                            throw IOException("DOCX document XML exceeds the size limit")
-                        }
-                        output.write(buffer, 0, count)
-                    }
-                    return output.toByteArray()
+        ZipFile(file).use { zip ->
+            val entries = zip.entries()
+            var entryCount = 0
+            while (entries.hasMoreElements()) {
+                val entry = entries.nextElement()
+                entryCount++
+                if (entryCount > MAX_ENTRIES) {
+                    throw IOException("DOCX contains too many ZIP entries")
                 }
-                zip.closeEntry()
+                if (entry.name == "word/document.xml") {
+                    if (entry.size > MAX_DOCUMENT_XML_BYTES) {
+                        throw IOException("DOCX document XML exceeds the size limit")
+                    }
+                    zip.getInputStream(entry).use { input ->
+                        val output = ByteArrayOutputStream()
+                        val buffer = ByteArray(8 * 1024)
+                        var total = 0
+                        while (true) {
+                            val count = input.read(buffer)
+                            if (count < 0) break
+                            total += count
+                            if (total > MAX_DOCUMENT_XML_BYTES) {
+                                throw IOException("DOCX document XML exceeds the size limit")
+                            }
+                            output.write(buffer, 0, count)
+                        }
+                        return output.toByteArray()
+                    }
+                }
             }
         }
         return null
@@ -86,7 +92,7 @@ object DocxParser {
         var headingLevel = 0
         var listId: String? = null
         var listLevel = 0
-        var outputChars = 0
+        var totalExtractedChars = 0
 
         fun appendText(value: String) {
             if (value.isEmpty()) return
@@ -97,7 +103,8 @@ object DocxParser {
                 else -> escapeInline(value)
             }
             paragraph.append(formatted)
-            if (paragraph.length + output.length > MAX_OUTPUT_CHARS) {
+            totalExtractedChars += value.length
+            if (totalExtractedChars > MAX_OUTPUT_CHARS) {
                 throw IOException("Extracted document text exceeds the size limit")
             }
         }
@@ -124,7 +131,6 @@ object DocxParser {
                 cellText.append(rendered)
             } else {
                 output.append(rendered).append("\n\n")
-                outputChars = output.length
             }
             headingLevel = 0
             listId = null
@@ -238,6 +244,9 @@ object DocxParser {
             }
         }
         output.append('\n')
+        if (output.length > MAX_OUTPUT_CHARS) {
+            throw IOException("Extracted document text exceeds the size limit")
+        }
     }
 
     private fun attribute(parser: XmlPullParser, localName: String): String? {
