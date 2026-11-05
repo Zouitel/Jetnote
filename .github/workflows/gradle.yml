@@ -15,7 +15,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Use the registered Ubuntu x64 Android runner instead of GitHub-hosted minutes.
+    runs-on: [self-hosted, linux, x64, android]
+    # Do not execute fork-controlled code on a personal self-hosted machine.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     permissions:
       contents: read
     steps:
