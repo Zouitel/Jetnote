@@ -87,8 +87,12 @@ class RecorderScreenModel(
                 runCatching {
                     withContext(Dispatchers.IO) { repo.stop() }
                 }.onSuccess {
-                    _uiState.value = UiState()
-                    elapsedSeconds = 0
+                    // Keep the final elapsed duration available until the caller saves the recording.
+                    _uiState.value = _uiState.value.copy(
+                        isRecording = false,
+                        isPause = false,
+                        isStarting = false,
+                    )
                 }.onFailure { error ->
                     _uiState.value = UiState(errorMessage = error.message ?: "Unable to stop recording")
                 }
@@ -116,7 +120,8 @@ class RecorderScreenModel(
                 _uiState.value = _uiState.value.copy(
                     hours = hours.pad(),
                     minutes = minutes.pad(),
-                    seconds = seconds.pad()
+                    seconds = seconds.pad(),
+                    elapsedMilliseconds = elapsedSeconds * 1_000L
                 )
             }
         }
