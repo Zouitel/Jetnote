@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import zouitel.neighborhood.domain.usecase.ConversationUseCase
+import zouitel.neighborhood.domain.usecase.NoteAndTagUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 
 /**
@@ -22,6 +23,7 @@ class BinWorker(
     params: WorkerParameters,
     private val cleanupNotes: NoteUseCase.Cleanup,
     private val cleanupConversations: ConversationUseCase.Cleanup,
+    private val deleteNoteAndTagDrafts: NoteAndTagUseCase.DeleteDrafts,
     private val ioDispatcher: CoroutineDispatcher
 ) : CoroutineWorker(context, params) {
 
@@ -29,6 +31,7 @@ class BinWorker(
         try {
             cleanupNotes()
             cleanupConversations()
+            deleteNoteAndTagDrafts()
             Result.success()
         } catch (exception: Exception) {
             Log.e(TAG, "Bin cleanup failed; WorkManager may retry it.", exception)
