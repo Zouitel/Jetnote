@@ -19,19 +19,16 @@ import kotlinx.coroutines.flow.collectLatest
 class AudioScreenModel(
     private val player: PlaybackManager,
     private val repo: AudioRepository
-): ScreenModel {
+) : ScreenModel {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState
-        .withFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.withFlow(UiState())
 
     private val _observeByUid: MutableStateFlow<List<Audio>> = MutableStateFlow(emptyList())
-    val observeByUid: StateFlow<List<Audio>> = _observeByUid
-        .withFlow(emptyList())
+    val observeByUid: StateFlow<List<Audio>> = _observeByUid.withFlow(emptyList())
 
     private val _observeAll: MutableStateFlow<List<Audio>> = MutableStateFlow(emptyList())
-    val observeAll: StateFlow<List<Audio>> = _observeAll
-        .withFlow(emptyList())
+    val observeAll: StateFlow<List<Audio>> = _observeAll.withFlow(emptyList())
 
     private val currentAudio = MutableStateFlow<Audio?>(null)
     private val audioByPath = mutableMapOf<String, Audio>()
@@ -42,16 +39,12 @@ class AudioScreenModel(
 
     fun initAudio(audio: Audio) {
         audioByPath[audio.path] = audio
-        withAsync {
-            player.addAudio(audio)
-        }
+        withAsync { player.addAudio(audio) }
     }
 
     fun sendAction(act: Action) {
-        when(act) {
-            is Action.Delete<*> -> withAsync {
-                player.removeAudio(act.data as Audio)
-            }
+        when (act) {
+            is Action.Delete<*> -> withAsync { player.removeAudio(act.data as Audio) }
             else -> throw Exception("Action not supported")
         }
     }
@@ -63,50 +56,59 @@ class AudioScreenModel(
     fun playbackItemState(item: Audio) {
         audioByPath[item.path] = item
         currentAudio.value = item
+        _uiState.value = _uiState.value.copy(
+            playingAudio = item,
+            currentPath = item.path,
+            progress = 0f
+        )
         withAsync {
             when {
-                _uiState.value.isPlaying -> player.pauseItem(item)
+                _uiState.value.isPlaying && _uiState.value.currentPath == item.path ->
+                    player.pauseItem(item)
                 else -> player.playItem(item)
             }
         }
     }
 
     private suspend fun observePlaybackEvents() {
-        player.events.collectLatest {
-            when (it) {
-                is PlaybackManager.Event.PositionChanged -> updatePlaybackProgress(it.position)
-                is PlaybackManager.Event.PlayingChanged -> updatePlayingState(it.isPlaying)
-                is PlaybackManager.Event.IsLoading -> updateLoadingState(it.isLoading)
-                is PlaybackManager.Event.CurrentPath -> {
-                    updateCurrentPath(it.path)
-                    audioByPath[it.path]?.let { audio -> currentAudio.value = audio }
-                }
+        player.events.collectLatest { event ->
+            when (event) {
+                is PlaybackManager.Event.PositionChanged -> updatePlaybackProgress(event.position)
+                is PlaybackManager.Event.PlayingChanged -> updatePlayingState(event.isPlaying)
+                is PlaybackManager.Event.IsLoading -> updateLoadingState(event.isLoading)
+                is PlaybackManager.Event.CurrentPath -> updateCurrentAudio(event.path)
             }
         }
     }
 
-    fun loadAudioThump(filePath: String): Bitmap? {
-        return repo.loadAudioThumbnail(filePath)
+    private fun updateCurrentAudio(path: String) {
+        if (_uiState.value.currentPath == path) return
+
+        val audio = audioByPath[path]
+        currentAudio.value = audio
+        _uiState.value = _uiState.value.copy(
+            currentPath = path,
+            playingAudio = audio,
+            progress = 0f,
+            isPlaying = if (path.isBlank()) false else _uiState.value.isPlaying
+        )
     }
+
+    fun loadAudioThump(filePath: String): Bitmap? = repo.loadAudioThumbnail(filePath)
 
     fun updatePlaybackProgress(position: Long) {
         val record = currentAudio.value ?: return
         if (record.duration <= 0L) return
-        _uiState.value = uiState.value.copy(
+        _uiState.value = _uiState.value.copy(
             progress = (position.toFloat() / record.duration).coerceIn(0f, 1f)
         )
     }
 
     private fun updatePlayingState(isPlaying: Boolean) {
-        _uiState.value = uiState.value.copy(isPlaying = isPlaying)
+        _uiState.value = _uiState.value.copy(isPlaying = isPlaying)
     }
 
     private fun updateLoadingState(isLoading: Boolean) {
-        _uiState.value = uiState.value.copy(isLoading = isLoading)
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
-
-    private fun updateCurrentPath(path: String) {
-        _uiState.value = uiState.value.copy(currentPath = path)
-    }
-
 }
