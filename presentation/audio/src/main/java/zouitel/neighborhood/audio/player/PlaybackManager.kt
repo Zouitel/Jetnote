@@ -164,10 +164,9 @@ class PlaybackManager(private val context: Context) : Player.Listener {
     fun releaseController() {
         stopPositionUpdates()
         val future = controllerFuture
-        controllerFuture = null
-
         val connected = controller
         connected?.removeListener(this)
+        controllerFuture = null
         if (future != null) {
             MediaController.releaseFuture(future)
         }
