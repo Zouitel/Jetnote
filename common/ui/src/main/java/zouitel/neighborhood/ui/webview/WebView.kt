@@ -87,9 +87,16 @@ fun WebView(
 
                     onCreated(this)
 
-                    settings.javaScriptEnabled = true // Enable JavaScript
-                    settings.domStorageEnabled = true
-                    settings.allowContentAccess = true
+                    // Keep executable web content opt-in. Callers should enable JavaScript
+                    // only for content they control and trust, especially when interfaces
+                    // are exposed through addJavascriptInterface.
+                    settings.javaScriptEnabled = state.javaScriptEnabled
+                    settings.domStorageEnabled = false
+                    settings.allowFileAccess = false
+                    settings.allowContentAccess = false
+                    settings.allowFileAccessFromFileURLs = false
+                    settings.allowUniversalAccessFromFileURLs = false
+                    settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
                     settings.apply(state.settings)
 
                     // Use the created clients
@@ -206,7 +213,11 @@ class WebViewState(
         internal set
 
     // --- Settings ---
-    var javaScriptEnabled: Boolean by mutableStateOf(true) // Example setting
+    /**
+     * JavaScript is disabled by default. Enable it only for trusted content;
+     * any registered JavaScript interfaces are exposed to scripts in the page.
+     */
+    var javaScriptEnabled: Boolean by mutableStateOf(false)
 
     // --- WebView Instance ---
     // Hold the WebView instance internally to perform actions.
