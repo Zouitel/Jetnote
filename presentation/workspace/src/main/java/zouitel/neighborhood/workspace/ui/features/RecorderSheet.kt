@@ -35,7 +35,6 @@ import org.koin.compose.koinInject
 import java.io.File
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.DurationUnit
 
 @Composable
 fun RecorderSheet(
@@ -108,7 +107,7 @@ fun RecorderSheet(
                                 id = audioFile.nameWithoutExtension.toLongOrNull() ?: Random.nextLong(),
                                 path = audioFile.absolutePath,
                                 isRecorded = true,
-                                duration = recorderModel.time.toLong(DurationUnit.MILLISECONDS),
+                                duration = uiState.elapsedMilliseconds,
                             )
 
                             data.value = data.value.copy(
