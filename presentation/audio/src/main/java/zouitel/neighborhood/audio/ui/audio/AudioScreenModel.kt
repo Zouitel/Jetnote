@@ -100,6 +100,12 @@ class AudioScreenModel(
 
     fun loadAudioThump(filePath: String): Bitmap? = repo.loadAudioThumbnail(filePath)
 
+    fun seekToProgress(progress: Float) {
+        val duration = currentAudio.value?.duration ?: return
+        if (duration <= 0L) return
+        player.seekToPosition((duration * progress.coerceIn(0f, 1f)).toLong())
+    }
+
     fun updatePlaybackProgress(position: Long) {
         val record = currentAudio.value ?: return
         if (record.duration <= 0L) return
