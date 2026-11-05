@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.compose.runtime.Stable
 import androidx.work.Constraints
 import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OutOfQuotaPolicy
@@ -30,7 +29,7 @@ class LinkScreenModel(
     private val insert: LinkUseCase.Insert,
     private val delete: LinkUseCase.Delete,
     private val mapper: LinkMapper
-): ScreenModel {
+) : ScreenModel {
 
     private val _observeAll: MutableStateFlow<List<Link>> = MutableStateFlow(emptyList())
     val observeAll: StateFlow<List<Link>> = _observeAll
@@ -53,6 +52,8 @@ class LinkScreenModel(
     }
 
     fun urlsProcessing(uid: String, text: String) {
+        if (uid.isBlank() || text.isBlank()) return
+
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -61,26 +62,27 @@ class LinkScreenModel(
             .setInputData(
                 Data.Builder()
                     .putString(UID, uid)
-                    .putString("text", text)
-                .build()
+                    .putString(TEXT, text)
+                    .build()
             )
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .setConstraints(constraints)
             .build()
 
-        workManager.enqueueUniqueWork(
-            "Fetch links",
-            ExistingWorkPolicy.KEEP,
-            worker
-        )
-
+        // Each request has its own WorkRequest ID. Unique work with KEEP could silently
+        // discard a second note's URLs while the first request is still pending.
+        workManager.enqueue(worker)
     }
 
-    fun sendAction(act: Action) {
-        when(act) {
-            is Action.Insert<*> -> withAsync { insert(mapper.toDomain(act.data as Link)) }
-            is Action.Delete<*> -> withAsync { delete(mapper.toDomain(act.data as Link)) }
+    suspend fun sendAction(act: Action) {
+        when (act) {
+            is Action.Insert<*> -> insert(mapper.toDomain(act.data as Link))
+            is Action.Delete<*> -> delete(mapper.toDomain(act.data as Link))
             else -> throw NotImplementedError("Action not implemented: $act")
         }
+    }
+
+    private companion object {
+        const val TEXT = "text"
     }
 }
