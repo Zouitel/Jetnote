@@ -164,7 +164,7 @@ class FeedbackScreenModel(application: Application) : ScreenModel {
                     .setConstraints(constraints)
                     .build()
 
-                workManager.enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.REPLACE, request)
+                workManager.enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, request)
 
                 // ✅ NEW: Set status to submitting and observe the work
                 _submissionStatus.value = SubmissionStatus.Submitting

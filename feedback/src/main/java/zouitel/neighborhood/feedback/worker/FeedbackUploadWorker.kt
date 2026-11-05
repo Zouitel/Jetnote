@@ -14,7 +14,6 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File as DriveFile
-import com.google.api.services.drive.model.Permission
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,6 +28,7 @@ class FeedbackUploadWorker(
 ) : CoroutineWorker(context, params) {
 
     companion object {
+        private const val MAX_SCREENSHOT_BYTES = 15L * 1024 * 1024
         const val KEY_SCREENSHOT_URI = "screenshot_uri"
         const val KEY_SCREENSHOT_NAME = "screenshot_name"
         const val KEY_DRIVE_LINK = "drive_link"
@@ -207,14 +207,29 @@ class FeedbackUploadWorker(
                 return@withContext null
             }
 
-            val tempFile = JavaFile(context.cacheDir, fileName)
-            FileOutputStream(tempFile).use { outputStream ->
-                inputStream.use { input ->
-                    input.copyTo(outputStream)
+            val safeName = fileName.substringAfterLast('/')
+                .filter { it.isLetterOrDigit() || it == '.' || it == '_' || it == '-' }
+                .take(100)
+                .ifBlank { "feedback_screenshot" }
+            val tempFile = JavaFile.createTempFile("feedback_", "_$safeName", context.cacheDir)
+            inputStream.use { input ->
+                FileOutputStream(tempFile).use { outputStream ->
+                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                    var totalBytes = 0L
+                    while (true) {
+                        val read = input.read(buffer)
+                        if (read < 0) break
+                        totalBytes += read
+                        if (totalBytes > MAX_SCREENSHOT_BYTES) {
+                            tempFile.delete()
+                            throw IllegalArgumentException("Screenshot exceeds the 15 MB upload limit")
+                        }
+                        outputStream.write(buffer, 0, read)
+                    }
                 }
             }
 
-            Log.d("FeedbackUploadWorker", "Temp file created: ${tempFile.absolutePath}, size: ${tempFile.length()} bytes")
+            Log.d("FeedbackUploadWorker", "Temporary screenshot copied (" + tempFile.length() + " bytes)")
             tempFile
         } catch (e: Exception) {
             Log.e("FeedbackUploadWorker", "Error copying URI to temp file: ${e.message}", e)
@@ -296,16 +311,8 @@ class FeedbackUploadWorker(
         fileId: String
     ): String? = withContext(Dispatchers.IO) {
         try {
-            // Create public permission
-            val permission = Permission().apply {
-                type = "anyone"
-                role = "reader"
-            }
-
-            // Apply permission
-            driveService.permissions().create(fileId, permission)
-                .setFields("id")
-                .execute()
+            // Keep feedback screenshots private in the user's Drive.
+            // A link alone must not grant public access to potentially sensitive content.
 
             // Get file metadata with links
             val file = driveService.files().get(fileId)
