@@ -104,7 +104,7 @@ class DataUploadWorker(
             Drive.Builder(
                 NetHttpTransport(),
                 GsonFactory.getDefaultInstance(),
-                credential
+                AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
             ).setApplicationName("Jetnote").build()
         } catch (cancelled: CancellationException) {
             throw cancelled

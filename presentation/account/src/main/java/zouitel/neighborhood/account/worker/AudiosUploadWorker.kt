@@ -56,7 +56,7 @@ class AudiosUploadWorker(
                 Drive.Builder(
                     NetHttpTransport(),
                     GsonFactory.getDefaultInstance(),
-                    credential
+                    AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
                 ).setApplicationName("Drive File Manager").build()
             }
         } catch (e: Exception) {

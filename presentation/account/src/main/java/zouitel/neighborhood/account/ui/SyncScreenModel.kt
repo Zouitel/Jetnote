@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.worker.AccountBoundDriveRequestInitializer
 import zouitel.neighborhood.account.worker.AccountWorkIdentity
 import zouitel.neighborhood.account.worker.AudiosDownloadsWorker
 import zouitel.neighborhood.account.worker.AudiosUploadWorker
@@ -200,11 +201,12 @@ class SyncScreenModel(
             }
 
             credential.selectedAccount = lastAccount.account
+            val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid, context)
 
             Drive.Builder(
                 NetHttpTransport(),
                 GsonFactory.getDefaultInstance(),
-                credential
+                AccountBoundDriveRequestInitializer(credential, context, accountWorkData)
             ).setApplicationName("Drive File Manager").build()
         } catch (e: Exception) {
             Log.e("SyncScreenModel", "Error initializing Drive service", e)
