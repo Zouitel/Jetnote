@@ -213,16 +213,13 @@ class ChatCompletionsAPI(
             override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
                 var exception = t
 
-
                 val bodyRaw = response?.body?.stringSafe()
                 try {
                     if (!bodyRaw.isNullOrBlank()) {
                         val bodyElement = Json.parseToJsonElement(bodyRaw)
                         exception = bodyElement.parseErrorDetail()
-                        Log.i(TAG, "onFailure: $exception")
                     }
                 } catch (e: Throwable) {
-                    exception = e
                     exception = e
                 } finally {
                     close(exception)
@@ -413,7 +410,6 @@ class ChatCompletionsAPI(
                                                     put("url", it)
                                                 })
                                             }.onFailure {
-                                                it.printStackTrace()
 
                                                 put("type", "text")
                                                 put("text", "")
