@@ -42,6 +42,15 @@ class FeedbackWorker(
     )
 
     override suspend fun doWork(): Result {
+        return Result.failure(
+            Data.Builder()
+                .putString(
+                    "ERROR_MESSAGE",
+                    "Feedback submission is temporarily unavailable until secure server-side submission is configured."
+                )
+                .build()
+        )
+
         return try {
             val title = inputData.getString("ISSUE_TITLE") ?: return Result.failure()
             val body = inputData.getString("ISSUE_BODY") ?: return Result.failure()
