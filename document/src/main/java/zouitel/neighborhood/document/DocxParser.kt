@@ -260,7 +260,7 @@ object DocxParser {
 
     private fun escapeInline(value: String): String = buildString(value.length) {
         value.forEach { char ->
-            if (char in "\\\`*_[]") append('\\')
+            if (char in "\\`*_[]") append('\\')
             append(char)
         }
     }
