@@ -10,6 +10,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import zouitel.neighborhood.domain.usecase.DataUseCase
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.worker.AccountWorkIdentity
 import zouitel.neighborhood.account.worker.AudiosDownloadsWorker
 import zouitel.neighborhood.account.worker.AudiosUploadWorker
 import zouitel.neighborhood.account.worker.DataUploadWorker
@@ -327,6 +329,7 @@ class SyncScreenModel(
     }
 
     fun enqueueUploadsProcessing() {
+        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid)
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresStorageNotLow(true)
@@ -334,18 +337,23 @@ class SyncScreenModel(
 
         val request_data = OneTimeWorkRequestBuilder<DataUploadWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
         val request_others = OneTimeWorkRequestBuilder<OthersUploadWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
         val request_pictures = OneTimeWorkRequestBuilder<PicturesUploadWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
         val request_movies = OneTimeWorkRequestBuilder<MoviesUploadWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
         val request_audios = OneTimeWorkRequestBuilder<AudiosUploadWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
 
         workManager.enqueueUniqueWork(
@@ -355,21 +363,26 @@ class SyncScreenModel(
     }
 
     fun enqueueDownloadsProcessing() {
+        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid)
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
         val request_pictuers = OneTimeWorkRequestBuilder<PicturesDownloadsWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
         val request_movies = OneTimeWorkRequestBuilder<MoviesDownloadsWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
         val request_others = OneTimeWorkRequestBuilder<OthersDownloadsWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
         val request_audios = OneTimeWorkRequestBuilder<AudiosDownloadsWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
 
         workManager.enqueueUniqueWork(
@@ -379,6 +392,7 @@ class SyncScreenModel(
     }
 
     fun enqueueSyncProcessing() {
+        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid)
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresStorageNotLow(true)
@@ -386,6 +400,7 @@ class SyncScreenModel(
 
         val request = OneTimeWorkRequestBuilder<SyncDataWorker>()
             .setConstraints(constraints)
+            .setInputData(accountWorkData)
             .build()
 
         workManager.enqueueUniqueWork(SYNCHRONIZE_WORK, KEEP, request)
