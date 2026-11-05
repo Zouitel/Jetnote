@@ -14,6 +14,7 @@ class LinkUrlValidatorTest {
         assertEquals("https", LinkUrlValidator.parseHttpUri("example.com/path").scheme)
         assertEquals("http", LinkUrlValidator.parseHttpUri("http://example.com").scheme)
         assertEquals("https", LinkUrlValidator.parseHttpUri("https://example.com").scheme)
+        assertEquals(8080, LinkUrlValidator.parseHttpUri("example.com:8080/path").port)
     }
 
     @Test
