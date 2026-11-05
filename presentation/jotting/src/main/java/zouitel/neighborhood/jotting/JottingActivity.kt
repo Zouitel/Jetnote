@@ -58,6 +58,7 @@ class JottingActivity: ComponentActivity(), KoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        description.value = savedInstanceState?.getString("jotting_shared_text").orEmpty()
         handleIncomingIntent(intent)
         permissionModel.activityBind(this)
 
