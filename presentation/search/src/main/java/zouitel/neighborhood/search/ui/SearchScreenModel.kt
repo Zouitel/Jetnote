@@ -12,8 +12,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.collectLatest
 import kotlinx.coroutines.coroutineScope
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 import zouitel.neighborhood.logic.withFlow
