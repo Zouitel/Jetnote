@@ -16,15 +16,15 @@ internal fun Project.configureAndroidApplication(common: CommonExtension) {
             }
 
             ndk {
-                abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
+                // Match the ABIs shipped by the document module's native libraries.
+                abiFilters.addAll(listOf("arm64-v8a", "x86_64"))
                 debugSymbolLevel = "NONE"
             }
         }
 
-        lint.abortOnError = false
+        lint.abortOnError = true
 
         splits.apply {
-
             abi {
                 // AppBundle tasks usually contain "bundle" in their name
                 //noinspection WrongGradleMethod
@@ -35,7 +35,6 @@ internal fun Project.configureAndroidApplication(common: CommonExtension) {
                 include("arm64-v8a", "x86_64")
                 isUniversalApk = true
             }
-
         }
 
         packagingOptions.resources {
@@ -54,22 +53,18 @@ internal fun Project.configureAndroidApplication(common: CommonExtension) {
                     "DebugProbesKt.bin"
                 )
             )
-
         }
 
         compileOptions.sourceCompatibility = JavaVersion.VERSION_17
         compileOptions.targetCompatibility = JavaVersion.VERSION_17
 
         packaging.jniLibs {
-            keepDebugSymbols.addAll(listOf("*/armeabi-v7a/*.so", "*/arm64-v8a/*.so"))
+            keepDebugSymbols.addAll(listOf("*/arm64-v8a/*.so", "*/x86_64/*.so"))
         }
     }
     tasks.withType<KotlinJvmCompile>().configureEach {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
-    }
-    dependencies {
-        androidUiTestDependencies(libs)
     }
 }
