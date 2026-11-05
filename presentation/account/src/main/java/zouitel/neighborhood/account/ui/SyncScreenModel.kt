@@ -128,7 +128,12 @@ class SyncScreenModel(
 
                 if (previousUid != currentUid) {
                     Log.d("SyncScreenModel", "Account changed; cancelling work owned by the previous session")
-                    cancelAccountWork()
+                    try {
+                        cancelAccountWork()
+                    } catch (error: Exception) {
+                        Log.e("SyncScreenModel", "Could not cancel previous account work; refusing to start sync for the new account", error)
+                        return@collect
+                    }
                     foldersCreatedThisSession = false
                     _needsInitialSync.value = false
                 }
