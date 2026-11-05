@@ -14,10 +14,17 @@ import java.net.URI
 internal object LinkUrlValidator {
 
     fun parseHttpUri(value: String): URI {
-        val normalized = if (
+        val hasExplicitScheme = EXPLICIT_SCHEME.matches(value) && !HOST_AND_PORT.matches(value)
+        val normalized = if (hasExplicitScheme) {
+            value
+        } else if (
             value.startsWith("http://", ignoreCase = true) ||
             value.startsWith("https://", ignoreCase = true)
-        ) value else "https://$value"
+        ) {
+            value
+        } else {
+            "https://$value"
+        }
 
         val uri = try {
             URI(normalized).normalize()
@@ -75,4 +82,7 @@ internal object LinkUrlValidator {
             else -> false
         }
     }
+
+    private val EXPLICIT_SCHEME = Regex("^[A-Za-z][A-Za-z0-9+.-]*:")
+    private val HOST_AND_PORT = Regex("^[^/:?#]+:\\d+(?:[/?#]|$)")
 }
