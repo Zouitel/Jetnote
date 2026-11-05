@@ -1,5 +1,6 @@
 package zouitel.neighborhood.logic.cache
 
+import android.util.AtomicFile
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
@@ -37,11 +38,7 @@ class SingleFileCacheStore<K : Any, V : Any>(
     }
 
     override fun clear() = lock.withLock {
-        if (file.exists()) {
-            if (!file.delete()) {
-                safeWriteMap(emptyMap())
-            }
-        }
+        AtomicFile(file).delete()
     }
 
     override fun loadAllEntries(): Map<K, CacheEntry<V>> = lock.withLock { safeReadMap() }
