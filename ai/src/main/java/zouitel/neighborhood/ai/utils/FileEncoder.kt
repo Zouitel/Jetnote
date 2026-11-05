@@ -19,29 +19,27 @@ private const val TAG = "FileEncoder"
 
 fun UIMessagePart.Image.encodeBase64(withPrefix: Boolean = true): Result<String> = runCatching {
     when {
-        this.url.startsWith("file://") -> {
-            val filePath =
-                this.url.toUri().path ?: throw IllegalArgumentException("Invalid file URI: ${this.url}")
+        url.startsWith("file://") -> {
+            val filePath = url.toUri().path
+                ?: throw IllegalArgumentException("Invalid file URI")
             val file = File(filePath)
-            if (!file.exists()) {
-                throw IllegalArgumentException("File does not exist: ${this.url}")
-            }
-            if (!file.isSupportedType()) {
-                convertToJpeg(file) // 转换为 JPEG 格式
-                println("File converted to WebP format: ${file.absolutePath}")
-            }
-            if (file.guessMimeType().getOrNull() != "image/webp") {
-                convertToJpeg(file) // 尝试转换为 WebP 格式
-                println("File converted to WebP format: ${file.absolutePath}")
-            }
-            val bytes = file.readBytes()
-            val encoded = Base64.encodeToString(bytes, Base64.NO_WRAP)
-            if (withPrefix) "data:${file.guessMimeType().getOrThrow()};base64,$encoded" else encoded
+            require(file.isFile && file.canRead()) { "Image file is unavailable" }
+
+            val mimeType = file.guessMimeType().getOrThrow()
+            require(mimeType in supportedTypes) { "Unsupported image type: $mimeType" }
+
+            val encoded = Base64.encodeToString(file.readBytes(), Base64.NO_WRAP)
+            if (withPrefix) "data:$mimeType;base64,$encoded" else encoded
         }
 
-        this.url.startsWith("data:") -> url
-        this.url.startsWith("http:") -> url
-        else -> throw IllegalArgumentException("Unsupported URL format: $url")
+        url.startsWith("data:", ignoreCase = true) -> {
+            if (withPrefix) url else url.substringAfter(',', url)
+        }
+
+        url.startsWith("https://", ignoreCase = true) ||
+            url.startsWith("http://", ignoreCase = true) -> url
+
+        else -> throw IllegalArgumentException("Unsupported URL format")
     }
 }
 
