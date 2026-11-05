@@ -2,7 +2,6 @@ package zouitel.neighborhood.audio.worker
 
 import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -46,8 +45,7 @@ class CopyAudioWorker(
 
     @WorkerThread
     private suspend fun copyAudioToAppStorage(audioId: Long, title: String, uri: Uri) {
-        val directory = applicationContext.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
-            ?: throw IOException("App audio storage is unavailable")
+        val directory = AudioStorage.directory(applicationContext)
 
         if ((!directory.exists() && !directory.mkdirs()) || !directory.isDirectory) {
             throw IOException("Unable to create app audio storage directory")
