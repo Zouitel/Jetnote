@@ -78,11 +78,13 @@ class AIRequestInterceptor(
             .encodedPath("$AI_PROXY_PREFIX$path")
             .build()
 
-        return request.newBuilder()
+        val authenticatedRequest = request.newBuilder()
             .url(proxyUrl)
             .header("Authorization", "Bearer $idToken")
             .header("X-Jetnote-Client", "android")
             .build()
+
+        return chain.proceed(authenticatedRequest)
     }
 
     @Synchronized
