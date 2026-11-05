@@ -63,7 +63,7 @@ class LocalMediaDataSource(
 
             val contentId = getLong(idColumn)
             val itemUri = ContentUris.withAppendedId(collectionUri, contentId)
-            val title = getString(titleColumn)?.takeIf(String::isNotBlank) ?: return null
+            val title = getString(titleColumn)?.takeIf { it.isNotBlank() } ?: return null
 
             Audio(
                 id = contentId,
