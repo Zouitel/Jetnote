@@ -54,18 +54,18 @@ class AudioScreenModel(
     }
 
     fun playbackItemState(item: Audio) {
+        val isCurrentTrack = _uiState.value.currentPath == item.path
         audioByPath[item.path] = item
         currentAudio.value = item
         _uiState.value = _uiState.value.copy(
             playingAudio = item,
-            currentPath = item.path,
-            progress = 0f
+            progress = if (isCurrentTrack) _uiState.value.progress else 0f
         )
         withAsync {
-            when {
-                _uiState.value.isPlaying && _uiState.value.currentPath == item.path ->
-                    player.pauseItem(item)
-                else -> player.playItem(item)
+            if (isCurrentTrack && _uiState.value.isPlaying) {
+                player.pauseItem(item)
+            } else {
+                player.playItem(item)
             }
         }
     }
