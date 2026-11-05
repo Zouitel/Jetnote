@@ -1,15 +1,20 @@
 package zouitel.neighborhood.audio.utils
 
+import android.content.Context
+import android.os.Environment
 import java.io.File
 
 /**
- * Keeps imported MediaStore items in a deterministic, collision-resistant app-private filename.
- * The source display name is retained (including its extension) for a useful file type hint.
+ * Provides one app-private location and deterministic, collision-resistant filenames for imports.
  */
 internal object AudioStorage {
+    fun directory(context: Context): File =
+        context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
+            ?: File(context.filesDir, Environment.DIRECTORY_PODCASTS)
+
     fun fileName(audioId: Long, title: String): String {
         val extension = title.substringAfterLast('.', missingDelimiterValue = "")
-            .takeIf { it.isNotBlank() && it.length <= 12 }
+            .takeIf { it.matches(Regex("[A-Za-z0-9]{1,10}")) }
             ?.let { ".$it" }
             .orEmpty()
         return "audio_$audioId$extension"
