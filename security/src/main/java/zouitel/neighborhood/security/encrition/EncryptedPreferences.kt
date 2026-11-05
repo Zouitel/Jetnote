@@ -86,7 +86,7 @@ class EncryptedPreferences(context: Context) {
     fun encryptBoolean(value: Boolean): String = encryptString(value.toString())
 
     fun decryptBoolean(encryptedData: String, defaultValue: Boolean = false): Boolean =
-        decryptStringOrNull(encryptedData)?.toBooleanStrictOrNull() ?: defaultValue
+        decryptString(encryptedData).toBooleanStrictOrNull() ?: defaultValue
 }
 
 class EncryptedValueException(message: String, cause: Throwable? = null) :
