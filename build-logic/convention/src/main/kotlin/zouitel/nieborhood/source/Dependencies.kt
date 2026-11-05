@@ -11,28 +11,20 @@ fun DependencyHandlerScope.androidDependencies(libs: VersionCatalog) {
 fun DependencyHandlerScope.androidTestDependencies(libs: VersionCatalog) {
 }
 
-fun DependencyHandlerScope.androidUiTestDependencies(libs: VersionCatalog) {
-    val bom = libs.findLibrary("compose-bom").get()
-    add("androidTestImplementation", platform(bom))
-    add("androidTestImplementation", libs.findLibrary("ui-test-junit4").get())
-    add("debugImplementation", libs.findLibrary("ui-tooling").get())
-    add("debugImplementation", libs.findLibrary("ui-test-manifest").get())
-}
-
 fun DependencyHandlerScope.composeDependencies(libs: VersionCatalog) {
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", libs.findLibrary("activity-compose").get())
-    add("implementation", libs.findLibrary("compose-ui").get())
     add("implementation", libs.findLibrary("ui-graphics").get())
-    add("implementation", libs.findLibrary("ui-tooling").get())
-    add("implementation", libs.findLibrary("material3").get())
+    add("debugImplementation", libs.findLibrary("ui-tooling").get())
     add("implementation", libs.findLibrary("compose-constraintlayout").get())
     add("implementation", libs.findLibrary("compose-foundation").get())
 }
 
 fun DependencyHandlerScope.composeBundlesDependencies(libs: VersionCatalog) {
     add("implementation", libs.findBundle("compose").get())
-    add("androidTestImplementation", libs.findBundle("composeTest").get())
+    add("androidTestImplementation", platform(libs.findLibrary("compose-bom").get()))
+    add("androidTestImplementation", libs.findLibrary("ui-test-junit4").get())
+    add("debugImplementation", libs.findLibrary("ui-test-manifest").get())
 }
 
 fun DependencyHandlerScope.koinDependencies(libs: VersionCatalog) {
