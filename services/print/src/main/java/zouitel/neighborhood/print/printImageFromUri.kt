@@ -3,11 +3,12 @@ package zouitel.neighborhood.print
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -26,25 +27,46 @@ fun printImage(
 ) {
     PrintHelper(context).apply {
         this.scaleMode = scaleMode
-    }.also { printHelper ->
-        printHelper.printBitmap(jobName, bitmap)
-    }
+    }.printBitmap(jobName, bitmap)
 }
 
-
+/**
+ * Prints an image from a filesystem path. This overload is retained for
+ * existing callers; content:// URIs should use the Uri overload below.
+ */
 fun printImageFromUri(
     context: Context,
     imagePath: String,
     jobName: String = "Image Print",
     scaleMode: Int = PrintHelper.SCALE_MODE_FIT
 ) {
-    val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", File(imagePath))
+    val file = File(imagePath)
+    require(file.isFile) { "Image file does not exist: $imagePath" }
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.provider",
+        file
+    )
+    printImageFromUri(context, uri, jobName, scaleMode)
+}
 
-    val bitmap = context.contentResolver.openInputStream(uri)?.use { inputStream ->
-        BitmapFactory.decodeStream(inputStream)
-    } ?: throw FileNotFoundException("Unable to load image from URI: $imagePath")
-    
+/**
+ * Prints an image supplied by any ContentResolver-readable URI, including
+ * content:// URIs from the photo picker or another provider.
+ */
+fun printImageFromUri(
+    context: Context,
+    imageUri: Uri,
+    jobName: String = "Image Print",
+    scaleMode: Int = PrintHelper.SCALE_MODE_FIT
+) {
+    val bitmap = context.contentResolver.openInputStream(imageUri)?.use { stream ->
+        BitmapFactory.decodeStream(stream)
+    } ?: throw FileNotFoundException("Unable to decode image from URI: $imageUri")
+
     printImage(context, bitmap, jobName, scaleMode)
+    // Do not recycle here: PrintHelper's adapter may still be reading the
+    // bitmap after this function returns. The adapter retains its reference.
 }
 
 @Composable
@@ -54,13 +76,11 @@ fun ImageWithPrintButton(
     jobName: String = "Photo Print"
 ) {
     val context = LocalContext.current
-
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Display the image
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = "Image to print",
@@ -69,8 +89,6 @@ fun ImageWithPrintButton(
                 .fillMaxWidth()
                 .padding(16.dp)
         )
-
-        // Print button
         Button(
             onClick = {
                 printImage(
@@ -87,13 +105,9 @@ fun ImageWithPrintButton(
     }
 }
 
-/**
- * Example usage with different scale modes
- */
 @Composable
 fun PrintImageExample(bitmap: Bitmap) {
     val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -108,7 +122,6 @@ fun PrintImageExample(bitmap: Bitmap) {
                 .weight(1f)
                 .fillMaxWidth()
         )
-
         Button(onClick = {
             printImage(
                 context = context,
@@ -119,7 +132,6 @@ fun PrintImageExample(bitmap: Bitmap) {
         }) {
             Text("Print (Fit to Page)")
         }
-
         Button(onClick = {
             printImage(
                 context = context,

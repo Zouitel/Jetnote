@@ -2,7 +2,6 @@ package zouitel.neighborhood.print
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
@@ -13,10 +12,14 @@ import android.print.PrintDocumentInfo
 import android.print.PrintManager
 import android.print.pdf.PrintedPdfDocument
 import android.text.Layout
+import android.text.SpannableStringBuilder
 import android.text.StaticLayout
 import android.text.TextPaint
-import java.io.FileOutputStream
-import androidx.core.graphics.withTranslation
+import android.text.style.RelativeSizeSpan
+import android.text.style.StrikethroughSpan
+import kotlinx.coroutines.CancellationException
+
+private const val NOTE_MARGIN = 48f
 
 fun printNote(
     context: Context,
@@ -24,10 +27,15 @@ fun printNote(
     description: String,
     tasks: List<Pair<String?, Boolean>> = emptyList()
 ) {
-    val printManager = context.getSystemService(Context.PRINT_SERVICE) as PrintManager
+    val printManager = context.getSystemService(Context.PRINT_SERVICE) as? PrintManager
+        ?: return
+    val jobTitle = title.ifBlank { "Untitled" }
 
     val printAdapter = object : PrintDocumentAdapter() {
         private var pdfDocument: PrintedPdfDocument? = null
+        private var contentLayout: StaticLayout? = null
+        private var contentHeight = 0
+        private var pageCount = 0
 
         override fun onLayout(
             oldAttributes: PrintAttributes?,
@@ -41,109 +49,152 @@ fun printNote(
                 return
             }
 
-            // Create a new PdfDocument with the requested page attributes
-            pdfDocument = PrintedPdfDocument(context, newAttributes)
-
-            // Just create one page
-            callback.onLayoutFinished(
-                PrintDocumentInfo.Builder(title.ifEmpty { "Untitled" })
+            runCatching {
+                pdfDocument?.close()
+                val document = PrintedPdfDocument(context, newAttributes)
+                try {
+                    val measurePage = document.startPage(0)
+                    val canvas = measurePage.canvas
+                    val availableWidth = (canvas.width - NOTE_MARGIN * 2).toInt().coerceAtLeast(1)
+                    contentHeight = (canvas.height - NOTE_MARGIN * 2).toInt().coerceAtLeast(1)
+                    contentLayout = createContentLayout(availableWidth)
+                    document.finishPage(measurePage)
+                    pageCount = (((contentLayout?.height ?: 0) + contentHeight - 1) / contentHeight)
+                        .coerceAtLeast(1)
+                    pdfDocument = document
+                    pageCount
+                } catch (error: Exception) {
+                    document.close()
+                    throw error
+                }
+            }.onSuccess { count ->
+                val info = PrintDocumentInfo.Builder(jobTitle)
                     .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
-                    .setPageCount(1)
-                    .build(),
-                true
-            )
+                    .setPageCount(count)
+                    .build()
+                callback.onLayoutFinished(info, oldAttributes != newAttributes)
+            }.onFailure { error ->
+                callback.onLayoutFailed(error.message ?: "Unable to prepare the note for printing.")
+            }
         }
 
         override fun onWrite(
-            pages: Array<PageRange>,
+            pages: Array<out PageRange>,
             destination: ParcelFileDescriptor,
             cancellationSignal: CancellationSignal,
             callback: WriteResultCallback
         ) {
+            val document = pdfDocument
+            val layout = contentLayout
+            if (document == null || layout == null) {
+                destination.close()
+                callback.onWriteFailed("The note has not been laid out for printing.")
+                return
+            }
+
+            val selectedPages = expandPageRanges(pages, pageCount)
+            if (selectedPages.isEmpty()) {
+                destination.close()
+                callback.onWriteFailed("No printable pages were selected.")
+                return
+            }
+
             try {
-                val document = pdfDocument ?: return
-
-                // Create page and draw content
-                val page = document.startPage(0)
-                val canvas = page.canvas
-
-                // Calculate available width and height
-                val contentWidth = canvas.width
-//                val contentHeight = canvas.height
-
-                // Draw the content
-                val paint = Paint().apply {
-                    color = Color.BLACK
-                    textSize = 36f
-                }
-
-                // Title
-                canvas.drawText(title, 72f, 72f, paint)
-
-                // Description
-                paint.textSize = 24f
-                var yPosition = 144f
-
-                // Create a StaticLayout to handle text wrapping
-                val textPaint = TextPaint(paint)
-                val availableWidth = contentWidth - 144 // 72 margin on each side
-
-                val staticLayout = StaticLayout.Builder.obtain(
-                    description,
-                    0,
-                    description.length,
-                    textPaint,
-                    availableWidth
-                )
-                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
-                    .setLineSpacing(0f, 1f)
-                    .setIncludePad(false)
-                    .build()
-                canvas.withTranslation(72f, yPosition) {
-                    staticLayout.draw(this)
-                }
-
-                // Update yPosition after drawing the description
-                yPosition += staticLayout.height + 48f // Add some spacing
-
-                // Tasks
-                paint.textSize = 20f
-                tasks.forEach { task ->
-                    if (yPosition + paint.textSize > canvas.height - 72f) {
-                        // TODO: Handle content exceeding page height (e.g., start a new page)
-                        return@forEach
+                selectedPages.forEach { pageIndex ->
+                    if (cancellationSignal.isCanceled) throw CancellationException()
+                    val page = document.startPage(pageIndex)
+                    try {
+                        page.canvas.drawColor(Color.WHITE)
+                        page.canvas.save()
+                        page.canvas.translate(NOTE_MARGIN, NOTE_MARGIN - pageIndex * contentHeight)
+                        layout.draw(page.canvas)
+                        page.canvas.restore()
+                    } finally {
+                        document.finishPage(page)
                     }
-
-                    // Apply strikethrough for done tasks
-                    paint.isStrikeThruText = task.second
-
-                    val taskText = (if (task.second) "✅ " else "⬛ ") + task.first
-                    canvas.drawText(taskText, 72f, yPosition, paint)
-
-                    // Reset strikethrough for the next item
-                    paint.isStrikeThruText = false
-                    yPosition += paint.textSize + 12f // Add spacing between tasks
                 }
 
-                document.finishPage(page)
-
-                // Write to output
-                document.writeTo(FileOutputStream(destination.fileDescriptor))
-
-                callback.onWriteFinished(arrayOf(PageRange.ALL_PAGES))
-            } catch (e: Exception) {
-                callback.onWriteFailed(e.message)
+                if (cancellationSignal.isCanceled) throw CancellationException()
+                ParcelFileDescriptor.AutoCloseOutputStream(destination).use(document::writeTo)
+                callback.onWriteFinished(toPageRanges(selectedPages))
+            } catch (_: CancellationException) {
+                runCatching { destination.close() }
+                callback.onWriteCancelled()
+            } catch (error: Exception) {
+                runCatching { destination.close() }
+                callback.onWriteFailed(error.message ?: "Unable to write the note.")
             } finally {
                 pdfDocument?.close()
                 pdfDocument = null
+                contentLayout = null
             }
         }
 
         override fun onFinish() {
             pdfDocument?.close()
             pdfDocument = null
+            contentLayout = null
+        }
+
+        private fun createContentLayout(width: Int): StaticLayout {
+            val content = SpannableStringBuilder()
+            val titleStart = content.length
+            content.append(title.ifBlank { "Untitled" }).append("\n\n")
+            content.setSpan(RelativeSizeSpan(1.35f), titleStart, content.length, 0)
+
+            if (description.isNotBlank()) content.append(description.trim()).append("\n\n")
+
+            tasks.forEach { (task, completed) ->
+                content.append(if (completed) "☑ " else "□ ")
+                val taskStart = content.length
+                content.append(task.orEmpty().ifBlank { "Untitled task" }).append("\n")
+                if (completed && content.length > taskStart) {
+                    content.setSpan(StrikethroughSpan(), taskStart, content.length - 1, 0)
+                }
+            }
+
+            val paint = TextPaint(TextPaint.ANTI_ALIAS_FLAG).apply {
+                color = Color.BLACK
+                textSize = 12f
+            }
+            return StaticLayout.Builder.obtain(content, 0, content.length, paint, width)
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setLineSpacing(2f, 1f)
+                .setIncludePad(true)
+                .build()
+        }
+
+        private fun expandPageRanges(ranges: Array<out PageRange>, totalPages: Int): List<Int> {
+            val result = sortedSetOf<Int>()
+            ranges.forEach { range ->
+                val start = if (range == PageRange.ALL_PAGES) 0 else range.start
+                val end = if (range == PageRange.ALL_PAGES) totalPages - 1 else range.end
+                if (start <= end && end >= 0 && start < totalPages) {
+                    for (index in start.coerceAtLeast(0)..end.coerceAtMost(totalPages - 1)) {
+                        result += index
+                    }
+                }
+            }
+            return result.toList()
+        }
+
+        private fun toPageRanges(pageIndices: List<Int>): Array<PageRange> {
+            if (pageIndices.isEmpty()) return emptyArray()
+            val ranges = mutableListOf<PageRange>()
+            var start = pageIndices.first()
+            var end = start
+            pageIndices.drop(1).forEach { index ->
+                if (index == end + 1) end = index
+                else {
+                    ranges += PageRange(start, end)
+                    start = index
+                    end = index
+                }
+            }
+            ranges += PageRange(start, end)
+            return ranges.toTypedArray()
         }
     }
 
-    printManager.print(title.ifEmpty { "Untitled" }, printAdapter, null)
+    printManager.print(jobTitle, printAdapter, null)
 }
