@@ -38,11 +38,13 @@ class LocalMediaDataSource (
             else -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         }
         val content = mutableListOf<Audio?>()
+        val selection = "${MediaStore.Audio.Media.DISPLAY_NAME} LIKE ?"
+        val selectionArgs = arrayOf("%$query%")
         val cursor = contentResolver.query(
             contentUri,
             projection,
-            MediaStore.Audio.Media.DISPLAY_NAME + " LIKE '%$query%'",
-            null,
+            selection,
+            selectionArgs,
             "${MediaStore.MediaColumns.DATE_ADDED} DESC"
         )
         cursor?.use {
@@ -76,11 +78,13 @@ class LocalMediaDataSource (
     fun getAudioThumbnail(filePath: String): Bitmap? {
         if (!(File(filePath).exists())) return null
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(filePath)
-        val rawArt = retriever.embeddedPicture
-        retriever.release()
-        return rawArt?.let {
-            decodeByteArray(it, 0, it.size)
+        return try {
+            retriever.setDataSource(filePath)
+            retriever.embeddedPicture?.let { decodeByteArray(it, 0, it.size) }
+        } catch (_: Exception) {
+            null
+        } finally {
+            runCatching { retriever.release() }
         }
     }
 }
