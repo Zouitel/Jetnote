@@ -102,7 +102,7 @@ class ResponseAPI(
             .url("${providerSetting.baseUrl}/responses")
             .headers(params.customHeaders.toHeaders())
             .post(json.encodeToString(requestBody).toRequestBody("application/json".toMediaType()))
-            .addHeader("Authorization", "Bearer ${providerSetting.apiKey}")
+            .addHeader("Authorization", "Bearer ${keyRoulette.next(providerSetting.apiKey)}")
             .addHeader("Content-Type", "application/json")
             .configureReferHeaders(providerSetting.baseUrl)
             .build()
@@ -133,20 +133,15 @@ class ResponseAPI(
             override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
                 var exception = t
 
-                t?.printStackTrace()
-                println("[onFailure] 发生错误: ${t?.javaClass?.name} ${t?.message} / $response")
 
                 val bodyRaw = response?.body?.stringSafe()
                 try {
                     if (!bodyRaw.isNullOrBlank()) {
                         val bodyElement = Json.parseToJsonElement(bodyRaw)
-                        println(bodyElement)
                         exception = bodyElement.parseErrorDetail()
-                        Log.i(TAG, "onFailure: $exception")
                     }
                 } catch (e: Throwable) {
-                    Log.w(TAG, "onFailure: failed to parse from $bodyRaw")
-                    e.printStackTrace()
+                    exception = e
                 } finally {
                     close(exception)
                 }
@@ -162,7 +157,6 @@ class ResponseAPI(
                 .newEventSource(request, listener)
 
         awaitClose {
-            println("[awaitClose] 关闭eventSource ")
             eventSource.cancel()
         }
     }
@@ -277,7 +271,6 @@ class ResponseAPI(
                                                 put("image_url", it)
                                             }.onFailure {
                                                 it.printStackTrace()
-                                                println("encode image failed: ${part.url}")
 
                                                 put("type", "input_text")
                                                 put(
@@ -456,7 +449,6 @@ class ResponseAPI(
     }
 
     private fun parseResponseOutput(jsonObject: JsonObject): MessageChunk {
-        println(jsonObject)
         val outputs = jsonObject["output"]?.jsonArray ?: error("output not found")
         val parts = arrayListOf<UIMessagePart>()
 
