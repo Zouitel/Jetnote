@@ -6,6 +6,12 @@ import androidx.security.crypto.MasterKeys
 import java.io.File
 import java.security.SecureRandom
 
+/**
+ * Encrypted file-backed secret storage.
+ *
+ * The AndroidX Security Crypto API used here is retained for on-disk compatibility;
+ * migration to a replacement format must preserve existing encrypted files.
+ */
 class FileEncryption(private val context: Context) {
     fun getCrypticPass(): ByteArray {
         val file = File(context.filesDir, PASS)
@@ -25,17 +31,7 @@ class FileEncryption(private val context: Context) {
         }
     }
 
-    private fun generateCryptic(): ByteArray {
-        val random = SecureRandom.getInstanceStrong()
-        val res = ByteArray(32)
-
-        random.nextBytes(res)
-        while (res.contains(0)) {
-            random.nextBytes(res)
-        }
-
-        return res
-    }
+    private fun generateCryptic(): ByteArray = ByteArray(32).also(SecureRandom()::nextBytes)
 
     companion object {
         const val PASS = "crypticpass.bin"
