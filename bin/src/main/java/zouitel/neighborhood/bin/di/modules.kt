@@ -16,6 +16,7 @@ val binModule = module {
             get(),
             get(),
             get(),
+            deleteNoteAndTagDrafts = get(),
             ioDispatcher = get()
         )
     }
