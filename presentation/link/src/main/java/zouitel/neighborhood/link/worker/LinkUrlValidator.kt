@@ -14,7 +14,7 @@ import java.net.URI
 internal object LinkUrlValidator {
 
     fun parseHttpUri(value: String): URI {
-        val hasExplicitScheme = EXPLICIT_SCHEME.matches(value) && !HOST_AND_PORT.matches(value)
+        val hasExplicitScheme = EXPLICIT_SCHEME.containsMatchIn(value) && !HOST_AND_PORT.matches(value)
         val normalized = if (hasExplicitScheme) {
             value
         } else if (
