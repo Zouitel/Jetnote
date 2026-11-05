@@ -20,7 +20,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
  * UI-side controller for the service-owned player.
  *
  * This class never constructs or owns the ExoPlayer. The Android service is
- * responsible for the player and MediaSession lifetime.
+ * responsible for the player and MediaSession lifetime. The manager's playlist
+ * is the presentation-side source of truth and is reconciled whenever a
+ * controller connects or a playlist mutation occurs.
  */
 class PlaybackManager(private val context: Context) : Player.Listener {
 
@@ -86,11 +88,10 @@ class PlaybackManager(private val context: Context) : Player.Listener {
 
     fun addAudio(audio: Audio) {
         val item = getMediaItem(audio.path.toUri(), audio.title)
-        val index = playlist.indexOfFirst { it.mediaId == item.mediaId }
-        if (index >= 0) return
+        if (playlist.any { it.mediaId == item.mediaId }) return
 
         playlist.add(item)
-        controller?.addMediaItem(item)
+        controller?.let(::synchronizePlaylist)
     }
 
     fun addAudios(items: List<Audio>) {
@@ -104,20 +105,23 @@ class PlaybackManager(private val context: Context) : Player.Listener {
 
         playlist.removeAt(index)
         if (pendingPlaybackMediaId == mediaId) pendingPlaybackMediaId = null
-        controller?.let { player ->
-            val playerIndex = (0 until player.mediaItemCount)
-                .firstOrNull { player.getMediaItemAt(it).mediaId == mediaId }
-            if (playerIndex != null) player.removeMediaItem(playerIndex)
+        controller?.let(::synchronizePlaylist)
+        if (controller?.currentMediaItem == null) {
+            lastEmittedPosition = 0L
+            events.tryEmit(Event.CurrentPath(""))
+            events.tryEmit(Event.PositionChanged(0L))
+            events.tryEmit(Event.PlayingChanged(false))
         }
-
     }
 
     fun clearPlaylist() {
         playlist.clear()
         pendingPlaybackMediaId = null
         lastEmittedPosition = 0L
-        controller?.stop()
-        controller?.clearMediaItems()
+        controller?.let { player ->
+            player.stop()
+            player.clearMediaItems()
+        }
         events.tryEmit(Event.CurrentPath(""))
         events.tryEmit(Event.PlayingChanged(false))
         events.tryEmit(Event.PositionChanged(0L))
@@ -143,12 +147,12 @@ class PlaybackManager(private val context: Context) : Player.Listener {
                             events.tryEmit(Event.IsLoading(false))
                         } else {
                             connected.addListener(this)
-                            if (playlist.isNotEmpty()) {
-                                connected.setMediaItems(playlist.toList(), false)
-                            }
+                            synchronizePlaylist(connected)
                             events.tryEmit(
                                 Event.CurrentPath(connected.currentMediaItem?.mediaId.orEmpty())
                             )
+                            events.tryEmit(Event.PositionChanged(connected.currentPosition))
+                            events.tryEmit(Event.PlayingChanged(connected.isPlaying))
                             startPositionUpdates()
                             pendingPlaybackMediaId?.let { mediaId ->
                                 pendingPlaybackMediaId = null
@@ -162,6 +166,23 @@ class PlaybackManager(private val context: Context) : Player.Listener {
         )
     }
 
+    /**
+     * Align the service player with the manager's playlist, including clearing
+     * stale service state when reconnecting with an empty local playlist.
+     */
+    private fun synchronizePlaylist(player: MediaController) {
+        val expectedIds = playlist.map { it.mediaId }
+        val actualIds = (0 until player.mediaItemCount).map { index ->
+            player.getMediaItemAt(index).mediaId
+        }
+        if (actualIds != expectedIds) {
+            player.setMediaItems(playlist.toList(), false)
+        }
+    }
+
+    /**
+     * Releasing the controller does not stop or release the service-owned player.
+     */
     fun releaseController() {
         stopPositionUpdates()
         val future = controllerFuture
@@ -197,10 +218,10 @@ class PlaybackManager(private val context: Context) : Player.Listener {
 
     suspend fun playItem(audio: Audio) {
         val mediaId = audio.path
-        val index = playlist.indexOfFirst { it.mediaId == mediaId }
-        if (index < 0) return
+        if (playlist.none { it.mediaId == mediaId }) addAudio(audio)
         if (controller == null) {
             pendingPlaybackMediaId = mediaId
+            initializeController()
             return
         }
         startPlayback(mediaId)
@@ -208,11 +229,12 @@ class PlaybackManager(private val context: Context) : Player.Listener {
 
     private fun startPlayback(mediaId: String) {
         val player = controller ?: return
+        synchronizePlaylist(player)
         val index = playlist.indexOfFirst { it.mediaId == mediaId }
         if (index < 0) return
 
         val resumePosition = if (player.currentMediaItem?.mediaId == mediaId) {
-            lastEmittedPosition
+            player.currentPosition
         } else {
             0L
         }
