@@ -51,7 +51,13 @@ class DataUploadWorker(
     private val ioDispatcher: CoroutineDispatcher
 ) : CoroutineWorker(context, params) {
 
-    override suspend fun doWork(): Result = try {
+    override suspend fun doWork(): Result {
+        if (!AccountWorkIdentity.belongsToCurrentUser(inputData)) {
+            Log.w("DataUploadWorker", "Skipping work because its Firebase account is missing or no longer active")
+            return Result.failure()
+        }
+
+        return try {
         // Read each source inside this work execution. No background collectors can
         // race the upload and leave an empty/default snapshot behind.
         val settingsSnapshot = settingsMapper.fromDomain(observeSettings().first())
@@ -79,6 +85,7 @@ class DataUploadWorker(
     } catch (error: Exception) {
         Log.e("DataUploadWorker", "Data upload failed: ${error.message}", error)
         if (error is IOException) Result.retry() else Result.failure()
+        }
     }
 
     private suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
