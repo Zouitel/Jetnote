@@ -22,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -131,9 +130,10 @@ private class MuPdfPrintDocumentAdapter(
 
                 withContext(Dispatchers.IO) {
                     for (pageIndex in pagesToRender) {
-                        if (cancellation?.isCanceled == true) throw CancellationException()
+                        if (finished || cancellation?.isCanceled == true) throw CancellationException()
                         val bitmap = renderPage(pageIndex)
                         try {
+                            if (finished || cancellation?.isCanceled == true) throw CancellationException()
                             val widthPoints = (bitmap.width * 72f / renderDpi).toInt().coerceAtLeast(1)
                             val heightPoints = (bitmap.height * 72f / renderDpi).toInt().coerceAtLeast(1)
                             val pageInfo = PdfDocument.PageInfo.Builder(
@@ -150,11 +150,11 @@ private class MuPdfPrintDocumentAdapter(
                         }
                     }
 
-                    if (cancellation?.isCanceled == true) throw CancellationException()
+                    if (finished || cancellation?.isCanceled == true) throw CancellationException()
                     ParcelFileDescriptor.AutoCloseOutputStream(destination).use(pdfDocument::writeTo)
                 }
 
-                if (cancellation?.isCanceled == true) callback.onWriteCancelled()
+                if (finished || cancellation?.isCanceled == true) callback.onWriteCancelled()
                 else callback.onWriteFinished(toPageRanges(writtenPages))
             } catch (cancelled: CancellationException) {
                 runCatching { destination.close() }
@@ -172,7 +172,7 @@ private class MuPdfPrintDocumentAdapter(
         if (finished) return
         finished = true
         scope.launch {
-            activeWrite?.cancelAndJoin()
+            activeWrite?.join()
             withContext(Dispatchers.IO) {
                 synchronized(documentLock) { runCatching { document.destroy() } }
             }
