@@ -18,8 +18,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import zouitel.neighborhood.account.utils.findFolderId
 import zouitel.neighborhood.domain.usecase.NoteAndTagUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
@@ -78,7 +78,7 @@ class DataUploadWorker(
         throw cancelled
     } catch (error: Exception) {
         Log.e("DataUploadWorker", "Data upload failed: ${error.message}", error)
-        Result.retry()
+        if (error is IOException) Result.retry() else Result.failure()
     }
 
     private suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
