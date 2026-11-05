@@ -20,7 +20,6 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.firebase.auth.FirebaseAuth
-import com.google.android.gms.tasks.Tasks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -215,9 +214,9 @@ class SyncScreenModel(
     private suspend fun cancelAccountWork() = withContext(Dispatchers.IO) {
         // Await cancellation before the next identity enqueues work under these
         // shared unique names; otherwise KEEP could retain the previous account's chain.
-        Tasks.await(workManager.cancelUniqueWork(UPLOAD_WORK).result)
-        Tasks.await(workManager.cancelUniqueWork(DOWNLOAD_WORK).result)
-        Tasks.await(workManager.cancelUniqueWork(SYNCHRONIZE_WORK).result)
+        workManager.cancelUniqueWork(UPLOAD_WORK).result.get()
+        workManager.cancelUniqueWork(DOWNLOAD_WORK).result.get()
+        workManager.cancelUniqueWork(SYNCHRONIZE_WORK).result.get()
     }
 
     fun resetInitialSyncFlag() {
