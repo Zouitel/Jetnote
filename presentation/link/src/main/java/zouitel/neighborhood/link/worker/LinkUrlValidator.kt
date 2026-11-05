@@ -84,5 +84,5 @@ internal object LinkUrlValidator {
     }
 
     private val EXPLICIT_SCHEME = Regex("^[A-Za-z][A-Za-z0-9+.-]*:")
-    private val HOST_AND_PORT = Regex("^[^/:?#]+:\\d+(?:[/?#]|$)")
+    private val HOST_AND_PORT = Regex("^[^/:?#]+:\\d+(?:[/?#].*)?$")
 }
