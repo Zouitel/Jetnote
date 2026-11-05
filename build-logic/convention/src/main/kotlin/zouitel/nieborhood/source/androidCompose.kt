@@ -13,9 +13,6 @@ internal fun Project.configureAndroidCompose(common: CommonExtension) {
             buildConfig = true
         }
 
-        composeOptions.kotlinCompilerExtensionVersion =
-            libs.findVersion("compose-version").get().requiredVersion
-
         dependencies {
             composeDependencies(libs)
             composeKoinDependencies(libs)
