@@ -31,6 +31,7 @@ import zouitel.neighborhood.permissions.permissionsModule
 import zouitel.neighborhood.audio.di.audioPlayerModule
 import zouitel.neighborhood.repository.di.localRepoLazyModule
 import zouitel.neighborhood.security.di.rootedLazyModule
+import zouitel.neighborhood.shortcut.utils.checkNoteActivityShortcut
 import zouitel.neighborhood.ui.di.systemDesignModule
 import zouitel.neighborhood.workspace.di.feedbackScreenModule
 import zouitel.neighborhood.workspace.di.tagsScreenModule
@@ -40,6 +41,7 @@ class NoteApplication: Application(), ImageLoaderFactory, KoinStartup {
 
     override fun onCreate() {
         super.onCreate()
+        checkNoteActivityShortcut(this)
         FirebaseApp.initializeApp(this@NoteApplication)
 
         // Init remote config

@@ -10,13 +10,12 @@ import zouitel.neighborhood.shortcut.utils.tintedShortcutIcon
 import zouitel.neighborhood.ui.CommonIcons
 
 fun quickNote(context: Context): ShortcutInfo {
-    val intent = Intent(context, JottingActivity::class.java)
-    intent.action = Intent.ACTION_VIEW
-    intent.putExtra("quick_note", true)
-
+    val intent = Intent(context, JottingActivity::class.java).apply {
+        action = Intent.ACTION_VIEW
+        putExtra("quick_note", true)
+    }
     val icon = tintedShortcutIcon(context, CommonIcons.NOTE_STICKY_18, Color.rgb(0, 255, 127))
-
-    return ShortcutInfo.Builder(context, "quick")
+    return ShortcutInfo.Builder(context, "quick-note")
         .setShortLabel(context.getString(R.string.jotting))
         .setLongLabel(context.getString(R.string.jotting))
         .setIcon(icon)
