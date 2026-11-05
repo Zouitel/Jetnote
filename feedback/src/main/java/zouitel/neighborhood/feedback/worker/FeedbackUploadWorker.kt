@@ -207,7 +207,7 @@ class FeedbackUploadWorker(
                 return@withContext null
             }
 
-            val safeName = fileName.substringAfterLast('/').substringAfterLast('\\\\')
+            val safeName = fileName.substringAfterLast('/')
                 .filter { it.isLetterOrDigit() || it == '.' || it == '_' || it == '-' }
                 .take(100)
                 .ifBlank { "feedback_screenshot" }
