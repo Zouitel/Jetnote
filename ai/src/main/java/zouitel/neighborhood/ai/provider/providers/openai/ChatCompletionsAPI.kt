@@ -86,7 +86,6 @@ class ChatCompletionsAPI(
             .configureReferHeaders(providerSetting.baseUrl)
             .build()
 
-        Log.i(TAG, "generateText: ${json.encodeToString(requestBody)}")
 
         val response = proxyClient.newCall(request).await()
         if (!response.isSuccessful) {
@@ -146,7 +145,6 @@ class ChatCompletionsAPI(
             .configureReferHeaders(providerSetting.baseUrl)
             .build()
 
-        Log.i(TAG, "streamText: ${json.encodeToString(requestBody)}")
 
         // just for debugging response body
         // println(client.newCall(request).await().body?.string())
@@ -158,12 +156,11 @@ class ChatCompletionsAPI(
                 type: String?,
                 data: String
             ) {
+                try {
                 if (data == "[DONE]") {
-                    println("[onEvent] (done) 结束流: $data")
                     close()
                     return
                 }
-                Log.d(TAG, "onEvent: $data")
                 data
                     .trim()
                     .split("\n")
@@ -207,6 +204,10 @@ class ChatCompletionsAPI(
                         )
                         trySend(messageChunk)
                     }
+                } catch (cause: Throwable) {
+                    close(cause)
+                    eventSource.cancel()
+                }
             }
 
             override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
