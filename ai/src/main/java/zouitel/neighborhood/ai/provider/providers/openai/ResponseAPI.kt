@@ -30,6 +30,7 @@ import zouitel.neighborhood.ai.ui.MessageChunk
 import zouitel.neighborhood.ai.ui.UIMessage
 import zouitel.neighborhood.ai.ui.UIMessageChoice
 import zouitel.neighborhood.ai.ui.UIMessagePart
+import zouitel.neighborhood.ai.utils.KeyRoulette
 import zouitel.neighborhood.ai.utils.configureClientWithProxy
 import zouitel.neighborhood.ai.utils.configureReferHeaders
 import zouitel.neighborhood.ai.utils.encodeBase64
@@ -51,7 +52,10 @@ import kotlin.time.Clock
 
 private const val TAG = "ResponseAPI"
 
-class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
+class ResponseAPI(
+    private val client: OkHttpClient,
+    private val keyRoulette: KeyRoulette
+) : OpenAIImpl {
     override suspend fun generateText(
         providerSetting: ProviderSetting.GlobalAI,
         messages: List<UIMessage>,
@@ -66,7 +70,7 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
             .url("${providerSetting.baseUrl}/responses")
             .headers(params.customHeaders.toHeaders())
             .post(json.encodeToString(requestBody).toRequestBody("application/json".toMediaType()))
-            .addHeader("Authorization", "Bearer ${providerSetting.apiKey}")
+            .addHeader("Authorization", "Bearer ${keyRoulette.next(providerSetting.apiKey)}")
             .addHeader("Content-Type", "application/json")
             .configureReferHeaders(providerSetting.baseUrl)
             .build()
