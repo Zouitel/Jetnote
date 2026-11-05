@@ -1,5 +1,6 @@
 package zouitel.neighborhood.playback
 
+import android.app.PendingIntent
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
@@ -26,9 +27,22 @@ class PlaybackService : MediaSessionService() {
             .build()
 
         player = exoPlayer
-        mediaSession = MediaSession.Builder(this, exoPlayer)
+        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+        val sessionActivity = launchIntent?.let {
+            PendingIntent.getActivity(
+                this,
+                0,
+                it,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        val sessionBuilder = MediaSession.Builder(this, exoPlayer)
             .setCallback(PlaybackSessionCallback())
-            .build()
+        if (sessionActivity != null) {
+            sessionBuilder.setSessionActivity(sessionActivity)
+        }
+        mediaSession = sessionBuilder.build()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
