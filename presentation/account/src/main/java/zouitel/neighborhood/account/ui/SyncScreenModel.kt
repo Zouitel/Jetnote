@@ -328,7 +328,7 @@ class SyncScreenModel(
     }
 
     fun enqueueUploadsProcessing() {
-        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid)
+        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid, context)
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresStorageNotLow(true)
@@ -362,7 +362,7 @@ class SyncScreenModel(
     }
 
     fun enqueueDownloadsProcessing() {
-        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid)
+        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid, context)
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -391,7 +391,7 @@ class SyncScreenModel(
     }
 
     fun enqueueSyncProcessing() {
-        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid)
+        val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid, context)
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresStorageNotLow(true)
