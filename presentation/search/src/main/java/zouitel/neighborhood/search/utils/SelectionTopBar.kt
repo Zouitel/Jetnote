@@ -167,4 +167,4 @@ fun SelectionTopBar(
 }
 private fun Data.plainText(): String = blocks.mapNotNull { block ->
     (block.content as? BlockContent.Text)?.text
-}.joinToString("\\n")
+}.joinToString("\n")
