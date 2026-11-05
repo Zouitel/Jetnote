@@ -33,7 +33,7 @@
         </activity>
                 <provider
                     android:name="androidx.core.content.FileProvider"
-                    android:authorities="${applicationId}.quicknote.provider"
+                    android:authorities="${applicationId}.provider"
                     android:exported="false"
                     tools:replace="android:authorities"
                     android:grantUriPermissions="true">
