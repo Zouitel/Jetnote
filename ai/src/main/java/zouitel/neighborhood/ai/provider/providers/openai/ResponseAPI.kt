@@ -133,7 +133,6 @@ class ResponseAPI(
             override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
                 var exception = t
 
-
                 val bodyRaw = response?.body?.stringSafe()
                 try {
                     if (!bodyRaw.isNullOrBlank()) {
@@ -270,7 +269,6 @@ class ResponseAPI(
                                                 )
                                                 put("image_url", it)
                                             }.onFailure {
-                                                it.printStackTrace()
 
                                                 put("type", "input_text")
                                                 put(
