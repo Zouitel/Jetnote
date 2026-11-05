@@ -133,23 +133,22 @@ class PlaybackManager(private val context: Context) : Player.Listener {
         future.addListener(
             {
                 handler.post {
-                val connected = runCatching { future.get() }.getOrNull()
-                if (controllerFuture !== future) {
-                    return@addListener
-                }
-
-                if (connected == null) {
-                    controllerFuture = null
-                    events.tryEmit(Event.IsLoading(false))
-                    return@addListener
-                }
-
-                connected.addListener(this)
-                if (playlist.isNotEmpty()) {
-                    connected.setMediaItems(playlist.toList(), false)
-                }
-                events.tryEmit(Event.CurrentPath(connected.currentMediaItem?.mediaId.orEmpty()))
-                startPositionUpdates()
+                    val connected = runCatching { future.get() }.getOrNull()
+                    if (controllerFuture === future) {
+                        if (connected == null) {
+                            controllerFuture = null
+                            events.tryEmit(Event.IsLoading(false))
+                        } else {
+                            connected.addListener(this)
+                            if (playlist.isNotEmpty()) {
+                                connected.setMediaItems(playlist.toList(), false)
+                            }
+                            events.tryEmit(
+                                Event.CurrentPath(connected.currentMediaItem?.mediaId.orEmpty())
+                            )
+                            startPositionUpdates()
+                        }
+                    }
                 }
             },
             MoreExecutors.directExecutor()
