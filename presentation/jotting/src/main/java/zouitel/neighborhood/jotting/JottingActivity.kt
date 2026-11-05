@@ -88,6 +88,7 @@ class JottingActivity: ComponentActivity(), KoinComponent {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         handleIncomingIntent(intent)
     }
 
@@ -136,11 +137,11 @@ class JottingActivity: ComponentActivity(), KoinComponent {
                 description.value = sharedText
             }
         } else if (intent?.action == Intent.ACTION_VIEW) {
-            if (intent.extras?.containsKey("quick_photo") == true) {
+            if (intent.getBooleanExtra("quick_photo", false)) {
                 screen.value = Screens.PHOTO_SCREEN
-            } else if (intent.extras?.containsKey("quick_record") == true) {
+            } else if (intent.getBooleanExtra("quick_record", false)) {
                 screen.value = Screens.RECORD_SCREEN
-            } else if (intent.extras?.containsKey("quick_reminder") == true) {
+            } else if (intent.getBooleanExtra("quick_reminder", false)) {
                 screen.value = Screens.REMINDER_SCREEN
             } else {
                 screen.value = Screens.NOTE_SCREEN
