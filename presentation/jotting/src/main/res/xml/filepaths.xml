@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path name="pictures" path="Android/data/zouitel.neighborhood.jetnote/files/Pictures" />
-    <external-path name="movies" path="Android/data/zouitel.neighborhood.jetnote/files/Movies" />
-    <cache-path name="cache" path="." />
-    <external-files-path name="external_files" path="." />
-    <files-path name="upload" path="." />
+    <!-- Only app-owned media directories are exposed to camera/share intents. -->
+    <external-files-path name="pictures" path="Pictures/" />
+    <external-files-path name="movies" path="Movies/" />
 </paths>
