@@ -34,8 +34,6 @@ import zouitel.neighborhood.ui.CommonIcons.PAUSE
 import zouitel.neighborhood.ui.CommonIcons.PLAY
 import zouitel.neighborhood.ui.CommonRow
 import zouitel.neighborhood.ui.SettingsScreenModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 @Composable
@@ -133,6 +131,15 @@ fun SmallAudioPlayer(
 }
 
 internal fun formatLong(value: Long): String {
-    val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
-    return dateFormat.format(value)
+    val totalSeconds = value.coerceAtLeast(0L) / 1_000L
+    val seconds = totalSeconds % 60
+    val totalMinutes = totalSeconds / 60
+    val minutes = totalMinutes % 60
+    val hours = totalMinutes / 60
+
+    return if (hours > 0) {
+        "%d:%02d:%02d".format(hours, minutes, seconds)
+    } else {
+        "%02d:%02d".format(totalMinutes, seconds)
+    }
 }

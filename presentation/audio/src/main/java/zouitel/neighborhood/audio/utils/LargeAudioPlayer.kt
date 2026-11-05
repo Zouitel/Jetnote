@@ -151,7 +151,7 @@ fun LargeAudioPlayer(playerModel: AudioScreenModel, item: Audio, onDelete: () ->
                                     modifier = Modifier.weight(1f),
                                     amplitudes = item.amplitude.map { it.digitToInt() },
                                     progress = if (item.path == uiState.currentPath) uiState.progress else 0f,
-                                    onProgressChange = { playerModel::updatePlaybackProgress },
+                                    onProgressChange = playerModel::seekToProgress,
                                     waveformAlignment = WaveformAlignment.Center,
                                     amplitudeType = AmplitudeType.Avg,
                                     style = Fill,

@@ -243,6 +243,20 @@ class PlaybackManager(private val context: Context) : Player.Listener {
         player.play()
     }
 
+    fun seekToPosition(positionMs: Long) {
+        controller?.let { player ->
+            val duration = player.duration
+            val target = if (duration > 0L) {
+                positionMs.coerceIn(0L, duration)
+            } else {
+                positionMs.coerceAtLeast(0L)
+            }
+            player.seekTo(target)
+            lastEmittedPosition = target
+            events.tryEmit(Event.PositionChanged(target))
+        }
+    }
+
     suspend fun pauseItem(audio: Audio) {
         val player = controller ?: run {
             playItem(audio)
