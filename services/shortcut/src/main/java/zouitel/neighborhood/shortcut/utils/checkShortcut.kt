@@ -1,7 +1,6 @@
 package zouitel.neighborhood.shortcut.utils
 
 import android.content.Context
-import android.content.pm.ShortcutInfo
 import android.util.Log
 import zouitel.neighborhood.shortcut.shorts.quickNote
 import zouitel.neighborhood.shortcut.shorts.quickPhoto
