@@ -103,7 +103,7 @@ class LinkWorker(
     }
 
     fun extractUrls(text: String): List<String> {
-        if (text.length > MAX_TEXT_LENGTH) return emptyList()
+        if (text.toByteArray(Charsets.UTF_8).size > MAX_TEXT_BYTES) return emptyList()
 
         val urlPattern = Regex(
             pattern = """(https?://[^\s]+)|([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.)+[a-zA-Z]{2,}(/[^\s]*)?""",
