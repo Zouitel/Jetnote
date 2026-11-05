@@ -71,6 +71,8 @@ import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.audio.utils.MediumAudioPlayer
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.link.ui.LinkScreenModel
+import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.markdown.action.InsertBlock
 import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.rememberEditorState
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
@@ -106,6 +108,10 @@ import kotlin.time.Duration.Companion.milliseconds
 fun Jotting(
     screen: MutableState<Screens?>,
     data: MutableState<Data>,
+    shareRevision: Int,
+    sharedText: String?,
+    incomingMedias: List<Media>,
+    incomingAudios: List<Audio>,
     onDismiss: () -> Unit
 ) {
     val playerModel = koinInject<AudioScreenModel>()
@@ -157,6 +163,21 @@ fun Jotting(
     val recordDeletedResource = stringResource(R.string.record_deleted)
     val undoResource = stringResource(R.string.action_undo)
     val editorState = rememberEditorState(data.value.blocks)
+    LaunchedEffect(shareRevision) {
+        if (shareRevision > 0) {
+            sharedText
+                ?.lineSequence()
+                ?.filter { it.isNotBlank() }
+                ?.forEach { line -> editorState.dispatch(InsertBlock(Block.paragraph(line))) }
+
+            if (incomingMedias.isNotEmpty() || incomingAudios.isNotEmpty()) {
+                data.value = data.value.copy(
+                    medias = data.value.medias + incomingMedias,
+                    audios = data.value.audios + incomingAudios
+                )
+            }
+        }
+    }
     val isImeVisible = WindowInsets.isImeVisible
 
     val cascadeTheme = remember(backgroundColorState.intValue, textColorState.intValue) {
