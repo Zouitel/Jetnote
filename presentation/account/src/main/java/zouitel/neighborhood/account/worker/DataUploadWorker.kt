@@ -98,6 +98,8 @@ class DataUploadWorker(
                 GsonFactory.getDefaultInstance(),
                 credential
             ).setApplicationName("Jetnote").build()
+        } catch (cancelled: CancellationException) {
+            throw cancelled
         } catch (error: Exception) {
             Log.e("DataUploadWorker", "Failed to initialize Drive service", error)
             null
