@@ -9,7 +9,7 @@ import zouitel.neighborhood.shortcut.shorts.quickRecord
 import zouitel.neighborhood.shortcut.shorts.quickReminder
 
 private const val TAG = "JetnoteShortcuts"
-private val jetnoteShortcutIds = setOf("quick-note", "record", "photo", "reminder")
+private val jetnoteShortcutIds = setOf("quick", "quick-note", "record", "photo", "reminder")
 
 /**
  * Publishes Jetnote's launcher shortcuts without deleting dynamic shortcuts
@@ -30,7 +30,7 @@ fun checkNoteActivityShortcut(context: Context): Boolean {
             quickReminder(context)
         )
         val existing = manager.dynamicShortcuts.filterNot { it.id in jetnoteShortcutIds }
-        val combined = (existing + shortcuts).distinctBy(ShortcutInfo::getId)
+        val combined = (existing + shortcuts).distinctBy { it.id }
         val limit = manager.maxShortcutCountPerActivity
         manager.dynamicShortcuts = combined.take(limit)
         true
