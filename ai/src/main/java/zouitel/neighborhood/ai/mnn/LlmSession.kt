@@ -212,13 +212,11 @@ class LlmSession(
     companion object {
         const val TAG: String = "LlmSession"
 
-        init {
-            private val nativeLibraryAvailable: Boolean = try {
+        private val nativeLibraryAvailable: Boolean = try {
             System.loadLibrary("mnnllmapp")
             true
         } catch (_: UnsatisfiedLinkError) {
             false
-        }
         }
     }
 
