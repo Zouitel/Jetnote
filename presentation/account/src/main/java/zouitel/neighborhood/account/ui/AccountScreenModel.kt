@@ -35,24 +35,27 @@ class AccountScreenModel(
 
     private fun computeStorage() {
         withAsync {
-            // Notes DB + shared prefs + app files (everything in dataDir except cache)
+            // Count internal app data once, excluding cache directories. filesDir is
+            // already nested under dataDir and must not be added a second time.
+            val internalCachePrefix = context.cacheDir.absolutePath + java.io.File.separator
+            val codeCachePrefix = context.codeCacheDir.absolutePath + java.io.File.separator
             val notesBytes = context.dataDir
                 ?.walkTopDown()
-                ?.filter { it.isFile && !it.path.contains("/cache") }
+                ?.filter { file ->
+                    file.isFile &&
+                        !file.absolutePath.startsWith(internalCachePrefix) &&
+                        !file.absolutePath.startsWith(codeCachePrefix)
+                }
                 ?.sumOf { it.length() } ?: 0L
 
-            // External app-specific files (downloaded media, documents)
-            val mediaBytes = (context.getExternalFilesDir(null)
+            // External app-specific files are separate from internal dataDir.
+            val mediaBytes = context.getExternalFilesDir(null)
                 ?.walkTopDown()
                 ?.filter { it.isFile }
-                ?.sumOf { it.length() } ?: 0L) +
-                    (context.filesDir
-                        ?.walkTopDown()
-                        ?.filter { it.isFile }
-                        ?.sumOf { it.length() } ?: 0L)
+                ?.sumOf { it.length() } ?: 0L
 
-            // System cache
-            val cacheBytes = (context.cacheDir?.walkTopDown()?.filter { it.isFile }?.sumOf { it.length() } ?: 0L) +
+            // Cache is reported separately and excluded from the app-data total.
+            val cacheBytes = (context.cacheDir.walkTopDown().filter { it.isFile }.sumOf { it.length() }) +
                     (context.externalCacheDir?.walkTopDown()?.filter { it.isFile }?.sumOf { it.length() } ?: 0L)
 
             _storageInfo.value = StorageInfo(
