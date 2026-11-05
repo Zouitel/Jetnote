@@ -74,9 +74,6 @@ class CopyAudioWorker(
                 throw IOException("Audio copy produced an empty file")
             }
 
-            if (destination.exists() && !destination.delete()) {
-                throw IOException("Unable to replace existing audio file")
-            }
             if (!temporary.renameTo(destination)) {
                 throw IOException("Unable to finalize copied audio file")
             }
