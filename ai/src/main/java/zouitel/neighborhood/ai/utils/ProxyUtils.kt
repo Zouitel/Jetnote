@@ -24,7 +24,6 @@ fun OkHttpClient.configureClientWithProxy(proxyConfig: HttpProxy): OkHttpClient 
         if (!proxyConfig.username.isNullOrEmpty() && !proxyConfig.password.isNullOrEmpty()) {
             clientBuilder.proxyAuthenticator { _: Route?, response: Response ->
                 val credential = Credentials.basic(proxyConfig.username, proxyConfig.password)
-                Log.d(TAG, "configureClientWithProxy: $credential for ${response.request.url}")
                 response.request.newBuilder()
                     .header("Proxy-Authorization", credential)
                     .build()

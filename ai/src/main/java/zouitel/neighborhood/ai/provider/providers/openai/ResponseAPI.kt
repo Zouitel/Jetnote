@@ -30,6 +30,7 @@ import zouitel.neighborhood.ai.ui.MessageChunk
 import zouitel.neighborhood.ai.ui.UIMessage
 import zouitel.neighborhood.ai.ui.UIMessageChoice
 import zouitel.neighborhood.ai.ui.UIMessagePart
+import zouitel.neighborhood.ai.utils.KeyRoulette
 import zouitel.neighborhood.ai.utils.configureClientWithProxy
 import zouitel.neighborhood.ai.utils.configureReferHeaders
 import zouitel.neighborhood.ai.utils.encodeBase64
@@ -51,7 +52,10 @@ import kotlin.time.Clock
 
 private const val TAG = "ResponseAPI"
 
-class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
+class ResponseAPI(
+    private val client: OkHttpClient,
+    private val keyRoulette: KeyRoulette
+) : OpenAIImpl {
     override suspend fun generateText(
         providerSetting: ProviderSetting.GlobalAI,
         messages: List<UIMessage>,
@@ -66,12 +70,11 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
             .url("${providerSetting.baseUrl}/responses")
             .headers(params.customHeaders.toHeaders())
             .post(json.encodeToString(requestBody).toRequestBody("application/json".toMediaType()))
-            .addHeader("Authorization", "Bearer ${providerSetting.apiKey}")
+            .addHeader("Authorization", "Bearer ${keyRoulette.next(providerSetting.apiKey)}")
             .addHeader("Content-Type", "application/json")
             .configureReferHeaders(providerSetting.baseUrl)
             .build()
 
-        Log.i(TAG, "generateText: ${json.encodeToString(requestBody)}")
 
         val response = client.configureClientWithProxy(providerSetting.proxy).newCall(request).await()
         if (!response.isSuccessful) {
@@ -79,7 +82,6 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
         }
 
         val bodyStr = response.body?.string() ?: ""
-        Log.i(TAG, "generateText: $bodyStr")
         val bodyJson = json.parseToJsonElement(bodyStr).jsonObject
         val output = parseResponseOutput(bodyJson)
 
@@ -100,12 +102,11 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
             .url("${providerSetting.baseUrl}/responses")
             .headers(params.customHeaders.toHeaders())
             .post(json.encodeToString(requestBody).toRequestBody("application/json".toMediaType()))
-            .addHeader("Authorization", "Bearer ${providerSetting.apiKey}")
+            .addHeader("Authorization", "Bearer ${keyRoulette.next(providerSetting.apiKey)}")
             .addHeader("Content-Type", "application/json")
             .configureReferHeaders(providerSetting.baseUrl)
             .build()
 
-        Log.i(TAG, "streamText: ${json.encodeToString(requestBody)}")
 
         val listener = object : EventSourceListener() {
             override fun onEvent(
@@ -114,7 +115,7 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
                 type: String?,
                 data: String
             ) {
-                Log.d(TAG, "onEvent: $id/$type $data")
+                try {
                 val json = json.parseToJsonElement(data).jsonObject
                 val chunk = parseResponseDelta(json)
                 if (chunk != null) {
@@ -123,25 +124,23 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
                 if (type == "response.completed") {
                     close()
                 }
+                } catch (cause: Throwable) {
+                    close(cause)
+                    eventSource.cancel()
+                }
             }
 
             override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
                 var exception = t
 
-                t?.printStackTrace()
-                println("[onFailure] 发生错误: ${t?.javaClass?.name} ${t?.message} / $response")
-
                 val bodyRaw = response?.body?.stringSafe()
                 try {
                     if (!bodyRaw.isNullOrBlank()) {
                         val bodyElement = Json.parseToJsonElement(bodyRaw)
-                        println(bodyElement)
                         exception = bodyElement.parseErrorDetail()
-                        Log.i(TAG, "onFailure: $exception")
                     }
                 } catch (e: Throwable) {
-                    Log.w(TAG, "onFailure: failed to parse from $bodyRaw")
-                    e.printStackTrace()
+                    exception = e
                 } finally {
                     close(exception)
                 }
@@ -157,7 +156,6 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
                 .newEventSource(request, listener)
 
         awaitClose {
-            println("[awaitClose] 关闭eventSource ")
             eventSource.cancel()
         }
     }
@@ -271,8 +269,6 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
                                                 )
                                                 put("image_url", it)
                                             }.onFailure {
-                                                it.printStackTrace()
-                                                println("encode image failed: ${part.url}")
 
                                                 put("type", "input_text")
                                                 put(
@@ -451,7 +447,6 @@ class ResponseAPI(private val client: OkHttpClient) : OpenAIImpl {
     }
 
     private fun parseResponseOutput(jsonObject: JsonObject): MessageChunk {
-        println(jsonObject)
         val outputs = jsonObject["output"]?.jsonArray ?: error("output not found")
         val parts = arrayListOf<UIMessagePart>()
 
