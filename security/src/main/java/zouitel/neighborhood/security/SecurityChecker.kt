@@ -86,7 +86,8 @@ object SecurityChecker {
         }
     }
 
-    fun checkApkHash(context: Context): Boolean = false
+    @Deprecated("Use checkAppSignature; whole-APK hashes change between legitimate builds")
+    fun checkApkHash(context: Context): Boolean = checkAppSignature(context)
 
     fun isDebuggable(context: Context): Boolean =
         (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
