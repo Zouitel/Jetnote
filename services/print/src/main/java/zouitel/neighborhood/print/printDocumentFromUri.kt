@@ -17,220 +17,241 @@ import android.print.PrintManager
 import android.widget.Toast
 import com.artifex.mupdf.fitz.Document
 import com.artifex.mupdf.fitz.android.AndroidDrawDevice
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.FileOutputStream
 import java.io.File
+import java.io.IOException
 
-// ── Public entry point ────────────────────────────────────────────────────────
+private const val MIN_RENDER_DPI = 72
+private const val MAX_RENDER_DPI = 600
+private const val MAX_BITMAP_PIXELS = 40_000_000L
+private const val MAX_BITMAP_DIMENSION = 12_000
 
 /**
- * Submits a print job for any document type supported by MuPDF
- * (PDF, DOCX, XLSX, PPTX, TXT, images …).
+ * Prints a local document supported by MuPDF.
  *
- * Each page is rendered at [renderDpi] DPI and written to the system print
- * spooler via [PrintDocumentAdapter].  The user sees the standard Android
- * print preview / printer-selection UI.
- *
- * @param context      Activity or Application context.
- * @param documentPath Absolute file-system path to the document.
- * @param jobName      Label shown in the print queue (defaults to the file name).
- * @param renderDpi    Render resolution — 300 DPI gives print-quality output.
+ * The document is owned by the adapter and is released after any active render
+ * has stopped. [renderDpi] is constrained to avoid invalid or unbounded bitmap
+ * allocations.
  */
 fun printDocumentFromUri(
-    context     : Context,
+    context: Context,
     documentPath: String,
-    jobName     : String = File(documentPath).name,
-    renderDpi   : Int    = 300
+    jobName: String = File(documentPath).name,
+    renderDpi: Int = 300
 ) {
     val printManager = context.getSystemService(Context.PRINT_SERVICE) as? PrintManager
     if (printManager == null) {
         Toast.makeText(context, "Print service unavailable.", Toast.LENGTH_SHORT).show()
         return
     }
+    if (renderDpi !in MIN_RENDER_DPI..MAX_RENDER_DPI) {
+        Toast.makeText(
+            context,
+            "Print resolution must be between $MIN_RENDER_DPI and $MAX_RENDER_DPI DPI.",
+            Toast.LENGTH_LONG
+        ).show()
+        return
+    }
 
-    // Open the document once here to validate it before handing off to the adapter.
     val document = runCatching { Document.openDocument(documentPath) }.getOrElse {
         Toast.makeText(context, "Cannot open document: ${it.message}", Toast.LENGTH_SHORT).show()
         return
     }
-
     val pageCount = runCatching { document.countPages() }.getOrElse { 0 }
-    if (pageCount == 0) {
+    if (pageCount <= 0) {
         document.destroy()
         Toast.makeText(context, "Document has no printable pages.", Toast.LENGTH_SHORT).show()
         return
     }
 
-    val adapter = MuPdfPrintDocumentAdapter(
-        document  = document,
-        pageCount = pageCount,
-        jobName   = jobName,
-        renderDpi = renderDpi
+    printManager.print(
+        jobName,
+        MuPdfPrintDocumentAdapter(document, pageCount, jobName, renderDpi),
+        PrintAttributes.Builder().build()
     )
-
-    printManager.print(jobName, adapter, PrintAttributes.Builder().build())
 }
 
-// ── Adapter ───────────────────────────────────────────────────────────────────
-
-/**
- * [PrintDocumentAdapter] that renders document pages via MuPDF.
- *
- * Lifecycle:
- *  1. [onLayout]  — called when the user changes print settings; returns page count.
- *  2. [onWrite]   — called when the spooler needs page content; renders each
- *                   requested page range into a [PdfDocument] and writes it to
- *                   the provided [ParcelFileDescriptor].
- *  3. [onFinish]  — destroys the MuPDF document and cancels the coroutine scope.
- */
 private class MuPdfPrintDocumentAdapter(
-    private val document : Document,
+    private val document: Document,
     private val pageCount: Int,
-    private val jobName  : String,
+    private val jobName: String,
     private val renderDpi: Int
 ) : PrintDocumentAdapter() {
-
-    // Each adapter instance owns its own scope so IO work cancels cleanly on finish.
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val documentLock = Any()
 
-    // ── onLayout ─────────────────────────────────────────────────────────────
+    @Volatile private var finished = false
+    @Volatile private var activeWrite: kotlinx.coroutines.Job? = null
 
     override fun onLayout(
-        oldAttributes : PrintAttributes?,
-        newAttributes : PrintAttributes,
-        cancellation  : CancellationSignal?,
-        callback      : LayoutResultCallback,
-        extras        : Bundle?
+        oldAttributes: PrintAttributes?,
+        newAttributes: PrintAttributes,
+        cancellation: CancellationSignal?,
+        callback: LayoutResultCallback,
+        extras: Bundle?
     ) {
-        if (cancellation?.isCanceled == true) {
+        if (finished || cancellation?.isCanceled == true) {
             callback.onLayoutCancelled()
             return
         }
-
         val info = PrintDocumentInfo.Builder(jobName)
             .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
             .setPageCount(pageCount)
             .build()
-
         callback.onLayoutFinished(info, oldAttributes != newAttributes)
     }
 
-    // ── onWrite ──────────────────────────────────────────────────────────────
-
     override fun onWrite(
-        pages      : Array<out PageRange>,
+        pages: Array<out PageRange>,
         destination: ParcelFileDescriptor,
         cancellation: CancellationSignal?,
-        callback   : WriteResultCallback
+        callback: WriteResultCallback
     ) {
-        scope.launch {
-            val writtenRanges = mutableListOf<PageRange>()
-            val pdfDoc        = PdfDocument()
+        if (finished) {
+            destination.close()
+            callback.onWriteFailed("The print job has already finished.")
+            return
+        }
 
+        activeWrite = scope.launch {
+            val pdfDocument = PdfDocument()
+            val writtenPages = mutableListOf<Int>()
             try {
                 val pagesToRender = expandRanges(pages, pageCount)
+                if (pagesToRender.isEmpty()) {
+                    throw IOException("No printable pages were selected.")
+                }
 
                 withContext(Dispatchers.IO) {
                     for (pageIndex in pagesToRender) {
-                        if (cancellation?.isCanceled == true) break
-
-                        val bitmap = renderPage(pageIndex) ?: continue
-
-                        // Create a PDF page sized to match the bitmap at the chosen DPI.
-                        val widthPts  = (bitmap.width  * 72f / renderDpi).toInt()
-                        val heightPts = (bitmap.height * 72f / renderDpi).toInt()
-
-                        val pageInfo = PdfDocument.PageInfo.Builder(widthPts, heightPts, pageIndex + 1).create()
-                        val pdfPage  = pdfDoc.startPage(pageInfo)
-
-                        drawBitmapOnCanvas(pdfPage.canvas, bitmap, widthPts, heightPts)
-
-                        pdfDoc.finishPage(pdfPage)
-                        bitmap.recycle()
-                        writtenRanges.add(PageRange(pageIndex, pageIndex))
+                        if (cancellation?.isCanceled == true) throw CancellationException()
+                        val bitmap = renderPage(pageIndex)
+                        try {
+                            val widthPoints = (bitmap.width * 72f / renderDpi).toInt().coerceAtLeast(1)
+                            val heightPoints = (bitmap.height * 72f / renderDpi).toInt().coerceAtLeast(1)
+                            val pageInfo = PdfDocument.PageInfo.Builder(
+                                widthPoints,
+                                heightPoints,
+                                pageIndex + 1
+                            ).create()
+                            val page = pdfDocument.startPage(pageInfo)
+                            drawBitmapOnCanvas(page.canvas, bitmap, widthPoints, heightPoints)
+                            pdfDocument.finishPage(page)
+                            writtenPages += pageIndex
+                        } finally {
+                            bitmap.recycle()
+                        }
                     }
 
-                    // Write the final PDF to the spooler's file descriptor.
-                    FileOutputStream(destination.fileDescriptor).use { out ->
-                        pdfDoc.writeTo(out)
-                    }
+                    if (cancellation?.isCanceled == true) throw CancellationException()
+                    ParcelFileDescriptor.AutoCloseOutputStream(destination).use(pdfDocument::writeTo)
                 }
 
-                if (cancellation?.isCanceled == true) {
-                    callback.onWriteCancelled()
-                } else {
-                    callback.onWriteFinished(writtenRanges.toTypedArray())
-                }
-
-            } catch (e: Exception) {
-                callback.onWriteFailed(e.message)
+                if (cancellation?.isCanceled == true) callback.onWriteCancelled()
+                else callback.onWriteFinished(toPageRanges(writtenPages))
+            } catch (cancelled: CancellationException) {
+                runCatching { destination.close() }
+                callback.onWriteCancelled()
+            } catch (error: Exception) {
+                runCatching { destination.close() }
+                callback.onWriteFailed(error.message ?: "Unable to render the selected pages.")
             } finally {
-                pdfDoc.close()
+                pdfDocument.close()
             }
         }
     }
 
-    // ── onFinish ─────────────────────────────────────────────────────────────
-
     override fun onFinish() {
-        runCatching { document.destroy() }
-        scope.cancel()
+        if (finished) return
+        finished = true
+        scope.launch {
+            activeWrite?.cancelAndJoin()
+            withContext(Dispatchers.IO) {
+                synchronized(documentLock) { runCatching { document.destroy() } }
+            }
+            scope.cancel()
+        }
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    private fun renderPage(index: Int): Bitmap = synchronized(documentLock) {
+        if (finished) throw CancellationException()
+        val page = document.loadPage(index)
+        try {
+            val bounds = page.bounds
+            val scale = renderDpi / 72f
+            val width = ((bounds.x1 - bounds.x0) * scale).toInt()
+            val height = ((bounds.y1 - bounds.y0) * scale).toInt()
+            val pixels = width.toLong() * height.toLong()
+            if (width <= 0 || height <= 0 ||
+                width > MAX_BITMAP_DIMENSION || height > MAX_BITMAP_DIMENSION ||
+                pixels > MAX_BITMAP_PIXELS
+            ) {
+                throw IOException("Page ${index + 1} is too large to render at $renderDpi DPI.")
+            }
+            AndroidDrawDevice.drawPage(
+                page,
+                com.artifex.mupdf.fitz.Matrix(scale, scale)
+            )
+        } finally {
+            page.destroy()
+        }
+    }
 
-    /**
-     * Renders a single document page to a [Bitmap] using MuPDF.
-     * Scale factor is derived from [renderDpi] (MuPDF renders at 72 DPI by default,
-     * so scale = renderDpi / 72).
-     */
-    private fun renderPage(index: Int): Bitmap? = runCatching {
-        val scale  = renderDpi / 72f
-        val page   = document.loadPage(index)
-        val matrix = com.artifex.mupdf.fitz.Matrix(scale, scale)
-        AndroidDrawDevice.drawPage(page, matrix)
-    }.getOrNull()
-
-    /**
-     * Draws [bitmap] onto [canvas] scaled to fit [destWidth] × [destHeight] points,
-     * centred on a white background.
-     */
     private fun drawBitmapOnCanvas(
-        canvas   : Canvas,
-        bitmap   : Bitmap,
-        destWidth : Int,
+        canvas: Canvas,
+        bitmap: Bitmap,
+        destWidth: Int,
         destHeight: Int
     ) {
         canvas.drawColor(Color.WHITE)
-
-        val scaleX = destWidth.toFloat()  / bitmap.width
-        val scaleY = destHeight.toFloat() / bitmap.height
-        val scale  = minOf(scaleX, scaleY)
-
-        val left = (destWidth  - bitmap.width  * scale) / 2f
-        val top  = (destHeight - bitmap.height * scale) / 2f
-
-        val matrix = Matrix().apply { setScale(scale, scale); postTranslate(left, top) }
+        val scale = minOf(
+            destWidth.toFloat() / bitmap.width,
+            destHeight.toFloat() / bitmap.height
+        )
+        val left = (destWidth - bitmap.width * scale) / 2f
+        val top = (destHeight - bitmap.height * scale) / 2f
+        val matrix = Matrix().apply {
+            setScale(scale, scale)
+            postTranslate(left, top)
+        }
         canvas.drawBitmap(bitmap, matrix, null)
     }
 
-    /**
-     * Expands an array of [PageRange] objects (which may include
-     * [PageRange.ALL_PAGES]) into a sorted, deduplicated list of zero-based page
-     * indices bounded by [totalPages].
-     */
     private fun expandRanges(ranges: Array<out PageRange>, totalPages: Int): List<Int> {
         val result = sortedSetOf<Int>()
         for (range in ranges) {
-            val start = if (range == PageRange.ALL_PAGES) 0          else range.start
-            val end   = if (range == PageRange.ALL_PAGES) totalPages - 1 else range.end
-            for (i in start..end.coerceAtMost(totalPages - 1)) result.add(i)
+            val start = if (range == PageRange.ALL_PAGES) 0 else range.start
+            val end = if (range == PageRange.ALL_PAGES) totalPages - 1 else range.end
+            if (start <= end && end >= 0 && start < totalPages) {
+                for (index in start.coerceAtLeast(0)..end.coerceAtMost(totalPages - 1)) {
+                    result += index
+                }
+            }
         }
         return result.toList()
+    }
+
+    private fun toPageRanges(pageIndices: List<Int>): Array<PageRange> {
+        if (pageIndices.isEmpty()) return emptyArray()
+        val ranges = mutableListOf<PageRange>()
+        var start = pageIndices.first()
+        var end = start
+        for (index in pageIndices.drop(1)) {
+            if (index == end + 1) end = index
+            else {
+                ranges += PageRange(start, end)
+                start = index
+                end = index
+            }
+        }
+        ranges += PageRange(start, end)
+        return ranges.toTypedArray()
     }
 }
