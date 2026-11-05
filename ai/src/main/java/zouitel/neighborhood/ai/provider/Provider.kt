@@ -13,7 +13,7 @@ interface Provider<T : ProviderSetting> {
     suspend fun listModels(providerSetting: T): List<Model>
 
     suspend fun getBalance(providerSetting: T): String {
-        return "TODO"
+        return "Balance lookup is not supported by this provider."
     }
 
     suspend fun generateText(
