@@ -13,7 +13,6 @@ import zouitel.neighborhood.logic.withFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @Stable
 @Suppress("DeferredResultUnused")
@@ -35,8 +34,14 @@ class AudioScreenModel(
         .withFlow(emptyList())
 
     private val currentAudio = MutableStateFlow<Audio?>(null)
+    private val audioByPath = mutableMapOf<String, Audio>()
+
+    init {
+        withAsync { observePlaybackEvents() }
+    }
 
     fun initAudio(audio: Audio) {
+        audioByPath[audio.path] = audio
         withAsync {
             player.addAudio(audio)
         }
@@ -56,13 +61,13 @@ class AudioScreenModel(
     }
 
     fun playbackItemState(item: Audio) {
+        audioByPath[item.path] = item
+        currentAudio.value = item
         withAsync {
             when {
                 _uiState.value.isPlaying -> player.pauseItem(item)
                 else -> player.playItem(item)
             }
-            currentAudio.value = item
-            launch { observePlaybackEvents() }
         }
     }
 
@@ -72,7 +77,10 @@ class AudioScreenModel(
                 is PlaybackManager.Event.PositionChanged -> updatePlaybackProgress(it.position)
                 is PlaybackManager.Event.PlayingChanged -> updatePlayingState(it.isPlaying)
                 is PlaybackManager.Event.IsLoading -> updateLoadingState(it.isLoading)
-                is PlaybackManager.Event.CurrentPath -> updateCurrentPath(it.path)
+                is PlaybackManager.Event.CurrentPath -> {
+                    updateCurrentPath(it.path)
+                    audioByPath[it.path]?.let { audio -> currentAudio.value = audio }
+                }
             }
         }
     }
@@ -83,7 +91,10 @@ class AudioScreenModel(
 
     fun updatePlaybackProgress(position: Long) {
         val record = currentAudio.value ?: return
-        _uiState.value = uiState.value.copy(progress = position.toFloat() / record.duration)
+        if (record.duration <= 0L) return
+        _uiState.value = uiState.value.copy(
+            progress = (position.toFloat() / record.duration).coerceIn(0f, 1f)
+        )
     }
 
     private fun updatePlayingState(isPlaying: Boolean) {
@@ -98,8 +109,4 @@ class AudioScreenModel(
         _uiState.value = uiState.value.copy(currentPath = path)
     }
 
-    override fun onDispose() {
-        super.onDispose()
-        player.clearPlaylist()
-    }
 }

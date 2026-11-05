@@ -28,7 +28,7 @@ import zouitel.neighborhood.navigator.di.initializerLazyModule
 import zouitel.neighborhood.navigator.di.screensModule
 import zouitel.neighborhood.navigator.di.screensScreenModule
 import zouitel.neighborhood.permissions.permissionsModule
-import zouitel.neighborhood.playback.di.playbackLazyModule
+import zouitel.neighborhood.audio.di.audioPlayerModule
 import zouitel.neighborhood.repository.di.localRepoLazyModule
 import zouitel.neighborhood.security.di.rootedLazyModule
 import zouitel.neighborhood.ui.di.systemDesignModule
@@ -62,15 +62,15 @@ class NoteApplication: Application(), ImageLoaderFactory, KoinStartup {
             databaseLazyModule,
             localRepoLazyModule,
             datastoreLazyModule,
-            rootedLazyModule,
-            playbackLazyModule
+            rootedLazyModule
         )
         modules(
             systemDesignModule,
             screensModule,
             permissionsModule,
             binModule,
-            feedbackModule
+            feedbackModule,
+            audioPlayerModule
         )
 
         ScreenRegistry {

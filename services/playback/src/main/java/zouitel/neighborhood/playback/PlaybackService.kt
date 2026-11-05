@@ -1,70 +1,80 @@
 package zouitel.neighborhood.playback
 
 import android.app.PendingIntent
-import android.app.TaskStackBuilder
-import android.content.Intent
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
-import zouitel.neighborhood.audio.AudioActivity
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
+/**
+ * Owns the player for the lifetime of the Android service. Media3 manages the
+ * foreground notification and foreground-service transitions for active playback.
+ */
 class PlaybackService : MediaSessionService() {
 
-    private val librarySessionCallback = CustomMediaLibrarySessionCallback()
     private var player: ExoPlayer? = null
-    private var mediaLibrarySession: MediaSession? = null
-
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
-        mediaLibrarySession
-
-    // Prevent Media3 from starting a foreground service notification
-    override fun onUpdateNotification(session: MediaSession, startInForegroundRequired: Boolean) {
-        // Intentionally no-op: suppresses foreground service promotion
-    }
+    private var mediaSession: MediaSession? = null
 
     override fun onCreate() {
         super.onCreate()
-        player = ExoPlayer.Builder(this)
+
+        val exoPlayer = ExoPlayer.Builder(this)
             .setAudioAttributes(AudioAttributes.DEFAULT, true)
             .setHandleAudioBecomingNoisy(true)
             .build()
 
-        val sessionActivityPendingIntent = TaskStackBuilder.create(this).run {
-            addNextIntent(Intent(this@PlaybackService, AudioActivity::class.java))
-            getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        player = exoPlayer
+        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+        val sessionActivity = launchIntent?.let {
+            PendingIntent.getActivity(
+                this,
+                0,
+                it,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         }
 
-        mediaLibrarySession = MediaSession.Builder(this, player!!)
-            .setCallback(librarySessionCallback)
-            .setSessionActivity(sessionActivityPendingIntent)
-            .build()
+        val sessionBuilder = MediaSession.Builder(this, exoPlayer)
+            .setCallback(PlaybackSessionCallback())
+        if (sessionActivity != null) {
+            sessionBuilder.setSessionActivity(sessionActivity)
+        }
+        mediaSession = sessionBuilder.build()
     }
+
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
+        mediaSession
 
     override fun onDestroy() {
+        mediaSession?.release()
+        mediaSession = null
+
+        player?.release()
+        player = null
+
         super.onDestroy()
-        mediaLibrarySession?.run {
-            player.release()
-            release()
-            mediaLibrarySession = null
-        }
     }
 
-    private inner class CustomMediaLibrarySessionCallback : MediaSession.Callback {
+    private class PlaybackSessionCallback : MediaSession.Callback {
         override fun onAddMediaItems(
             mediaSession: MediaSession,
             controller: MediaSession.ControllerInfo,
             mediaItems: MutableList<MediaItem>
         ): ListenableFuture<List<MediaItem>> {
-            val updatedMediaItems = mediaItems.map { mediaItem ->
-                mediaItem.buildUpon()
-                    .setUri(mediaItem.requestMetadata.mediaUri)
+            val resolvedItems = mediaItems.map { item ->
+                val uri = item.requestMetadata.mediaUri ?: item.localConfiguration?.uri
+                    ?: return Futures.immediateFailedFuture(
+                        IllegalArgumentException("Media item is missing a playable URI")
+                    )
+
+                item.buildUpon()
+                    .setUri(uri)
                     .build()
             }
-            return Futures.immediateFuture(updatedMediaItems)
+            return Futures.immediateFuture(resolvedItems)
         }
     }
 }
