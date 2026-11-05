@@ -1,93 +1,145 @@
 package zouitel.neighborhood.recorder.ui
 
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
-import zouitel.neighborhood.domain.utils.withAsync
-import zouitel.neighborhood.logic.withFlow
 import zouitel.neighborhood.recorder.recorder.RecorderRepo
 import zouitel.neighborhood.recorder.state.UiState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.Timer
-import kotlin.concurrent.fixedRateTimer
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 @Stable
-@Suppress("DeferredResultUnused")
-class RecorderScreenModel(private val repo: RecorderRepo): ScreenModel {
-    var time: Duration by mutableStateOf(Duration.ZERO)
+class RecorderScreenModel(
+    private val repo: RecorderRepo
+) : ScreenModel {
+    private val screenScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val operationMutex = Mutex()
+    private var timerJob: Job? = null
+    private var elapsedSeconds = 0
 
-    private val timer = mutableStateOf<Timer?>(null)
-
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState
-        .withFlow(UiState())
+    private val _uiState = kotlinx.coroutines.flow.MutableStateFlow(UiState())
+    val uiState: kotlinx.coroutines.flow.StateFlow<UiState> = _uiState
 
     fun start(file: File) {
-        withAsync {
-            launch { repo.start(file) }
-            launch {
-                timer.value = fixedRateTimer(initialDelay = 1000L, period = 1000L) {
-                    time += 1.seconds
-                    updateTimeStates()
+        screenScope.launch {
+            operationMutex.withLock {
+                if (_uiState.value.isRecording || _uiState.value.isStarting) return@withLock
+
+                timerJob?.cancel()
+                elapsedSeconds = 0
+                _uiState.value = UiState(isStarting = true)
+                runCatching {
+                    withContext(Dispatchers.IO) { repo.start(file) }
+                }.onSuccess {
+                    _uiState.value = UiState(isRecording = true)
+                    startTimer()
+                }.onFailure { error ->
+                    _uiState.value = UiState(errorMessage = error.message ?: "Unable to start recording")
                 }
             }
-            _uiState.value = _uiState.value.copy(isRecording = true)
         }
     }
 
     fun pause() {
-        repo.pause()
-        timer.value?.cancel()
-        _uiState.value = _uiState.value.copy(isPause = true)
+        screenScope.launch {
+            operationMutex.withLock {
+                if (!_uiState.value.isRecording || _uiState.value.isPause) return@withLock
+                runCatching {
+                    withContext(Dispatchers.IO) { repo.pause() }
+                }.onSuccess {
+                    timerJob?.cancel()
+                    timerJob = null
+                    _uiState.value = _uiState.value.copy(isPause = true)
+                }.onFailure(::publishError)
+            }
+        }
     }
 
     fun resume() {
-        repo.resume()
-        timer.value = fixedRateTimer(initialDelay = 1000L, period = 1000L) {
-            time += 1.seconds
-            updateTimeStates()
+        screenScope.launch {
+            operationMutex.withLock {
+                if (!_uiState.value.isRecording || !_uiState.value.isPause) return@withLock
+                runCatching {
+                    withContext(Dispatchers.IO) { repo.resume() }
+                }.onSuccess {
+                    _uiState.value = _uiState.value.copy(isPause = false)
+                    startTimer()
+                }.onFailure(::publishError)
+            }
         }
-        _uiState.value = _uiState.value.copy(isPause = false)
     }
 
     fun stop() {
-        withAsync {
-            launch { repo.stop() }
-            launch {
-                _uiState.value = _uiState.value.copy(isRecording = false)
+        screenScope.launch {
+            operationMutex.withLock {
+                if (!_uiState.value.isRecording && !_uiState.value.isStarting) return@withLock
+                timerJob?.cancel()
+                timerJob = null
+                runCatching {
+                    withContext(Dispatchers.IO) { repo.stop() }
+                }.onSuccess {
+                    // Keep the final elapsed duration available until the caller saves the recording.
+                    _uiState.value = _uiState.value.copy(
+                        isRecording = false,
+                        isPause = false,
+                        isStarting = false,
+                    )
+                }.onFailure { error ->
+                    _uiState.value = UiState(errorMessage = error.message ?: "Unable to stop recording")
+                }
             }
         }
     }
 
     fun reset() {
-        timer.value?.cancel()
-        time = Duration.ZERO
-        updateTimeStates()
+        if (_uiState.value.isRecording) return
+        timerJob?.cancel()
+        timerJob = null
+        elapsedSeconds = 0
+        _uiState.value = UiState()
     }
 
-    private fun updateTimeStates() {
-        time.toComponents { hours, minutes, seconds, _ ->
-            _uiState.value = _uiState.value.copy(
-                seconds = seconds.pad(),
-                minutes = minutes.pad(),
-                hours = hours.toInt().pad()
-            )
+    private fun startTimer() {
+        timerJob?.cancel()
+        timerJob = screenScope.launch {
+            while (isActive) {
+                delay(1_000)
+                elapsedSeconds += 1
+                val hours = elapsedSeconds / 3_600
+                val minutes = (elapsedSeconds % 3_600) / 60
+                val seconds = elapsedSeconds % 60
+                _uiState.value = _uiState.value.copy(
+                    hours = hours.pad(),
+                    minutes = minutes.pad(),
+                    seconds = seconds.pad(),
+                    elapsedMilliseconds = elapsedSeconds * 1_000L
+                )
+            }
         }
     }
 
-    private fun Int.pad(): String {
-        return this.toString().padStart(2, '0')
+    private fun publishError(error: Throwable) {
+        _uiState.value = _uiState.value.copy(
+            errorMessage = error.message ?: "Recording operation failed"
+        )
     }
 
+    private fun Int.pad(): String = toString().padStart(2, '0')
+
     override fun onDispose() {
+        timerJob?.cancel()
+        screenScope.cancel()
+        // MediaRecorder must be released even if the screen is removed mid-recording.
+        runCatching { repo.stop() }
         super.onDispose()
-        stop()
     }
 }

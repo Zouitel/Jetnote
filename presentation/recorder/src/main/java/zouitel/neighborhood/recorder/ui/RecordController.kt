@@ -47,11 +47,12 @@ fun RecordController(
             ) {
                 IconButton(
                     onClick = onStart,
+                    enabled = !uiState.isStarting,
                     modifier = Modifier.sizeIn(50.dp)
                 ) {
                     Icon(
                         painter = painterResource(id = MIC_36),
-                        contentDescription = null,
+                        contentDescription = "Start recording",
                         tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -69,7 +70,7 @@ fun RecordController(
                     ) {
                         Icon(
                             painter = painterResource(id = PLAY_36),
-                            contentDescription = null,
+                            contentDescription = "Resume recording",
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -80,7 +81,7 @@ fun RecordController(
                     ) {
                         Icon(
                             painter = painterResource(id = PAUSE_36),
-                            contentDescription = null,
+                            contentDescription = "Pause recording",
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
@@ -98,7 +99,7 @@ fun RecordController(
                 ) {
                     Icon(
                         painter = painterResource(id = STOP_36),
-                        contentDescription = null,
+                        contentDescription = "Stop recording",
                         tint = MaterialTheme.colorScheme.errorContainer
                     )
                 }
