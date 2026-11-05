@@ -249,16 +249,16 @@ class SyncScreenModel(
      * a verified Drive ID. Exceptions intentionally propagate to auto-sync.
      */
     suspend fun createDriveFolders(driveService: Drive?) = withContext(Dispatchers.IO) {
-        requireNotNull(driveService) { "Google Drive service is not initialized" }
+        val drive = requireNotNull(driveService) { "Google Drive service is not initialized" }
 
         Log.d("SyncScreenModel", "Starting folder creation/verification...")
 
-        requireFolder(driveService, "jetnote_data", "root")
-        val mediasFolderId = requireFolder(driveService, "jetnote_medias", "root")
-        requireFolder(driveService, "jetnote_feedback", "root")
+        requireFolder(drive, "jetnote_data", "root")
+        val mediasFolderId = requireFolder(drive, "jetnote_medias", "root")
+        requireFolder(drive, "jetnote_feedback", "root")
 
         listOf("pictures", "movies", "downloads", "audios").forEach { folderName ->
-            requireFolder(driveService, folderName, mediasFolderId)
+            requireFolder(drive, folderName, mediasFolderId)
         }
 
         Log.d("SyncScreenModel", "Drive folder structure verified successfully")
