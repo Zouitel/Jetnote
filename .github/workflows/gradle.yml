@@ -35,6 +35,21 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     
+    - name: Download Gradle distribution (with retries)
+      shell: bash
+      run: |
+        for attempt in 1 2 3; do
+          if ./gradlew --version; then
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Gradle distribution download failed (attempt $attempt/3); retrying..."
+            sleep $((attempt * 15))
+          fi
+        done
+        echo "Gradle distribution could not be downloaded after 3 attempts."
+        exit 1
+
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
