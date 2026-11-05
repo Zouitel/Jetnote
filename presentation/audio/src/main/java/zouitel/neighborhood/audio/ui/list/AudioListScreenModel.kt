@@ -2,7 +2,6 @@ package zouitel.neighborhood.audio.ui.list
 
 import android.app.Application
 import android.content.Context
-import android.os.Environment
 import androidx.compose.runtime.Stable
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy.KEEP
@@ -54,8 +53,7 @@ class AudioListScreenModel(
             runCatching {
                 repo.loadAudioFiles(query ?: _ListUiState.value.searchQuery).map { audio ->
                     audio.toUiState {
-                        val directory = context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
-                            ?: throw IllegalStateException("App audio storage is unavailable")
+                        val directory = AudioStorage.directory(context)
                         if ((!directory.exists() && !directory.mkdirs()) || !directory.isDirectory) {
                             throw IllegalStateException("Unable to create app audio storage directory")
                         }
@@ -66,7 +64,7 @@ class AudioListScreenModel(
                         }
 
                         screenModelScope.launch {
-                            delay(if (listUiState.value.newAudio) 300.milliseconds else 300.milliseconds)
+                            delay(300.milliseconds)
                             runCatching { listUiState.value.bottomSheetNavigator?.hide() }
                         }
                         audio.copy(path = file.absolutePath)
