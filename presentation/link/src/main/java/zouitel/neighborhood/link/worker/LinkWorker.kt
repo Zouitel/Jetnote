@@ -14,9 +14,6 @@ import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.io.IOException
-import java.net.Inet4Address
-import java.net.Inet6Address
-import java.net.InetAddress
 import java.net.URI
 
 class LinkWorker(
@@ -31,7 +28,7 @@ class LinkWorker(
         val uid = inputData.getString(UID)?.trim().orEmpty()
         val text = inputData.getString(TEXT).orEmpty()
 
-        if (uid.isBlank() || text.isBlank() || text.length > MAX_TEXT_LENGTH) {
+        if (uid.isBlank() || text.isBlank() || text.toByteArray(Charsets.UTF_8).size > MAX_TEXT_BYTES) {
             return@withContext Result.failure()
         }
 
@@ -122,9 +119,15 @@ class LinkWorker(
     }
 
     private fun fetchDocument(rawUrl: String): Document {
-        var uri = parseHttpUri(rawUrl)
+        var uri = LinkUrlValidator.parseHttpUri(rawUrl)
         repeat(MAX_REDIRECTS + 1) { redirectCount ->
-            ensurePublicDestination(uri)
+            try {
+                LinkUrlValidator.validatePublicDestination(uri)
+            } catch (failure: IOException) {
+                throw LinkFetchException("DNS lookup failed", retryable = true, cause = failure)
+            } catch (failure: IllegalArgumentException) {
+                throw LinkFetchException(failure.message ?: "Unsafe URL", retryable = false, cause = failure)
+            }
             val response = try {
                 Jsoup.connect(uri.toString())
                     .userAgent(USER_AGENT)
@@ -143,7 +146,7 @@ class LinkWorker(
                 }
                 val location = response.header("Location")
                     ?: throw LinkFetchException("Redirect without a location", retryable = false)
-                uri = parseHttpUri(uri.resolve(location).toString())
+                uri = LinkUrlValidator.parseHttpUri(uri.resolve(location).toString())
                 return@repeat
             }
             if (status !in 200..299) {
@@ -157,69 +160,6 @@ class LinkWorker(
         throw LinkFetchException("Unable to fetch URL", retryable = false)
     }
 
-    private fun parseHttpUri(value: String): URI {
-        val normalized = if (value.startsWith("http://", true) || value.startsWith("https://", true)) {
-            value
-        } else {
-            "https://$value"
-        }
-        val uri = try {
-            URI(normalized).normalize()
-        } catch (failure: Exception) {
-            throw LinkFetchException("Malformed URL", retryable = false, cause = failure)
-        }
-        if (uri.scheme?.lowercase() !in listOf("http", "https") || uri.host.isNullOrBlank() ||
-            uri.userInfo != null || uri.port !in -1..65535
-        ) {
-            throw LinkFetchException("Unsupported URL", retryable = false)
-        }
-        return uri
-    }
-
-    private fun ensurePublicDestination(uri: URI) {
-        val addresses = try {
-            InetAddress.getAllByName(uri.host)
-        } catch (failure: IOException) {
-            throw LinkFetchException("DNS lookup failed", retryable = true, cause = failure)
-        }
-        if (addresses.isEmpty() || addresses.any { !it.isPublicAddress() }) {
-            throw LinkFetchException("Non-public network destinations are not allowed", retryable = false)
-        }
-    }
-
-    private fun InetAddress.isPublicAddress(): Boolean {
-        if (isAnyLocalAddress || isLoopbackAddress || isLinkLocalAddress ||
-            isSiteLocalAddress || isMulticastAddress
-        ) return false
-
-        val bytes = address
-        return when (this) {
-            is Inet4Address -> {
-                val a = bytes[0].toInt() and 0xff
-                val b = bytes[1].toInt() and 0xff
-                val c = bytes[2].toInt() and 0xff
-                !(a == 0 || a == 10 || a == 127 || a >= 224 ||
-                    (a == 100 && b in 64..127) ||
-                    (a == 169 && b == 254) ||
-                    (a == 172 && b in 16..31) ||
-                    (a == 192 && (b == 0 || b == 168)) ||
-                    (a == 198 && b in 18..19) ||
-                    (a == 198 && b == 51 && c == 100) ||
-                    (a == 203 && b == 0 && c == 113))
-            }
-            is Inet6Address -> {
-                val first = bytes[0].toInt() and 0xff
-                val second = bytes[1].toInt() and 0xff
-                // Unique-local (fc00::/7), link-local (fe80::/10), and documentation (2001:db8::/32).
-                !(first and 0xfe == 0xfc ||
-                    first == 0xfe && second and 0xc0 == 0x80 ||
-                    first == 0x20 && second == 0x01 &&
-                    bytes[2].toInt() == 0x0d && bytes[3].toInt() == 0xb8)
-            }
-            else -> false
-        }
-    }
-
     private class LinkFetchException(
         message: String,
         val retryable: Boolean,
@@ -228,7 +168,7 @@ class LinkWorker(
 
     private companion object {
         const val TEXT = "text"
-        const val MAX_TEXT_LENGTH = 20_000
+        const val MAX_TEXT_BYTES = 7_500
         const val MAX_URL_LENGTH = 2_048
         const val MAX_URL_COUNT = 20
         const val MAX_METADATA_LENGTH = 2_000
