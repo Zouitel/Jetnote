@@ -2,9 +2,9 @@ package zouitel.neighborhood.account.worker
 
 import android.content.Context
 import androidx.work.Data
+import com.google.api.client.http.HttpExecuteInterceptor
 import com.google.api.client.http.HttpRequest
 import com.google.api.client.http.HttpRequestInitializer
-import com.google.api.client.http.HttpRequestInterceptor
 import java.io.IOException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
@@ -56,7 +56,7 @@ internal object AccountWorkIdentity {
  * Revalidates the Firebase and Google account binding before every Drive HTTP
  * request, not only when WorkManager starts the worker.
  *
- * The credential initializer remains responsible for OAuth setup. Its request
+ * The credential initializer remains responsible for OAuth setup. Its execute
  * interceptor is chained after the identity check so no authenticated request
  * is sent when the account binding has changed.
  */
@@ -68,7 +68,7 @@ internal class AccountBoundDriveRequestInitializer(
     override fun initialize(request: HttpRequest) {
         credentialInitializer.initialize(request)
         val credentialInterceptor = request.interceptor
-        request.interceptor = HttpRequestInterceptor { currentRequest ->
+        request.interceptor = HttpExecuteInterceptor { currentRequest ->
             AccountWorkIdentity.requireCurrent(inputData, context)
             credentialInterceptor?.intercept(currentRequest)
         }
