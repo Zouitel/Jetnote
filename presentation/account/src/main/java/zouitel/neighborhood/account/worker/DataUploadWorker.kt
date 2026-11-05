@@ -58,28 +58,29 @@ class DataUploadWorker(
         }
 
         return try {
-        // Read each source inside this work execution. No background collectors can
-        // race the upload and leave an empty/default snapshot behind.
-        val settingsSnapshot = settingsMapper.fromDomain(observeSettings().first())
-        val notesSnapshot = getNotes().map { note ->
-            dataMapper.fromDomain(note.data)
-        }
-        val labelsSnapshot = labelMapper.fromDomain(getLabels())
-        val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags())
-
-        val driveService = initializeDriveService()
-            ?: throw IOException("Google Drive account is not available")
-
-        uploadsData(
-            context = applicationContext,
-            driveService = driveService,
-            settings = settingsSnapshot,
-            notes = notesSnapshot,
-            labels = labelsSnapshot,
-            noteAndTags = noteAndTagsSnapshot
-        )
-
-        Result.success()
+            // Read each source inside this work execution. No background collectors can
+            // race the upload and leave an empty/default snapshot behind.
+            val settingsSnapshot = settingsMapper.fromDomain(observeSettings().first())
+            val notesSnapshot = getNotes().map { note ->
+                dataMapper.fromDomain(note.data)
+            }
+            val labelsSnapshot = labelMapper.fromDomain(getLabels())
+            val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags())
+    
+            val driveService = initializeDriveService()
+                ?: throw IOException("Google Drive account is not available")
+    
+            uploadsData(
+                context = applicationContext,
+                driveService = driveService,
+                settings = settingsSnapshot,
+                notes = notesSnapshot,
+                labels = labelsSnapshot,
+                noteAndTags = noteAndTagsSnapshot
+            )
+    
+            Result.success()
+    
     } catch (cancelled: CancellationException) {
         throw cancelled
     } catch (error: Exception) {
