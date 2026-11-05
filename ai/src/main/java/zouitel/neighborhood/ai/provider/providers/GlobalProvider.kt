@@ -37,7 +37,7 @@ class GlobalProvider(
 ) : Provider<ProviderSetting.GlobalAI> {
     private val keyRoulette = KeyRoulette.default()
     private val chatCompletionsAPI = ChatCompletionsAPI(client = client, keyRoulette = keyRoulette)
-    private val responseAPI = ResponseAPI(client = client)
+    private val responseAPI = ResponseAPI(client = client, keyRoulette = keyRoulette)
 
     // Cache for all models
     private var allModelsCache: List<Model>? = null
