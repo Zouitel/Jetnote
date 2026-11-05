@@ -112,6 +112,7 @@ fun Jotting(
     sharedText: String?,
     incomingMedias: List<Media>,
     incomingAudios: List<Audio>,
+    onShareConsumed: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val playerModel = koinInject<AudioScreenModel>()
@@ -176,6 +177,7 @@ fun Jotting(
                     audios = data.value.audios + incomingAudios
                 )
             }
+            onShareConsumed()
         }
     }
     val isImeVisible = WindowInsets.isImeVisible
