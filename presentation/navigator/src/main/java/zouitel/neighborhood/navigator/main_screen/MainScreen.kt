@@ -137,7 +137,7 @@ class MainScreen: Screen {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarState = remember { SnackbarHostState() }
         var searchExpandRequest by remember { mutableStateOf<Any?>(null) }
-        val deletedNotes = remember { mutableStateListOf<Pair<Data, Int>>() }
+        val deletedNotes = remember { mutableStateListOf<Pair<List<Data>, Int>>() }
         var jobCounter by remember { mutableIntStateOf(0) }
         val scope = rememberCoroutineScope()
 
@@ -222,24 +222,32 @@ class MainScreen: Screen {
                                 tagModel = tagModel
                             ) {
                                 val currentJobId = jobCounter++
-                                deletedNotes.add(Pair(it, currentJobId))
-                                val notePair = deletedNotes.firstOrNull { note -> note.second == currentJobId }
-                                dataModel.sendAction(Action.DeleteByUid(it.uid))
+                                val notesToDelete = it.distinctBy(Data::uid)
+                                val deletedBatch = notesToDelete to currentJobId
+                                deletedNotes.add(deletedBatch)
+                                notesToDelete.forEach { note ->
+                                    dataModel.sendAction(Action.DeleteByUid(note.uid))
+                                }
 
                                 scope.launch {
                                     snackbarState.currentSnackbarData?.dismiss()
+                                    val message = if (notesToDelete.size == 1) {
+                                        "${notesToDelete.single().title} deleted!"
+                                    } else {
+                                        "${notesToDelete.size} notes deleted!"
+                                    }
                                     val result = snackbarState.showSnackbar(
-                                        message = "${notePair?.first?.title} deleted!",
+                                        message = message,
                                         actionLabel = "Undo",
                                         duration = SnackbarDuration.Long
                                     )
 
                                     if (result == SnackbarResult.ActionPerformed) {
-                                        notePair?.first?.let { note ->
+                                        notesToDelete.forEach { note ->
                                             dataModel.sendAction(Action.Insert(note))
                                         }
                                     }
-                                    notePair?.let { note -> deletedNotes.remove(note) }
+                                    deletedNotes.remove(deletedBatch)
                                 }
                             }
                         } else {
