@@ -20,13 +20,15 @@ object PdfParser {
         require(file.isFile && file.canRead()) { "PDF file is not readable" }
         require(file.length() <= MAX_FILE_BYTES) { "PDF exceeds the size limit" }
 
-        var document: Document? = null
+        var openedDocument: Document? = null
+        var pdfDocument: PDFDocument? = null
         try {
-            document = PDFDocument.openDocument(file.absolutePath)
-            if (!document.isPDF) throw IOException("File is not a supported PDF document")
-            val pdf = document.asPDF()
-            if (pdf.needsPassword()) throw IOException("PDF is password-protected")
-            val pageCount = pdf.countPages()
+            openedDocument = PDFDocument.openDocument(file.absolutePath)
+            if (!openedDocument.isPDF) throw IOException("File is not a supported PDF document")
+            pdfDocument = openedDocument.asPDF()
+
+            if (pdfDocument.needsPassword()) throw IOException("PDF is password-protected")
+            val pageCount = pdfDocument.countPages()
             if (pageCount > MAX_PAGES) throw IOException("PDF contains too many pages")
 
             val result = StringBuilder()
@@ -34,7 +36,7 @@ object PdfParser {
                 var page: Page? = null
                 var structuredText: StructuredText? = null
                 try {
-                    page = pdf.loadPage(index)
+                    page = pdfDocument.loadPage(index)
                     structuredText = page.toStructuredText()
                     result.append("---\nPage ${index + 1}:\n")
                     result.append(structuredText.asText())
@@ -49,7 +51,13 @@ object PdfParser {
             }
             return result.toString()
         } finally {
-            document?.destroy()
+            // asPDF() returns the PDF-typed wrapper for the same native document.
+            // Destroy exactly one wrapper to avoid double-releasing its pointer.
+            if (pdfDocument != null) {
+                pdfDocument.destroy()
+            } else {
+                openedDocument?.destroy()
+            }
         }
     }
 }
