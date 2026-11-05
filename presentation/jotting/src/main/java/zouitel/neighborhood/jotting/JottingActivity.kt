@@ -62,8 +62,11 @@ class JottingActivity: ComponentActivity(), KoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        description.value = savedInstanceState?.getString("jotting_shared_text").orEmpty()
-        handleIncomingIntent(intent, publishToEditor = false)
+        if (savedInstanceState == null) {
+            handleIncomingIntent(intent, publishToEditor = false)
+        } else {
+            restoreSharedContent(savedInstanceState)
+        }
         permissionModel.activityBind(this)
 
         setContent {
@@ -189,6 +192,36 @@ class JottingActivity: ComponentActivity(), KoinComponent {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("jotting_shared_text", description.value)
+        outState.putStringArrayList("jotting_media_uris", ArrayList(sharedMedias.value.map { it.uri }))
+        outState.putStringArrayList("jotting_media_types", ArrayList(sharedMedias.value.map { it.type.name }))
+        outState.putStringArrayList("jotting_media_titles", ArrayList(sharedMedias.value.map { it.title.orEmpty() }))
+        outState.putStringArrayList("jotting_audio_uris", ArrayList(sharedAudios.value.map { it.uri }))
+        outState.putStringArrayList("jotting_audio_titles", ArrayList(sharedAudios.value.map { it.title }))
+        outState.putString("jotting_screen", screen.value?.name)
+    }
+
+    private fun restoreSharedContent(state: Bundle) {
+        description.value = state.getString("jotting_shared_text").orEmpty()
+        val mediaTypes = state.getStringArrayList("jotting_media_types").orEmpty()
+        val mediaTitles = state.getStringArrayList("jotting_media_titles").orEmpty()
+        sharedMedias.value = state.getStringArrayList("jotting_media_uris").orEmpty().mapIndexed { index, uri ->
+            val type = mediaTypes.getOrNull(index)
+                ?.let { runCatching { MediaType.valueOf(it) }.getOrNull() }
+                ?: MediaType.IMAGE
+            Media(
+                uri = uri,
+                isVideo = type == MediaType.VIDEO,
+                isDocument = type == MediaType.DOCUMENT,
+                type = type,
+                title = mediaTitles.getOrNull(index)
+            )
+        }
+        val audioTitles = state.getStringArrayList("jotting_audio_titles").orEmpty()
+        sharedAudios.value = state.getStringArrayList("jotting_audio_uris").orEmpty().mapIndexed { index, uri ->
+            Audio(title = audioTitles.getOrNull(index).orEmpty(), path = uri, uri = uri)
+        }
+        screen.value = state.getString("jotting_screen")
+            ?.let { runCatching { Screens.valueOf(it) }.getOrNull() }
     }
 
     override fun onDestroy() {
