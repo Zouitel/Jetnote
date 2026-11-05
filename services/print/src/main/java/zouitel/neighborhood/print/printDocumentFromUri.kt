@@ -184,7 +184,7 @@ private class MuPdfPrintDocumentAdapter(
         if (finished) throw CancellationException()
         val page = document.loadPage(index)
         try {
-            val bounds = page.bounds
+            val bounds = page.getBounds()
             val scale = renderDpi / 72f
             val width = ((bounds.x1 - bounds.x0) * scale).toInt()
             val height = ((bounds.y1 - bounds.y0) * scale).toInt()
