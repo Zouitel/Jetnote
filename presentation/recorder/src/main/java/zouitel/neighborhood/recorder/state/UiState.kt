@@ -7,5 +7,6 @@ data class UiState(
     val seconds: String = "00",
     val minutes: String = "00",
     val hours: String = "00",
+    val elapsedMilliseconds: Long = 0L,
     val errorMessage: String? = null,
 )
