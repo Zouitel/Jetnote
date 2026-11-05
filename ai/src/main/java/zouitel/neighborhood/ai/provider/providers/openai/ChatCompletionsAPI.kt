@@ -213,20 +213,16 @@ class ChatCompletionsAPI(
             override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
                 var exception = t
 
-                t?.printStackTrace()
-                println("[onFailure] 发生错误: ${t?.javaClass?.name} ${t?.message} / $response")
 
                 val bodyRaw = response?.body?.stringSafe()
                 try {
                     if (!bodyRaw.isNullOrBlank()) {
                         val bodyElement = Json.parseToJsonElement(bodyRaw)
-                        println(bodyElement)
                         exception = bodyElement.parseErrorDetail()
                         Log.i(TAG, "onFailure: $exception")
                     }
                 } catch (e: Throwable) {
-                    Log.w(TAG, "onFailure: failed to parse from $bodyRaw")
-                    e.printStackTrace()
+                    exception = e
                     exception = e
                 } finally {
                     close(exception)
@@ -241,7 +237,6 @@ class ChatCompletionsAPI(
         val eventSource = EventSources.createFactory(proxyClient).newEventSource(request, listener)
 
         awaitClose {
-            println("[awaitClose] 关闭eventSource ")
             eventSource.cancel()
         }
     }
@@ -419,7 +414,6 @@ class ChatCompletionsAPI(
                                                 })
                                             }.onFailure {
                                                 it.printStackTrace()
-                                                println("encode image failed: ${part.url}")
 
                                                 put("type", "text")
                                                 put("text", "")
