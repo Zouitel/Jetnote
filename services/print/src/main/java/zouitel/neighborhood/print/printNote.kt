@@ -155,7 +155,7 @@ fun printNote(
 
             val paint = TextPaint(TextPaint.ANTI_ALIAS_FLAG).apply {
                 color = Color.BLACK
-                textSize = 12f * context.resources.displayMetrics.density
+                textSize = 12f
             }
             return StaticLayout.Builder.obtain(content, 0, content.length, paint, width)
                 .setAlignment(Layout.Alignment.ALIGN_NORMAL)
