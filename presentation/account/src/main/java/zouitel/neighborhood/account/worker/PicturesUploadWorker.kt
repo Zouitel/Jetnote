@@ -29,6 +29,10 @@ class PicturesUploadWorker(
 ): CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
+        if (!AccountWorkIdentity.belongsToCurrentUser(inputData)) {
+            Log.w("PicturesUploadWorker", "Skipping work because its Firebase account is missing or no longer active")
+            return Result.failure()
+        }
         return try {
             uploadsPictures(applicationContext, initializeDriveService())
             Result.success()
