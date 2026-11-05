@@ -1,6 +1,5 @@
 package zouitel.neighborhood.jotting.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
@@ -477,15 +476,24 @@ fun Jotting(
     }
 }
 
-@SuppressLint("SimpleDateFormat")
 fun createMediaUri(context: Context, pattern: String): Uri {
-    val fileName = "${Random.nextLong()}.$pattern"
-    val imagePath = when (pattern) {
-        "jpg" -> Environment.DIRECTORY_PICTURES
-        "mp4" -> Environment.DIRECTORY_MOVIES
-        else -> Environment.DIRECTORY_DOWNLOADS
-    }?.let { context.getExternalFilesDir(it) }
-    if (!imagePath?.exists()!!) imagePath.mkdirs()
-    val newFile = File(imagePath, fileName)
-    return FileProvider.getUriForFile(context, "${context.packageName}.provider", newFile)
+    val (directory, extension) = when (pattern.lowercase()) {
+        "jpg", "jpeg" -> Environment.DIRECTORY_PICTURES to "jpg"
+        "mp4" -> Environment.DIRECTORY_MOVIES to "mp4"
+        else -> throw IllegalArgumentException("Unsupported media type: $pattern")
+    }
+
+    val mediaDirectory = context.getExternalFilesDir(directory)
+        ?: throw IllegalStateException("App-specific media directory is unavailable")
+
+    if (!mediaDirectory.exists() && !mediaDirectory.mkdirs()) {
+        throw IllegalStateException("Unable to create media directory")
+    }
+
+    val outputFile = File(mediaDirectory, "${Random.nextLong()}.$extension")
+    return FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.provider",
+        outputFile
+    )
 }
