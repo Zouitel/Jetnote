@@ -18,6 +18,7 @@ import zouitel.neighborhood.assistant.ui.provider.ProviderScreenModel
 import zouitel.neighborhood.assistant.utils.JsonInstant
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.crashlytics
 import com.google.firebase.remoteconfig.remoteConfig
 import io.pebbletemplates.pebble.PebbleEngine
@@ -45,17 +46,10 @@ val assistantModule = module {
 
     single<Json> { JsonInstant }
 
-    single {
-        Firebase.crashlytics
-    }
-
-    single {
-        Firebase.remoteConfig
-    }
-
-    single {
-        Firebase.analytics
-    }
+    single { Firebase.crashlytics }
+    single { Firebase.remoteConfig }
+    single { Firebase.analytics }
+    single { FirebaseAuth.getInstance() }
 
     single<OkHttpClient> {
         OkHttpClient.Builder()
@@ -65,17 +59,24 @@ val assistantModule = module {
             .followSslRedirects(true)
             .followRedirects(true)
             .retryOnConnectionFailure(true)
-            .addInterceptor(AIRequestInterceptor(remoteConfig = get()))
+            .addInterceptor(
+                AIRequestInterceptor(
+                    remoteConfig = get(),
+                    firebaseAuth = get()
+                )
+            )
             .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.HEADERS
+                // Never log Firebase ID tokens or provider credentials.
+                redactHeader("Authorization")
+                redactHeader("x-api-key")
+                redactHeader("x-goog-api-key")
+                level = HttpLoggingInterceptor.Level.NONE
             })
             .build()
     }
 
-    single {
-        ProviderManager(get())
-    }
-    
+    single { ProviderManager(get()) }
+
     single {
         ChatService(
             androidApplication(),
@@ -94,6 +95,7 @@ val assistantModule = module {
             get()
         )
     }
+
     single {
         GenerationHandler(
             get(),
@@ -103,9 +105,9 @@ val assistantModule = module {
             get()
         )
     }
-    single {
-        AssistantTemplateLoader()
-    }
+
+    single { AssistantTemplateLoader() }
+
     single {
         PebbleEngine.Builder()
             .loader(get<AssistantTemplateLoader>())
@@ -113,10 +115,7 @@ val assistantModule = module {
             .autoEscaping(false)
             .build()
     }
-    single {
-        TemplateTransformer(get())
-    }
-    single {
-        AppScope()
-    }
+
+    single { TemplateTransformer(get()) }
+    single { AppScope() }
 }
