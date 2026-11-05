@@ -48,6 +48,10 @@ class JottingActivity: ComponentActivity(), KoinComponent {
     private var description = mutableStateOf("")
     private var sharedMedias = mutableStateOf<List<Media>>(emptyList())
     private var sharedAudios = mutableStateOf<List<Audio>>(emptyList())
+    private var pendingSharedText = mutableStateOf<String?>(null)
+    private var pendingSharedMedias = mutableStateOf<List<Media>>(emptyList())
+    private var pendingSharedAudios = mutableStateOf<List<Audio>>(emptyList())
+    private var shareRevision = mutableIntStateOf(0)
     private var screen = mutableStateOf<Screens?>(null)
     private val permissionModel: PermissionScreenModel by inject()
     private val playerManager: PlaybackManager by inject()
@@ -59,7 +63,7 @@ class JottingActivity: ComponentActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         description.value = savedInstanceState?.getString("jotting_shared_text").orEmpty()
-        handleIncomingIntent(intent)
+        handleIncomingIntent(intent, publishToEditor = false)
         permissionModel.activityBind(this)
 
         setContent {
@@ -88,7 +92,19 @@ class JottingActivity: ComponentActivity(), KoinComponent {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface.copy(alpha = .6f))
                 ) {
-                    Jotting(screen, data) {
+                    Jotting(
+                        screen = screen,
+                        data = data,
+                        shareRevision = shareRevision.intValue,
+                        sharedText = pendingSharedText.value,
+                        incomingMedias = pendingSharedMedias.value,
+                        incomingAudios = pendingSharedAudios.value,
+                        onShareConsumed = {
+                            pendingSharedText.value = null
+                            pendingSharedMedias.value = emptyList()
+                            pendingSharedAudios.value = emptyList()
+                        }
+                    ) {
                         finish()
                     }
                 }
@@ -99,10 +115,10 @@ class JottingActivity: ComponentActivity(), KoinComponent {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        handleIncomingIntent(intent)
+        handleIncomingIntent(intent, publishToEditor = true)
     }
 
-    private fun handleIncomingIntent(intent: Intent?) {
+    private fun handleIncomingIntent(intent: Intent?, publishToEditor: Boolean) {
         if (intent == null) return
         when (intent.action) {
             Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE -> {
@@ -117,25 +133,47 @@ class JottingActivity: ComponentActivity(), KoinComponent {
                 when {
                     mimeType.startsWith("text/") -> {
                         val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT) ?: intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
-                        if (!sharedText.isNullOrBlank()) description.value = listOfNotNull(description.value.takeIf { it.isNotBlank() }, sharedText).joinToString("\n\n")
+                        if (!sharedText.isNullOrBlank()) {
+                            description.value = listOfNotNull(description.value.takeIf { it.isNotBlank() }, sharedText).joinToString("\n\n")
+                            if (publishToEditor) {
+                                pendingSharedText.value = sharedText
+                                shareRevision.intValue++
+                            }
+                        }
                     }
                     mimeType.startsWith("audio/") -> {
-                        sharedAudios.value = sharedAudios.value + uris.map { uri ->
+                        val incoming = uris.map { uri ->
                             val title = uri.lastPathSegment?.substringAfterLast("/") ?: "Shared audio"
                             Audio(title = title, path = uri.toString(), uri = uri.toString())
                         }
+                        sharedAudios.value = sharedAudios.value + incoming
+                        if (publishToEditor && incoming.isNotEmpty()) {
+                            pendingSharedAudios.value = incoming
+                            shareRevision.intValue++
+                        }
                     }
                     else -> {
-                        sharedMedias.value = sharedMedias.value + uris.map { uri ->
+                        val incoming = uris.map { uri ->
                             val type = MediaType.fromMime(mimeType)
                             Media(uri = uri.toString(), isVideo = type == MediaType.VIDEO, isDocument = type == MediaType.DOCUMENT, type = type, title = uri.lastPathSegment?.substringAfterLast("/"))
+                        }
+                        sharedMedias.value = sharedMedias.value + incoming
+                        if (publishToEditor && incoming.isNotEmpty()) {
+                            pendingSharedMedias.value = incoming
+                            shareRevision.intValue++
                         }
                     }
                 }
             }
             Intent.ACTION_PROCESS_TEXT -> {
                 val sharedText = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)?.toString()
-                if (!sharedText.isNullOrBlank()) description.value = sharedText
+                if (!sharedText.isNullOrBlank()) {
+                    description.value = sharedText
+                    if (publishToEditor) {
+                        pendingSharedText.value = sharedText
+                        shareRevision.intValue++
+                    }
+                }
             }
             Intent.ACTION_VIEW -> {
                 screen.value = when {
