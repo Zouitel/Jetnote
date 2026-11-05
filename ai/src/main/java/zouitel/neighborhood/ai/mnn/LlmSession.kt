@@ -35,9 +35,14 @@ class LlmSession(
     }
 
     override fun setHistory(history: List<ChatDataItem>?) {
+        savedHistory = history
     }
 
     override fun load() {
+        check(nativeLibraryAvailable) {
+            "On-device MNN inference is unavailable: the mnnllmapp native library is not packaged."
+        }
+        error("On-device MNN session initialization is not implemented in this build.")
 //        Log.d(TAG, "MNN_DEBUG load begin")
 //        modelLoading = true
 //        var historyStringList: List<String>? = null
@@ -94,20 +99,20 @@ class LlmSession(
         params: Map<String, Any>,
         progressListener: GenerateProgressListener
     ): HashMap<String, Any> {
-        Log.d(TAG, "start generate prompt: $prompt")
+        check(nativePtr != 0L) { "MNN session is not loaded. Call load() after installing the native runtime." }
         synchronized(this) {
-            Log.d(TAG, "MNN_DEBUG submit$prompt")
             generating = true
-            val result = submitNative(nativePtr, prompt, keepHistory, progressListener)
-            generating = false
-            if (releaseRequested) {
-                release()
+            try {
+                return submitNative(nativePtr, prompt, keepHistory, progressListener)
+            } finally {
+                generating = false
+                if (releaseRequested) release()
             }
-            return result
         }
     }
 
     override fun reset(): String {
+        check(nativePtr != 0L) { "MNN session is not loaded." }
         synchronized(this) {
             resetNative(nativePtr)
         }
@@ -171,6 +176,7 @@ class LlmSession(
     }
 
     override fun setEnableAudioOutput(enable: Boolean) {
+        check(nativePtr != 0L) { "MNN session is not loaded." }
         updateEnableAudioOutputNative(nativePtr, enable)
     }
 
@@ -178,15 +184,18 @@ class LlmSession(
         get() = getDebugInfoNative(nativePtr) + "\n"
 
     fun updateMaxNewTokens(maxNewTokens: Int) {
+        check(nativePtr != 0L) { "MNN session is not loaded." }
         updateMaxNewTokensNative(nativePtr, maxNewTokens)
     }
 
     fun updateSystemPrompt(systemPrompt: String) {
+        check(nativePtr != 0L) { "MNN session is not loaded." }
         updateSystemPromptNative(nativePtr, systemPrompt)
     }
 
     fun updateAssistantPrompt(assistantPrompt: String) {
         extraAssistantPrompt = assistantPrompt
+        check(nativePtr != 0L) { "MNN session is not loaded." }
         updateAssistantPromptNative(nativePtr, assistantPrompt)
     }
 
@@ -204,7 +213,12 @@ class LlmSession(
         const val TAG: String = "LlmSession"
 
         init {
+            private val nativeLibraryAvailable: Boolean = try {
             System.loadLibrary("mnnllmapp")
+            true
+        } catch (_: UnsatisfiedLinkError) {
+            false
+        }
         }
     }
 
@@ -214,13 +228,19 @@ class LlmSession(
         history: List<Pair<String, String>>,
         progressListener: GenerateProgressListener
     ): HashMap<String, Any> {
+        check(nativePtr != 0L) { "MNN session is not loaded." }
         synchronized(this) {
+            generating = true
+            try {
             // 转换类型：kotlin.Pair -> android.util.Pair
             val androidHistory = history.map { Pair(it.first, it.second) }
             // 调用JNI方法，移除不必要的类型转换
             val result = submitFullHistoryNative(nativePtr, androidHistory, progressListener)
-            generating = false
             return result
+            } finally {
+                generating = false
+                if (releaseRequested) release()
+            }
         }
     }
 
@@ -237,6 +257,7 @@ class LlmSession(
     }
 
     fun getSystemPrompt(): String? {
+        check(nativePtr != 0L) { "MNN session is not loaded." }
         return getSystemPromptNative(nativePtr)
     }
 
