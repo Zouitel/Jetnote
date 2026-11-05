@@ -52,7 +52,7 @@ class LinkScreenModel(
     }
 
     fun urlsProcessing(uid: String, text: String) {
-        if (uid.isBlank() || text.isBlank()) return
+        if (uid.isBlank() || text.isBlank() || text.toByteArray(Charsets.UTF_8).size > MAX_TEXT_BYTES) return
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -84,5 +84,6 @@ class LinkScreenModel(
 
     private companion object {
         const val TEXT = "text"
+        const val MAX_TEXT_BYTES = 7_500
     }
 }
