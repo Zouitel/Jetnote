@@ -32,6 +32,7 @@ dependencies {
 
     //Firebase.
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.config)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
@@ -48,12 +49,9 @@ dependencies {
 
     //Coil.
     implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
+    implementation(libs.zoomable.coil)
 
     //Ucrop.
     implementation(libs.ucrop)
-
-    //Coil.
-    implementation(libs.coil.compose)
-    implementation(libs.coil.svg)
-    implementation(libs.zoomable.coil)
 }
