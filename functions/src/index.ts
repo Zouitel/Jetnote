@@ -5,7 +5,7 @@ import { FieldValue, getFirestore } from "firebase-admin/firestore";
 import { defineSecret } from "firebase-functions/params";
 import { logger } from "firebase-functions";
 import { onRequest } from "firebase-functions/v2/https";
-import { evaluateRateLimit, RateLimitState } from "./rateLimit";
+import { evaluateRateLimit, type RateLimitState } from "./rateLimit";
 
 if (getApps().length === 0) initializeApp();
 
@@ -183,7 +183,7 @@ export const aiProxy = onRequest(
           Accept: req.get("accept") ?? "application/json",
           ...(isChatRequest ? { "Content-Type": req.get("content-type") ?? "application/json" } : {})
         },
-        ...(isChatRequest ? { body } : {}),
+        ...(isChatRequest ? { body: body.toString("utf8") } : {}),
         redirect: "manual",
         signal: controller.signal
       });
@@ -200,8 +200,11 @@ export const aiProxy = onRequest(
       }
 
       // Preserve SSE/chunked responses instead of buffering a full model completion.
-      for await (const chunk of upstream.body) {
-        if (!res.write(chunk)) {
+      const reader = upstream.body.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (!res.write(Buffer.from(value))) {
           await new Promise<void>((resolve) => res.once("drain", resolve));
         }
       }
