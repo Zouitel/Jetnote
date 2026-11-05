@@ -2,6 +2,7 @@ package zouitel.neighborhood.logic.cache
 
 import android.util.AtomicFile
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 internal fun ensureParentDir(file: File) {
@@ -23,12 +24,13 @@ internal fun ensureParentDir(file: File) {
 internal fun atomicWrite(file: File, content: String) {
     ensureParentDir(file)
     val atomicFile = AtomicFile(file)
-    var output = null as java.io.FileOutputStream?
+    var output: FileOutputStream? = null
 
     try {
-        output = atomicFile.startWrite()
-        output.write(content.toByteArray(Charsets.UTF_8))
-        atomicFile.finishWrite(output)
+        val stream = atomicFile.startWrite()
+        output = stream
+        stream.write(content.toByteArray(Charsets.UTF_8))
+        atomicFile.finishWrite(stream)
         output = null
     } catch (failure: Throwable) {
         output?.let(atomicFile::failWrite)
