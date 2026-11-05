@@ -33,6 +33,7 @@ class PlaybackManager(private val context: Context) : Player.Listener {
     val events = MutableSharedFlow<Event>(extraBufferCapacity = 64)
 
     private var lastEmittedPosition = 0L
+    private var pendingPlaybackMediaId: String? = null
     private val playlist = mutableListOf<MediaItem>()
     private var controllerFuture: ListenableFuture<MediaController>? = null
 
@@ -102,6 +103,7 @@ class PlaybackManager(private val context: Context) : Player.Listener {
         if (index < 0) return
 
         playlist.removeAt(index)
+        if (pendingPlaybackMediaId == mediaId) pendingPlaybackMediaId = null
         controller?.let { player ->
             val playerIndex = (0 until player.mediaItemCount)
                 .firstOrNull { player.getMediaItemAt(it).mediaId == mediaId }
@@ -112,6 +114,7 @@ class PlaybackManager(private val context: Context) : Player.Listener {
 
     fun clearPlaylist() {
         playlist.clear()
+        pendingPlaybackMediaId = null
         lastEmittedPosition = 0L
         controller?.stop()
         controller?.clearMediaItems()
@@ -147,6 +150,10 @@ class PlaybackManager(private val context: Context) : Player.Listener {
                                 Event.CurrentPath(connected.currentMediaItem?.mediaId.orEmpty())
                             )
                             startPositionUpdates()
+                            pendingPlaybackMediaId?.let { mediaId ->
+                                pendingPlaybackMediaId = null
+                                startPlayback(mediaId)
+                            }
                         }
                     }
                 }
@@ -191,7 +198,17 @@ class PlaybackManager(private val context: Context) : Player.Listener {
     suspend fun playItem(audio: Audio) {
         val mediaId = audio.path
         val index = playlist.indexOfFirst { it.mediaId == mediaId }
+        if (index < 0) return
+        if (controller == null) {
+            pendingPlaybackMediaId = mediaId
+            return
+        }
+        startPlayback(mediaId)
+    }
+
+    private fun startPlayback(mediaId: String) {
         val player = controller ?: return
+        val index = playlist.indexOfFirst { it.mediaId == mediaId }
         if (index < 0) return
 
         val resumePosition = if (player.currentMediaItem?.mediaId == mediaId) {
@@ -199,14 +216,16 @@ class PlaybackManager(private val context: Context) : Player.Listener {
         } else {
             0L
         }
-
         player.seekTo(index, resumePosition)
         if (player.playbackState == Player.STATE_IDLE) player.prepare()
         player.play()
     }
 
     suspend fun pauseItem(audio: Audio) {
-        val player = controller ?: return
+        val player = controller ?: run {
+            playItem(audio)
+            return
+        }
         if (audio.path == player.currentMediaItem?.mediaId) {
             player.pause()
         } else {
