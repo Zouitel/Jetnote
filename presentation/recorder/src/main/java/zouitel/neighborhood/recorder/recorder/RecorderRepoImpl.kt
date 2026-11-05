@@ -19,13 +19,13 @@ class RecorderRepoImpl(private val context: Context) : RecorderRepo {
         }
 
         val stream = FileOutputStream(outPutFile)
-        val mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            MediaRecorder(context)
-        } else {
-            MediaRecorder()
-        }
-
+        var mediaRecorder: MediaRecorder? = null
         try {
+            mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                MediaRecorder(context)
+            } else {
+                MediaRecorder()
+            }
             mediaRecorder.apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
@@ -37,7 +37,7 @@ class RecorderRepoImpl(private val context: Context) : RecorderRepo {
             outputStream = stream
             recorder = mediaRecorder
         } catch (error: Throwable) {
-            runCatching { mediaRecorder.release() }
+            runCatching { mediaRecorder?.release() }
             runCatching { stream.close() }
             throw error
         }
@@ -54,7 +54,7 @@ class RecorderRepoImpl(private val context: Context) : RecorderRepo {
             activeRecorder.stop()
         } finally {
             runCatching { activeRecorder.reset() }
-            activeRecorder.release()
+            runCatching { activeRecorder.release() }
             closeOutput()
         }
     }
