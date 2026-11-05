@@ -27,6 +27,10 @@ import zouitel.neighborhood.jotting.ui.Jotting
 import zouitel.neighborhood.ui.MainTheme
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.Data
+import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.workspace.model.Media
+import zouitel.neighborhood.workspace.model.MediaType
+import zouitel.neighborhood.audio.model.Audio
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +46,8 @@ class JottingActivity: ComponentActivity(), KoinComponent {
     private var mediaUri = mutableStateOf<Uri?>(null)
     private var isVideo = mutableStateOf(false)
     private var description = mutableStateOf("")
+    private var sharedMedias = mutableStateOf<List<Media>>(emptyList())
+    private var sharedAudios = mutableStateOf<List<Audio>>(emptyList())
     private var screen = mutableStateOf<Screens?>(null)
     private val permissionModel: PermissionScreenModel by inject()
     private val playerManager: PlaybackManager by inject()
@@ -67,7 +73,10 @@ class JottingActivity: ComponentActivity(), KoinComponent {
                     uid = Uuid.random().toString(),
                     userUid = auth.uid.toString(),
                     background = backgroundColorState.intValue,
-                    textColor = textColorState.intValue
+                    textColor = textColorState.intValue,
+                    blocks = description.value.lineSequence().filter { it.isNotBlank() }.map { Block.paragraph(it) }.toList(),
+                    medias = sharedMedias.value,
+                    audios = sharedAudios.value
                 ))
             }
 
@@ -92,66 +101,55 @@ class JottingActivity: ComponentActivity(), KoinComponent {
         handleIncomingIntent(intent)
     }
 
-    @SuppressLint("UnsafeIntentLaunch")
     private fun handleIncomingIntent(intent: Intent?) {
-        if (intent?.action == Intent.ACTION_SEND)
-            when {
-                intent.type?.startsWith("text/plain") == true -> {
-                    val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
-                    if (sharedText != null) {
-                        description.value = sharedText
+        if (intent == null) return
+        when (intent.action) {
+            Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE -> {
+                val mimeType = intent.type.orEmpty()
+                val uris = buildList {
+                    if (intent.action == Intent.ACTION_SEND_MULTIPLE) {
+                        addAll(intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM).orEmpty())
+                    } else {
+                        intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.let(::add)
+                    }
+                }.distinct()
+                when {
+                    mimeType.startsWith("text/") -> {
+                        val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT) ?: intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
+                        if (!sharedText.isNullOrBlank()) description.value = listOfNotNull(description.value.takeIf { it.isNotBlank() }, sharedText).joinToString("\n\n")
+                    }
+                    mimeType.startsWith("audio/") -> {
+                        sharedAudios.value = sharedAudios.value + uris.map { uri ->
+                            val title = uri.lastPathSegment?.substringAfterLast("/") ?: "Shared audio"
+                            Audio(title = title, path = uri.toString(), uri = uri.toString())
+                        }
+                    }
+                    else -> {
+                        sharedMedias.value = sharedMedias.value + uris.map { uri ->
+                            val type = MediaType.fromMime(mimeType)
+                            Media(uri = uri.toString(), isVideo = type == MediaType.VIDEO, isDocument = type == MediaType.DOCUMENT, type = type, title = uri.lastPathSegment?.substringAfterLast("/"))
+                        }
                     }
                 }
-
-                intent.type?.startsWith("application/") == true -> {
-                    val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
-                    if (documentUri != null) {
-                        println(documentUri)
-                    }
-                }
-
-                intent.type?.startsWith("audio/") == true -> {
-                    val audioUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
-                    if (audioUri != null) {
-                        println(audioUri)
-                    }
-                }
-
-                intent.type?.startsWith("video/") == true -> {
-                    val imageUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
-                    if (imageUri != null) {
-                        mediaUri.value = imageUri
-                        isVideo.value = true
-                    }
-                }
-
-                intent.type?.startsWith("image/") == true -> {
-                    val imageUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
-                    if (imageUri != null) {
-                        mediaUri.value = imageUri
-                    }
-                }
-            } else if (intent?.action == Intent.ACTION_PROCESS_TEXT) {
-            val sharedText = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
-            if (sharedText != null) {
-                description.value = sharedText
             }
-        } else if (intent?.action == Intent.ACTION_VIEW) {
-            if (intent.getBooleanExtra("quick_photo", false)) {
-                screen.value = Screens.PHOTO_SCREEN
-            } else if (intent.getBooleanExtra("quick_record", false)) {
-                screen.value = Screens.RECORD_SCREEN
-            } else if (intent.getBooleanExtra("quick_reminder", false)) {
-                screen.value = Screens.REMINDER_SCREEN
-            } else {
-                screen.value = Screens.NOTE_SCREEN
+            Intent.ACTION_PROCESS_TEXT -> {
+                val sharedText = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)?.toString()
+                if (!sharedText.isNullOrBlank()) description.value = sharedText
+            }
+            Intent.ACTION_VIEW -> {
+                screen.value = when {
+                    intent.getBooleanExtra("quick_photo", false) -> Screens.PHOTO_SCREEN
+                    intent.getBooleanExtra("quick_record", false) -> Screens.RECORD_SCREEN
+                    intent.getBooleanExtra("quick_reminder", false) -> Screens.REMINDER_SCREEN
+                    else -> Screens.NOTE_SCREEN
+                }
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.clear()
+        outState.putString("jotting_shared_text", description.value)
     }
 
     override fun onDestroy() {
