@@ -28,7 +28,7 @@ class AudiosDownloadsWorker(
 ): CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        if (!AccountWorkIdentity.belongsToCurrentUser(inputData)) {
+        if (!AccountWorkIdentity.belongsToCurrentUser(inputData, applicationContext)) {
             Log.w("AudiosDownloadWorker", "Skipping work because its Firebase account is missing or no longer active")
             return Result.failure()
         }
