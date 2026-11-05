@@ -1,63 +1,87 @@
 package zouitel.neighborhood.audio.worker
 
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import androidx.core.net.toUri
+import zouitel.neighborhood.audio.utils.AudioStorage
+import zouitel.neighborhood.audio.utils.Constants.INPUT_ID
 import zouitel.neighborhood.audio.utils.Constants.INPUT_TITLE
 import zouitel.neighborhood.audio.utils.Constants.INPUT_URI
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class CopyAudioWorker(
     context: Context,
     params: WorkerParameters,
-    private val ioDeprecated: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher
 ) : CoroutineWorker(context, params) {
-    override suspend fun doWork(): Result = withContext(ioDeprecated) {
-        return@withContext try {
-            val uri = inputData.getString(INPUT_URI) ?: return@withContext Result.failure()
-            val title = inputData.getString(INPUT_TITLE) ?: return@withContext Result.failure()
 
-            copyAudioToExternalStorage(title, uri.toUri())
+    override suspend fun doWork(): Result = withContext(ioDispatcher) {
+        val audioId = inputData.getLong(INPUT_ID, INVALID_AUDIO_ID)
+        val title = inputData.getString(INPUT_TITLE)
+        val source = inputData.getString(INPUT_URI)
+
+        if (audioId == INVALID_AUDIO_ID || title.isNullOrBlank() || source.isNullOrBlank()) {
+            return@withContext Result.failure()
+        }
+
+        try {
+            copyAudioToAppStorage(audioId, title, Uri.parse(source))
             Result.success()
+        } catch (error: IOException) {
+            if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
+        } catch (_: SecurityException) {
+            Result.failure()
         } catch (_: Exception) {
             Result.failure()
         }
     }
 
     @WorkerThread
-    private suspend fun copyAudioToExternalStorage(title: String, uri: Uri) {
-        val context = applicationContext
-        val podcasts = context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)?.path ?: return
-        val file = File(podcasts, title)
+    private suspend fun copyAudioToAppStorage(audioId: Long, title: String, uri: Uri) {
+        val directory = AudioStorage.directory(applicationContext)
 
-        val contentResolver: ContentResolver = context.contentResolver
-        val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return
-        val inputStream = runCatching {
-            FileInputStream(fileDescriptor.fileDescriptor)
-        }.onFailure {
-            fileDescriptor.close()
-            return
+        if ((!directory.exists() && !directory.mkdirs()) || !directory.isDirectory) {
+            throw IOException("Unable to create app audio storage directory")
         }
 
-        withContext(Dispatchers.IO) {
-            FileOutputStream(file).use { outputStream ->
-                inputStream.getOrNull()?.copyTo(outputStream)
+        val destination = AudioStorage.destination(directory, audioId, title)
+        if (destination.isFile && destination.length() > 0L) return
+
+        val temporary = File(directory, "${destination.name}.partial")
+        try {
+            val input = applicationContext.contentResolver.openInputStream(uri)
+                ?: throw IOException("Unable to open source audio: $uri")
+
+            input.use { source ->
+                withContext(Dispatchers.IO) {
+                    FileOutputStream(temporary).use { output ->
+                        source.copyTo(output)
+                        output.fd.sync()
+                    }
+                }
             }
-        }
 
-        runCatching {
-            inputStream.getOrNull()?.close()
-            fileDescriptor.close()
+            if (!temporary.isFile || temporary.length() == 0L) {
+                throw IOException("Audio copy produced an empty file")
+            }
+
+            if (!temporary.renameTo(destination)) {
+                throw IOException("Unable to finalize copied audio file")
+            }
+        } finally {
+            if (temporary.exists()) temporary.delete()
         }
+    }
+
+    private companion object {
+        const val INVALID_AUDIO_ID = Long.MIN_VALUE
+        const val MAX_RETRIES = 3
     }
 }

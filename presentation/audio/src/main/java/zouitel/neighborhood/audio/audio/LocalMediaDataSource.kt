@@ -4,82 +4,91 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory.decodeByteArray
+import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import zouitel.neighborhood.audio.model.Audio
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory.*
-import android.media.MediaMetadataRetriever
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.io.FileNotFoundException
 
-@Suppress("DEPRECATION")
-class LocalMediaDataSource (
+class LocalMediaDataSource(
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher
 ) {
     private val contentResolver: ContentResolver get() = context.contentResolver
+
     private val projection: Array<String>
         get() = arrayOf(
             MediaStore.Audio.AudioColumns._ID,
             MediaStore.Audio.AudioColumns.DATE_ADDED,
             MediaStore.Audio.AudioColumns.DISPLAY_NAME,
             MediaStore.Audio.AudioColumns.DURATION,
-            MediaStore.Audio.Media.DATA,
             MediaStore.Audio.AudioColumns.SIZE
         )
 
     suspend fun loadAudioFiles(query: String): List<Audio> = withContext(ioDispatcher) {
-        val contentUri = when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ->
-                MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-            else -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        val collectionUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        } else {
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         }
-        val content = mutableListOf<Audio?>()
         val selection = "${MediaStore.Audio.Media.DISPLAY_NAME} LIKE ?"
         val selectionArgs = arrayOf("%$query%")
-        val cursor = contentResolver.query(
-            contentUri,
+        val result = mutableListOf<Audio>()
+
+        contentResolver.query(
+            collectionUri,
             projection,
             selection,
             selectionArgs,
             "${MediaStore.MediaColumns.DATE_ADDED} DESC"
-        )
-        cursor?.use {
-            while (it.moveToNext()) {
-                content.add(it.toLocalAudio())
+        )?.use { cursor ->
+            while (cursor.moveToNext()) {
+                cursor.toLocalAudio(collectionUri)?.let(result::add)
             }
         }
-        return@withContext content.filterNotNull()
+        result
     }
 
-    private fun Cursor.toLocalAudio(): Audio? {
-        try {
-            val contentId = getColumnIndex(MediaStore.Audio.AudioColumns._ID).let(::getLong)
-            val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, contentId)
-            val data = getColumnIndex(MediaStore.Audio.Media.DATA).let(::getString)
-            if (!File(data).exists()) {
-                return null
-            }
-            return Audio(
-                path = data,
-                title = getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME).let(::getString),
-                duration = getColumnIndex(MediaStore.Audio.AudioColumns.DURATION).let(::getLong),
-                size = getColumnIndex(MediaStore.Audio.AudioColumns.SIZE).let(::getLong),
-                uri = uri.toString()
+    private fun Cursor.toLocalAudio(collectionUri: Uri): Audio? {
+        return try {
+            val idColumn = getColumnIndexOrThrow(MediaStore.Audio.AudioColumns._ID)
+            val titleColumn = getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DISPLAY_NAME)
+            val durationColumn = getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DURATION)
+            val sizeColumn = getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.SIZE)
+
+            val contentId = getLong(idColumn)
+            val itemUri = ContentUris.withAppendedId(collectionUri, contentId)
+            val title = getString(titleColumn)?.takeIf { it.isNotBlank() } ?: return null
+
+            Audio(
+                id = contentId,
+                path = itemUri.toString(),
+                title = title,
+                duration = getLong(durationColumn),
+                size = getLong(sizeColumn),
+                uri = itemUri.toString()
             )
         } catch (_: FileNotFoundException) {
-            return null
+            null
+        } catch (_: IllegalArgumentException) {
+            null
         }
     }
 
-    fun getAudioThumbnail(filePath: String): Bitmap? {
-        if (!(File(filePath).exists())) return null
+    fun getAudioThumbnail(uriOrPath: String): Bitmap? {
         val retriever = MediaMetadataRetriever()
         return try {
-            retriever.setDataSource(filePath)
+            val uri = Uri.parse(uriOrPath)
+            if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+                retriever.setDataSource(context, uri)
+            } else {
+                retriever.setDataSource(uriOrPath)
+            }
             retriever.embeddedPicture?.let { decodeByteArray(it, 0, it.size) }
         } catch (_: Exception) {
             null

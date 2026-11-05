@@ -2,7 +2,6 @@ package zouitel.neighborhood.audio.ui.list
 
 import android.app.Application
 import android.content.Context
-import android.os.Environment
 import androidx.compose.runtime.Stable
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy.KEEP
@@ -18,7 +17,7 @@ import zouitel.neighborhood.audio.audio.AudioRepository
 import zouitel.neighborhood.audio.audio.toUiState
 import zouitel.neighborhood.audio.model.Audio
 import zouitel.neighborhood.audio.state.ListUiState
-import zouitel.neighborhood.audio.utils.Constants.COPY_WORK
+import zouitel.neighborhood.audio.utils.AudioStorage
 import zouitel.neighborhood.audio.utils.Constants.INPUT_DURATION
 import zouitel.neighborhood.audio.utils.Constants.INPUT_ID
 import zouitel.neighborhood.audio.utils.Constants.INPUT_TITLE
@@ -31,8 +30,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.io.File
-import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 
 @Stable
@@ -40,10 +37,9 @@ class AudioListScreenModel(
     application: Application,
     private val context: Context,
     private val repo: AudioRepository
-): ScreenModel {
+) : ScreenModel {
     private val _ListUiState: MutableStateFlow<ListUiState> = MutableStateFlow(ListUiState())
-    val listUiState: StateFlow<ListUiState> = _ListUiState
-        .withFlow(ListUiState())
+    val listUiState: StateFlow<ListUiState> = _ListUiState.withFlow(ListUiState())
 
     private val workManager = WorkManager.getInstance(application)
 
@@ -53,54 +49,38 @@ class AudioListScreenModel(
 
     private fun loadAudioFiles(query: String? = null) {
         screenModelScope.launch(Dispatchers.IO) {
+            _ListUiState.value = _ListUiState.value.copy(isLoadingAudios = true)
             runCatching {
-                val id = Random.nextLong()
-                _ListUiState.value = _ListUiState.value.copy(isLoadingAudios = true)
-                val audioFiles = repo.loadAudioFiles(query ?: _ListUiState.value.searchQuery)
-                    .map { audio ->
-                        audio.toUiState {
-                            val podcats =
-                                context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
-                            if (podcats?.exists() != true || !podcats.isDirectory) podcats?.mkdirs()
-                            val file = File(podcats?.path, audio.title)
-                            if (listUiState.value.newAudio) {
-                                screenModelScope.launch {
-                                    if (file.exists().not()) {
-                                        enqueueCopingProcessing(
-                                            audio.copy(
-                                                id = id,
-                                                path = file.path
-                                            )
-                                        )
-                                    }
-
-                                    delay(500.milliseconds).runCatching {
-                                        listUiState.value.bottomSheetNavigator?.hide()
-                                    }
-                                }
-                            } else {
-                                screenModelScope.launch {
-                                    delay(300.milliseconds).runCatching {
-                                        listUiState.value.bottomSheetNavigator?.hide()
-                                    }
-                                }
-                            }
-                            return@toUiState audio.copy(id = id, path = file.path)
+                repo.loadAudioFiles(query ?: _ListUiState.value.searchQuery).map { audio ->
+                    audio.toUiState {
+                        val directory = AudioStorage.directory(context)
+                        if ((!directory.exists() && !directory.mkdirs()) || !directory.isDirectory) {
+                            throw IllegalStateException("Unable to create app audio storage directory")
                         }
+                        val file = AudioStorage.destination(directory, audio.id, audio.title)
+
+                        if (listUiState.value.newAudio && (!file.isFile || file.length() == 0L)) {
+                            enqueueCopyProcessing(audio.copy(path = file.absolutePath))
+                        }
+
+                        screenModelScope.launch {
+                            delay(300.milliseconds)
+                            runCatching { listUiState.value.bottomSheetNavigator?.hide() }
+                        }
+                        audio.copy(path = file.absolutePath)
                     }
+                }
+            }.onSuccess { audioFiles ->
                 _ListUiState.value = _ListUiState.value.copy(audioFiles = audioFiles)
             }.onFailure {
                 it.printStackTrace()
-            }.onSuccess {
-                _ListUiState.value = _ListUiState.value.copy(isLoadingAudios = false)
             }
+            _ListUiState.value = _ListUiState.value.copy(isLoadingAudios = false)
         }
     }
 
     fun updateId(uid: String): AudioListScreenModel {
-        screenModelScope.launch {
-            _ListUiState.value = _ListUiState.value.copy(currentId = uid)
-        }
+        screenModelScope.launch { _ListUiState.value = _ListUiState.value.copy(currentId = uid) }
         return this
     }
 
@@ -112,18 +92,14 @@ class AudioListScreenModel(
     }
 
     fun updateNavigator(navigator: Navigator?) {
-        screenModelScope.launch {
-            _ListUiState.value = _ListUiState.value.copy(navigator = navigator)
-        }
+        screenModelScope.launch { _ListUiState.value = _ListUiState.value.copy(navigator = navigator) }
     }
 
     fun updateNewAudio(isNew: Boolean) {
-        screenModelScope.launch {
-            _ListUiState.value = _ListUiState.value.copy(newAudio = isNew)
-        }
+        screenModelScope.launch { _ListUiState.value = _ListUiState.value.copy(newAudio = isNew) }
     }
 
-    private fun enqueueCopingProcessing(audio: Audio) {
+    private fun enqueueCopyProcessing(audio: Audio) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
             .setRequiresStorageNotLow(true)
@@ -137,11 +113,11 @@ class AudioListScreenModel(
             INPUT_DURATION to audio.duration
         )
 
-        val requestCopy = OneTimeWorkRequestBuilder<CopyAudioWorker>()
+        val request = OneTimeWorkRequestBuilder<CopyAudioWorker>()
             .setInputData(inputData)
             .setConstraints(constraints)
             .build()
 
-        workManager.enqueueUniqueWork(COPY_WORK, KEEP, requestCopy)
+        workManager.enqueueUniqueWork("copy_audio_${audio.id}", KEEP, request)
     }
 }
