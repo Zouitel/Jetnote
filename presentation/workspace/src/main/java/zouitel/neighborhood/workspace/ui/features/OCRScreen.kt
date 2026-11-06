@@ -146,7 +146,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
                 TopAppBar(
                     title = { Text("Document Scanner") },
                     navigationIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { navigator.pop() }) {
                             Icon(
                                 painter = painterResource(CommonIcons.DOCUMENT_36),
                                 contentDescription = "Back"
