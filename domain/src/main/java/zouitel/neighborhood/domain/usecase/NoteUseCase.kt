@@ -12,27 +12,27 @@ sealed class NoteUseCase {
     }
 
     class ObserveByDefault(private val repo: NoteRepository) : NoteUseCase() {
-        suspend operator fun invoke(userUid: String) = repo.observeByDefault(userUid)
+        operator fun invoke(userUid: String) = repo.observeByDefault(userUid)
     }
 
     class ObserveByName(private val repos: NoteRepository) : NoteUseCase() {
-        suspend operator fun invoke(userUid: String) = repos.observeByName(userUid)
+        operator fun invoke(userUid: String) = repos.observeByName(userUid)
     }
 
     class ObserveByOldest(private val repo: NoteRepository) : NoteUseCase() {
-        suspend operator fun invoke(userUid: String) = repo.observeByOldest(userUid)
+        operator fun invoke(userUid: String) = repo.observeByOldest(userUid)
     }
 
     class ObserveByNewest(private val repo: NoteRepository) : NoteUseCase() {
-        suspend operator fun invoke(userUid: String) = repo.observeByNewest(userUid)
+        operator fun invoke(userUid: String) = repo.observeByNewest(userUid)
     }
 
     class ObserveByPriority(private val repo: NoteRepository) : NoteUseCase() {
-        suspend operator fun invoke(userUid: String) = repo.observeByPriority(userUid)
+        operator fun invoke(userUid: String) = repo.observeByPriority(userUid)
     }
 
     class ObserveArchives(private val repo: NoteRepository) : NoteUseCase() {
-        suspend operator fun invoke(userUid: String) = repo.observeArchives(userUid)
+        operator fun invoke(userUid: String) = repo.observeArchives(userUid)
     }
 
     data class Cleanup(private val repo: NoteRepository) : NoteUseCase() {
