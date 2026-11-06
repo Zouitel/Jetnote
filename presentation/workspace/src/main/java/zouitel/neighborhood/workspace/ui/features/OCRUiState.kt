@@ -143,7 +143,7 @@ class OCRScreenModel(private val application: Application) : ScreenModel {
         // ── Observe result ────────────────────────────────────────────────────
         val workInfoLiveData = workManager.getWorkInfoByIdLiveData(request.id)
         val observer = object : Observer<WorkInfo> {
-            override fun onChanged(workInfo: WorkInfo?) {
+            override fun onChanged(workInfo: WorkInfo) {
                 if (workInfo?.state?.isFinished != true) return
                 workInfoLiveData.removeObserver(this)
 
