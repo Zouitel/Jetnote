@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -60,7 +59,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
 
     @Composable
     override fun Content() {
-        OCR(koinScreenModel())
+        OCR(koinScreenModel(), koinScreenModel())
     }
 
     @Composable
