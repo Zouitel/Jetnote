@@ -49,9 +49,9 @@ class WorkplaceScreenModel(val application: Application) : ScreenModel {
                         MediaType.DOCUMENT -> Environment.DIRECTORY_DOCUMENTS
                         MediaType.VIDEO -> Environment.DIRECTORY_MOVIES
                         MediaType.IMAGE -> Environment.DIRECTORY_PICTURES
-                    }.let { dir -> application.getExternalFilesDir(dir) }
+                    }.let { dir -> application.getExternalFilesDir(dir) ?: File(application.filesDir, dir) }
 
-                    val mediaName = getImageDisplayName(application, uri)
+                    val mediaName = getImageDisplayName(application, uri).orEmpty().ifBlank { "attachment.bin" }
                     val destinationPath = File(mediaDir, mediaName).path
 
                     val averageColor = when (mediaType) {
