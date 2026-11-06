@@ -102,41 +102,31 @@ private val BREAK_LINE_REGEX = Regex("(?i)<br\\s*/?>")
 
 // 预处理markdown内容
 private fun preProcess(content: String): String {
-    // 先找出所有代码块的位置
-    val codeBlocks = mutableListOf<IntRange>()
-    CODE_BLOCK_REGEX.findAll(content).forEach { match ->
-        codeBlocks.add(match.range)
-    }
-
-    // 检查位置是否在代码块内
-    fun isInCodeBlock(position: Int): Boolean {
-        return codeBlocks.any { range -> position in range }
-    }
-
-    // 替换行内公式 \( ... \) 到 $ ... $，但跳过代码块内的内容
-    var result = INLINE_LATEX_REGEX.replace(content) { matchResult ->
-        if (isInCodeBlock(matchResult.range.first)) {
-            matchResult.value // 保持原样
-        } else {
-            "$" + matchResult.groupValues[1] + "$"
+    fun transformNonCode(segment: String): String {
+        var result = INLINE_LATEX_REGEX.replace(segment) { match ->
+            "$" + match.groupValues[1] + "$"
+        }
+        result = BLOCK_LATEX_REGEX.replace(result) { match ->
+            "$$" + match.groupValues[1] + "$$"
+        }
+        return result.replace(THINKING_REGEX) { match ->
+            match.groupValues[1].lines()
+                .filter { it.isNotBlank() }
+                .joinToString("\n") { ">$it" }
         }
     }
 
-    // 替换块级公式 \[ ... \] 到 $$ ... $$，但跳过代码块内的内容
-    result = BLOCK_LATEX_REGEX.replace(result) { matchResult ->
-        if (isInCodeBlock(matchResult.range.first)) {
-            matchResult.value // 保持原样
-        } else {
-            "$$" + matchResult.groupValues[1] + "$$"
+    // Match code spans against the original input so earlier replacements cannot
+    // shift the offsets used to protect later code blocks.
+    return buildString(content.length) {
+        var cursor = 0
+        CODE_BLOCK_REGEX.findAll(content).forEach { code ->
+            append(transformNonCode(content.substring(cursor, code.range.first)))
+            append(code.value)
+            cursor = code.range.last + 1
         }
+        append(transformNonCode(content.substring(cursor)))
     }
-
-    // 替换思考
-    result = result.replace(THINKING_REGEX) { matchResult ->
-        matchResult.groupValues[1].lines().filter { it.isNotBlank() }.joinToString("\n") { ">$it" }
-    }
-
-    return result
 }
 
 @Preview(showBackground = true)
