@@ -2,6 +2,9 @@ package zouitel.neighborhood.logic
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import androidx.core.text.TextUtilsCompat
+import android.view.View
+import java.util.Locale
 
 object LanguageManager {
 
@@ -149,6 +152,8 @@ object LanguageManager {
     /**
      * Convenience: return true if the current locale is Right-To-Left.
      */
-    fun isCurrentLanguageRtl(): Boolean =
-        getCurrentLanguage() in setOf(AppLanguage.ARABIC)
+    fun isCurrentLanguageRtl(): Boolean {
+        val locale = Locale.forLanguageTag(getCurrentLanguage().tag)
+        return TextUtilsCompat.getLayoutDirectionFromLocale(locale) == View.LAYOUT_DIRECTION_RTL
+    }
 }

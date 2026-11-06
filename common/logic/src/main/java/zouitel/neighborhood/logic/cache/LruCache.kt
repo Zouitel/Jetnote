@@ -2,9 +2,14 @@ package zouitel.neighborhood.logic.cache
 
 import java.util.LinkedHashMap
 import java.util.concurrent.locks.ReentrantLock
-import kotlin.collections.iterator
 import kotlin.concurrent.withLock
 
+/**
+ * A thread-safe, write-through LRU cache.
+ *
+ * Store operations are serialized with in-memory mutations so a slow read cannot
+ * overwrite a newer value written by another thread.
+ */
 class LruCache<K, V>(
     private val capacity: Int,
     private val store: CacheStore<K, V>,
@@ -13,102 +18,121 @@ class LruCache<K, V>(
     private val expireAfterWriteMillis: Long? = null
 ) where K : Any {
     private val lock = ReentrantLock()
-
-    private val map = object : LinkedHashMap<K, CacheEntry<V>>(capacity, 0.75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<K, CacheEntry<V>>): Boolean {
-            val shouldEvict = size > capacity
-            if (shouldEvict) {
-                if (deleteOnEvict) {
-                    try {
-                        store.remove(eldest.key)
-                    } catch (_: Exception) {
-                    }
-                }
-            }
-            return shouldEvict
-        }
-    }
+    private val map = LinkedHashMap<K, CacheEntry<V>>(16, 0.75f, true)
 
     init {
+        require(capacity > 0) { "capacity must be greater than zero" }
+        require(expireAfterWriteMillis == null || expireAfterWriteMillis >= 0) {
+            "expireAfterWriteMillis must not be negative"
+        }
+
         if (preloadFromStore) {
-            try {
-                val all = store.loadAllEntries()
+            runCatching {
                 lock.withLock {
-                    val now = now()
-                    for ((k, entry) in all) {
-                        if (!entry.isExpired(now)) {
-                            map[k] = entry
+                    val currentTime = now()
+                    store.loadAllEntries().forEach { (key, entry) ->
+                        if (entry.isExpired(currentTime)) {
+                            runCatching { store.remove(key) }
                         } else {
-                            runCatching { store.remove(k) }
+                            map[key] = entry
+                            evictOverflow()
                         }
-                        if (map.size >= capacity) break
                     }
                 }
-            } catch (_: Exception) {
             }
         }
     }
 
-    fun get(key: K): V? {
-        lock.withLock {
-            map[key]?.let { entry ->
-                if (!entry.isExpired(now())) return entry.value
-                map.remove(key)
-            }
+    fun get(key: K): V? = lock.withLock {
+        map[key]?.let { entry ->
+            if (!entry.isExpired(now())) return@withLock entry.value
+            map.remove(key)
+            runCatching { store.remove(key) }
         }
-        val entry = store.loadEntry(key)
-        if (entry != null) {
-            return if (!entry.isExpired(now())) {
-                lock.withLock { map[key] = entry }
-                entry.value
-            } else {
-                runCatching { store.remove(key) }
-                null
-            }
+
+        val entry = runCatching { store.loadEntry(key) }.getOrNull() ?: return@withLock null
+        if (entry.isExpired(now())) {
+            runCatching { store.remove(key) }
+            return@withLock null
         }
-        return null
+
+        map[key] = entry
+        evictOverflow()
+        entry.value
     }
 
     fun put(key: K, value: V) = put(key, value, expireAfterWriteMillis)
 
     fun put(key: K, value: V, ttlMillis: Long?) {
+        require(ttlMillis == null || ttlMillis >= 0) { "ttlMillis must not be negative" }
         val entry = CacheEntry(value = value, expiresAt = ttlMillis?.let { now() + it })
-        lock.withLock { map[key] = entry }
-        try {
-            store.saveEntry(key, entry)
-        } catch (_: Exception) {
+        lock.withLock {
+            map[key] = entry
+            runCatching { store.saveEntry(key, entry) }
+            evictOverflow()
         }
     }
 
-    fun remove(key: K) {
-        lock.withLock { map.remove(key) }
-        try {
-            store.remove(key)
-        } catch (_: Exception) {
+    fun remove(key: K) = lock.withLock {
+        map.remove(key)
+        runCatching { store.remove(key) }
+        Unit
+    }
+
+    fun clear() = lock.withLock {
+        map.clear()
+        runCatching { store.clear() }
+        Unit
+    }
+
+    fun containsKey(key: K): Boolean = lock.withLock {
+        map[key]?.let { entry ->
+            if (!entry.isExpired(now())) return@withLock true
+            map.remove(key)
+        }
+
+        val entry = runCatching { store.loadEntry(key) }.getOrNull() ?: return@withLock false
+        if (entry.isExpired(now())) {
+            runCatching { store.remove(key) }
+            false
+        } else {
+            true
         }
     }
 
-    fun clear() {
-        lock.withLock { map.clear() }
-        try {
-            store.clear()
-        } catch (_: Exception) {
+    /** Number of currently resident (in-memory) entries. */
+    fun size(): Int = lock.withLock {
+        removeExpiredEntries()
+        map.size
+    }
+
+    fun keysInMemory(): Set<K> = lock.withLock {
+        removeExpiredEntries()
+        map.keys.toSet()
+    }
+
+    private fun removeExpiredEntries() {
+        val currentTime = now()
+        val iterator = map.entries.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            if (entry.value.isExpired(currentTime)) {
+                val key = entry.key
+                iterator.remove()
+                runCatching { store.remove(key) }
+            }
         }
     }
 
-    fun containsKey(key: K): Boolean {
-        val inMem = lock.withLock { map[key]?.let { !it.isExpired(now()) } ?: false }
-        if (inMem) return true
-        val entry = store.loadEntry(key)
-        if (entry != null && !entry.isExpired(now())) return true
-        if (entry != null) runCatching { store.remove(key) }
-        return false
+    private fun evictOverflow() {
+        while (map.size > capacity) {
+            val iterator = map.entries.iterator()
+            if (!iterator.hasNext()) return
+            val eldestKey = iterator.next().key
+            iterator.remove()
+            if (deleteOnEvict) runCatching { store.remove(eldestKey) }
+        }
     }
-
-    fun size(): Int = lock.withLock { map.size }
-
-    fun keysInMemory(): Set<K> = lock.withLock { map.filterValues { !it.isExpired(now()) }.keys.toSet() }
 }
 
 private fun now(): Long = System.currentTimeMillis()
-

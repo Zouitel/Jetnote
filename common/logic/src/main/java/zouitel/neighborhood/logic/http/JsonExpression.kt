@@ -71,7 +71,6 @@ private class Lexer(private val src: String) {
             '-' -> { i++; return Token(TokenType.MINUS, "-", start) }
             '*' -> { i++; return Token(TokenType.STAR, "*", start) }
             '/' -> { i++; return Token(TokenType.SLASH, "/", start) }
-            'x', 'X' -> { i++; return Token(TokenType.STAR, c.toString(), start) }
             '"' -> return stringToken()
         }
 
@@ -120,6 +119,13 @@ private class Lexer(private val src: String) {
         if (i < src.length && src[i] == '.') {
             i++
             while (i < src.length && src[i].isDigit()) i++
+        }
+        if (i < src.length && (src[i] == 'e' || src[i] == 'E')) {
+            i++
+            if (i < src.length && (src[i] == '+' || src[i] == '-')) i++
+            val exponentStart = i
+            while (i < src.length && src[i].isDigit()) i++
+            if (exponentStart == i) throw ParseException("Invalid exponent at $start")
         }
         val text = src.substring(start, i)
         return Token(TokenType.NUMBER, text, start)
@@ -238,8 +244,14 @@ private class Parser(private val lexer: Lexer) {
                     parts.add(Field(id.lexeme))
                 }
                 match(TokenType.LBRACKET) -> {
+                    val isNegative = match(TokenType.MINUS)
                     val numTok = expect(TokenType.NUMBER)
-                    val idxVal = numTok.lexeme.toDouble().toInt()
+                    val numericIndex = numTok.lexeme.toDoubleOrNull()
+                        ?: throw error("Invalid array index: ${numTok.lexeme}")
+                    if (!numericIndex.isFinite() || numericIndex % 1.0 != 0.0) {
+                        throw error("Array index must be an integer")
+                    }
+                    val idxVal = numericIndex.toInt() * if (isNegative) -1 else 1
                     parts.add(Index(idxVal))
                     expect(TokenType.RBRACKET)
                 }
@@ -298,7 +310,11 @@ private class Evaluator(private val root: JsonObject) {
             TokenType.PLUS -> Value.Num(toNumber(left) + toNumber(right))
             TokenType.MINUS -> Value.Num(toNumber(left) - toNumber(right))
             TokenType.STAR -> Value.Num(toNumber(left) * toNumber(right))
-            TokenType.SLASH -> Value.Num(toNumber(left) / toNumber(right))
+            TokenType.SLASH -> {
+                val divisor = toNumber(right)
+                if (divisor == 0.0) throw ParseException("Division by zero")
+                Value.Num(toNumber(left) / divisor)
+            }
             else -> throw ParseException("Unsupported binary operator ${expr.op.lexeme}")
         }
     }
@@ -327,7 +343,7 @@ private class Evaluator(private val root: JsonObject) {
         return when (elem) {
             is JsonPrimitive -> {
                 if (elem.isString) Value.Str(elem.content)
-                else elem.doubleOrNull()?.let { Value.Num("%.2f".format(it).toDouble()) } ?: Value.Str(elem.content)
+                else elem.doubleOrNull()?.let { Value.Num(it) } ?: Value.Str(elem.content)
             }
             is JsonObject, is JsonArray -> Value.Str(elem.toString())
             else -> Value.Str(elem.toString())
@@ -336,7 +352,8 @@ private class Evaluator(private val root: JsonObject) {
 
     private fun toNumber(v: Value): Double = when (v) {
         is Value.Num -> v.value
-        is Value.Str -> v.value.toDoubleOrNull() ?: 0.0
+        is Value.Str -> v.value.toDoubleOrNull()
+            ?: throw ParseException("Expected a number but got '${v.value}'")
     }
 
     private fun toString(v: Value): String = when (v) {

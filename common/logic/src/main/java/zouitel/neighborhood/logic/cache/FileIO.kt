@@ -2,6 +2,7 @@ package zouitel.neighborhood.logic.cache
 
 import android.util.AtomicFile
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -11,6 +12,18 @@ internal fun ensureParentDir(file: File) {
         if (!parent.mkdirs() && !parent.exists()) {
             throw IOException("Failed to create directory: $parent")
         }
+    }
+}
+
+/**
+ * Reads through AtomicFile so an interrupted previous write can be recovered
+ * from its backup before the caller sees the contents.
+ */
+internal fun readAtomicText(file: File): String? {
+    return try {
+        AtomicFile(file).openRead().bufferedReader(Charsets.UTF_8).use { it.readText() }
+    } catch (_: FileNotFoundException) {
+        null
     }
 }
 
