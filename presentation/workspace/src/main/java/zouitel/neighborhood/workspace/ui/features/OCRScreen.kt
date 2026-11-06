@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -40,6 +39,7 @@ import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
 import zouitel.neighborhood.workspace.model.MediaType
+import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 
 /**
  * Full-page scan screen for Jetnote.
@@ -59,11 +59,11 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
 
     @Composable
     override fun Content() {
-        OCR(koinScreenModel())
+        OCR(koinScreenModel(), koinScreenModel())
     }
 
     @Composable
-    private fun OCR(OCRModel: OCRScreenModel) {
+    private fun OCR(OCRModel: OCRScreenModel, dataModel: DataScreenModel) {
         val uiState  by OCRModel.uiState.collectAsStateWithLifecycle()
         val context  = LocalContext.current
         val activity = context as? Activity
@@ -105,21 +105,40 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
             }
         }
 
-        // ── Write saved PDF into data.medias, then navigate back ─────────────
+        // Persist the attachment through the note use case before leaving the scanner.
         LaunchedEffect(uiState.savedPdfPath) {
             val path = uiState.savedPdfPath ?: return@LaunchedEffect
-            if (path.isNotBlank()) {
-                data?.value = data.value.copy(
-                    medias = data.value.medias.plusElement(
-                        Media(
-                            uri   = path,
-                            type  = MediaType.DOCUMENT,
-                            color = Color.Transparent.toArgb()
-                        )
-                    )
-                )
-                navigator.pop()
+            if (path.isBlank()) return@LaunchedEffect
+
+            val currentNote = data?.value
+            if (currentNote == null) {
+                OCRModel.onAttachError("PDF saved locally, but no note was supplied to attach it to.")
+                return@LaunchedEffect
             }
+            if (noteId.isNotBlank() && noteId != currentNote.uid) {
+                OCRModel.onAttachError("The supplied note does not match the target note.")
+                return@LaunchedEffect
+            }
+
+            val updatedNote = currentNote.copy(
+                medias = currentNote.medias + Media(
+                    uri = path,
+                    type = MediaType.DOCUMENT,
+                    color = Color.Transparent.toArgb()
+                )
+            )
+            runCatching { dataModel.persist(updatedNote) }
+                .onSuccess {
+                    data?.value = updatedNote
+                    OCRModel.onNoteAttached()
+                    navigator.pop()
+                }
+                .onFailure { error ->
+                    OCRModel.onAttachError(
+                        "PDF saved locally, but attaching it to the note failed: " +
+                            (error.localizedMessage ?: "Unknown error")
+                    )
+                }
         }
 
         Scaffold(
@@ -127,7 +146,7 @@ class OCRScreen(val noteId: String = "", val data: MutableState<Data>? = null) :
                 TopAppBar(
                     title = { Text("Document Scanner") },
                     navigationIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { navigator.pop() }) {
                             Icon(
                                 painter = painterResource(CommonIcons.DOCUMENT_36),
                                 contentDescription = "Back"

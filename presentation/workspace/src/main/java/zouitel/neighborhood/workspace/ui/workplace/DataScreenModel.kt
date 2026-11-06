@@ -19,6 +19,10 @@ class DataScreenModel(
     private val mapper: DataMapper
 ): ScreenModel {
 
+    suspend fun persist(data: Data) {
+        insert(mapper.toDomain(data))
+    }
+
     fun sendAction(act: Action) {
         when(act) {
             is Action.Insert<*> -> withAsync { insert(mapper.toDomain(act.data as Data)) }
