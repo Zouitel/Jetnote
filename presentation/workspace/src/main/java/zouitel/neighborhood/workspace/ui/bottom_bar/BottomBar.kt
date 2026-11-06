@@ -2,6 +2,7 @@ package zouitel.neighborhood.workspace.ui.bottom_bar
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -32,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,9 +46,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
-import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.ui.CommonConstants
 import zouitel.neighborhood.ui.CommonConstants.FOCUS_NAVIGATION
@@ -94,6 +96,8 @@ internal fun BottomBar(
     val sound by lazy { SoundEffect() }
     val auth = FirebaseAuth.getInstance()
     val untitledResource = stringResource(zouitel.neighborhood.logic.R.string.untitled)
+    val saveScope = rememberCoroutineScope()
+    val isSaving = remember { mutableStateOf(false) }
 
     val isImeVisible = WindowInsets.isImeVisible
 
@@ -147,33 +151,46 @@ internal fun BottomBar(
                             )
 
                             IconButton(
+                                enabled = !isSaving.value,
                                 onClick = {
-                                    sound.performSoundEffect(
-                                        context,
-                                        CommonConstants.KEY_STANDARD,
-                                        isSound
-                                    )
-                                    dataModel.sendAction(
-                                        Action.Insert(
-                                            data.value.copy(
-                                                userUid = auth.uid.toString(),
-                                                title = titleState?.text.toString().ifEmpty { untitledResource },
-                                                position = 2,
-                                                blocks = editorState.state.blocks,
-                                                background = backgroundState.value,
-                                                textColor = textColorState.value
-                                            )
+                                    if (!isSaving.value) {
+                                        sound.performSoundEffect(
+                                            context,
+                                            CommonConstants.KEY_STANDARD,
+                                            isSound
                                         )
-                                    )
-                                    linkModel.urlsProcessing(
-                                        data.value.uid,
-                                        "..."
-                                    )
-                                    navigator?.items?.size?.let {
-                                        if (it > 1) {
-                                            navigator.pop()
-                                        } else {
-                                            (context as Activity).finishAfterTransition()
+                                        isSaving.value = true
+                                        val noteToSave = data.value.copy(
+                                            userUid = auth.uid.toString(),
+                                            title = titleState?.text.toString().ifEmpty { untitledResource },
+                                            position = 2,
+                                            blocks = editorState.state.blocks,
+                                            background = backgroundState.value,
+                                            textColor = textColorState.value
+                                        )
+
+                                        // Await the Room write before leaving this screen. A
+                                        // fire-and-forget ScreenModel coroutine is cancelled
+                                        // when Voyager clears the Workplace ScreenModel.
+                                        saveScope.launch {
+                                            try {
+                                                dataModel.persist(noteToSave)
+                                                linkModel.urlsProcessing(noteToSave.uid, "...")
+                                                navigator?.items?.size?.let {
+                                                    if (it > 1) {
+                                                        navigator.pop()
+                                                    } else {
+                                                        (context as Activity).finishAfterTransition()
+                                                    }
+                                                }
+                                            } catch (error: Exception) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Couldn't save note: ${error.localizedMessage ?: "Unknown error"}",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                                isSaving.value = false
+                                            }
                                         }
                                     }
                                 }) {
