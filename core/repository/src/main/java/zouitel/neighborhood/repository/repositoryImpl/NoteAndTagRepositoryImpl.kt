@@ -25,8 +25,8 @@ class NoteAndTagRepositoryImpl(
         dataSource.insertAll(mapper.fromDomain(noteAndTags))
     }
 
-    override suspend fun delete(id: Long) {
-        dataSource.delete(id)
+    override suspend fun delete(noteAndTag: OutNoteAndTag) {
+        dataSource.delete(mapper.fromDomain(noteAndTag))
     }
 
     override suspend fun deleteDrafts() {

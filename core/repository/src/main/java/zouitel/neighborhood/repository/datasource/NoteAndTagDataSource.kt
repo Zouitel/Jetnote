@@ -12,8 +12,7 @@ interface NoteAndTagDataSource {
 
     suspend fun insertAll(noteAndTags: List<NoteAndTag>)
 
-    suspend fun delete(id: Long)
+    suspend fun delete(noteAndTag: NoteAndTag)
 
     suspend fun deleteDrafts()
-
 }

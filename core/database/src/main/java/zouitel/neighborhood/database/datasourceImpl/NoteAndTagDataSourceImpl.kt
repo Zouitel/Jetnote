@@ -25,8 +25,8 @@ class NoteAndTagDataSourceImpl(
         dao.insertAll(mapper.fromRepo(noteAndTags))
     }
 
-    override suspend fun delete(id: Long) {
-        dao.delete(id)
+    override suspend fun delete(noteAndTag: OutNoteAndTag) {
+        dao.delete(uid = noteAndTag.uid, id = noteAndTag.id)
     }
 
     override suspend fun deleteDrafts() {

@@ -32,7 +32,9 @@ class NoteAndTagScreenModel(
     fun sendAction(act: Action) {
         when (act) {
             is Action.Insert<*> -> withAsync { insert(mapper.toDomain(act.data as NoteAndTag)) }
-            is Action.DeleteById -> withAsync { delete(act.id as Long) }
+            is Action.Delete<*> -> (act.data as? NoteAndTag)?.let { noteAndTag ->
+                withAsync { delete(mapper.toDomain(noteAndTag)) }
+            }
             else -> throw Exception("Not implemented")
         }
     }

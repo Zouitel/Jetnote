@@ -29,13 +29,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -71,8 +68,6 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
         tagModel: TagScreenModel,
         noteAndTagModel: NoteAndTagScreenModel
     ) {
-        val keyboardManager = LocalFocusManager.current
-
         val observeTags by remember(tagModel, tagModel::observeAll).collectAsState()
         val observeNoteAndTag by remember(
             noteAndTagModel,
@@ -81,7 +76,7 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
         val uiState by remember(tagModel, tagModel::uiState).collectAsState()
         var maxLines by remember { mutableIntStateOf(3) }
         val fieldState = rememberTextFieldState(uiState.currentLabel)
-        val focusRequester by lazy { FocusRequester() }
+        val focusRequester = remember { FocusRequester() }
         val scope = rememberCoroutineScope()
         val tagResource = stringResource(zouitel.neighborhood.logic.R.string.tag_placeholder)
         val tagCannotBeEmptyResource = stringResource(zouitel.neighborhood.logic.R.string.tag_cannot_be_empty)
@@ -153,9 +148,7 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
                         selected = observeNoteAndTag.contains(noteAndTag),
                         onClick = {
                             val act = when {
-                                observeNoteAndTag.contains(noteAndTag) -> Action.DeleteById(
-                                    noteAndTag.id
-                                )
+                                observeNoteAndTag.contains(noteAndTag) -> Action.Delete(noteAndTag)
                                 else -> Action.Insert(noteAndTag)
                             }
                             noteAndTagModel.sendAction(act)
@@ -182,8 +175,7 @@ data class TagsScreen(val uid: String, val background: Int?): Screen {
                     modifier = Modifier
                         .fillMaxWidth()
                         .imePadding()
-                        .focusRequester(focusRequester)
-                        .onFocusEvent { keyboardManager.moveFocus(FocusDirection.Enter) },
+                        .focusRequester(focusRequester),
                     placeholder = placeholder,
                     imeAction = ImeAction.Done,
                     keyboardActions = {
