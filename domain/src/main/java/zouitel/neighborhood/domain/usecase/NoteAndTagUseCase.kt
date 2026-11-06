@@ -2,6 +2,7 @@ package zouitel.neighborhood.domain.usecase
 
 import zouitel.neighborhood.domain.model.NoteAndTag
 import zouitel.neighborhood.domain.repository.NoteAndTagRepository
+
 sealed class NoteAndTagUseCase {
     data class ObserveAll(private val repo: NoteAndTagRepository): NoteAndTagUseCase() {
         operator fun invoke() = repo.observeAll
@@ -19,8 +20,8 @@ sealed class NoteAndTagUseCase {
         suspend operator fun invoke(noteAndTags: List<NoteAndTag>) = repo.insertAll(noteAndTags)
     }
 
-    data class Delete(private val repos: NoteAndTagRepository): NoteAndTagUseCase() {
-        suspend operator fun invoke(id: Long) = repos.delete(id)
+    data class Delete(private val repo: NoteAndTagRepository): NoteAndTagUseCase() {
+        suspend operator fun invoke(noteAndTag: NoteAndTag) = repo.delete(noteAndTag)
     }
 
     data class DeleteDrafts(private val repo: NoteAndTagRepository): NoteAndTagUseCase() {
