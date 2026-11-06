@@ -83,6 +83,7 @@ ktorSerializationKotlinxJson = "3.5.1"
 #Others.
 media3 = "1.11.0"
 cloudy = "0.7.1"
+backdrop = "2.0.1"
 ktorClientAndroid = "3.5.2"
 metaprobeKmp = "1.0.1"
 gmsGoogleServices = "4.5.0"
@@ -221,6 +222,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
 #Others.
 compose-cloudy = { module = "com.github.skydoves:cloudy", version.ref = "cloudy" }
+backdrop = { module = "io.github.kyant0:backdrop", version.ref = "backdrop" }
 #revenuecat = { module = "com.revenuecat.purchases:purchases", version.ref = "revenuecat" }
 #revenuecat-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "revenuecat" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
