@@ -72,9 +72,9 @@ class MainScreenModel(
                 reorderNotes(positions)
             } catch (error: Exception) {
                 Log.e("MainScreenModel", "Failed to persist note order", error)
+                applyLatestSnapshots()
             } finally {
                 isDraggingActive = false
-                applyLatestSnapshots()
             }
         }
     }
