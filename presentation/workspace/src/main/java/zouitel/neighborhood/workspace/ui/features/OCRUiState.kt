@@ -91,6 +91,7 @@ class OCRScreenModel(private val application: Application) : ScreenModel {
     fun onScanError(message: String) = _uiState.update { it.copy(error = message) }
     fun clearError()                  = _uiState.update { it.copy(error = null) }
     fun onNoteAttached()               = _uiState.update { it.copy(savedToNote = true) }
+    fun onAttachError(message: String) = _uiState.update { it.copy(error = message) }
 
     // ── Save ──────────────────────────────────────────────────────────────────
 
