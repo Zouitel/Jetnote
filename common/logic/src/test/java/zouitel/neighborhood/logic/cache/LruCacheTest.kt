@@ -20,7 +20,7 @@ class LruCacheTest {
 
         assertTrue(cache.containsKey("a"))
         assertTrue(cache.containsKey("c"))
-        assertFalse(cache.containsKey("b"))
+        assertTrue(store.entries.containsKey("b"))
         assertEquals(setOf("a", "c"), cache.keysInMemory())
     }
 
