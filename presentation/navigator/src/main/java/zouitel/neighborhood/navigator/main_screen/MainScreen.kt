@@ -1,6 +1,5 @@
 package zouitel.neighborhood.navigator.main_screen
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -35,8 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -57,7 +54,6 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.AsyncImage
 import com.skydoves.cloudy.cloudy
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.account.ui.AccountScreen
 import zouitel.neighborhood.account.ui.SyncScreen
@@ -86,7 +82,6 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
-import kotlin.time.Duration.Companion.milliseconds
 
 @RequiresApi(Build.VERSION_CODES.S)
 class MainScreen: Screen {
@@ -109,7 +104,7 @@ class MainScreen: Screen {
         )
     }
 
-    @SuppressLint("CoroutineCreationDuringComposition", "UnusedMaterial3ScaffoldPaddingParameter")
+    @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
     @Composable
     private fun Main(
@@ -137,8 +132,6 @@ class MainScreen: Screen {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarState = remember { SnackbarHostState() }
         var searchExpandRequest by remember { mutableStateOf<Any?>(null) }
-        val deletedNotes = remember { mutableStateListOf<Pair<List<Data>, Int>>() }
-        var jobCounter by remember { mutableIntStateOf(0) }
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(isDownloading, syncState) {
@@ -221,10 +214,7 @@ class MainScreen: Screen {
                                 noteAndTagModel = noteAndTagModel,
                                 tagModel = tagModel
                             ) {
-                                val currentJobId = jobCounter++
                                 val notesToDelete = it.distinctBy(Data::uid)
-                                val deletedBatch = notesToDelete to currentJobId
-                                deletedNotes.add(deletedBatch)
                                 notesToDelete.forEach { note ->
                                     dataModel.sendAction(Action.DeleteByUid(note.uid))
                                 }
@@ -247,7 +237,6 @@ class MainScreen: Screen {
                                             dataModel.sendAction(Action.Insert(note))
                                         }
                                     }
-                                    deletedNotes.remove(deletedBatch)
                                 }
                             }
                         } else {
@@ -331,7 +320,6 @@ class MainScreen: Screen {
                                 containerColor = CommonColors.prime,
                                 color = MaterialTheme.colorScheme.surface
                             )
-                            scope.launch { delay(2000.milliseconds) }
                         }
                     ) {
                         if (settings.layout == CommonConstants.LIST) {
