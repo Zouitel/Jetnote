@@ -142,17 +142,16 @@ fun WebView(
                     }
 
                     is WebContent.Data -> {
-                        if (state.lastLoadedData == content) return@AndroidView
-                        state.lastLoadedData = content
-                        webView.loadDataWithBaseURL(
-                            content.baseUrl,
-                            content.data,
-                            content.mimeType,
-                            content.encoding,
-                            content.historyUrl
-                        )
-                        // Assuming data loading is fast, but let's reflect the state more accurately
-                        // state.isLoading = false // This might be too soon, let WebViewClient handle it
+                        if (state.lastLoadedData != content) {
+                            state.lastLoadedData = content
+                            webView.loadDataWithBaseURL(
+                                content.baseUrl,
+                                content.data,
+                                content.mimeType,
+                                content.encoding,
+                                content.historyUrl
+                            )
+                        }
                     }
 
                     WebContent.NavigatorOnly -> {
@@ -166,7 +165,10 @@ fun WebView(
                 webView.webViewClient = WebViewClient()
                 webView.removeAllViews()
                 webView.destroy()
-                if (state.webView === webView) state.webView = null
+                if (state.webView === webView) {
+                    state.webView = null
+                    state.lastLoadedData = null
+                }
             }
         )
 
