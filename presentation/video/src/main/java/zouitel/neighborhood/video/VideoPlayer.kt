@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.keepScreenOn
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -53,9 +52,7 @@ import androidx.media3.common.util.ExperimentalApi
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.compose.ContentFrame
-import androidx.media3.ui.compose.material3.buttons.MuteButton
 import androidx.media3.ui.compose.material3.buttons.PlayPauseButton
-import androidx.media3.ui.compose.material3.indicator.PositionAndDurationText
 import androidx.media3.ui.compose.material3.indicator.PositionText
 import androidx.media3.ui.compose.material3.indicator.ProgressSlider
 import androidx.media3.ui.compose.material3.indicator.RemainingDurationText
@@ -64,7 +61,7 @@ import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import kotlinx.coroutines.delay
 import zouitel.neighborhood.ui.CommonIcons
 
-@OptIn(UnstableApi::class,  ExperimentalApi::class)
+@OptIn(UnstableApi::class, ExperimentalApi::class)
 @Composable
 fun VideoPlayer(
     uri: Uri,
@@ -92,13 +89,16 @@ fun VideoPlayer(
         }
     }
 
-    var isPlaying by remember { mutableStateOf(exoPlayer.isPlaying) }
-    var isBuffering by remember { mutableStateOf(true) }
-    var hasError by remember { mutableStateOf(false) }
-    var controlsVisible by remember { mutableStateOf(true) }
-    var showRemainingTime by remember { mutableStateOf(false) }
+    // These values describe a specific player and must reset when its media changes.
+    var isPlaying by remember(exoPlayer) { mutableStateOf(exoPlayer.isPlaying) }
+    var isBuffering by remember(exoPlayer) {
+        mutableStateOf(exoPlayer.playbackState == Player.STATE_BUFFERING)
+    }
+    var hasError by remember(exoPlayer) { mutableStateOf(exoPlayer.playerError != null) }
+    var controlsVisible by remember(exoPlayer) { mutableStateOf(true) }
+    var showRemainingTime by remember(exoPlayer) { mutableStateOf(false) }
 
-    // Mirror the player's state into Compose state, and release exactly once.
+    // Mirror current and future player state into Compose, and release exactly once.
     DisposableEffect(exoPlayer) {
         val listener = object : Player.Listener {
             override fun onIsPlayingChanged(playing: Boolean) {
@@ -116,6 +116,12 @@ fun VideoPlayer(
             }
         }
         exoPlayer.addListener(listener)
+
+        // prepare() may have advanced the player before this listener was attached.
+        isPlaying = exoPlayer.isPlaying
+        isBuffering = exoPlayer.playbackState == Player.STATE_BUFFERING
+        hasError = exoPlayer.playerError != null
+
         onDispose {
             exoPlayer.removeListener(listener)
             exoPlayer.release()
@@ -133,7 +139,6 @@ fun VideoPlayer(
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    // Auto-hide the control overlay a few seconds after it was last shown while playing.
     LaunchedEffect(controlsVisible, isPlaying) {
         if (controlsVisible && isPlaying) {
             delay(3_000)
@@ -156,7 +161,6 @@ fun VideoPlayer(
             )
             .then(if (isPlaying) Modifier.keepScreenOn() else Modifier)
     ) {
-        // Surface + aspect ratio + shutter, straight from media3-ui-compose.
         ContentFrame(
             player = exoPlayer,
             modifier = Modifier.fillMaxSize()
@@ -241,7 +245,6 @@ fun VideoPlayer(
                         thumbColor = Color.White,
                         activeTrackColor = Color.Red
                     )
-
                 )
                 Box(
                     modifier = Modifier

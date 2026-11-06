@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -12,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackParameters
@@ -24,18 +25,17 @@ import androidx.media3.ui.compose.ContentFrame
 @Composable
 fun SmallVideoPlayer(uri: Uri) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val exoPlayer = remember(context, uri) {
         ExoPlayer.Builder(context).build().apply {
             try {
-                val mediaMetadata = MediaMetadata.Builder()
-                    .build()
-
+                val mediaMetadata = MediaMetadata.Builder().build()
                 val mediaItem = MediaItem.Builder()
                     .setUri(uri)
                     .setMediaMetadata(mediaMetadata)
                     .build()
-                setMediaItem(mediaItem)
 
+                setMediaItem(mediaItem)
                 prepare()
                 volume = 0f
                 playbackParameters = PlaybackParameters(0.5f)
@@ -46,22 +46,6 @@ fun SmallVideoPlayer(uri: Uri) {
         }
     }
 
-//    AndroidView(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .background(Color.Black),
-//        factory = {
-//            PlayerView(context).apply {
-//                player = exoPlayer
-//                useController = false
-//                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
-//                setShowBuffering(PlayerView.SHOW_BUFFERING_WHEN_PLAYING)
-//            }
-//        }, update = { playerView ->
-//            playerView.player = exoPlayer
-//        })
-
-    // Surface + aspect ratio + shutter, straight from media3-ui-compose.
     ContentFrame(
         player = exoPlayer,
         modifier = Modifier.fillMaxSize(),
@@ -69,9 +53,22 @@ fun SmallVideoPlayer(uri: Uri) {
         shutter = { Box(Modifier.fillMaxSize().background(Color.Black)) }
     )
 
-    DisposableEffect(Unit) {
-        onDispose {
-            exoPlayer.release()
+    // Release the exact player instance owned by this composition.
+    DisposableEffect(exoPlayer) {
+        onDispose { exoPlayer.release() }
+    }
+
+    // Muted inline playback should not continue decoding while the app is backgrounded.
+    DisposableEffect(lifecycleOwner, exoPlayer) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE || event == Lifecycle.Event.ON_STOP) {
+                exoPlayer.pause()
+            }
         }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        if (!lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            exoPlayer.pause()
+        }
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 }
