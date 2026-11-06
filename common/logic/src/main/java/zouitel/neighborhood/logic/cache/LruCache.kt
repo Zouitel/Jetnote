@@ -47,7 +47,7 @@ class LruCache<K, V>(
         map[key]?.let { entry ->
             if (!entry.isExpired(now())) return@withLock entry.value
             map.remove(key)
-            if (deleteOnEvict) runCatching { store.remove(key) }
+            runCatching { store.remove(key) }
         }
 
         val entry = runCatching { store.loadEntry(key) }.getOrNull() ?: return@withLock null
@@ -119,7 +119,7 @@ class LruCache<K, V>(
             if (entry.value.isExpired(currentTime)) {
                 val key = entry.key
                 iterator.remove()
-                if (deleteOnEvict) runCatching { store.remove(key) }
+                runCatching { store.remove(key) }
             }
         }
     }
