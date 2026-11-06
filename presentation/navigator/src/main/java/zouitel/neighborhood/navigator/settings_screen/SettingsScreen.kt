@@ -244,9 +244,9 @@ class SettingsScreen: Screen {
                                 LiquidGlassSurface(
                                     backdrop = glassBackdrop,
                                     enabled = settings.liquidGlassEnabled,
-                                    blurRadius = settings.liquidGlassBlurRadius,
-                                    refraction = settings.liquidGlassRefraction,
-                                    tintAlpha = settings.liquidGlassTint,
+                                    blurRadius = blurRadius,
+                                    refraction = refraction,
+                                    tintAlpha = tint,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = 6.dp)
