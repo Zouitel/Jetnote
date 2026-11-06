@@ -67,7 +67,15 @@ class AudioListScreenModel(
                             delay(300.milliseconds)
                             runCatching { listUiState.value.bottomSheetNavigator?.hide() }
                         }
-                        audio.copy(path = file.absolutePath)
+                        // A queued WorkManager copy is not ready synchronously. Keep the source
+                        // content URI playable until the atomic destination file is available.
+                        audio.copy(
+                            path = if (file.isFile && file.length() > 0L) {
+                                file.absolutePath
+                            } else {
+                                audio.uri
+                            }
+                        )
                     }
                 }
             }.onSuccess { audioFiles ->
