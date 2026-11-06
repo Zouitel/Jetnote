@@ -12,19 +12,19 @@ import kotlinx.coroutines.flow.Flow
 interface NoteAndTagDao {
 
     @get: Query("SELECT * FROM $TABLE_NAME")
-    val observeAll:Flow<List<NoteAndTag>>
+    val observeAll: Flow<List<NoteAndTag>>
 
     @get: Query("SELECT * FROM $TABLE_NAME")
     val getAll: List<NoteAndTag>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(noteAndLabel: NoteAndTag)
+    suspend fun insert(noteAndTag: NoteAndTag)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(noteAndLabels: List<NoteAndTag>)
+    suspend fun insertAll(noteAndTags: List<NoteAndTag>)
 
-    @Query("DELETE FROM $TABLE_NAME WHERE id = :id")
-    suspend fun delete(id: Long)
+    @Query("DELETE FROM $TABLE_NAME WHERE uid = :uid AND id = :id")
+    suspend fun delete(uid: String, id: Long)
 
     @Query("DELETE FROM $TABLE_NAME WHERE uid NOT IN (SELECT UUID FROM note_data_table)")
     suspend fun deleteDrafts()
