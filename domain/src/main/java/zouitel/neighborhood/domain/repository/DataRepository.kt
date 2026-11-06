@@ -19,7 +19,7 @@ interface DataRepository {
 
     suspend fun sweepDrafts()
 
-    suspend fun reorderNote(userUid: String, position: Int)
+    suspend fun reorderNote(noteUid: String, position: Int)
 
     suspend fun reorderNotes(positions: Map<String, Int>)
 }
