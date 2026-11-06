@@ -14,6 +14,8 @@ import androidx.work.ExistingWorkPolicy.*
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkInfo
+import androidx.lifecycle.Observer
 import androidx.work.workDataOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -84,7 +86,8 @@ class WorkplaceScreenModel(val application: Application) : ScreenModel {
     fun enqueueFileProcessing(
         uri: Uri,
         destinationPath: String,
-        onComplete: (String) -> Unit = {}
+        onComplete: (String) -> Unit = {},
+        onFailure: (String) -> Unit = {}
     ) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
@@ -107,11 +110,23 @@ class WorkplaceScreenModel(val application: Application) : ScreenModel {
             request
         )
 
-        workManager.getWorkInfoByIdLiveData(request.id).observeForever { workInfo ->
-            if (workInfo?.state?.isFinished == true) {
-                onComplete(destinationPath)
+        val workInfoLiveData = workManager.getWorkInfoByIdLiveData(request.id)
+        val observer = object : Observer<WorkInfo> {
+            override fun onChanged(workInfo: WorkInfo?) {
+                if (workInfo?.state?.isFinished != true) return
+                workInfoLiveData.removeObserver(this)
+                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    val copiedPath = workInfo.outputData.getString(CopyMediaWorker.KEY_OUTPUT_PATH)
+                    if (!copiedPath.isNullOrBlank()) onComplete(copiedPath)
+                    else onFailure("Media worker completed without an output path")
+                } else {
+                    val reason = workInfo.outputData.getString(CopyMediaWorker.KEY_ERROR)
+                        ?: "Media copy ${workInfo.state.name.lowercase()}"
+                    onFailure(reason)
+                }
             }
         }
+        workInfoLiveData.observeForever(observer)
     }
 
     companion object {
