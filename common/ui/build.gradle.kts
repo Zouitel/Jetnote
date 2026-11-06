@@ -38,4 +38,7 @@ dependencies {
 
     //Toast(Sonner).
     implementation(libs.sonner)
+
+    //Liquid Glass (Kyant Backdrop).
+    api(libs.backdrop)
 }
