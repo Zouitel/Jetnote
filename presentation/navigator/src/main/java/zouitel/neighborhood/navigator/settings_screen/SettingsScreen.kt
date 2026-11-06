@@ -20,6 +20,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -206,6 +207,72 @@ class SettingsScreen: Screen {
                                     settingsModel.update(settings.copy(darkTheme = it))
                                 }
                             )
+                        }
+                        item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                            ) {
+                                Text(
+                                    text = "Liquid glass",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    text = "Customize glass surfaces across the app.",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+                                )
+                                CommonActivationItem(
+                                    title = "Enable liquid glass",
+                                    description = "Use translucent, blurred glass surfaces wherever the app supports them.",
+                                    icon = null,
+                                    checked = settings.liquidGlassEnabled,
+                                    onChecked = {
+                                        settingsModel.update(settings.copy(liquidGlassEnabled = it))
+                                    }
+                                )
+                                Text(
+                                    text = "Blur · ${settings.liquidGlassBlurRadius.toInt()} dp",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    modifier = Modifier.padding(top = 12.dp)
+                                )
+                                Slider(
+                                    value = settings.liquidGlassBlurRadius,
+                                    onValueChange = {
+                                        settingsModel.update(settings.copy(liquidGlassBlurRadius = it))
+                                    },
+                                    valueRange = 0f..40f,
+                                    enabled = settings.liquidGlassEnabled
+                                )
+                                Text(
+                                    text = "Refraction · ${settings.liquidGlassRefraction.toInt()} dp",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Slider(
+                                    value = settings.liquidGlassRefraction,
+                                    onValueChange = {
+                                        settingsModel.update(settings.copy(liquidGlassRefraction = it))
+                                    },
+                                    valueRange = 0f..24f,
+                                    enabled = settings.liquidGlassEnabled
+                                )
+                                Text(
+                                    text = "Tint · ${(settings.liquidGlassTint * 100).toInt()}%",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Slider(
+                                    value = settings.liquidGlassTint,
+                                    onValueChange = {
+                                        settingsModel.update(settings.copy(liquidGlassTint = it))
+                                    },
+                                    valueRange = 0f..0.4f,
+                                    enabled = settings.liquidGlassEnabled
+                                )
+                            }
                         }
                         item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                         item {
