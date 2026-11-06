@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.coerceIn
@@ -78,8 +79,8 @@ fun Waveform(
     var isScrubbing by remember { mutableStateOf(false) }
 
     val spikeCount = if (spikeTotalWidth > 0.dp) {
-        with(androidx.compose.ui.platform.LocalDensity.current) {
-            (canvasSize.width / spikeTotalWidth.toPx()).coerceAtLeast(0)
+        with(LocalDensity.current) {
+            (canvasSize.width / spikeTotalWidth.toPx()).toInt().coerceAtLeast(0)
         }
     } else {
         0
@@ -100,8 +101,7 @@ fun Waveform(
     val animatedAmplitudes = drawableAmplitudes.map { amplitude ->
         animateFloatAsState(
             targetValue = amplitude,
-            animationSpec = spikeAnimationSpec,
-            label = "waveform-spike"
+            animationSpec = spikeAnimationSpec
         ).value
     }
 
