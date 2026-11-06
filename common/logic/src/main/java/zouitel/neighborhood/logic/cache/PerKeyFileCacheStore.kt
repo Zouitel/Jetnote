@@ -36,14 +36,13 @@ class PerKeyFileCacheStore<K : Any, V : Any>(
 
     override fun clear() = lock.withLock {
         if (!dir.exists()) return@withLock
-        dir.listFiles { file -> file.isFile && file.name.endsWith(ext) }
-            ?.forEach { AtomicFile(it).delete() }
+        cacheFiles().forEach { AtomicFile(it).delete() }
     }
 
     override fun loadAllEntries(): Map<K, CacheEntry<V>> = lock.withLock {
         if (!dir.exists()) return@withLock emptyMap()
         val result = LinkedHashMap<K, CacheEntry<V>>()
-        dir.listFiles { file -> file.isFile && file.name.endsWith(ext) }?.forEach { file ->
+        cacheFiles().forEach { file ->
             val key = keyCodec.fromFileName(file.name.removeSuffix(ext)) ?: return@forEach
             val text = readAtomicText(file) ?: return@forEach
             decodeEntry(text)?.let { result[key] = it }
@@ -54,7 +53,7 @@ class PerKeyFileCacheStore<K : Any, V : Any>(
     override fun keys(): Set<K> = lock.withLock {
         if (!dir.exists()) return@withLock emptySet()
         buildSet {
-            dir.listFiles { file -> file.isFile && file.name.endsWith(ext) }?.forEach { file ->
+            cacheFiles().forEach { file ->
                 keyCodec.fromFileName(file.name.removeSuffix(ext))?.let(::add)
             }
         }
@@ -65,6 +64,21 @@ class PerKeyFileCacheStore<K : Any, V : Any>(
             runCatching { json.decodeFromString(valueSerializer, text) }
                 .getOrNull()?.let { CacheEntry(value = it, expiresAt = null) }
         }
+    }
+
+    /**
+     * Includes AtomicFile backup-only entries. openRead() restores those backups
+     * when the corresponding base file is missing.
+     */
+    private fun cacheFiles(): List<File> {
+        val names = dir.listFiles()
+            ?.asSequence()
+            ?.filter { it.isFile && (it.name.endsWith(ext) || it.name.endsWith("$ext.bak")) }
+            ?.map { if (it.name.endsWith("$ext.bak")) it.name.removeSuffix(".bak") else it.name }
+            ?.distinct()
+            ?.toList()
+            .orEmpty()
+        return names.map { File(dir, it) }
     }
 
     private fun fileFor(key: K): File = File(dir, keyCodec.toFileName(key) + ext)
