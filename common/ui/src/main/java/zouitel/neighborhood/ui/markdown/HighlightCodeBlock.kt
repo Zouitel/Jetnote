@@ -53,7 +53,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import zouitel.neighborhood.ui.CommonIcons
@@ -286,30 +285,13 @@ class HighlightCodeVisualTransformation(
     val highlighter: Highlighter,
     val darkMode: Boolean
 ) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val annotatedString = try {
-            val colorPalette = if (darkMode) AtomOneDarkPalette else AtomOneLightPalette
-            if (text.text.isEmpty()) {
-                AnnotatedString("")
-            } else {
-                runBlocking {
-                    val tokens = highlighter.highlight(text.text, language)
-                    buildAnnotatedString {
-                        tokens.forEach { token ->
-                            buildHighlightText(token, colorPalette)
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            AnnotatedString(text.text)
-        }
-
-        return TransformedText(
-            text = annotatedString,
+    override fun filter(text: AnnotatedString): TransformedText =
+        TransformedText(
+            // VisualTransformation.filter is synchronous. Highlighting belongs in
+            // HighlightText, which performs it asynchronously without blocking layout.
+            text = text,
             offsetMapping = OffsetMapping.Identity
         )
-    }
 
     companion object {
         @Composable

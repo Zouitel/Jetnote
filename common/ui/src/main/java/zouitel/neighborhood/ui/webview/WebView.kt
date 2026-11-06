@@ -2,6 +2,7 @@ package zouitel.neighborhood.ui.webview
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import android.view.ViewGroup.LayoutParams
 import android.webkit.ConsoleMessage
@@ -47,6 +48,16 @@ internal class MyWebChromeClient(private val state: WebViewState) : WebChromeCli
 }
 
 internal class MyWebViewClient(private val state: WebViewState) : WebViewClient() {
+    override fun shouldOverrideUrlLoading(view: WebView?, request: android.webkit.WebResourceRequest?): Boolean {
+        val uri = request?.url ?: return true
+        return !uri.isAllowedWebViewUrl()
+    }
+
+    @Suppress("DEPRECATION")
+    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+        return url?.toUriOrNull()?.isAllowedWebViewUrl() != true
+    }
+
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
         state.isLoading = true
@@ -90,6 +101,8 @@ fun WebView(
                     // Keep executable web content opt-in. Callers should enable JavaScript
                     // only for content they control and trust, especially when interfaces
                     // are exposed through addJavascriptInterface.
+                    settings.apply(state.settings)
+                    // Caller settings are applied first; these security restrictions are mandatory.
                     settings.javaScriptEnabled = state.javaScriptEnabled
                     settings.domStorageEnabled = false
                     settings.allowFileAccess = false
@@ -97,7 +110,6 @@ fun WebView(
                     settings.allowFileAccessFromFileURLs = false
                     settings.allowUniversalAccessFromFileURLs = false
                     settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
-                    settings.apply(state.settings)
 
                     // Use the created clients
                     this.webChromeClient = webChromeClient
@@ -123,30 +135,39 @@ fun WebView(
                         // Only load new URL if it's different from the current one or if the state forces reload
                         // Also check if the webView's url is null or blank, which might happen initially
                         val currentWebViewUrl = webView.url
-                        if (url.isNotEmpty() && (currentWebViewUrl.isNullOrBlank() || url != currentWebViewUrl || state.forceReload)) {
+                        if (url.isNotEmpty() && url.toUriOrNull()?.isAllowedWebViewUrl() == true && (currentWebViewUrl.isNullOrBlank() || url != currentWebViewUrl || state.forceReload)) {
                             webView.loadUrl(content.url, content.additionalHttpHeaders)
                             state.forceReload = false // Reset force reload flag
                         }
                     }
 
                     is WebContent.Data -> {
-                        // Check if the data needs to be reloaded (e.g., if different from last loaded data)
-                        // For simplicity, we might just reload it every time the update block runs with NotificationData content.
-                        // A more complex check could involve comparing `content.data` with a previously stored value.
-                        webView.loadDataWithBaseURL(
-                            content.baseUrl,
-                            content.data,
-                            content.mimeType,
-                            content.encoding,
-                            content.historyUrl
-                        )
-                        // Assuming data loading is fast, but let's reflect the state more accurately
-                        // state.isLoading = false // This might be too soon, let WebViewClient handle it
+                        if (state.lastLoadedData != content) {
+                            state.lastLoadedData = content
+                            webView.loadDataWithBaseURL(
+                                content.baseUrl,
+                                content.data,
+                                content.mimeType,
+                                content.encoding,
+                                content.historyUrl
+                            )
+                        }
                     }
 
                     WebContent.NavigatorOnly -> {
                         // NO-OP: State changes related to navigation are handled by the methods in WebViewState
                     }
+                }
+            },
+            onRelease = { webView ->
+                webView.stopLoading()
+                webView.webChromeClient = null
+                webView.webViewClient = WebViewClient()
+                webView.removeAllViews()
+                webView.destroy()
+                if (state.webView === webView) {
+                    state.webView = null
+                    state.lastLoadedData = null
                 }
             }
         )
@@ -223,6 +244,7 @@ class WebViewState(
     // Hold the WebView instance internally to perform actions.
     // Be cautious with this reference, ensure it doesn't leak context.
     internal var webView: WebView? by mutableStateOf(null)
+    internal var lastLoadedData: WebContent.Data? = null
 
     // --- Public Actions ---
 
@@ -291,7 +313,7 @@ fun rememberWebViewState(
     additionalHttpHeaders: Map<String, String> = emptyMap(),
     interfaces: Map<String, Any> = emptyMap(),
     settings: WebSettings.() -> Unit = {},
-) = remember(url, additionalHttpHeaders) { // Use keys for better recomposition control
+) = remember(url, additionalHttpHeaders, interfaces, settings) {
     WebViewState(
         initialContent = WebContent.Url(url, additionalHttpHeaders),
         interfaces = interfaces,
@@ -308,10 +330,16 @@ fun rememberWebViewState(
     historyUrl: String? = null,
     interfaces: Map<String, Any> = emptyMap(),
     settings: WebSettings.() -> Unit = {},
-) = remember(data, baseUrl, encoding, mimeType, historyUrl) { // Use keys
+) = remember(data, baseUrl, encoding, mimeType, historyUrl, interfaces, settings) {
     WebViewState(
         initialContent = WebContent.Data(data, baseUrl, encoding, mimeType, historyUrl),
         interfaces = interfaces,
         settings = settings
     )
 }
+
+private fun String.toUriOrNull(): Uri? = runCatching { Uri.parse(this) }.getOrNull()
+
+private fun Uri.isAllowedWebViewUrl(): Boolean =
+    scheme.equals("https", ignoreCase = true) ||
+        (scheme.equals("about", ignoreCase = true) && path == "blank")

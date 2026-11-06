@@ -22,11 +22,13 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import zouitel.neighborhood.ui.R
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class Highlighter(ctx: Context) {
     private val executor = Executors.newSingleThreadExecutor()
+    private val destroyed = AtomicBoolean(false)
 
     init {
         executor.submit {
@@ -42,11 +44,12 @@ class Highlighter(ctx: Context) {
         }
     }
 
-    private val context: QuickJSContext by lazy {
+    private val contextDelegate = lazy {
         QuickJSContext.create().also {
             it.evaluate(script)
         }
     }
+    private val context: QuickJSContext by contextDelegate
 
     private val highlightFn by lazy {
         context.globalObject.getJSFunction("highlight")
@@ -54,45 +57,64 @@ class Highlighter(ctx: Context) {
 
     suspend fun highlight(code: String, language: String) =
         suspendCancellableCoroutine { continuation ->
-            executor.submit {
-                runCatching {
-                    val result = highlightFn.call(code, language)
-                    require(result is QuickJSArray) {
-                        "highlight result must be an array"
-                    }
-                    val tokens = arrayListOf<HighlightToken>()
-                    for (i in 0 until result.length()) {
-                        when (val element = result[i]) {
-                            is String -> tokens.add(
-                                HighlightToken.Plain(
-                                    content = element,
-                                )
-                            )
-
-                            is QuickJSObject -> {
-                                val json = element.stringify()
-                                val token = format.decodeFromString<HighlightToken.Token>(
-                                    HighlightTokenSerializer, json
-                                )
-                                tokens.add(token)
-                            }
-
-                            else -> error("Unknown type: ${element::class.java.name}")
+            if (destroyed.get()) {
+                continuation.resumeWithException(IllegalStateException("Highlighter has been destroyed"))
+                return@suspendCancellableCoroutine
+            }
+            try {
+                executor.submit {
+                    if (destroyed.get()) {
+                        if (continuation.isActive) {
+                            continuation.resumeWithException(IllegalStateException("Highlighter has been destroyed"))
                         }
+                        return@submit
                     }
-                    result.release()
-                    continuation.resume(tokens)
-                }.onFailure {
-                    it.printStackTrace()
-                    if (continuation.isActive) {
-                        continuation.resumeWithException(it)
+
+                    try {
+                        val result = highlightFn.call(code, language)
+                        require(result is QuickJSArray) {
+                            "highlight result must be an array"
+                        }
+                        val tokens = try {
+                            buildList {
+                                for (i in 0 until result.length()) {
+                                    when (val element = result[i]) {
+                                        is String -> add(HighlightToken.Plain(content = element))
+                                        is QuickJSObject -> {
+                                            val json = element.stringify()
+                                            add(
+                                                format.decodeFromString<HighlightToken.Token>(
+                                                    HighlightTokenSerializer, json
+                                                )
+                                            )
+                                        }
+                                        else -> error("Unknown type: ${element::class.java.name}")
+                                    }
+                                }
+                            }
+                        } finally {
+                            result.release()
+                        }
+                        if (continuation.isActive) continuation.resume(tokens)
+                    } catch (error: Throwable) {
+                        if (continuation.isActive) continuation.resumeWithException(error)
                     }
                 }
+            } catch (error: java.util.concurrent.RejectedExecutionException) {
+                if (continuation.isActive) continuation.resumeWithException(error)
             }
         }
 
     fun destroy() {
-        context.destroy()
+        if (!destroyed.compareAndSet(false, true)) return
+        runCatching {
+            executor.execute {
+                if (contextDelegate.isInitialized()) {
+                    context.destroy()
+                }
+            }
+        }
+        executor.shutdown()
     }
 }
 
