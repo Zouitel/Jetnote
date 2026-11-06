@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit)
     //Serialization.
     implementation(libs.kotlinx.serialization.json)
 }
