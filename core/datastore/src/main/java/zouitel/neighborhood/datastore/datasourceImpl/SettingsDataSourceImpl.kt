@@ -38,7 +38,11 @@ class SettingsDataSourceImpl(
                         isLocked = preferences[Keys.IS_LOCK_MODE] ?: false,
                         isScreenshot = preferences[Keys.IS_SCREENSHOT_BLOCKED] ?: false,
                         isZenMode = preferences[Keys.IS_ZEN_MODE] ?: false,
-                        isShakable = preferences[Keys.IS_SHAKABLE] ?: true
+                        isShakable = preferences[Keys.IS_SHAKABLE] ?: true,
+                        liquidGlassEnabled = preferences[Keys.LIQUID_GLASS_ENABLED] ?: true,
+                        liquidGlassBlurRadius = preferences[Keys.LIQUID_GLASS_BLUR_RADIUS] ?: 18f,
+                        liquidGlassRefraction = preferences[Keys.LIQUID_GLASS_REFRACTION] ?: 12f,
+                        liquidGlassTint = preferences[Keys.LIQUID_GLASS_TINT] ?: 0.12f
                     )
                 )
             }
@@ -55,6 +59,10 @@ class SettingsDataSourceImpl(
             preferences[Keys.IS_SCREENSHOT_BLOCKED] = dataStoreSettings.isScreenshot
             preferences[Keys.IS_ZEN_MODE] = dataStoreSettings.isZenMode
             preferences[Keys.IS_SHAKABLE] = dataStoreSettings.isShakable
+            preferences[Keys.LIQUID_GLASS_ENABLED] = dataStoreSettings.liquidGlassEnabled
+            preferences[Keys.LIQUID_GLASS_BLUR_RADIUS] = dataStoreSettings.liquidGlassBlurRadius
+            preferences[Keys.LIQUID_GLASS_REFRACTION] = dataStoreSettings.liquidGlassRefraction
+            preferences[Keys.LIQUID_GLASS_TINT] = dataStoreSettings.liquidGlassTint
         }
     }
 }

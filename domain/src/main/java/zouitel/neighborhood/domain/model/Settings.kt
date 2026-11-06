@@ -8,5 +8,9 @@ data class Settings(
     val isLocked: Boolean,
     val isScreenshot: Boolean,
     val isZenMode: Boolean,
-    val isShakable: Boolean
+    val isShakable: Boolean,
+    val liquidGlassEnabled: Boolean = true,
+    val liquidGlassBlurRadius: Float = 18f,
+    val liquidGlassRefraction: Float = 12f,
+    val liquidGlassTint: Float = 0.12f
 )

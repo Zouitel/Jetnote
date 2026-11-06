@@ -12,7 +12,11 @@ class SettingsMapper {
         isLocked = settings.isLocked,
         isScreenshot = settings.isScreenshot,
         isZenMode = settings.isZenMode,
-        isShakable = settings.isShakable
+        isShakable = settings.isShakable,
+        liquidGlassEnabled = settings.liquidGlassEnabled,
+        liquidGlassBlurRadius = settings.liquidGlassBlurRadius,
+        liquidGlassRefraction = settings.liquidGlassRefraction,
+        liquidGlassTint = settings.liquidGlassTint
     )
 
     fun fromDomain(settings: OutSettings) = Settings(
@@ -23,6 +27,10 @@ class SettingsMapper {
         isLocked = settings.isLocked,
         isScreenshot = settings.isScreenshot,
         isZenMode = settings.isZenMode,
-        isShakable = settings.isShakable
+        isShakable = settings.isShakable,
+        liquidGlassEnabled = settings.liquidGlassEnabled,
+        liquidGlassBlurRadius = settings.liquidGlassBlurRadius,
+        liquidGlassRefraction = settings.liquidGlassRefraction,
+        liquidGlassTint = settings.liquidGlassTint
     )
 }

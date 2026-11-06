@@ -1,6 +1,7 @@
 package zouitel.neighborhood.datastore
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import zouitel.neighborhood.datastore.Constants.LOCK_MODE
 import zouitel.neighborhood.datastore.Constants.MUTE
@@ -18,6 +19,10 @@ object Keys {
     val IS_SCREENSHOT_BLOCKED = booleanPreferencesKey(SCREENSHOT_BLOCK)
     val IS_ZEN_MODE = booleanPreferencesKey(ZEN_MODE)
     val IS_SHAKABLE = booleanPreferencesKey(SHAKE_TO_REPORT)
+    val LIQUID_GLASS_ENABLED = booleanPreferencesKey("liquid_glass_enabled")
+    val LIQUID_GLASS_BLUR_RADIUS = floatPreferencesKey("liquid_glass_blur_radius")
+    val LIQUID_GLASS_REFRACTION = floatPreferencesKey("liquid_glass_refraction")
+    val LIQUID_GLASS_TINT = floatPreferencesKey("liquid_glass_tint")
 
     @Deprecated("Use IS_MUTED; the stored preference represents the mute setting.")
     val IS_SOUND = IS_MUTED
