@@ -1,5 +1,6 @@
 package zouitel.neighborhood.logic.cache
 
+import android.util.AtomicFile
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -18,46 +19,34 @@ class PerKeyFileCacheStore<K : Any, V : Any>(
     private val entrySerializer = cacheEntrySerializer(valueSerializer)
 
     override fun loadEntry(key: K): CacheEntry<V>? = lock.withLock {
-        val f = fileFor(key)
-        if (!f.exists()) return@withLock null
-        return@withLock runCatching { json.decodeFromString(entrySerializer, f.readText()) }
-            .getOrElse {
-                runCatching { json.decodeFromString(valueSerializer, f.readText()) }
-                    .getOrNull()?.let { CacheEntry(value = it, expiresAt = null) }
-            }
+        val file = fileFor(key)
+        val text = readAtomicText(file) ?: return@withLock null
+        decodeEntry(text)
     }
 
     override fun saveEntry(key: K, entry: CacheEntry<V>) = lock.withLock {
-        val f = fileFor(key)
-        ensureParentDir(f)
-        val text = json.encodeToString(entrySerializer, entry)
-        atomicWrite(f, text)
+        val file = fileFor(key)
+        ensureParentDir(file)
+        atomicWrite(file, json.encodeToString(entrySerializer, entry))
     }
 
     override fun remove(key: K) = lock.withLock {
-        val f = fileFor(key)
-        if (f.exists()) {
-            runCatching { f.delete() }
-        }
+        AtomicFile(fileFor(key)).delete()
     }
 
     override fun clear() = lock.withLock {
         if (!dir.exists()) return@withLock
-        dir.listFiles { file -> file.isFile && file.name.endsWith(ext) }?.forEach { runCatching { it.delete() } }
+        dir.listFiles { file -> file.isFile && file.name.endsWith(ext) }
+            ?.forEach { AtomicFile(it).delete() }
     }
 
     override fun loadAllEntries(): Map<K, CacheEntry<V>> = lock.withLock {
         if (!dir.exists()) return@withLock emptyMap()
         val result = LinkedHashMap<K, CacheEntry<V>>()
         dir.listFiles { file -> file.isFile && file.name.endsWith(ext) }?.forEach { file ->
-            val base = file.name.removeSuffix(ext)
-            val key = keyCodec.fromFileName(base) ?: return@forEach
-            val entry = runCatching { json.decodeFromString(entrySerializer, file.readText()) }
-                .getOrElse {
-                    runCatching { json.decodeFromString(valueSerializer, file.readText()) }
-                        .getOrNull()?.let { CacheEntry(value = it, expiresAt = null) }
-                }
-            if (entry != null) result[key] = entry
+            val key = keyCodec.fromFileName(file.name.removeSuffix(ext)) ?: return@forEach
+            val text = readAtomicText(file) ?: return@forEach
+            decodeEntry(text)?.let { result[key] = it }
         }
         result
     }
@@ -66,15 +55,17 @@ class PerKeyFileCacheStore<K : Any, V : Any>(
         if (!dir.exists()) return@withLock emptySet()
         buildSet {
             dir.listFiles { file -> file.isFile && file.name.endsWith(ext) }?.forEach { file ->
-                val base = file.name.removeSuffix(ext)
-                keyCodec.fromFileName(base)?.let { add(it) }
+                keyCodec.fromFileName(file.name.removeSuffix(ext))?.let(::add)
             }
         }
     }
 
-    private fun fileFor(key: K): File {
-        val name = keyCodec.toFileName(key) + ext
-        return File(dir, name)
+    private fun decodeEntry(text: String): CacheEntry<V>? {
+        return runCatching { json.decodeFromString(entrySerializer, text) }.getOrElse {
+            runCatching { json.decodeFromString(valueSerializer, text) }
+                .getOrNull()?.let { CacheEntry(value = it, expiresAt = null) }
+        }
     }
-}
 
+    private fun fileFor(key: K): File = File(dir, keyCodec.toFileName(key) + ext)
+}
