@@ -13,9 +13,15 @@ object Keys {
     val LAYOUT = stringPreferencesKey(Constants.LAYOUT)
     val ORDINATION = stringPreferencesKey(Constants.ORDINATION)
     val DARK_THEME = booleanPreferencesKey(THEME)
-    val IS_SOUND = booleanPreferencesKey(MUTE)
+    val IS_MUTED = booleanPreferencesKey(MUTE)
     val IS_LOCK_MODE = booleanPreferencesKey(LOCK_MODE)
-    val IS_SCREENSHOT = booleanPreferencesKey(SCREENSHOT_BLOCK)
+    val IS_SCREENSHOT_BLOCKED = booleanPreferencesKey(SCREENSHOT_BLOCK)
     val IS_ZEN_MODE = booleanPreferencesKey(ZEN_MODE)
     val IS_SHAKABLE = booleanPreferencesKey(SHAKE_TO_REPORT)
+
+    @Deprecated("Use IS_MUTED; the stored preference represents the mute setting.")
+    val IS_SOUND = IS_MUTED
+
+    @Deprecated("Use IS_SCREENSHOT_BLOCKED; the stored preference represents screenshot blocking.")
+    val IS_SCREENSHOT = IS_SCREENSHOT_BLOCKED
 }
