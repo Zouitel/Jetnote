@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "zouitel.neighborhood.waveform"
 }
+
+dependencies {
+    testImplementation(libs.junit)
+}

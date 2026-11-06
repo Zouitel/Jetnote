@@ -1,34 +1,50 @@
 package zouitel.neighborhood.waveform
 
-import kotlin.math.ceil
-import kotlin.math.roundToInt
+internal fun <T> Iterable<T>.fillToSize(
+    size: Int,
+    transform: (List<T>) -> T
+): List<T> {
+    if (size <= 0) return emptyList()
+    val values = toList()
+    if (values.isEmpty()) return emptyList()
+    if (values.size >= size) return values.chunkToSize(size, transform)
 
-internal fun <T> Iterable<T>.fillToSize(size: Int, transform: (List<T>) -> T): List<T> {
-    val capacity = ceil(size.safeDiv(count())).roundToInt()
-    return map { data -> List(capacity) { data } }.flatten().chunkToSize(size, transform)
+    val repetitions = (size + values.size - 1) / values.size
+    val expanded = values.flatMap { value -> List(repetitions) { value } }
+    return expanded.chunkToSize(size, transform)
 }
 
-internal fun <T> Iterable<T>.chunkToSize(size: Int, transform: (List<T>) -> T): List<T> {
-    val chunkSize = count() / size
-    val remainder = count() % size
-    val remainderIndex = ceil(count().safeDiv(remainder)).roundToInt()
-    val chunkIteration = filterIndexed { index, _ ->
-        remainderIndex == 0 || index % remainderIndex != 0
-    }.chunked(chunkSize, transform)
-    return when (size) {
-        chunkIteration.count() -> chunkIteration
-        else -> chunkIteration.chunkToSize(size, transform)
+internal fun <T> Iterable<T>.chunkToSize(
+    size: Int,
+    transform: (List<T>) -> T
+): List<T> {
+    if (size <= 0) return emptyList()
+    val values = toList()
+    if (values.isEmpty()) return emptyList()
+    if (size >= values.size) {
+        return if (size == values.size) {
+            values.map { transform(listOf(it)) }
+        } else {
+            values.fillToSize(size, transform)
+        }
+    }
+
+    return List(size) { bucketIndex ->
+        val start = bucketIndex * values.size / size
+        val end = (bucketIndex + 1) * values.size / size
+        transform(values.subList(start, end))
     }
 }
 
 internal fun Iterable<Float>.normalize(min: Float, max: Float): List<Float> {
-    return map { (max-min) * ((it - min()) safeDiv (max() - min())) + min }
-}
+    val values = toList()
+    if (values.isEmpty()) return emptyList()
+    val sourceMin = values.minOrNull() ?: return emptyList()
+    val sourceMax = values.maxOrNull() ?: return emptyList()
+    if (sourceMax == sourceMin) return List(values.size) { min }
 
-private fun Int.safeDiv(value: Int): Float {
-    return if(value == 0) return 0F else this / value.toFloat()
-}
-
-private infix fun Float.safeDiv(value: Float): Float {
-    return if (value == 0f) return 0F else this / value
+    val range = max - min
+    return values.map { value ->
+        min + ((value - sourceMin) / (sourceMax - sourceMin)) * range
+    }
 }
