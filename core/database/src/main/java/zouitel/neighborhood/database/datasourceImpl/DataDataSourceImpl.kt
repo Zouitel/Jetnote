@@ -14,8 +14,8 @@ class DataDataSourceImpl(
     }
 
     override suspend fun insertAll(data: List<OutData>) {
-        require(data.all { it.userUid.isNotBlank() && it.userUid != "null" }) {
-            "Every imported note must belong to an authenticated user"
+        require(data.all { it.uid.isNotBlank() && it.userUid.isNotBlank() && it.userUid != "null" }) {
+            "Every imported note must have an ID and belong to an authenticated user"
         }
         dao.insertAll(mapper.fromRepo(data))
     }

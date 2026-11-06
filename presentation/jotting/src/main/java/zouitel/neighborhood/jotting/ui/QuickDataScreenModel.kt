@@ -21,7 +21,11 @@ class QuickDataScreenModel(
             is UiEvent.Insert -> performUiEvent {
                 val userUid = firebaseAuth.currentUser?.uid?.takeIf(String::isNotBlank)
                     ?: return@performUiEvent
-                add(mapper.toDomain(event.data.copy(userUid = userUid)))
+                val source = event.data
+                if (source.userUid.isNotBlank() && source.userUid != "null" && source.userUid != userUid) {
+                    return@performUiEvent
+                }
+                add(mapper.toDomain(source.copy(userUid = userUid)))
             }
             else -> throw Exception("Not Implemented!")
         }

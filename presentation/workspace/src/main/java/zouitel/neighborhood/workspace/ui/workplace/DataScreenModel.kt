@@ -24,7 +24,11 @@ class DataScreenModel(
         val userUid = firebaseAuth.currentUser?.uid?.takeIf(String::isNotBlank) ?: return
         when(act) {
             is Action.Insert<*> -> withAsync {
-                insert(mapper.toDomain(act.data as Data).copy(userUid = userUid))
+                val source = act.data as Data
+                if (source.userUid.isNotBlank() && source.userUid != "null" && source.userUid != userUid) {
+                    return@withAsync
+                }
+                insert(mapper.toDomain(source.copy(userUid = userUid)))
             }
             is Action.Archive -> withAsync { archive(userUid, act.uid) }
             is Action.Rollback -> withAsync { rollback(userUid, act.uid) }
