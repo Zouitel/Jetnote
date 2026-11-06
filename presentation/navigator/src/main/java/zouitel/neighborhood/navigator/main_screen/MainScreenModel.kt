@@ -74,6 +74,7 @@ class MainScreenModel(
                 Log.e("MainScreenModel", "Failed to persist note order", error)
             } finally {
                 isDraggingActive = false
+                applyLatestSnapshots()
             }
         }
     }
@@ -134,6 +135,14 @@ class MainScreenModel(
                 }
             }
         }
+    }
+
+    private fun applyLatestSnapshots() {
+        defaultNotes.replaceWith(_observeDefaults.value)
+        newestNotes.replaceWith(_observeNewest.value)
+        oldestNotes.replaceWith(_observeOldest.value)
+        nameNotes.replaceWith(_observeNames.value)
+        priorityNotes.replaceWith(_observePriorities.value)
     }
 
     private fun clearNotes() {
