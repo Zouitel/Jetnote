@@ -7,7 +7,6 @@ import android.media.AudioManager
 import android.widget.Toast
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -104,8 +103,7 @@ fun <T> Flow<T>.withFlow(initialValue: T): StateFlow<T> {
     fun <T> Flow<T>.withFlow(initialValue: T, onStart: suspend () -> Unit): StateFlow<T> {
         return this@withFlow
             .onStart {
-                model.screenModelScope.async { onStart() }
-//                onStart()
+                onStart()
             }.stateIn(
                 scope = model.screenModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
