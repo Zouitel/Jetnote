@@ -7,97 +7,84 @@ import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import zouitel.neighborhood.workspace.ui.utils.getImageDisplayName
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 
 class CopyMediaWorker(
     context: Context,
-    params : WorkerParameters,
-    private val ioDeprecated: CoroutineDispatcher
+    params: WorkerParameters,
+    private val ioDeprecated: CoroutineDispatcher = Dispatchers.IO
 ) : CoroutineWorker(context, params) {
 
-    override suspend fun doWork(): Result {
-        return try {
-            val mediaUri = inputData.getString("CONTENT_URI") ?: return Result.failure()
-            val destinationPath = inputData.getString("DESTINATION_PATH")
-
-            if (destinationPath != null) {
-                copyMediaToDestination(mediaUri.toUri(), destinationPath)
-            } else {
-                copyMediaToExternalStorage(mediaUri.toUri())
-            }
-
-            Result.success()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure()
+    override suspend fun doWork(): Result = try {
+        val uri = inputData.getString(KEY_CONTENT_URI)?.toUri()
+            ?: return Result.failure(workDataOf(KEY_ERROR to "No source URI supplied"))
+        val destinationPath = inputData.getString(KEY_DESTINATION_PATH)
+        val destination = if (destinationPath.isNullOrBlank()) {
+            copyMediaToExternalStorage(uri)
+        } else {
+            copyMediaToDestination(uri, destinationPath)
         }
+        if (!destination.isFile || destination.length() == 0L) {
+            return Result.failure(workDataOf(KEY_ERROR to "Media copy did not produce a valid file"))
+        }
+        Result.success(workDataOf(KEY_OUTPUT_PATH to destination.absolutePath))
+    } catch (error: Exception) {
+        Result.failure(workDataOf(KEY_ERROR to (error.localizedMessage ?: "Unable to copy media")))
     }
 
-    // ── Targeted copy (preferred path — used by handleContentReceiver) ────────
     @WorkerThread
-    private suspend fun copyMediaToDestination(uri: Uri, destinationPath: String) {
-        val destinationFile = File(destinationPath)
+    private suspend fun copyMediaToDestination(uri: Uri, path: String): File =
+        withContext(ioDeprecated) { copyToFile(uri, File(path)) }
 
-        if (destinationFile.exists()) return
-
-        withContext(ioDeprecated) {
-            destinationFile.parentFile?.takeIf { !it.exists() }?.mkdirs()
-
-            runCatching {
-                applicationContext.contentResolver.openInputStream(uri)?.use { src ->
-                    FileOutputStream(destinationFile).use { dst -> src.copyTo(dst) }
-                }
-            }.onFailure { it.printStackTrace(); throw it }
-        }
-    }
-
-    // ── Fallback copy (legacy path — no explicit destination supplied) ─────────
     @WorkerThread
-    private suspend fun copyMediaToExternalStorage(uri: Uri) {
+    private suspend fun copyMediaToExternalStorage(uri: Uri): File = withContext(ioDeprecated) {
         val context = applicationContext
-        val fileDescriptor = context.contentResolver.openFileDescriptor(uri, "r") ?: return
-
-        val inputStream = try {
-            context.contentResolver.query(uri, null, null, null, null)?.use { it.moveToFirst() }
-            FileInputStream(fileDescriptor.fileDescriptor)
-        } catch (e: Exception) {
-            fileDescriptor.close()
-            return
+        val mime = context.contentResolver.getType(uri).orEmpty()
+        val directory = when {
+            mime.startsWith("image/") -> Environment.DIRECTORY_PICTURES
+            mime.startsWith("video/") -> Environment.DIRECTORY_MOVIES
+            else -> Environment.DIRECTORY_DOCUMENTS
         }
+        val parent = context.getExternalFilesDir(directory) ?: File(context.filesDir, directory)
+        val name = getImageDisplayName(context, uri).orEmpty().ifBlank { "attachment.bin" }
+        copyToFile(uri, File(parent, name))
+    }
 
-        val mediaName = getImageDisplayName(context, uri)
-        val mediaType = context.contentResolver.getType(uri)
-
-        // ── Route to the correct directory based on MIME type ─────────────────
-        val mediaDir = when {
-            mediaType?.startsWith("image/") == true ->
-                Environment.DIRECTORY_PICTURES
-            mediaType?.startsWith("video/") == true ->
-                Environment.DIRECTORY_MOVIES
-            else ->
-                // Documents (pdf, docx, xlsx, pptx …) go to DIRECTORY_DOCUMENTS,
-                // not DIRECTORY_DOWNLOADS as before.
-                Environment.DIRECTORY_DOCUMENTS
-        }.let { context.getExternalFilesDir(it) }
-
-        val file = File(mediaDir, mediaName)
-
-        withContext(ioDeprecated) {
-            if (mediaDir?.exists() == false) mediaDir.mkdirs()
-
-            if (!file.exists()) {
-                FileOutputStream(file).use { dst -> inputStream.copyTo(dst) }
+    private fun copyToFile(uri: Uri, destination: File): File {
+        if (destination.isFile && destination.length() > 0L) return destination
+        val parent = destination.absoluteFile.parentFile ?: error("Destination has no parent")
+        if (!parent.exists() && !parent.mkdirs() && !parent.isDirectory) {
+            error("Unable to create destination directory")
+        }
+        val temporary = File(parent, destination.name + "." + id + ".tmp")
+        try {
+            val input = applicationContext.contentResolver.openInputStream(uri)
+                ?: error("Unable to open source URI: $uri")
+            input.use { source ->
+                FileOutputStream(temporary).use { output ->
+                    source.copyTo(output)
+                    output.fd.sync()
+                }
             }
+            if (!temporary.isFile || temporary.length() == 0L) error("Copied file is empty")
+            if (destination.exists() && !destination.delete()) error("Unable to replace destination")
+            if (!temporary.renameTo(destination)) error("Unable to finalize copied file")
+            return destination
+        } finally {
+            if (temporary.exists()) temporary.delete()
         }
+    }
 
-        runCatching {
-            inputStream.close()
-            fileDescriptor.close()
-        }
+    companion object {
+        const val KEY_CONTENT_URI = "CONTENT_URI"
+        const val KEY_DESTINATION_PATH = "DESTINATION_PATH"
+        const val KEY_OUTPUT_PATH = "OUTPUT_PATH"
+        const val KEY_ERROR = "ERROR_MESSAGE"
     }
 }

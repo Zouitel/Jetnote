@@ -1,96 +1,68 @@
 package zouitel.neighborhood.workspace.notifications
 
 import android.R
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Build
-import androidx.annotation.CallSuper
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import zouitel.neighborhood.workspace.WorkplaceActivity
 import zouitel.neighborhood.workspace.mapper.JsonInstant
 import zouitel.neighborhood.workspace.model.Data
 import org.koin.core.component.KoinComponent
 
-class NotificationReceiver: BroadcastReceiver(), KoinComponent {
-    @RequiresApi(Build.VERSION_CODES.S)
-    @SuppressLint("NewApi")
-    @CallSuper
+class NotificationReceiver : BroadcastReceiver(), KoinComponent {
     override fun onReceive(context: Context, intent: Intent) {
-        val notifyManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val jsonNote = intent.getStringExtra("data")
-        val note = JsonInstant.decodeFromString<Data>(jsonNote ?: return)
+        val json = intent.getStringExtra(EXTRA_DATA) ?: return
+        val note = runCatching { JsonInstant.decodeFromString<Data>(json) }.getOrNull() ?: return
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val publicChannel = NotificationChannel(
-            note.uid,
-            "jetnote_notification_channel",
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            description = "Reminder notification"
-            enableVibration(true)
-            enableLights(true)
-            vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            setShowBadge(true)
-        }
-        notifyManager.createNotificationChannel(publicChannel)
-
-        // Use action string instead of class reference
-        val activityIntent = Intent(context, WorkplaceActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                    Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra("start_workplace", true)
-            putExtra("data", jsonNote)
-            // Set package to ensure it opens your app
-            setPackage(context.packageName)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID, "Jetnote reminders", NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Reminders for your Jetnote notes"
+                enableVibration(true)
+                vibrationPattern = longArrayOf(500, 500, 500)
+                lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+            }
+            manager.createNotificationChannel(channel)
         }
 
+        val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, note.uid.hashCode())
+        val openIntent = Intent(context, WorkplaceActivity::class.java).apply {
+            action = ACTION_OPEN_WORKPLACE
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(EXTRA_START_WORKPLACE, true)
+            putExtra(EXTRA_DATA, json)
+        }
         val pendingIntent = PendingIntent.getActivity(
-            context,
-            note.uid.hashCode(),
-            activityIntent,
+            context, notificationId, openIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
-        val notifyBuilder = NotificationCompat.Builder(context, note.uid)
-            .setStyle(
-                NotificationCompat
-                    .BigPictureStyle().bigPicture(
-                    note.medias.firstOrNull()?.uri?.let {
-                        BitmapFactory.decodeFile(it)
-                    }
-                ).bigLargeIcon(null as Bitmap?)
-            )
-            .setLargeIcon(
-                note.medias.firstOrNull()?.uri?.let {
-                    BitmapFactory.decodeFile(it)
-                }
-            )
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_popup_reminder)
             .setContentIntent(pendingIntent)
             .setWhen(System.currentTimeMillis())
-            .setOngoing(false)
-            .setOnlyAlertOnce(true)
+            .setAutoCancel(true)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(false)
-            .setContentTitle(note.title)
-            .setContentText("note.description")
+            .setContentTitle(note.title.ifBlank { "Jetnote reminder" })
+            .setContentText("Tap to open your note")
             .build()
+        manager.notify(notificationId, notification)
+    }
 
-        notifyManager.notify(
-            note.uid.hashCode(),
-            notifyBuilder
-        )
+    companion object {
+        const val CHANNEL_ID = "workspace_reminders"
+        const val EXTRA_DATA = "data"
+        const val EXTRA_NOTIFICATION_ID = "notification_id"
+        const val EXTRA_START_WORKPLACE = "start_workplace"
+        const val ACTION_OPEN_WORKPLACE = "city.zouitel.action.OPEN_WORKPLACE"
     }
 }
