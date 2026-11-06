@@ -7,17 +7,15 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.usecase.DataUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
-import zouitel.neighborhood.domain.utils.withAsync
-import zouitel.neighborhood.logic.withFlow
 import zouitel.neighborhood.navigator.mapper.NoteMapper
 import zouitel.neighborhood.workspace.model.Note
 
 @Stable
-@Suppress("DeferredResultUnused")
 class MainScreenModel(
     private val defaults: NoteUseCase.ObserveByDefault,
     private val newest: NoteUseCase.ObserveByNewest,
@@ -30,104 +28,58 @@ class MainScreenModel(
 ) : ScreenModel {
 
     private val _auth = MutableStateFlow(firebaseAuth.currentUser?.uid)
-    val auth: StateFlow<String?> = _auth
+    val auth: StateFlow<String?> = _auth.asStateFlow()
 
-    // ── Backing mutable snapshot lists (used by the reorderable library) ──
     val defaultNotes = mutableStateListOf<Note>()
     val newestNotes = mutableStateListOf<Note>()
     val oldestNotes = mutableStateListOf<Note>()
     val nameNotes = mutableStateListOf<Note>()
     val priorityNotes = mutableStateListOf<Note>()
 
-    // Flag that blocks the Room flow from overwriting the list during a drag
-    private var isDraggingActive = false
-
-    // ── Flow collectors — guard all five with the flag ──────────────────
     private val _observeDefaults = MutableStateFlow<List<Note>>(emptyList())
-    val observeDefaults: StateFlow<List<Note>> = _observeDefaults
-        .withFlow(emptyList()) {
-            withAsync {
-                defaults(auth.value ?: "null").collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeDefaults.value = mapped
-                    if (!isDraggingActive) {
-                        defaultNotes.apply { clear(); addAll(mapped) }
-                    }
-                }
-            }
-        }
+    val observeDefaults: StateFlow<List<Note>> = _observeDefaults.asStateFlow()
 
-    // (repeat the same pattern for newest / oldest / names / priorities)
     private val _observeNewest = MutableStateFlow<List<Note>>(emptyList())
-    val observeNewest: StateFlow<List<Note>> = _observeNewest
-        .withFlow(emptyList()) {
-            withAsync {
-                newest(auth.value ?: "null").collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeNewest.value = mapped
-                    newestNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-        }
+    val observeNewest: StateFlow<List<Note>> = _observeNewest.asStateFlow()
 
     private val _observeOldest = MutableStateFlow<List<Note>>(emptyList())
-    val observeOldest: StateFlow<List<Note>> = _observeOldest
-        .withFlow(emptyList()) {
-            withAsync {
-                oldest(auth.value ?: "null").collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeOldest.value = mapped
-                    oldestNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-        }
+    val observeOldest: StateFlow<List<Note>> = _observeOldest.asStateFlow()
 
     private val _observeNames = MutableStateFlow<List<Note>>(emptyList())
-    val observeNames: StateFlow<List<Note>> = _observeNames
-        .withFlow(emptyList()) {
-            withAsync {
-                names(auth.value ?: "null").collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeNames.value = mapped
-                    nameNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-        }
+    val observeNames: StateFlow<List<Note>> = _observeNames.asStateFlow()
 
     private val _observePriorities = MutableStateFlow<List<Note>>(emptyList())
-    val observePriorities: StateFlow<List<Note>> = _observePriorities
-        .withFlow(emptyList()) {
-            withAsync {
-                priorities(auth.value ?: "null").collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observePriorities.value = mapped
-                    priorityNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-        }
+    val observePriorities: StateFlow<List<Note>> = _observePriorities.asStateFlow()
+
+    private var isDraggingActive = false
 
     init {
-        setupAuthStateListener()
+        observeAuthentication()
     }
 
-    // ── Called every drag frame — memory only, no Room write ────────────
     fun onNoteMoved(list: MutableList<Note>, from: Int, to: Int) {
+        if (from !in list.indices || to !in list.indices || from == to) return
         isDraggingActive = true
-        list.add(to, list.removeAt(from))   // instant visual update
+        list.add(to, list.removeAt(from))
     }
 
-    // ── Called once when finger lifts — persist final order ─────────────
-    fun onDragEnd(list: MutableList<Note>) {
-        isDraggingActive = false
+    fun onDragEnd(list: List<Note>) {
+        if (!isDraggingActive) return
+        val positions = list.mapIndexed { index, note -> note.data.uid to index }.toMap()
+
         screenModelScope.launch {
-            val positions = list
-                .mapIndexed { index, note -> note.data.uid to index }
-                .toMap()
-            reorderNotes(positions)
+            try {
+                reorderNotes(positions)
+            } catch (error: Exception) {
+                Log.e("MainScreenModel", "Failed to persist note order", error)
+                applyLatestSnapshots()
+            } finally {
+                isDraggingActive = false
+            }
         }
     }
 
-    private fun setupAuthStateListener() {
+    private fun observeAuthentication() {
         screenModelScope.launch {
             callbackFlow {
                 val listener = FirebaseAuth.AuthStateListener { auth ->
@@ -136,52 +88,78 @@ class MainScreenModel(
                 firebaseAuth.addAuthStateListener(listener)
                 trySend(firebaseAuth.currentUser?.uid)
                 awaitClose { firebaseAuth.removeAuthStateListener(listener) }
-            }.collect { uid ->
+            }.distinctUntilChanged().collectLatest { uid ->
                 _auth.value = uid
-                Log.d("MainScreenModel", "User ID updated: ${uid ?: "null"}")
-                reloadNotes()
+                isDraggingActive = false
+                clearNotes()
+
+                if (uid == null) return@collectLatest
+
+                // collectLatest cancels every observer belonging to the previous account.
+                coroutineScope {
+                    launch {
+                        defaults(uid).collect { values ->
+                            val mapped = mapper.fromDomain(values)
+                            _observeDefaults.value = mapped
+                            if (!isDraggingActive) defaultNotes.replaceWith(mapped)
+                        }
+                    }
+                    launch {
+                        newest(uid).collect { values ->
+                            val mapped = mapper.fromDomain(values)
+                            _observeNewest.value = mapped
+                            if (!isDraggingActive) newestNotes.replaceWith(mapped)
+                        }
+                    }
+                    launch {
+                        oldest(uid).collect { values ->
+                            val mapped = mapper.fromDomain(values)
+                            _observeOldest.value = mapped
+                            if (!isDraggingActive) oldestNotes.replaceWith(mapped)
+                        }
+                    }
+                    launch {
+                        names(uid).collect { values ->
+                            val mapped = mapper.fromDomain(values)
+                            _observeNames.value = mapped
+                            if (!isDraggingActive) nameNotes.replaceWith(mapped)
+                        }
+                    }
+                    launch {
+                        priorities(uid).collect { values ->
+                            val mapped = mapper.fromDomain(values)
+                            _observePriorities.value = mapped
+                            if (!isDraggingActive) priorityNotes.replaceWith(mapped)
+                        }
+                    }
+                }
             }
         }
     }
 
-    private fun reloadNotes() {
-        val userId = auth.value ?: "null"
-        screenModelScope.launch {
-            launch {
-                defaults(userId).collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeDefaults.value = mapped
-                    defaultNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-            launch {
-                newest(userId).collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeNewest.value = mapped
-                    newestNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-            launch {
-                oldest(userId).collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeOldest.value = mapped
-                    oldestNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-            launch {
-                names(userId).collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observeNames.value = mapped
-                    nameNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-            launch {
-                priorities(userId).collect { list ->
-                    val mapped = mapper.fromDomain(list)
-                    _observePriorities.value = mapped
-                    priorityNotes.apply { clear(); addAll(mapped) }
-                }
-            }
-        }
+    private fun applyLatestSnapshots() {
+        defaultNotes.replaceWith(_observeDefaults.value)
+        newestNotes.replaceWith(_observeNewest.value)
+        oldestNotes.replaceWith(_observeOldest.value)
+        nameNotes.replaceWith(_observeNames.value)
+        priorityNotes.replaceWith(_observePriorities.value)
+    }
+
+    private fun clearNotes() {
+        defaultNotes.clear()
+        newestNotes.clear()
+        oldestNotes.clear()
+        nameNotes.clear()
+        priorityNotes.clear()
+        _observeDefaults.value = emptyList()
+        _observeNewest.value = emptyList()
+        _observeOldest.value = emptyList()
+        _observeNames.value = emptyList()
+        _observePriorities.value = emptyList()
+    }
+
+    private fun MutableList<Note>.replaceWith(values: List<Note>) {
+        clear()
+        addAll(values)
     }
 }

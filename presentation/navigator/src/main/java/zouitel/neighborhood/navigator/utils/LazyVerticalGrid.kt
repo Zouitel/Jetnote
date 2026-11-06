@@ -11,6 +11,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -46,8 +49,12 @@ fun LazyVerticalGrid(
             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
         }
 
+    var dragWasActive by remember { mutableStateOf(false) }
     LaunchedEffect(reorderableLazyStaggeredGridState.isAnyItemDragging) {
-        if (!reorderableLazyStaggeredGridState.isAnyItemDragging) {
+        if (reorderableLazyStaggeredGridState.isAnyItemDragging) {
+            dragWasActive = true
+        } else if (dragWasActive) {
+            dragWasActive = false
             model.onDragEnd(notes)
         }
     }
