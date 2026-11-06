@@ -17,7 +17,7 @@ class NoteRepositoryImpl(
     override val getAll: List<OutNote>
         get() = dataSource.getAll.map { mapper.toDomain(it) }
 
-    override suspend fun observeByDefault(userUid: String): Flow<List<OutNote>> {
+    override fun observeByDefault(userUid: String): Flow<List<OutNote>> {
         return dataSource.observeByDefault(userUid).map { mapper.toDomain(it) }
     }
 
