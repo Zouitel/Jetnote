@@ -7,14 +7,19 @@ class WaveformUtilsTest {
 
     @Test
     fun fillToSizeReturnsRequestedNumberOfValues() {
-        val result = listOf(2, 4, 6).fillToSize(5) { bucket -> bucket.sum() }
+        val result = listOf(2, 4, 6).fillToSize(5) { bucket -> bucket.first() }
 
-        assertEquals(5, result.size)
+        assertEquals(listOf(2, 2, 4, 4, 6), result)
     }
 
     @Test
     fun fillToSizeHandlesEmptyInput() {
         assertEquals(emptyList<Int>(), emptyList<Int>().fillToSize(4) { it.sum() })
+    }
+
+    @Test
+    fun fillToSizeHandlesNonPositiveTargetSize() {
+        assertEquals(emptyList<Int>(), listOf(1, 2, 3).fillToSize(0) { it.sum() })
     }
 
     @Test
@@ -32,6 +37,11 @@ class WaveformUtilsTest {
     @Test
     fun normalizeMapsConstantValuesToMinimum() {
         assertEquals(listOf(1F, 1F, 1F), listOf(5F, 5F, 5F).normalize(1F, 10F))
+    }
+
+    @Test
+    fun normalizeHandlesEmptyInput() {
+        assertEquals(emptyList<Float>(), emptyList<Float>().normalize(1F, 10F))
     }
 
     @Test
