@@ -9,6 +9,8 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import androidx.lifecycle.Observer
+import androidx.work.WorkInfo
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
@@ -88,6 +90,7 @@ class OCRScreenModel(private val application: Application) : ScreenModel {
 
     fun onScanError(message: String) = _uiState.update { it.copy(error = message) }
     fun clearError()                  = _uiState.update { it.copy(error = null) }
+    fun onNoteAttached()               = _uiState.update { it.copy(savedToNote = true) }
 
     // ── Save ──────────────────────────────────────────────────────────────────
 
@@ -137,72 +140,31 @@ class OCRScreenModel(private val application: Application) : ScreenModel {
         )
 
         // ── Observe result ────────────────────────────────────────────────────
-        workManager.getWorkInfoByIdLiveData(request.id)
-            .observeForever { workInfo ->
-                if (workInfo == null) return@observeForever
+        val workInfoLiveData = workManager.getWorkInfoByIdLiveData(request.id)
+        val observer = object : Observer<WorkInfo> {
+            override fun onChanged(workInfo: WorkInfo?) {
+                if (workInfo?.state?.isFinished != true) return
+                workInfoLiveData.removeObserver(this)
 
-                when {
-                    workInfo.state.isFinished && workInfo.state ==
-                            androidx.work.WorkInfo.State.SUCCEEDED -> {
-                        val savedPath = workInfo.outputData
-                            .getString(SavePdfWorker.KEY_OUTPUT_PATH) ?: destinationPath
-
+                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    val savedPath = workInfo.outputData.getString(SavePdfWorker.KEY_OUTPUT_PATH)
+                    if (savedPath.isNullOrBlank()) {
                         _uiState.update {
-                            it.copy(isSaving = false, savedPdfPath = savedPath)
+                            it.copy(isSaving = false, error = "PDF worker completed without an output path")
                         }
-
-                        // ── Attach to note after the file is safely on disk ───
-                        attachToNote(noteId = noteId, localPdfPath = savedPath, title = title)
+                    } else {
+                        _uiState.update { it.copy(isSaving = false, savedPdfPath = savedPath) }
                     }
-
-                    workInfo.state.isFinished -> {   // FAILED or CANCELLED
-                        val reason = workInfo.outputData
-                            .getString(SavePdfWorker.KEY_ERROR) ?: "Unknown error"
-                        _uiState.update {
-                            it.copy(isSaving = false, error = "Failed to save PDF: $reason")
-                        }
+                } else {
+                    val reason = workInfo.outputData.getString(SavePdfWorker.KEY_ERROR)
+                        ?: workInfo.state.name.lowercase()
+                    _uiState.update {
+                        it.copy(isSaving = false, error = "Failed to save PDF: $reason")
                     }
-                    // ENQUEUED / RUNNING → keep isSaving = true
-                }
-            }
-    }
-
-    // ── Note attachment ───────────────────────────────────────────────────────
-
-    /**
-     * Called once the PDF is safely stored on disk.
-     * The composable's LaunchedEffect already appended the Media entry to
-     * [data.value.medias] and popped the back-stack, so all that remains here
-     * is flipping [savedToNote] to signal completion (e.g. for analytics /
-     * future repository calls).
-     *
-     * @param noteId       Target note ID; empty = new note.
-     * @param localPdfPath Absolute path of the persisted PDF file.
-     * @param title        Title used when creating a new note.
-     */
-    private fun attachToNote(noteId: String, localPdfPath: String, title: String) {
-        screenModelScope.launch {
-            try {
-                // ── TODO: replace with your NoteRepository call ───────────────
-                // if (noteId.isBlank()) {
-                //     noteRepository.createNoteWithPdf(
-                //         title   = title,
-                //         pdfPath = localPdfPath,
-                //     )
-                // } else {
-                //     noteRepository.attachPdfToNote(
-                //         noteId  = noteId,
-                //         pdfPath = localPdfPath,
-                //     )
-                // }
-                // ─────────────────────────────────────────────────────────────
-                _uiState.update { it.copy(savedToNote = true) }
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(error = "Saved PDF but failed to attach to note: ${e.localizedMessage}")
                 }
             }
         }
+        workInfoLiveData.observeForever(observer)
     }
 
     // ── Reset ─────────────────────────────────────────────────────────────────
