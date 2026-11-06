@@ -1,31 +1,52 @@
 package zouitel.neighborhood.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import zouitel.neighborhood.database.model.NoteAndTag
 import zouitel.neighborhood.database.model.NoteAndTag.Companion.TABLE_NAME
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteAndTagDao {
+    @Transaction
+    @Query("""
+        SELECT $TABLE_NAME.* FROM $TABLE_NAME
+        INNER JOIN note_data_table ON $TABLE_NAME.uid = note_data_table.uuid
+        WHERE note_data_table.user_uid = :userUid
+    """)
+    fun observeAll(userUid: String): Flow<List<NoteAndTag>>
 
-    @get: Query("SELECT * FROM $TABLE_NAME")
-    val observeAll: Flow<List<NoteAndTag>>
+    @Transaction
+    @Query("""
+        SELECT $TABLE_NAME.* FROM $TABLE_NAME
+        INNER JOIN note_data_table ON $TABLE_NAME.uid = note_data_table.uuid
+        WHERE note_data_table.user_uid = :userUid
+    """)
+    suspend fun getAll(userUid: String): List<NoteAndTag>
 
-    @get: Query("SELECT * FROM $TABLE_NAME")
-    val getAll: List<NoteAndTag>
+    @Query("""
+        INSERT OR IGNORE INTO $TABLE_NAME (uid, id)
+        SELECT :uid, :id
+        WHERE EXISTS (
+            SELECT 1 FROM note_data_table
+            WHERE uuid = :uid AND user_uid = :userUid
+        )
+    """)
+    suspend fun insertForUser(uid: String, id: Long, userUid: String)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(noteAndTag: NoteAndTag)
+    @Transaction
+    suspend fun insertAllForUser(noteAndTags: List<NoteAndTag>, userUid: String) {
+        noteAndTags.forEach { insertForUser(it.uid, it.id, userUid) }
+    }
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(noteAndTags: List<NoteAndTag>)
-
-    @Query("DELETE FROM $TABLE_NAME WHERE uid = :uid AND id = :id")
-    suspend fun delete(uid: String, id: Long)
-
-    @Query("DELETE FROM $TABLE_NAME WHERE uid NOT IN (SELECT UUID FROM note_data_table)")
-    suspend fun deleteDrafts()
+    @Query("""
+        DELETE FROM $TABLE_NAME
+        WHERE uid = :uid AND id = :id
+        AND EXISTS (
+            SELECT 1 FROM note_data_table
+            WHERE uuid = :uid AND user_uid = :userUid
+        )
+    """)
+    suspend fun deleteForUser(uid: String, id: Long, userUid: String)
 }

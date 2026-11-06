@@ -8,13 +8,8 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val widgetModule = module {
-    factory {
-        WidgetMapper(get(), get())
-    }
-
-    factory {
-        WidgetScreenModel(get(), get())
-    }
+    factory { WidgetMapper(get(), get()) }
+    factory { WidgetScreenModel(get(), get(), get()) }
     factoryOf(::WidgetScreen)
     factoryOf(::JottingWidget)
 }

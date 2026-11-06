@@ -11,35 +11,31 @@ class NoteDataSourceImpl(
     private val dao: NoteDao,
     private val mapper: NoteMapper
 ): NoteDataSource {
-    override val observeAll: Flow<List<OutNote>>
-        get() = dao.observeAll.map { mapper.toRepo(it) }
+    override fun observeAll(userUid: String): Flow<List<OutNote>> =
+        dao.observeAll(userUid).map { mapper.toRepo(it) }
 
-    override val getAll: List<OutNote>
-        get() = dao.getAll.map { mapper.toRepo(it) }
+    override suspend fun getAll(userUid: String): List<OutNote> =
+        dao.getAll(userUid).map { mapper.toRepo(it) }
 
-    override fun observeByDefault(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByDefault(userUid).map { mapper.toRepo(it) }
-    }
+    override fun observeByDefault(userUid: String): Flow<List<OutNote>> =
+        dao.observeByDefault(userUid).map { mapper.toRepo(it) }
 
-    override fun observeByName(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByName(userUid).map { mapper.toRepo(it) }
-    }
+    override fun observeByName(userUid: String): Flow<List<OutNote>> =
+        dao.observeByName(userUid).map { mapper.toRepo(it) }
 
-    override fun observeByOldest(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByOldest(userUid).map { mapper.toRepo(it) }
-    }
+    override fun observeByOldest(userUid: String): Flow<List<OutNote>> =
+        dao.observeByOldest(userUid).map { mapper.toRepo(it) }
 
-    override fun observeByNewest(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByNewest(userUid).map { mapper.toRepo(it) }
-    }
+    override fun observeByNewest(userUid: String): Flow<List<OutNote>> =
+        dao.observeByNewest(userUid).map { mapper.toRepo(it) }
 
-    override fun observeByPriority(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByPriority(userUid).map { mapper.toRepo(it) }
-    }
+    override fun observeByPriority(userUid: String): Flow<List<OutNote>> =
+        dao.observeByPriority(userUid).map { mapper.toRepo(it) }
 
-    override fun observeArchives(userUid: String): Flow<List<OutNote>> = dao.observeArchives(userUid).map { mapper.toRepo(it) }
+    override fun observeArchives(userUid: String): Flow<List<OutNote>> =
+        dao.observeArchives(userUid).map { mapper.toRepo(it) }
 
-    override suspend fun cleanup() {
-        dao.cleanup()
+    override suspend fun cleanup(userUid: String) {
+        dao.cleanup(userUid)
     }
 }

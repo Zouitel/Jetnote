@@ -26,36 +26,26 @@ class MainScreenModel(
     private val mapper: NoteMapper,
     private val firebaseAuth: FirebaseAuth
 ) : ScreenModel {
-
     private val _auth = MutableStateFlow(firebaseAuth.currentUser?.uid)
     val auth: StateFlow<String?> = _auth.asStateFlow()
-
     val defaultNotes = mutableStateListOf<Note>()
     val newestNotes = mutableStateListOf<Note>()
     val oldestNotes = mutableStateListOf<Note>()
     val nameNotes = mutableStateListOf<Note>()
     val priorityNotes = mutableStateListOf<Note>()
-
     private val _observeDefaults = MutableStateFlow<List<Note>>(emptyList())
     val observeDefaults: StateFlow<List<Note>> = _observeDefaults.asStateFlow()
-
     private val _observeNewest = MutableStateFlow<List<Note>>(emptyList())
     val observeNewest: StateFlow<List<Note>> = _observeNewest.asStateFlow()
-
     private val _observeOldest = MutableStateFlow<List<Note>>(emptyList())
     val observeOldest: StateFlow<List<Note>> = _observeOldest.asStateFlow()
-
     private val _observeNames = MutableStateFlow<List<Note>>(emptyList())
     val observeNames: StateFlow<List<Note>> = _observeNames.asStateFlow()
-
     private val _observePriorities = MutableStateFlow<List<Note>>(emptyList())
     val observePriorities: StateFlow<List<Note>> = _observePriorities.asStateFlow()
-
     private var isDraggingActive = false
 
-    init {
-        observeAuthentication()
-    }
+    init { observeAuthentication() }
 
     fun onNoteMoved(list: MutableList<Note>, from: Int, to: Int) {
         if (from !in list.indices || to !in list.indices || from == to) return
@@ -65,11 +55,11 @@ class MainScreenModel(
 
     fun onDragEnd(list: List<Note>) {
         if (!isDraggingActive) return
+        val userUid = _auth.value ?: return
         val positions = list.mapIndexed { index, note -> note.data.uid to index }.toMap()
-
         screenModelScope.launch {
             try {
-                reorderNotes(positions)
+                reorderNotes(userUid, positions)
             } catch (error: Exception) {
                 Log.e("MainScreenModel", "Failed to persist note order", error)
                 applyLatestSnapshots()
@@ -82,9 +72,7 @@ class MainScreenModel(
     private fun observeAuthentication() {
         screenModelScope.launch {
             callbackFlow {
-                val listener = FirebaseAuth.AuthStateListener { auth ->
-                    trySend(auth.currentUser?.uid)
-                }
+                val listener = FirebaseAuth.AuthStateListener { auth -> trySend(auth.currentUser?.uid) }
                 firebaseAuth.addAuthStateListener(listener)
                 trySend(firebaseAuth.currentUser?.uid)
                 awaitClose { firebaseAuth.removeAuthStateListener(listener) }
@@ -92,10 +80,7 @@ class MainScreenModel(
                 _auth.value = uid
                 isDraggingActive = false
                 clearNotes()
-
                 if (uid == null) return@collectLatest
-
-                // collectLatest cancels every observer belonging to the previous account.
                 coroutineScope {
                     launch {
                         defaults(uid).collect { values ->

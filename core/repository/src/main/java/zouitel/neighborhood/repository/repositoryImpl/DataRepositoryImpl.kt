@@ -17,35 +17,31 @@ class DataRepositoryImpl(
         dataSource.insertAll(mapper.fromDomain(data))
     }
 
-    override suspend fun combineUser(userUid: String?) {
-        dataSource.combineUser(userUid)
+    override suspend fun archive(userUid: String, noteUid: String) {
+        dataSource.archive(userUid, noteUid)
     }
 
-    override suspend fun archive(uid: String) {
-        dataSource.archive(uid)
+    override suspend fun rollback(userUid: String, noteUid: String) {
+        dataSource.rollback(userUid, noteUid)
     }
 
-    override suspend fun rollback(uid: String) {
-        dataSource.rollback(uid)
+    override suspend fun delete(userUid: String, noteUid: String) {
+        dataSource.delete(userUid, noteUid)
     }
 
-    override suspend fun delete(uid: String) {
-        dataSource.delete(uid)
+    override suspend fun erase(userUid: String) {
+        dataSource.erase(userUid)
     }
 
-    override suspend fun erase() {
-        dataSource.erase()
+    override suspend fun sweepDrafts(userUid: String) {
+        dataSource.sweepDrafts(userUid)
     }
 
-    override suspend fun sweepDrafts() {
-        dataSource.sweepDrafts()
+    override suspend fun reorderNote(userUid: String, noteUid: String, position: Int) {
+        dataSource.reorderNote(userUid, noteUid, position)
     }
 
-    override suspend fun reorderNote(noteUid: String, position: Int) {
-        dataSource.reorderNote(noteUid, position)
-    }
-
-    override suspend fun reorderNotes(positions: Map<String, Int>) {
-        dataSource.reorderNotes(positions)
+    override suspend fun reorderNotes(userUid: String, positions: Map<String, Int>) {
+        dataSource.reorderNotes(userUid, positions)
     }
 }

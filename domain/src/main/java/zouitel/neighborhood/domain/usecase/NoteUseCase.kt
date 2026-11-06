@@ -4,19 +4,19 @@ import zouitel.neighborhood.domain.repository.NoteRepository
 
 sealed class NoteUseCase {
     data class ObserveAll(private val repo: NoteRepository) : NoteUseCase() {
-        operator fun invoke() = repo.observeAll
+        operator fun invoke(userUid: String) = repo.observeAll(userUid)
     }
 
     data class GetAll(private val repo: NoteRepository) : NoteUseCase() {
-        operator fun invoke() = repo.getAll
+        suspend operator fun invoke(userUid: String) = repo.getAll(userUid)
     }
 
     class ObserveByDefault(private val repo: NoteRepository) : NoteUseCase() {
         operator fun invoke(userUid: String) = repo.observeByDefault(userUid)
     }
 
-    class ObserveByName(private val repos: NoteRepository) : NoteUseCase() {
-        operator fun invoke(userUid: String) = repos.observeByName(userUid)
+    class ObserveByName(private val repo: NoteRepository) : NoteUseCase() {
+        operator fun invoke(userUid: String) = repo.observeByName(userUid)
     }
 
     class ObserveByOldest(private val repo: NoteRepository) : NoteUseCase() {
@@ -36,6 +36,6 @@ sealed class NoteUseCase {
     }
 
     data class Cleanup(private val repo: NoteRepository) : NoteUseCase() {
-        suspend operator fun invoke() = repo.cleanup()
+        suspend operator fun invoke(userUid: String) = repo.cleanup(userUid)
     }
 }

@@ -22,41 +22,22 @@ import zouitel.neighborhood.workspace.ui.features.OCRScreenModel
 val workplaceModule = module {
     factoryOf(::DataMapper)
     factoryOf(::AlarmManagerScreenModel)
-    factory {
-        WorkplaceScreenModel(androidApplication())
-    }
-    factory {
-        DataScreenModel(get(), get(), get(), get(), get(), get())
-    }
-    factory {
-        OCRScreenModel(androidApplication())
-    }
-    single {
-        NotificationReceiver()
-    }
-    worker {
-        CopyMediaWorker(androidContext(), get(), get())
-    }
+    factory { WorkplaceScreenModel(androidApplication()) }
+    factory { DataScreenModel(get(), get(), get(), get(), get(), get(), get()) }
+    factory { OCRScreenModel(androidApplication()) }
+    single { NotificationReceiver() }
+    worker { CopyMediaWorker(androidContext(), get(), get()) }
 }
 
 val workplaceScreenModule = screenModule {
     register<SharedScreen.Workplace> {
-        WorkplaceScreen(
-            data = it.data,
-            isNew = it.isNew,
-            )
+        WorkplaceScreen(data = it.data, isNew = it.isNew)
     }
 }
 val feedbackScreenModule = screenModule {
-    register<SharedScreen.FeedbackSheetScreen> {
-        FeedbackSheetScreen()
-    }
-    register<SharedScreen.FeedbackScreen>{
-        FeedbackScreen()
-    }
+    register<SharedScreen.FeedbackSheetScreen> { FeedbackSheetScreen() }
+    register<SharedScreen.FeedbackScreen> { FeedbackScreen() }
 }
 val tagsScreenModule = screenModule {
-    register<SharedScreen.Tags> {
-        TagsScreen(it.uid, it.background)
-    }
+    register<SharedScreen.Tags> { TagsScreen(it.uid, it.background) }
 }

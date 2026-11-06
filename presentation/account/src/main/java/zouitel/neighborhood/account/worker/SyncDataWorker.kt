@@ -21,8 +21,6 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -85,11 +83,11 @@ class SyncDataWorker(
     }
 
     private suspend fun syncDatabaseFromDrive() = withContext(ioDispatcher) {
+        val userUid = inputData.getString(AccountWorkIdentity.FIREBASE_UID_KEY)
+            ?.takeIf(String::isNotBlank)
+            ?: throw IOException("The sync request has no bound Firebase user")
         val driveService = initializeDriveService()
-        if (driveService == null) {
-            Log.e("SyncDataWorker", "Drive service is null")
-            return@withContext
-        }
+            ?: throw IOException("Google Drive account is not available")
 
         // Find root folder
         val rootFolderId = findFolderId(driveService, "jetnote_data")
@@ -98,35 +96,26 @@ class SyncDataWorker(
             return@withContext
         }
 
-        // Create temp directory for downloads
         val tempDir = File(applicationContext.cacheDir, "jetnote_sync").apply {
             if (!exists()) mkdirs()
         }
 
-        runCatching {
-            // Download all JSON files from Drive
-            val downloadJobs = listOf(
-                async { downloadAndParse(driveService, "notes.json", rootFolderId, tempDir) { content ->
-                    val notes = json.decodeFromString<List<Data>>(content)
-                    insertData(dataMapper.toDomain(notes))
-                }},
-                async { downloadAndParse(driveService, "noteandtags.json", rootFolderId, tempDir) { content ->
-                    val noteTags = json.decodeFromString<List<NoteAndTag>>(content)
-                    insertNoteAndTags(noteAndTagMapper.toDomain(noteTags))
-                }},
-                async { downloadAndParse(driveService, "labels.json", rootFolderId, tempDir) { content ->
-                    val tags = json.decodeFromString<List<Tag>>(content)
-                    insertTags(tagMapper.toDomain(tags))
-                }}
-            )
-
-            // Wait for all downloads and parsing to complete
-            downloadJobs.awaitAll()
+        try {
+            downloadAndParse(driveService, "notes.json", rootFolderId, tempDir) { content ->
+                val notes = json.decodeFromString<List<Data>>(content)
+                insertData(dataMapper.toDomain(notes.map { it.copy(userUid = userUid) }))
+            }
+            downloadAndParse(driveService, "labels.json", rootFolderId, tempDir) { content ->
+                val tags = json.decodeFromString<List<Tag>>(content)
+                insertTags(tagMapper.toDomain(tags))
+            }
+            downloadAndParse(driveService, "noteandtags.json", rootFolderId, tempDir) { content ->
+                val noteTags = json.decodeFromString<List<NoteAndTag>>(content)
+                insertNoteAndTags(noteAndTagMapper.toDomain(noteTags), userUid)
+            }
             Log.d("SyncDataWorker", "Database sync completed successfully")
-
-        }.onFailure {
+        } finally {
             tempDir.deleteRecursively()
-            it.printStackTrace()
         }
     }
 

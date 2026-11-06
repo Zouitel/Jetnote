@@ -2,38 +2,44 @@ package zouitel.neighborhood.widget.ui
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.usecase.NoteUseCase
-import zouitel.neighborhood.domain.utils.withAsync
-import zouitel.neighborhood.logic.withFlow
 import zouitel.neighborhood.widget.mapper.WidgetMapper
 import zouitel.neighborhood.widget.model.WidgetNote
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 
 class WidgetScreenModel(
     private val default: NoteUseCase.ObserveByDefault,
-    private val mapper: WidgetMapper
+    private val mapper: WidgetMapper,
+    private val firebaseAuth: FirebaseAuth
 ): ScreenModel {
-    private val _auth = MutableStateFlow(FirebaseAuth.getInstance().currentUser?.uid)
-    val auth: StateFlow<String?> = _auth
+    private val _auth = MutableStateFlow(firebaseAuth.currentUser?.uid)
+    val auth: StateFlow<String?> = _auth.asStateFlow()
+    private val _observeByDefault = MutableStateFlow<List<WidgetNote>>(emptyList())
+    val observeByDefault: StateFlow<List<WidgetNote>> = _observeByDefault.asStateFlow()
 
-    private val _observeByDefault: MutableStateFlow<List<WidgetNote>> = MutableStateFlow(
-        emptyList()
-    )
-    val observeByDefault: StateFlow<List<WidgetNote>> = _observeByDefault
-        .withFlow(emptyList()) {
-            withAsync {
-                default(auth.value ?: "null").collect {
-                    _observeByDefault.value = mapper.fromDomain(it)
+    init {
+        screenModelScope.launch {
+            callbackFlow {
+                val listener = FirebaseAuth.AuthStateListener { auth -> trySend(auth.currentUser?.uid) }
+                firebaseAuth.addAuthStateListener(listener)
+                trySend(firebaseAuth.currentUser?.uid)
+                awaitClose { firebaseAuth.removeAuthStateListener(listener) }
+            }.distinctUntilChanged().collectLatest { uid ->
+                _auth.value = uid
+                _observeByDefault.value = emptyList()
+                if (uid == null) return@collectLatest
+                default(uid).collect { notes ->
+                    _observeByDefault.value = mapper.fromDomain(notes)
                 }
             }
         }
-        .stateIn(
-            screenModelScope,
-            SharingStarted.WhileSubscribed(),
-            emptyList()
-        )
+    }
 }

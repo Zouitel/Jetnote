@@ -2,6 +2,7 @@ package zouitel.neighborhood.workspace.ui.workplace
 
 import androidx.compose.runtime.Stable
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.google.firebase.auth.FirebaseAuth
 import zouitel.neighborhood.domain.usecase.DataUseCase
 import zouitel.neighborhood.domain.utils.Action
 import zouitel.neighborhood.domain.utils.withAsync
@@ -16,16 +17,19 @@ class DataScreenModel(
     private val rollback: DataUseCase.Rollback,
     private val data: DataUseCase.Delete,
     private val erase: DataUseCase.Erase,
-    private val mapper: DataMapper
+    private val mapper: DataMapper,
+    private val firebaseAuth: FirebaseAuth
 ): ScreenModel {
-
     fun sendAction(act: Action) {
+        val userUid = firebaseAuth.currentUser?.uid?.takeIf(String::isNotBlank) ?: return
         when(act) {
-            is Action.Insert<*> -> withAsync { insert(mapper.toDomain(act.data as Data)) }
-            is Action.Archive -> withAsync { archive(act.uid) }
-            is Action.Rollback -> withAsync { rollback(act.uid) }
-            is Action.DeleteByUid -> withAsync { data(act.uid) }
-            is Action.Erase -> withAsync { erase() }
+            is Action.Insert<*> -> withAsync {
+                insert(mapper.toDomain(act.data as Data).copy(userUid = userUid))
+            }
+            is Action.Archive -> withAsync { archive(userUid, act.uid) }
+            is Action.Rollback -> withAsync { rollback(userUid, act.uid) }
+            is Action.DeleteByUid -> withAsync { data(userUid, act.uid) }
+            is Action.Erase -> withAsync { erase(userUid) }
             else -> throw NotImplementedError("This event is not implemented: $act")
         }
     }

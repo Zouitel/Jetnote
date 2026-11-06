@@ -58,14 +58,20 @@ class DataUploadWorker(
         }
 
         return try {
-            // Read each source inside this work execution. No background collectors can
-            // race the upload and leave an empty/default snapshot behind.
+            val userUid = inputData.getString(AccountWorkIdentity.FIREBASE_UID_KEY)
+                ?.takeIf(String::isNotBlank)
+                ?: throw IOException("The upload request has no bound Firebase user")
+
+            // Export only records owned by the identity captured when this worker
+            // was scheduled. Filter junction rows against those notes as well.
             val settingsSnapshot = settingsMapper.fromDomain(observeSettings().first())
-            val notesSnapshot = getNotes().map { note ->
+            val notesSnapshot = getNotes(userUid).map { note ->
                 dataMapper.fromDomain(note.data)
             }
+            val noteUids = notesSnapshot.mapTo(hashSetOf()) { it.uid }
             val labelsSnapshot = labelMapper.fromDomain(getLabels())
-            val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags())
+            val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags(userUid))
+                .filter { it.uid in noteUids }
 
             val driveService = initializeDriveService()
                 ?: throw IOException("Google Drive account is not available")

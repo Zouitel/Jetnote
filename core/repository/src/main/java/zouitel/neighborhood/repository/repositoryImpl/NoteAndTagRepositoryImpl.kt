@@ -11,25 +11,21 @@ class NoteAndTagRepositoryImpl(
     private val dataSource: NoteAndTagDataSource,
     private val mapper: NoteAndTagMapper
 ): NoteAndTagRepository {
-    override val observeAll: Flow<List<OutNoteAndTag>>
-        get() = dataSource.observeAll.map { mapper.toDomain(it) }
+    override fun observeAll(userUid: String): Flow<List<OutNoteAndTag>> =
+        dataSource.observeAll(userUid).map { mapper.toDomain(it) }
 
-    override val getAll: List<OutNoteAndTag>
-        get() = dataSource.getAll.map { mapper.toDomain(it) }
+    override suspend fun getAll(userUid: String): List<OutNoteAndTag> =
+        dataSource.getAll(userUid).map { mapper.toDomain(it) }
 
-    override suspend fun insert(noteAndTag: OutNoteAndTag) {
-        dataSource.insert(mapper.fromDomain(noteAndTag))
+    override suspend fun insert(noteAndTag: OutNoteAndTag, userUid: String) {
+        dataSource.insert(mapper.fromDomain(noteAndTag), userUid)
     }
 
-    override suspend fun insertAll(noteAndTags: List<OutNoteAndTag>) {
-        dataSource.insertAll(mapper.fromDomain(noteAndTags))
+    override suspend fun insertAll(noteAndTags: List<OutNoteAndTag>, userUid: String) {
+        dataSource.insertAll(mapper.fromDomain(noteAndTags), userUid)
     }
 
-    override suspend fun delete(noteAndTag: OutNoteAndTag) {
-        dataSource.delete(mapper.fromDomain(noteAndTag))
-    }
-
-    override suspend fun deleteDrafts() {
-        dataSource.deleteDrafts()
+    override suspend fun delete(noteAndTag: OutNoteAndTag, userUid: String) {
+        dataSource.delete(mapper.fromDomain(noteAndTag), userUid)
     }
 }

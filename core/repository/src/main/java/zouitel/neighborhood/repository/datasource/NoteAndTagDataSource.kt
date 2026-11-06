@@ -4,15 +4,9 @@ import zouitel.neighborhood.repository.model.NoteAndTag
 import kotlinx.coroutines.flow.Flow
 
 interface NoteAndTagDataSource {
-    val observeAll: Flow<List<NoteAndTag>>
-
-    val getAll: List<NoteAndTag>
-
-    suspend fun insert(noteAndTag: NoteAndTag)
-
-    suspend fun insertAll(noteAndTags: List<NoteAndTag>)
-
-    suspend fun delete(noteAndTag: NoteAndTag)
-
-    suspend fun deleteDrafts()
+    fun observeAll(userUid: String): Flow<List<NoteAndTag>>
+    suspend fun getAll(userUid: String): List<NoteAndTag>
+    suspend fun insert(noteAndTag: NoteAndTag, userUid: String)
+    suspend fun insertAll(noteAndTags: List<NoteAndTag>, userUid: String)
+    suspend fun delete(noteAndTag: NoteAndTag, userUid: String)
 }

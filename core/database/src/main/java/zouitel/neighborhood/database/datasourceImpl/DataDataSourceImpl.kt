@@ -10,42 +10,41 @@ class DataDataSourceImpl(
     private val mapper: DataMapper
 ): DataDataSource {
     override suspend fun insert(data: OutData) {
-        dao.upsert(mapper.fromRepo(data))
+        dao.upsertForUser(mapper.fromRepo(data))
     }
 
     override suspend fun insertAll(data: List<OutData>) {
+        require(data.all { it.userUid.isNotBlank() && it.userUid != "null" }) {
+            "Every imported note must belong to an authenticated user"
+        }
         dao.insertAll(mapper.fromRepo(data))
     }
 
-    override suspend fun combineUser(userUid: String?) {
-        dao.combineUser(userUid)
+    override suspend fun archive(userUid: String, noteUid: String) {
+        dao.archive(userUid, noteUid)
     }
 
-    override suspend fun archive(uid: String) {
-        dao.archive(uid)
+    override suspend fun rollback(userUid: String, noteUid: String) {
+        dao.rollback(userUid, noteUid)
     }
 
-    override suspend fun rollback(uid: String) {
-        dao.rollback(uid)
+    override suspend fun delete(userUid: String, noteUid: String) {
+        dao.delete(userUid, noteUid)
     }
 
-    override suspend fun delete(uid: String) {
-        dao.delete(uid)
+    override suspend fun erase(userUid: String) {
+        dao.erase(userUid)
     }
 
-    override suspend fun erase() {
-        dao.erase()
+    override suspend fun sweepDrafts(userUid: String) {
+        dao.sweepDrafts(userUid)
     }
 
-    override suspend fun sweepDrafts() {
-        dao.sweepDrafts()
+    override suspend fun reorderNote(userUid: String, noteUid: String, position: Int) {
+        dao.reorderNote(userUid, noteUid, position)
     }
 
-    override suspend fun reorderNote(noteUid: String, position: Int) {
-        dao.reorderNote(noteUid, position)
-    }
-
-    override suspend fun reorderNotes(positions: Map<String, Int>) {
-        dao.reorderNotes(positions)
+    override suspend fun reorderNotes(userUid: String, positions: Map<String, Int>) {
+        dao.reorderNotes(userUid, positions)
     }
 }
