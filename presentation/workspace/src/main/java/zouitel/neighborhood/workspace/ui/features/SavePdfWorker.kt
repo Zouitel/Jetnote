@@ -33,18 +33,39 @@ class SavePdfWorker(
     }
 
     private suspend fun copyPdf(src: Uri, destinationPath: String) {
-        val destFile = File(destinationPath)
-
-        if (destFile.exists()) return
+        val destination = File(destinationPath)
 
         withContext(Dispatchers.IO) {
-            destFile.parentFile?.takeIf { !it.exists() }?.mkdirs()
+            if (destination.isFile && destination.length() > 0L) return@withContext
 
-            applicationContext.contentResolver.openInputStream(src)?.use { input ->
-                FileOutputStream(destFile).use { output ->
-                    input.copyTo(output)
+            val parent = destination.absoluteFile.parentFile
+                ?: error("PDF destination has no parent directory")
+            if (!parent.exists() && !parent.mkdirs() && !parent.isDirectory) {
+                error("Unable to create PDF destination directory")
+            }
+
+            val temporary = File(parent, destination.name + "." + id + ".tmp")
+            try {
+                val input = applicationContext.contentResolver.openInputStream(src)
+                    ?: error("ContentResolver returned null InputStream for $src")
+                input.use { source ->
+                    FileOutputStream(temporary).use { output ->
+                        source.copyTo(output)
+                        output.fd.sync()
+                    }
                 }
-            } ?: error("ContentResolver returned null InputStream for $src")
+                if (!temporary.isFile || temporary.length() == 0L) {
+                    error("Scanned PDF is empty")
+                }
+                if (destination.exists() && !destination.delete()) {
+                    error("Unable to replace incomplete PDF destination")
+                }
+                if (!temporary.renameTo(destination)) {
+                    error("Unable to finalize scanned PDF")
+                }
+            } finally {
+                if (temporary.exists()) temporary.delete()
+            }
         }
     }
 
