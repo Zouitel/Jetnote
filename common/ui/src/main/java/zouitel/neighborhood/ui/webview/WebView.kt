@@ -342,5 +342,4 @@ private fun String.toUriOrNull(): Uri? = runCatching { Uri.parse(this) }.getOrNu
 
 private fun Uri.isAllowedWebViewUrl(): Boolean =
     scheme.equals("https", ignoreCase = true) ||
-        scheme.equals("http", ignoreCase = true) ||
         (scheme.equals("about", ignoreCase = true) && path == "blank")
