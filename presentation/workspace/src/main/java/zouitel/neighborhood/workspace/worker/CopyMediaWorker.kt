@@ -52,7 +52,7 @@ class CopyMediaWorker(
             else -> Environment.DIRECTORY_DOCUMENTS
         }
         val parent = context.getExternalFilesDir(directory) ?: File(context.filesDir, directory)
-        val name = getImageDisplayName(context, uri).ifBlank { "attachment.bin" }
+        val name = getImageDisplayName(context, uri).orEmpty().ifBlank { "attachment.bin" }
         copyToFile(uri, File(parent, name))
     }
 
