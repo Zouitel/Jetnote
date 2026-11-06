@@ -41,8 +41,8 @@ class DataRepositoryImpl(
         dataSource.sweepDrafts()
     }
 
-    override suspend fun reorderNote(userUid: String, position: Int) {
-        dataSource.reorderNote(userUid, position)
+    override suspend fun reorderNote(noteUid: String, position: Int) {
+        dataSource.reorderNote(noteUid, position)
     }
 
     override suspend fun reorderNotes(positions: Map<String, Int>) {
