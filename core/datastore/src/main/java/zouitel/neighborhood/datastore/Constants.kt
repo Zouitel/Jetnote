@@ -19,6 +19,7 @@ internal object Constants {
     const val SHAKE_TO_REPORT = "shake_to_report_preferences"
     const val ZEN_MODE = "zen_mode_preferences"
 
+    const val DEFAULT_LAYOUT = "grid_layout"
     const val DEFAULT_ORDER = "Default"
 
     const val DS_NAME = "jetnoteDS.preferences_pb"
