@@ -10,6 +10,8 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit)
+
     // okhttp
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)
