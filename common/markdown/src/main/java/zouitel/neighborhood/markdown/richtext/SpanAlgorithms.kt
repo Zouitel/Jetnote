@@ -223,13 +223,13 @@ internal object SpanAlgorithms {
                 buildList {
                     // Part before the removal range
                     if (span.start < normalizedStart && span.end > normalizedStart) {
-                        add(TextSpan(span.start, minOf(span.end, normalizedStart), style))
+                        add(TextSpan(span.start, minOf(span.end, normalizedStart), span.style))
                     } else if (span.end <= normalizedStart) {
                         add(span) // entirely before removal
                     }
                     // Part after the removal range
                     if (span.end > normalizedEnd && span.start < normalizedEnd) {
-                        add(TextSpan(maxOf(span.start, normalizedEnd), span.end, style))
+                        add(TextSpan(maxOf(span.start, normalizedEnd), span.end, span.style))
                     } else if (span.start >= normalizedEnd) {
                         add(span) // entirely after removal
                     }
