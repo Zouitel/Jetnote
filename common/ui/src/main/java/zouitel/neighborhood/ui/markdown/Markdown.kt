@@ -371,10 +371,8 @@ private fun MarkdownNode(
                 Column(
                     modifier = Modifier
                         .drawWithContent {
+                            drawRect(color = bgColor, size = size)
                             drawContent()
-                            drawRect(
-                                color = bgColor, size = size
-                            )
                             drawRect(
                                 color = borderColor, size = Size(10f, size.height)
                             )
@@ -402,8 +400,12 @@ private fun MarkdownNode(
                 color = MaterialTheme.colorScheme.primary,
                 textDecoration = TextDecoration.Underline,
                 modifier = modifier.clickable {
-                    val intent = Intent(Intent.ACTION_VIEW, linkDest.toUri())
-                    context.startActivity(intent)
+                    val uri = linkDest.toUri()
+                    if (uri.scheme?.lowercase() in setOf("https", "http", "mailto")) {
+                        runCatching {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                        }
+                    }
                 })
         }
 
