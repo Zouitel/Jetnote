@@ -20,8 +20,7 @@ class SingleFileCacheStore<K : Any, V : Any>(
     private val mapEntrySerializer = MapSerializer(keySerializer, entrySerializer)
 
     override fun loadEntry(key: K): CacheEntry<V>? = lock.withLock {
-        val all = safeReadMap()
-        all[key]
+        safeReadMap()[key]
     }
 
     override fun saveEntry(key: K, entry: CacheEntry<V>) = lock.withLock {
@@ -32,9 +31,7 @@ class SingleFileCacheStore<K : Any, V : Any>(
 
     override fun remove(key: K) = lock.withLock {
         val all = safeReadMap().toMutableMap()
-        if (all.remove(key) != null) {
-            safeWriteMap(all)
-        }
+        if (all.remove(key) != null) safeWriteMap(all)
     }
 
     override fun clear() = lock.withLock {
@@ -46,9 +43,8 @@ class SingleFileCacheStore<K : Any, V : Any>(
     override fun keys(): Set<K> = lock.withLock { safeReadMap().keys }
 
     private fun safeReadMap(): Map<K, CacheEntry<V>> {
-        if (!file.exists()) return emptyMap()
         val text = try {
-            file.readText()
+            readAtomicText(file) ?: return emptyMap()
         } catch (failure: Exception) {
             throw IOException("Unable to read cache file: $file", failure)
         }
