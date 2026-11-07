@@ -158,18 +158,26 @@ class SettingsScreen: Screen {
                             settingsModel = settingsModel,
                             drawerState = drawerState,
                             scrollBehavior = scrollBehavior,
-                            title = stringResource(zouitel.neighborhood.logic.R.string.settings)
+                            title = stringResource(zouitel.neighborhood.logic.R.string.settings),
+                            backdrop = glassBackdrop,
+                            liquidGlassEnabled = settings.liquidGlassEnabled,
+                            liquidGlassBlurRadius = blurRadius,
+                            liquidGlassRefraction = refraction,
+                            liquidGlassTint = tint
                         )
                     },
                     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                         .reportable(settings.isShakable)
                         .cloudy(enabled = bottomNav.isVisible || drawerState.isOpen || showLanguagesSheet),
                 ) { paddingValues ->
-                    Box(Modifier.fillMaxSize()) {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .layerBackdrop(glassBackdrop)
+                    ) {
                         Box(
                             Modifier
                                 .fillMaxSize()
-                                .layerBackdrop(glassBackdrop)
                                 .background(
                                     Brush.linearGradient(
                                         listOf(
