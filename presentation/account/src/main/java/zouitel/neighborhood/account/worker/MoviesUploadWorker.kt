@@ -198,10 +198,14 @@ class MoviesUploadWorker(
                 parents = listOf(folderId)
             }
             val createRequest = driveService.files().create(fileMetadata, mediaContent)
-            // Configure chunked upload for large video files
             createRequest.mediaHttpUploader?.apply {
-                isDirectUploadEnabled = false
-                chunkSize = 100 * 1024 * 1024
+                // The uploader buffers a whole chunk in memory, and 100 MB chunks were an
+                // OOM waiting to happen on mid-range devices. Small files go out in one
+                // direct request; larger ones use resumable 8 MB chunks.
+                if (localFile.length() > RESUMABLE_UPLOAD_THRESHOLD_BYTES) {
+                    isDirectUploadEnabled = false
+                    chunkSize = RESUMABLE_UPLOAD_CHUNK_BYTES
+                }
             }
             createRequest.execute()
             Log.d("MoviesUploadWorker", "File created: ${localFile.name}")
@@ -230,5 +234,11 @@ class MoviesUploadWorker(
     private companion object {
         const val MAX_RETRIES = 3
         const val MAX_CONCURRENT_TRANSFERS = 3
+
+        /** Files above this size are uploaded with the resumable protocol. */
+        const val RESUMABLE_UPLOAD_THRESHOLD_BYTES = 16L * 1024 * 1024
+
+        /** Resumable uploads buffer one chunk in memory, so keep this modest. */
+        const val RESUMABLE_UPLOAD_CHUNK_BYTES = 8 * 1024 * 1024
     }
 }
