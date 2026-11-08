@@ -6,13 +6,8 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.FileContent
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +37,7 @@ class MoviesUploadWorker(
             return Result.failure()
         }
         return try {
-            uploadsMovies(applicationContext, initializeDriveService())
+            uploadsMovies(applicationContext, initializeDriveService(applicationContext, inputData, "MoviesUploadWorker", ioDispatcher))
             Result.success()
         } catch (cancelled: CancellationException) {
             throw cancelled
@@ -52,34 +47,6 @@ class MoviesUploadWorker(
         } catch (e: Exception) {
             Log.e("MoviesUploadWorker", "Upload failed: ${e.message}", e)
             Result.failure()
-        }
-    }
-
-    suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
-        try {
-            val credential = GoogleAccountCredential.usingOAuth2(
-                applicationContext,
-                listOf(DriveScopes.DRIVE_FILE)
-            )
-
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(applicationContext)
-            if (lastAccount == null) {
-                Log.e("MoviesUploadWorker", "No signed-in Google account found")
-                return@withContext null
-            }
-
-            credential.selectedAccount = lastAccount.account
-
-            credential.run {
-                Drive.Builder(
-                    NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
-                ).setApplicationName("Drive File Manager").build()
-            }
-        } catch (e: Exception) {
-            Log.e("MoviesUploadWorker", "Failed to initialize Drive service: ${e.message}", e)
-            null
         }
     }
 

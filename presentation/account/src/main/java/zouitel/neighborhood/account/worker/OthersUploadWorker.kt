@@ -7,13 +7,8 @@ import android.webkit.MimeTypeMap
 import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.FileContent
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +35,7 @@ class OthersUploadWorker(
             return Result.failure()
         }
         return try {
-            uploadsDownloads(applicationContext, initializeDriveService())
+            uploadsDownloads(applicationContext, initializeDriveService(applicationContext, inputData, "OthersUploadWorker", ioDispatcher))
             Result.success()
         } catch (cancelled: CancellationException) {
             throw cancelled
@@ -50,28 +45,6 @@ class OthersUploadWorker(
         } catch (e: Exception) {
             Log.e("OthersUploadWorker", "Upload failed: ${e.message}", e)
             Result.failure()
-        }
-    }
-
-    suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
-        try {
-            val credential = GoogleAccountCredential.usingOAuth2(
-                applicationContext,
-                listOf(DriveScopes.DRIVE_FILE)
-            )
-
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(applicationContext)
-            credential.selectedAccount = lastAccount?.account
-
-            credential?.run {
-                Drive.Builder(
-                    NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
-                ).setApplicationName("Drive File Manager").build()
-            }
-        } catch (_: Exception) {
-            null
         }
     }
 

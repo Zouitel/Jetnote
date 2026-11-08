@@ -13,12 +13,7 @@ import zouitel.neighborhood.tag.model.NoteAndTag
 import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.workspace.mapper.DataMapper
 import zouitel.neighborhood.workspace.model.Data
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -68,31 +63,8 @@ class SyncDataWorker(
         }
     }
 
-    suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
-        try {
-            val credential = GoogleAccountCredential.usingOAuth2(
-                applicationContext,
-                listOf(DriveScopes.DRIVE_FILE)
-            )
-
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(applicationContext)
-            credential.selectedAccount = lastAccount?.account
-
-            credential?.run {
-                Drive.Builder(
-                    NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
-                ).setApplicationName("Drive File Manager").build()
-            }
-        } catch (e: Exception) {
-            Log.e("SyncDataWorker", "Failed to initialize Drive service: ${e.message}", e)
-            null
-        }
-    }
-
     private suspend fun syncDatabaseFromDrive() = withContext(ioDispatcher) {
-        val driveService = initializeDriveService()
+        val driveService = initializeDriveService(applicationContext, inputData, "SyncDataWorker", ioDispatcher)
             ?: throw IOException("Google Drive account is not available")
 
         // Find root folder

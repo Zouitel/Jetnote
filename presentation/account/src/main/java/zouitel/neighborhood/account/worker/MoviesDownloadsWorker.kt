@@ -6,12 +6,7 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +33,7 @@ class MoviesDownloadsWorker(
             return Result.failure()
         }
         return try {
-            downloadMovies(applicationContext, initializeDriveService())
+            downloadMovies(applicationContext, initializeDriveService(applicationContext, inputData, "MoviesDownloadsWorker", ioDispatcher))
             Result.success()
         } catch (cancelled: CancellationException) {
             throw cancelled
@@ -48,29 +43,6 @@ class MoviesDownloadsWorker(
         } catch (e: Exception) {
             Log.e("MoviesDownloadsWorker", "Download failed: ${e.message}", e)
             Result.failure()
-        }
-    }
-
-    suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
-        try {
-            val credential = GoogleAccountCredential.usingOAuth2(
-                applicationContext,
-                listOf(DriveScopes.DRIVE_FILE)
-            )
-
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(applicationContext)
-            credential.selectedAccount = lastAccount?.account
-
-            credential?.run {
-                Drive.Builder(
-                    NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
-                ).setApplicationName("Drive File Manager").build()
-            }
-        } catch (e: Exception) {
-            Log.e("MoviesDownloadsWorker", "Failed to initialize Drive service: ${e.message}", e)
-            null
         }
     }
 
