@@ -13,6 +13,7 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -24,6 +25,7 @@ import zouitel.neighborhood.account.utils.findFolderId
 import java.net.SocketTimeoutException
 import com.google.api.services.drive.model.File as DriveFile
 import java.io.File as JavaFile
+import java.io.IOException
 
 class MoviesUploadWorker(
     context: Context,
@@ -39,7 +41,13 @@ class MoviesUploadWorker(
         return try {
             uploadsMovies(applicationContext, initializeDriveService())
             Result.success()
-        } catch (_: Exception) {
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (e: IOException) {
+            Log.e("MoviesUploadWorker", "Upload failed (attempt ${runAttemptCount + 1}): ${e.message}", e)
+            if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
+        } catch (e: Exception) {
+            Log.e("MoviesUploadWorker", "Upload failed: ${e.message}", e)
             Result.failure()
         }
     }
@@ -74,27 +82,19 @@ class MoviesUploadWorker(
 
     @WorkerThread
     suspend fun uploadsMovies(context: Context, driveService: Drive?) = withContext(ioDispatcher) {
-        if (driveService == null) {
-            Log.e("MoviesUploadWorker", "Drive service is null, cannot upload movies")
-            return@withContext
-        }
+        // A missing service or folder must fail the work: returning normally here
+        // used to report a successful upload while nothing was uploaded.
+        if (driveService == null) throw IOException("Google Drive account is not available")
 
         val mediasFolderId = findFolderId(driveService, "jetnote_medias")
-        if (mediasFolderId == null) {
-            Log.e("MoviesUploadWorker", "Root folder 'jetnote_medias' not found in Drive.")
-            return@withContext
-        }
+            ?: throw IOException("Root folder 'jetnote_medias' not found in Drive.")
 
         val moviesFolderId = findFolderId(driveService, "movies", mediasFolderId)
-        if (moviesFolderId == null) {
-            Log.e("MoviesUploadWorker", "Movies folder not found in Drive.")
-            return@withContext
-        }
+            ?: throw IOException("Movies folder not found in Drive.")
 
         val mediaDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
         if (mediaDir?.exists() != true || !mediaDir.isDirectory) {
-            Log.e("MoviesUploadWorker", "Movies directory not found: ${mediaDir?.absolutePath}")
-            return@withContext
+            throw IOException("Movies directory not found: ${mediaDir?.absolutePath}")
         }
 
         val files = mediaDir.listFiles()
@@ -110,26 +110,24 @@ class MoviesUploadWorker(
             val uploadJobs = files.mapNotNull { localMediaFile ->
                 if (localMediaFile.isFile) {
                     async {
-                        try {
-                            // Check file size before uploading
-                            val fileSizeMB = localMediaFile.length() / (1024.0 * 1024.0)
-                            Log.d("MoviesUploadWorker", "Processing ${localMediaFile.name} (${String.format("%.2f", fileSizeMB)} MB)")
+                        // A failed upload fails the worker so WorkManager can retry it;
+                        // files already uploaded are skipped on the next attempt.
+                        // Check file size before uploading
+                        val fileSizeMB = localMediaFile.length() / (1024.0 * 1024.0)
+                        Log.d("MoviesUploadWorker", "Processing ${localMediaFile.name} (${String.format("%.2f", fileSizeMB)} MB)")
 
-                            val query = "name='${localMediaFile.name}' and '$moviesFolderId' in parents and trashed=false"
-                            val result = driveService.files().list()
-                                .setQ(query)
-                                .setSpaces("drive")
-                                .setFields("files(id)")
-                                .execute()
+                        val query = "name='${localMediaFile.name}' and '$moviesFolderId' in parents and trashed=false"
+                        val result = driveService.files().list()
+                            .setQ(query)
+                            .setSpaces("drive")
+                            .setFields("files(id)")
+                            .execute()
 
-                            if (result.files.isNullOrEmpty()) {
-                                updateFileWithRetry(driveService, localMediaFile, moviesFolderId)
-                                Log.d("MoviesUploadWorker", "Uploaded: ${localMediaFile.name}")
-                            } else {
-                                Log.d("MoviesUploadWorker", "File already exists: ${localMediaFile.name}")
-                            }
-                        } catch (e: Exception) {
-                            Log.e("MoviesUploadWorker", "Failed to upload ${localMediaFile.name}: ${e.message}", e)
+                        if (result.files.isNullOrEmpty()) {
+                            updateFileWithRetry(driveService, localMediaFile, moviesFolderId)
+                            Log.d("MoviesUploadWorker", "Uploaded: ${localMediaFile.name}")
+                        } else {
+                            Log.d("MoviesUploadWorker", "File already exists: ${localMediaFile.name}")
                         }
                     }
                 } else {
@@ -247,5 +245,9 @@ class MoviesUploadWorker(
             "mpeg", "mpg" -> "video/mpeg"
             else -> "video/mp4" // Default to mp4 for unknown video types
         }
+    }
+
+    private companion object {
+        const val MAX_RETRIES = 3
     }
 }

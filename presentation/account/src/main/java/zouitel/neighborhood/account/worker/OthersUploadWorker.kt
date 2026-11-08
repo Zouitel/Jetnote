@@ -14,14 +14,17 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import zouitel.neighborhood.account.utils.findFolderId
 import com.google.api.services.drive.model.File as DriveFile
 import java.io.File as JavaFile
+import java.io.IOException
 
 class OthersUploadWorker(
     context: Context,
@@ -36,7 +39,13 @@ class OthersUploadWorker(
         return try {
             uploadsDownloads(applicationContext, initializeDriveService())
             Result.success()
-        } catch (_: Exception) {
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (e: IOException) {
+            Log.e("OthersUploadWorker", "Upload failed (attempt ${runAttemptCount + 1}): ${e.message}", e)
+            if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
+        } catch (e: Exception) {
+            Log.e("OthersUploadWorker", "Upload failed: ${e.message}", e)
             Result.failure()
         }
     }
@@ -65,43 +74,53 @@ class OthersUploadWorker(
 
     @WorkerThread
     suspend fun uploadsDownloads(context: Context, driveService: Drive?) = withContext(ioDispatcher) {
-        if (driveService == null) return@withContext
+        // A missing service or folder must fail the work: returning normally here
+        // used to report a successful upload while nothing was uploaded.
+        if (driveService == null) throw IOException("Google Drive account is not available")
 
         val mediasFolderId = findFolderId(driveService, "jetnote_medias")
-        if (mediasFolderId == null) {
-            Log.e("SyncScreenModel", "Root folder 'Jetnote_medias' not found in Drive.")
+            ?: throw IOException("Root folder 'jetnote_medias' not found in Drive")
+
+        val downloadsFolderId = findFolderId(driveService, "downloads", mediasFolderId)
+            ?: throw IOException("Downloads folder not found in Drive")
+
+        val mediaDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        if (mediaDir?.exists() != true || !mediaDir.isDirectory) {
+            throw IOException("Downloads directory not accessible: ${mediaDir?.absolutePath}")
+        }
+
+        val files = mediaDir.listFiles()
+        if (files.isNullOrEmpty()) {
+            Log.d("OthersUploadWorker", "No files found in downloads directory")
             return@withContext
         }
 
-        val uploadJobs = mutableListOf<Deferred<Unit>>()
-        val downloadsFolderId = findFolderId(driveService, "downloads", mediasFolderId)
-        downloadsFolderId?.let { mFolderId ->
-            val mediaDir = Environment.DIRECTORY_DOWNLOADS.let { context.getExternalFilesDir(it) }
-            if (mediaDir?.exists() == true && mediaDir.isDirectory) {
-                mediaDir.listFiles()?.forEach { localMediaFile ->
-                    if (localMediaFile.isFile) {
-                        uploadJobs.add(async {
-                            val query =
-                                "name='${localMediaFile.name}' and '$mFolderId' in parents and trashed=false"
-                            val result = driveService.files().list()
-                                .setQ(query)
-                                .setSpaces("drive")
-                                .setFields("files(id)")
-                                .execute()
+        // A failed upload fails the worker so WorkManager can retry it;
+        // files already uploaded are skipped on the next attempt.
+        coroutineScope {
+            val uploadJobs = files.mapNotNull { localMediaFile ->
+                if (localMediaFile.isFile) {
+                    async {
+                        val query =
+                            "name='${localMediaFile.name}' and '$downloadsFolderId' in parents and trashed=false"
+                        val result = driveService.files().list()
+                            .setQ(query)
+                            .setSpaces("drive")
+                            .setFields("files(id)")
+                            .execute()
 
-                            if (result.files.isNullOrEmpty()) {
-                                updateFile(driveService, localMediaFile, mFolderId)
-                            }
-                        })
+                        if (result.files.isNullOrEmpty()) {
+                            updateFile(driveService, localMediaFile, downloadsFolderId)
+                        }
                     }
+                } else {
+                    null
                 }
-            } else {
-                Log.e(
-                    "DataUploadWorker",
-                    "Downloads directory not found: ${mediaDir?.absolutePath}"
-                )
             }
+            uploadJobs.awaitAll()
         }
+
+        Log.d("OthersUploadWorker", "All upload jobs completed")
     }
 
     private fun getMimeType(file: JavaFile): String {
@@ -143,5 +162,9 @@ class OthersUploadWorker(
                 Log.d("SyncScreenModel", "File created: ${localFile.name} (${mimeType})")
             }
         }
+    }
+
+    private companion object {
+        const val MAX_RETRIES = 3
     }
 }

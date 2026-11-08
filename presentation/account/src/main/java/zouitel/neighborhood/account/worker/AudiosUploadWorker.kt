@@ -14,6 +14,7 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -22,6 +23,7 @@ import kotlinx.coroutines.withContext
 import zouitel.neighborhood.account.utils.findFolderId
 import com.google.api.services.drive.model.File as DriveFile
 import java.io.File as JavaFile
+import java.io.IOException
 
 class AudiosUploadWorker(
     context: Context,
@@ -37,7 +39,13 @@ class AudiosUploadWorker(
         return try {
             uploadsAudios(applicationContext, initializeDriveService())
             Result.success()
-        } catch (_: Exception) {
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (e: IOException) {
+            Log.e("AudiosUploadWorker", "Upload failed (attempt ${runAttemptCount + 1}): ${e.message}", e)
+            if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
+        } catch (e: Exception) {
+            Log.e("AudiosUploadWorker", "Upload failed: ${e.message}", e)
             Result.failure()
         }
     }
@@ -67,27 +75,19 @@ class AudiosUploadWorker(
 
     @WorkerThread
     suspend fun uploadsAudios(context: Context, driveService: Drive?) = withContext(ioDispatcher) {
-        if (driveService == null) {
-            Log.e("AudiosUploadWorker", "Drive service is null, cannot upload Audios")
-            return@withContext
-        }
+        // A missing service or folder must fail the work: returning normally here
+        // used to report a successful upload while nothing was uploaded.
+        if (driveService == null) throw IOException("Google Drive account is not available")
 
         val mediasFolderId = findFolderId(driveService, "jetnote_medias")
-        if (mediasFolderId == null) {
-            Log.e("AudiosUploadWorker", "Root folder 'jetnote_medias' not found in Drive.")
-            return@withContext
-        }
+            ?: throw IOException("Root folder 'jetnote_medias' not found in Drive.")
 
         val audiosFolderId = findFolderId(driveService, "audios", mediasFolderId)
-        if (audiosFolderId == null) {
-            Log.e("AudiosUploadWorker", "Audios folder not found in Drive.")
-            return@withContext
-        }
+            ?: throw IOException("Audios folder not found in Drive.")
 
         val mediaDir = context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
         if (mediaDir?.exists() != true || !mediaDir.isDirectory) {
-            Log.e("AudiosUploadWorker", "Audios directory not found: ${mediaDir?.absolutePath}")
-            return@withContext
+            throw IOException("Audios directory not found: ${mediaDir?.absolutePath}")
         }
 
         val files = mediaDir.listFiles()
@@ -100,22 +100,20 @@ class AudiosUploadWorker(
         val uploadJobs = files.mapNotNull { localMediaFile ->
             if (localMediaFile.isFile) {
                 async {
-                    try {
-                        val query = "name='${localMediaFile.name}' and '$audiosFolderId' in parents and trashed=false"
-                        val result = driveService.files().list()
-                            .setQ(query)
-                            .setSpaces("drive")
-                            .setFields("files(id)")
-                            .execute()
+                    // A failed upload fails the worker so WorkManager can retry it;
+                    // files already uploaded are skipped on the next attempt.
+                    val query = "name='${localMediaFile.name}' and '$audiosFolderId' in parents and trashed=false"
+                    val result = driveService.files().list()
+                        .setQ(query)
+                        .setSpaces("drive")
+                        .setFields("files(id)")
+                        .execute()
 
-                        if (result.files.isNullOrEmpty()) {
-                            updateFile(driveService, localMediaFile, audiosFolderId)
-                            Log.d("AudiosUploadWorker", "Uploaded: ${localMediaFile.name}")
-                        } else {
-                            Log.d("AudiosUploadWorker", "File already exists: ${localMediaFile.name}")
-                        }
-                    } catch (e: Exception) {
-                        Log.e("AudiosUploadWorker", "Failed to upload ${localMediaFile.name}: ${e.message}", e)
+                    if (result.files.isNullOrEmpty()) {
+                        updateFile(driveService, localMediaFile, audiosFolderId)
+                        Log.d("AudiosUploadWorker", "Uploaded: ${localMediaFile.name}")
+                    } else {
+                        Log.d("AudiosUploadWorker", "File already exists: ${localMediaFile.name}")
                     }
                 }
             } else {
@@ -195,5 +193,9 @@ class AudiosUploadWorker(
             "m4a" -> "audio/mp4"
             else -> MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
         }
+    }
+
+    private companion object {
+        const val MAX_RETRIES = 3
     }
 }
