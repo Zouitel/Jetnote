@@ -67,6 +67,14 @@ class DataUploadWorker(
             val labelsSnapshot = labelMapper.fromDomain(getLabels())
             val noteAndTagsSnapshot = noteAndTagsMapper.fromDomain(getNoteAndTags())
 
+            if (notesSnapshot.isEmpty() && labelsSnapshot.isEmpty() && noteAndTagsSnapshot.isEmpty()) {
+                // An all-empty snapshot almost always means the local database is fresh,
+                // wiped, or mid-migration. Overwriting the Drive backup now would destroy
+                // the only good copy of the user's notes, so refuse and fail visibly.
+                Log.w("DataUploadWorker", "Local snapshot is empty; refusing to overwrite the Drive backup")
+                return Result.failure()
+            }
+
             val driveService = initializeDriveService()
                 ?: throw IOException("Google Drive account is not available")
 
