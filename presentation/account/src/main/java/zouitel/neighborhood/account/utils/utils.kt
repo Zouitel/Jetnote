@@ -32,3 +32,10 @@ internal suspend fun findFolderId(driveService: Drive, folderName: String, paren
     }
 }
 
+/**
+ * Escape a literal so it can be embedded in a Drive query string. Apostrophes and
+ * backslashes otherwise terminate or corrupt the quoted value, which makes files
+ * whose names contain them unfindable (and, on upload, duplicated on every sync).
+ */
+internal fun escapeDriveQueryLiteral(value: String): String =
+    value.replace("\\", "\\\\").replace("'", "\\'")

@@ -18,6 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import zouitel.neighborhood.account.utils.findFolderId
 import java.io.File
@@ -121,11 +123,17 @@ class PicturesDownloadsWorker(
 
         // A failed download fails the worker so WorkManager can retry it;
         // already completed files are skipped on retry.
+        // Cap concurrent Drive requests to stay clear of API rate limits.
+        val downloadSemaphore = Semaphore(MAX_CONCURRENT_TRANSFERS)
         coroutineScope {
             driveFiles
                 .filter { isImageFile(it.name, it.mimeType) }
                 .map { driveFile ->
-                    async { downloadFile(drive, driveFile.id, driveFile.name, picturesDir) }
+                    async {
+                        downloadSemaphore.withPermit {
+                            downloadFile(drive, driveFile.id, driveFile.name, picturesDir)
+                        }
+                    }
                 }.awaitAll()
         }
 
@@ -184,5 +192,6 @@ class PicturesDownloadsWorker(
     private companion object {
         const val MAX_RETRIES = 3
         const val LIST_PAGE_SIZE = 200
+        const val MAX_CONCURRENT_TRANSFERS = 3
     }
 }

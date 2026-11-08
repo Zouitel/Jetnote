@@ -20,7 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.utils.escapeDriveQueryLiteral
 import zouitel.neighborhood.account.utils.findFolderId
 import com.google.api.services.drive.model.File as DriveFile
 import java.io.File as JavaFile
@@ -97,20 +100,24 @@ class OthersUploadWorker(
 
         // A failed upload fails the worker so WorkManager can retry it;
         // files already uploaded are skipped on the next attempt.
+        // Cap concurrent Drive requests to stay clear of API rate limits.
+        val uploadSemaphore = Semaphore(MAX_CONCURRENT_TRANSFERS)
         coroutineScope {
             val uploadJobs = files.mapNotNull { localMediaFile ->
                 if (localMediaFile.isFile) {
                     async {
-                        val query =
-                            "name='${localMediaFile.name}' and '$downloadsFolderId' in parents and trashed=false"
-                        val result = driveService.files().list()
-                            .setQ(query)
-                            .setSpaces("drive")
-                            .setFields("files(id)")
-                            .execute()
+                        uploadSemaphore.withPermit {
+                            val query =
+                                "name='${escapeDriveQueryLiteral(localMediaFile.name)}' and '$downloadsFolderId' in parents and trashed=false"
+                            val result = driveService.files().list()
+                                .setQ(query)
+                                .setSpaces("drive")
+                                .setFields("files(id)")
+                                .execute()
 
-                        if (result.files.isNullOrEmpty()) {
-                            updateFile(driveService, localMediaFile, downloadsFolderId)
+                            if (result.files.isNullOrEmpty()) {
+                                createFile(driveService, localMediaFile, downloadsFolderId)
+                            }
                         }
                     }
                 } else {
@@ -129,42 +136,29 @@ class OthersUploadWorker(
             ?: "application/octet-stream" // Default fallback for unknown types
     }
 
-    private suspend fun updateFile(driveService: Drive, localFile: JavaFile, folderId: String) {
+    private suspend fun createFile(driveService: Drive, localFile: JavaFile, folderId: String) {
         if (!localFile.exists()) {
-            Log.e("SyncScreenModel", "File not found for upload: ${localFile.absolutePath}")
-            return
+            throw IOException("File not found for upload: ${localFile.absolutePath}")
         }
 
         withContext(Dispatchers.IO) {
-            // Check if the file already exists in Google Drive
-            val query = "name='${localFile.name}' and '$folderId' in parents and trashed=false"
-            val result = driveService.files().list()
-                .setQ(query)
-                .setSpaces("drive")
-                .setFields("files(id)")
-                .execute()
-
-            val existingFileId = result.files?.firstOrNull()?.id
             val mimeType = getMimeType(localFile)
             val mediaContent = FileContent(mimeType, localFile)
 
-            if (existingFileId != null) {
-                // File exists, update it
-                driveService.files().update(existingFileId, null, mediaContent).execute()
-                Log.d("SyncScreenModel", "File updated: ${localFile.name} (${mimeType})")
-            } else {
-                // File does not exist, create it
-                val fileMetadata = DriveFile().apply {
-                    name = localFile.name
-                    parents = listOf(folderId)
-                }
-                driveService.files().create(fileMetadata, mediaContent).execute()
-                Log.d("SyncScreenModel", "File created: ${localFile.name} (${mimeType})")
+            // The caller already confirmed this file is absent from Drive, so one
+            // listing per file is enough; create it without re-checking existence.
+            val fileMetadata = DriveFile().apply {
+                name = localFile.name
+                parents = listOf(folderId)
             }
+            val createRequest = driveService.files().create(fileMetadata, mediaContent)
+            createRequest.execute()
+            Log.d("OthersUploadWorker", "File created: ${localFile.name} (${mimeType})")
         }
     }
 
     private companion object {
         const val MAX_RETRIES = 3
+        const val MAX_CONCURRENT_TRANSFERS = 3
     }
 }

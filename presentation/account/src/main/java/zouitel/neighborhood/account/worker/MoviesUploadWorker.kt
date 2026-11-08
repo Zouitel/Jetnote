@@ -20,7 +20,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.utils.escapeDriveQueryLiteral
 import zouitel.neighborhood.account.utils.findFolderId
 import java.net.SocketTimeoutException
 import com.google.api.services.drive.model.File as DriveFile
@@ -106,28 +109,32 @@ class MoviesUploadWorker(
         Log.d("MoviesUploadWorker", "Found ${files.size} files to process")
 
         // Use coroutineScope to properly await all jobs
+        // Cap concurrent Drive requests to stay clear of API rate limits.
+        val uploadSemaphore = Semaphore(MAX_CONCURRENT_TRANSFERS)
         coroutineScope {
             val uploadJobs = files.mapNotNull { localMediaFile ->
                 if (localMediaFile.isFile) {
                     async {
-                        // A failed upload fails the worker so WorkManager can retry it;
-                        // files already uploaded are skipped on the next attempt.
-                        // Check file size before uploading
-                        val fileSizeMB = localMediaFile.length() / (1024.0 * 1024.0)
-                        Log.d("MoviesUploadWorker", "Processing ${localMediaFile.name} (${String.format("%.2f", fileSizeMB)} MB)")
+                        uploadSemaphore.withPermit {
+                            // A failed upload fails the worker so WorkManager can retry it;
+                            // files already uploaded are skipped on the next attempt.
+                            // Check file size before uploading
+                            val fileSizeMB = localMediaFile.length() / (1024.0 * 1024.0)
+                            Log.d("MoviesUploadWorker", "Processing ${localMediaFile.name} (${String.format("%.2f", fileSizeMB)} MB)")
 
-                        val query = "name='${localMediaFile.name}' and '$moviesFolderId' in parents and trashed=false"
-                        val result = driveService.files().list()
-                            .setQ(query)
-                            .setSpaces("drive")
-                            .setFields("files(id)")
-                            .execute()
+                            val query = "name='${escapeDriveQueryLiteral(localMediaFile.name)}' and '$moviesFolderId' in parents and trashed=false"
+                            val result = driveService.files().list()
+                                .setQ(query)
+                                .setSpaces("drive")
+                                .setFields("files(id)")
+                                .execute()
 
-                        if (result.files.isNullOrEmpty()) {
-                            updateFileWithRetry(driveService, localMediaFile, moviesFolderId)
-                            Log.d("MoviesUploadWorker", "Uploaded: ${localMediaFile.name}")
-                        } else {
-                            Log.d("MoviesUploadWorker", "File already exists: ${localMediaFile.name}")
+                            if (result.files.isNullOrEmpty()) {
+                                updateFileWithRetry(driveService, localMediaFile, moviesFolderId)
+                                Log.d("MoviesUploadWorker", "Uploaded: ${localMediaFile.name}")
+                            } else {
+                                Log.d("MoviesUploadWorker", "File already exists: ${localMediaFile.name}")
+                            }
                         }
                     }
                 } else {
@@ -157,7 +164,7 @@ class MoviesUploadWorker(
                     delay(2000L * attempt) // Exponential backoff
                 }
 
-                updateFile(driveService, localFile, folderId)
+                createFile(driveService, localFile, folderId)
                 return // Success, exit function
 
             } catch (e: SocketTimeoutException) {
@@ -175,56 +182,29 @@ class MoviesUploadWorker(
         throw lastException ?: Exception("Upload failed after $maxRetries attempts")
     }
 
-    private suspend fun updateFile(driveService: Drive, localFile: JavaFile, folderId: String) {
+    private suspend fun createFile(driveService: Drive, localFile: JavaFile, folderId: String) {
         if (!localFile.exists()) {
-            Log.e("MoviesUploadWorker", "File not found for upload: ${localFile.absolutePath}")
-            return
+            throw IOException("File not found for upload: ${localFile.absolutePath}")
         }
 
         withContext(Dispatchers.IO) {
-            try {
-                // Check if the file already exists in Google Drive
-                val query = "name='${localFile.name}' and '$folderId' in parents and trashed=false"
-                val result = driveService.files().list()
-                    .setQ(query)
-                    .setSpaces("drive")
-                    .setFields("files(id)")
-                    .execute()
+            val mimeType = getVideoMimeType(localFile.name)
+            val mediaContent = FileContent(mimeType, localFile)
 
-                val existingFileId = result.files?.firstOrNull()?.id
-
-                // Get correct MIME type for video files
-                val mimeType = getVideoMimeType(localFile.name)
-                val mediaContent = FileContent(mimeType, localFile)
-
-                if (existingFileId != null) {
-                    // File exists, update it
-                    val updateRequest = driveService.files().update(existingFileId, null, mediaContent)
-                    // Configure chunked upload for large video files
-                    updateRequest.mediaHttpUploader?.apply {
-                        isDirectUploadEnabled = false
-                        chunkSize = 100 * 1024 * 1024
-                    }
-                    updateRequest.execute()
-                    Log.d("MoviesUploadWorker", "File updated: ${localFile.name}")
-                } else {
-                    // File does not exist, create it
-                    val fileMetadata = DriveFile().apply {
-                        name = localFile.name
-                        parents = listOf(folderId)
-                    }
-                    val createRequest = driveService.files().create(fileMetadata, mediaContent)
-                    // Configure chunked upload for large video files
-                    createRequest.mediaHttpUploader?.apply {
-                        isDirectUploadEnabled = false
-                        chunkSize = 100 * 1024 * 1024
-                    }
-                    createRequest.execute()
-                    Log.d("MoviesUploadWorker", "File created: ${localFile.name}")
-                }
-            } catch (e: Exception) {
-                error(e.message ?: "error!")
+            // The caller already confirmed this file is absent from Drive, so one
+            // listing per file is enough; create it without re-checking existence.
+            val fileMetadata = DriveFile().apply {
+                name = localFile.name
+                parents = listOf(folderId)
             }
+            val createRequest = driveService.files().create(fileMetadata, mediaContent)
+            // Configure chunked upload for large video files
+            createRequest.mediaHttpUploader?.apply {
+                isDirectUploadEnabled = false
+                chunkSize = 100 * 1024 * 1024
+            }
+            createRequest.execute()
+            Log.d("MoviesUploadWorker", "File created: ${localFile.name}")
         }
     }
 
@@ -249,5 +229,6 @@ class MoviesUploadWorker(
 
     private companion object {
         const val MAX_RETRIES = 3
+        const val MAX_CONCURRENT_TRANSFERS = 3
     }
 }
