@@ -19,6 +19,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import zouitel.neighborhood.account.utils.findFolderId
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -95,13 +96,21 @@ class PicturesDownloadsWorker(
 
         // Get all image files from Drive pictures folder
         val query = "'$picturesFolderId' in parents and trashed=false"
-        val result = drive.files().list()
-            .setQ(query)
-            .setSpaces("drive")
-            .setFields("files(id, name, mimeType)")
-            .execute()
-
-        val driveFiles = result.files ?: emptyList()
+        // Drive caps list responses (100 entries by default); follow the page tokens
+        // so a folder holding more files is never silently truncated.
+        val driveFiles = mutableListOf<com.google.api.services.drive.model.File>()
+        var pageToken: String? = null
+        do {
+            val result = drive.files().list()
+                .setQ(query)
+                .setSpaces("drive")
+                .setFields("files(id, name, mimeType), nextPageToken")
+                .setPageSize(LIST_PAGE_SIZE)
+                .setPageToken(pageToken)
+                .execute()
+            driveFiles += result.files ?: emptyList()
+            pageToken = result.nextPageToken
+        } while (pageToken != null)
 
         if (driveFiles.isEmpty()) {
             Log.d("PicturesDownloadsWorker", "No pictures found in Drive folder")
@@ -172,32 +181,8 @@ class PicturesDownloadsWorker(
         }
     }
 
-    private suspend fun findFolderId(
-        driveService: Drive,
-        folderName: String,
-        parentId: String? = null
-    ): String? = withContext(Dispatchers.IO) {
-        try {
-            val query = if (parentId != null) {
-                "name='$folderName' and '$parentId' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
-            } else {
-                "name='$folderName' and mimeType='application/vnd.google-apps.folder' and trashed=false"
-            }
-
-            val result = driveService.files().list()
-                .setQ(query)
-                .setSpaces("drive")
-                .setFields("files(id, name)")
-                .execute()
-
-            result.files?.firstOrNull()?.id
-        } catch (e: Exception) {
-            Log.e("PicturesDownloadsWorker", "Failed to find folder '$folderName': ${e.message}", e)
-            null
-        }
-    }
-
     private companion object {
         const val MAX_RETRIES = 3
+        const val LIST_PAGE_SIZE = 200
     }
 }

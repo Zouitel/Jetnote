@@ -26,6 +26,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import zouitel.neighborhood.account.utils.findFolderId
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -165,31 +166,6 @@ class SyncDataWorker(
         // Read and parse JSON
         val content = localFile.readText()
         onParse(content)
-    }
-
-    private suspend fun findFolderId(
-        driveService: Drive,
-        folderName: String,
-        parentId: String? = null
-    ): String? = withContext(Dispatchers.IO) {
-        runCatching {
-            val query = if (parentId != null) {
-                "name='$folderName' and '$parentId' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
-            } else {
-                "name='$folderName' and mimeType='application/vnd.google-apps.folder' and trashed=false"
-            }
-
-            val result = driveService.files().list()
-                .setQ(query)
-                .setSpaces("drive")
-                .setFields("files(id, name)")
-                .execute()
-
-            result.files?.firstOrNull()?.id
-        }.onFailure {
-            it.printStackTrace()
-            null
-        }.getOrNull()
     }
 
     private companion object {
