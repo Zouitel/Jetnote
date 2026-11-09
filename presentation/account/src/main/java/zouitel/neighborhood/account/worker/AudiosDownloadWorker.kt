@@ -12,10 +12,12 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
@@ -35,6 +37,11 @@ class AudiosDownloadsWorker(
         return try {
             downloadAudios(applicationContext, initializeDriveService())
             Result.success()
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (e: IOException) {
+            Log.e("AudiosDownloadsWorker", "Download failed (attempt ${runAttemptCount + 1}): ${e.message}", e)
+            if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
         } catch (e: Exception) {
             Log.e("AudiosDownloadsWorker", "Download failed: ${e.message}", e)
             Result.failure()
@@ -66,65 +73,48 @@ class AudiosDownloadsWorker(
 
     @WorkerThread
     suspend fun downloadAudios(context: Context, driveService: Drive?) = withContext(ioDispatcher) {
-        if (driveService == null) {
-            Log.e("AudiosDownloadsWorker", "Drive service is null")
-            return@withContext
-        }
+        // A missing service or folder must fail the work: returning normally here
+        // used to report a successful sync while nothing was downloaded.
+        val drive = driveService ?: throw IOException("Drive service is not available")
 
-        val mediasFolderId = findFolderId(driveService, "jetnote_medias")
-        if (mediasFolderId == null) {
-            Log.e("AudiosDownloadsWorker", "Root folder 'jetnote_medias' not found in Drive")
-            return@withContext
-        }
+        val mediasFolderId = findFolderId(drive, "jetnote_medias")
+            ?: throw IOException("Root folder 'jetnote_medias' not found in Drive")
 
-        val audiosFolderId = findFolderId(driveService, "audios", mediasFolderId)
-        if (audiosFolderId == null) {
-            Log.e("AudiosDownloadsWorker", "Downloads folder not found in Drive")
-            return@withContext
-        }
+        val audiosFolderId = findFolderId(drive, "audios", mediasFolderId)
+            ?: throw IOException("Audios folder not found in Drive")
 
         val audiosDir = context.getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
-        if (audiosDir == null) {
-            Log.e("AudiosDownloadsWorker", "Downloads directory not accessible")
-            return@withContext
-        }
+            ?: throw IOException("Audios directory not accessible")
 
         if (!audiosDir.exists()) {
             audiosDir.mkdirs()
         }
 
-        val downloadJobs = mutableListOf<Deferred<Unit>>()
+        val query = "'$audiosFolderId' in parents and trashed=false"
+        val result = drive.files().list()
+            .setQ(query)
+            .setSpaces("drive")
+            .setFields("files(id, name, mimeType)")
+            .execute()
 
-        try {
-            val query = "'$audiosFolderId' in parents and trashed=false"
-            val result = driveService.files().list()
-                .setQ(query)
-                .setSpaces("drive")
-                .setFields("files(id, name, mimeType)")
-                .execute()
+        val driveFiles = result.files ?: emptyList()
 
-            val driveFiles = result.files ?: emptyList()
-
-            if (driveFiles.isEmpty()) {
-                Log.d("AudiosDownloadsWorker", "No files found in Drive downloads folder")
-                return@withContext
-            }
-
-            Log.d("AudiosDownloadsWorker", "Found ${driveFiles.size} files in Drive downloads folder")
-
-            // Download all files (any type)
-            driveFiles.forEach { driveFile ->
-                downloadJobs.add(async {
-                    downloadFile(driveService, driveFile.id, driveFile.name, audiosDir)
-                })
-            }
-
-            downloadJobs.forEach { it.await() }
-            Log.d("AudiosDownloadsWorker", "All download files completed")
-
-        } catch (e: Exception) {
-            Log.e("AudiosDownloadsWorker", "Error listing files from Drive: ${e.message}", e)
+        if (driveFiles.isEmpty()) {
+            Log.d("AudiosDownloadsWorker", "No files found in Drive audios folder")
+            return@withContext
         }
+
+        Log.d("AudiosDownloadsWorker", "Found ${driveFiles.size} files in Drive audios folder")
+
+        // A failed download fails the worker so WorkManager can retry it;
+        // already completed files are skipped on retry.
+        coroutineScope {
+            driveFiles.map { driveFile ->
+                async { downloadFile(drive, driveFile.id, driveFile.name, audiosDir) }
+            }.awaitAll()
+        }
+
+        Log.d("AudiosDownloadsWorker", "All download files completed")
     }
 
     private suspend fun downloadFile(
@@ -133,25 +123,32 @@ class AudiosDownloadsWorker(
         fileName: String,
         localDir: File
     ) = withContext(Dispatchers.IO) {
+        val localFile = File(localDir, fileName)
+
+        if (localFile.exists()) {
+            Log.d("AudiosDownloadsWorker", "File already exists, skipping: $fileName")
+            return@withContext
+        }
+
+        // Download to a temporary file first so an interrupted transfer can never
+        // leave a truncated file behind that the exists() check above would then
+        // treat as complete and refuse to re-download.
+        val partialFile = File(localDir, "$fileName.part")
+
         try {
-            val localFile = File(localDir, fileName)
-
-            if (localFile.exists()) {
-                Log.d("AudiosDownloadsWorker", "File already exists, skipping: $fileName")
-                return@withContext
-            }
-
-            FileOutputStream(localFile).use { outputStream ->
+            FileOutputStream(partialFile).use { outputStream ->
                 driveService.files().get(fileId).executeMediaAndDownloadTo(outputStream)
                 outputStream.flush()
             }
 
-            Log.d("AudiosDownloadsWorker", "Downloaded: $fileName to ${localFile.absolutePath}")
+            if (!partialFile.renameTo(localFile)) {
+                throw IOException("Could not move downloaded file into place: $fileName")
+            }
 
-        } catch (e: IOException) {
-            Log.e("AudiosDownloadsWorker", "Error downloading file $fileName: ${e.message}", e)
+            Log.d("AudiosDownloadsWorker", "Downloaded: $fileName to ${localFile.absolutePath}")
         } catch (e: Exception) {
-            Log.e("AudiosDownloadsWorker", "Unexpected error downloading $fileName: ${e.message}", e)
+            partialFile.delete()
+            throw e
         }
     }
 
@@ -178,5 +175,9 @@ class AudiosDownloadsWorker(
             Log.e("AudiosDownloadsWorker", "Failed to find folder '$folderName': ${e.message}", e)
             null
         }
+    }
+
+    private companion object {
+        const val MAX_RETRIES = 3
     }
 }
