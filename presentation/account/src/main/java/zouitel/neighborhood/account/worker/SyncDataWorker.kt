@@ -19,6 +19,7 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -55,6 +56,11 @@ class SyncDataWorker(
         return try {
             syncDatabaseFromDrive()
             Result.success()
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (e: IOException) {
+            Log.e("SyncDataWorker", "Transient error while syncing from Drive (attempt ${runAttemptCount + 1}): ${e.message}", e)
+            if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
         } catch (e: Exception) {
             Log.e("SyncDataWorker", "Sync failed: ${e.message}", e)
             Result.failure()
@@ -86,25 +92,21 @@ class SyncDataWorker(
 
     private suspend fun syncDatabaseFromDrive() = withContext(ioDispatcher) {
         val driveService = initializeDriveService()
-        if (driveService == null) {
-            Log.e("SyncDataWorker", "Drive service is null")
-            return@withContext
-        }
+            ?: throw IOException("Google Drive account is not available")
 
         // Find root folder
         val rootFolderId = findFolderId(driveService, "jetnote_data")
-        if (rootFolderId == null) {
-            Log.e("SyncDataWorker", "Root folder 'jetnote_data' not found in Drive")
-            return@withContext
-        }
+            ?: throw IOException("Root folder 'jetnote_data' not found in Drive")
 
         // Create temp directory for downloads
         val tempDir = File(applicationContext.cacheDir, "jetnote_sync").apply {
             if (!exists()) mkdirs()
         }
 
-        runCatching {
-            // Download all JSON files from Drive
+        try {
+            // Download all JSON files from Drive. Any download or parse failure must
+            // propagate: reporting success while the restore silently failed leaves
+            // the user convinced their notes are safe when they are not.
             val downloadJobs = listOf(
                 async { downloadAndParse(driveService, "notes.json", rootFolderId, tempDir) { content ->
                     val notes = json.decodeFromString<List<Data>>(content)
@@ -123,10 +125,8 @@ class SyncDataWorker(
             // Wait for all downloads and parsing to complete
             downloadJobs.awaitAll()
             Log.d("SyncDataWorker", "Database sync completed successfully")
-
-        }.onFailure {
+        } finally {
             tempDir.deleteRecursively()
-            it.printStackTrace()
         }
     }
 
@@ -137,40 +137,34 @@ class SyncDataWorker(
         tempDir: File,
         onParse: suspend (String) -> Unit
     ) = withContext(ioDispatcher) {
-        runCatching {
-            // Find file in Drive
-            val query = "name='$fileName' and '$folderId' in parents and trashed=false"
-            val result = driveService.files().list()
-                .setQ(query)
-                .setSpaces("drive")
-                .setFields("files(id, name)")
-                .execute()
+        // Find file in Drive
+        val query = "name='$fileName' and '$folderId' in parents and trashed=false"
+        val result = driveService.files().list()
+            .setQ(query)
+            .setSpaces("drive")
+            .setFields("files(id, name)")
+            .execute()
 
-            val driveFile = result.files?.firstOrNull()
-            if (driveFile == null) {
-                Log.w("SyncDataWorker", "File not found in Drive: $fileName")
-                return@withContext
-            }
-
-            // Download to temp file
-            val localFile = File(tempDir, fileName)
-            FileOutputStream(localFile).use { outputStream ->
-                driveService.files().get(driveFile.id).executeMediaAndDownloadTo(outputStream)
-                outputStream.flush()
-            }
-
-            Log.d("SyncDataWorker", "Downloaded: $fileName")
-
-            // Read and parse JSON
-            val content = localFile.readText()
-            onParse(content)
-
-        }.onFailure {
-            when(it) {
-                is IOException -> Log.e("SyncDataWorker", "Error downloading $fileName: ${it.message}", it)
-                is Exception -> Log.e("SyncDataWorker", "Error parsing $fileName: ${it.message}", it)
-            }
+        val driveFile = result.files?.firstOrNull()
+        if (driveFile == null) {
+            // Not an error: the folder structure is created at sign-in, but files
+            // only exist after the first successful upload.
+            Log.w("SyncDataWorker", "File not found in Drive, skipping: $fileName")
+            return@withContext
         }
+
+        // Download to temp file
+        val localFile = File(tempDir, fileName)
+        FileOutputStream(localFile).use { outputStream ->
+            driveService.files().get(driveFile.id).executeMediaAndDownloadTo(outputStream)
+            outputStream.flush()
+        }
+
+        Log.d("SyncDataWorker", "Downloaded: $fileName")
+
+        // Read and parse JSON
+        val content = localFile.readText()
+        onParse(content)
     }
 
     private suspend fun findFolderId(
@@ -196,5 +190,9 @@ class SyncDataWorker(
             it.printStackTrace()
             null
         }.getOrNull()
+    }
+
+    private companion object {
+        const val MAX_RETRIES = 3
     }
 }
