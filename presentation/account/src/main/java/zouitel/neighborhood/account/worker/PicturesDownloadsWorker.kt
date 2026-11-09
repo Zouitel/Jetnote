@@ -6,18 +6,15 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import zouitel.neighborhood.account.utils.findFolderId
 import java.io.File
@@ -36,7 +33,7 @@ class PicturesDownloadsWorker(
             return Result.failure()
         }
         return try {
-            downloadPictures(applicationContext, initializeDriveService())
+            downloadPictures(applicationContext, initializeDriveService(applicationContext, inputData, "PicturesDownloadsWorker", ioDispatcher))
             Result.success()
         } catch (cancelled: CancellationException) {
             throw cancelled
@@ -46,28 +43,6 @@ class PicturesDownloadsWorker(
         } catch (e: Exception) {
             Log.e("PicturesDownloadsWorker", "Download failed: ${e.message}", e)
             Result.failure()
-        }
-    }
-
-    suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
-        try {
-            val credential = GoogleAccountCredential.usingOAuth2(
-                applicationContext,
-                listOf(DriveScopes.DRIVE_FILE)
-            )
-
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(applicationContext)
-            credential.selectedAccount = lastAccount?.account
-
-            credential?.run {
-                Drive.Builder(
-                    NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
-                ).setApplicationName("Drive File Manager").build()
-            }
-        } catch (_: Exception) {
-            null
         }
     }
 
@@ -121,11 +96,17 @@ class PicturesDownloadsWorker(
 
         // A failed download fails the worker so WorkManager can retry it;
         // already completed files are skipped on retry.
+        // Cap concurrent Drive requests to stay clear of API rate limits.
+        val downloadSemaphore = Semaphore(MAX_CONCURRENT_TRANSFERS)
         coroutineScope {
             driveFiles
                 .filter { isImageFile(it.name, it.mimeType) }
                 .map { driveFile ->
-                    async { downloadFile(drive, driveFile.id, driveFile.name, picturesDir) }
+                    async {
+                        downloadSemaphore.withPermit {
+                            downloadFile(drive, driveFile.id, driveFile.name, picturesDir)
+                        }
+                    }
                 }.awaitAll()
         }
 
@@ -184,5 +165,6 @@ class PicturesDownloadsWorker(
     private companion object {
         const val MAX_RETRIES = 3
         const val LIST_PAGE_SIZE = 200
+        const val MAX_CONCURRENT_TRANSFERS = 3
     }
 }

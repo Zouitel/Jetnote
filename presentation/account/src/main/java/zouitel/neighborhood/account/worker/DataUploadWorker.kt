@@ -5,13 +5,8 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.FileContent
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File as DriveFile
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -75,7 +70,7 @@ class DataUploadWorker(
                 return Result.failure()
             }
 
-            val driveService = initializeDriveService()
+            val driveService = initializeDriveService(applicationContext, inputData, "DataUploadWorker", ioDispatcher)
                 ?: throw IOException("Google Drive account is not available")
 
             uploadsData(
@@ -94,31 +89,6 @@ class DataUploadWorker(
         } catch (error: Exception) {
         Log.e("DataUploadWorker", "Data upload failed: ${error.message}", error)
         if (error is IOException) Result.retry() else Result.failure()
-        }
-    }
-
-    private suspend fun initializeDriveService(): Drive? = withContext(ioDispatcher) {
-        try {
-            val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
-                ?: return@withContext null
-
-            val credential = GoogleAccountCredential.usingOAuth2(
-                applicationContext,
-                listOf(DriveScopes.DRIVE_FILE)
-            ).apply {
-                selectedAccount = account.account
-            }
-
-            Drive.Builder(
-                NetHttpTransport(),
-                GsonFactory.getDefaultInstance(),
-                AccountBoundDriveRequestInitializer(credential, applicationContext, inputData)
-            ).setApplicationName("Jetnote").build()
-        } catch (cancelled: CancellationException) {
-            throw cancelled
-        } catch (error: Exception) {
-            Log.e("DataUploadWorker", "Failed to initialize Drive service", error)
-            null
         }
     }
 

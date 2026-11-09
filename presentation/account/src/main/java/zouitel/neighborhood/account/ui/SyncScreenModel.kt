@@ -13,12 +13,7 @@ import androidx.work.WorkManager
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import zouitel.neighborhood.domain.usecase.DataUseCase
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -29,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import zouitel.neighborhood.account.worker.AccountBoundDriveRequestInitializer
 import zouitel.neighborhood.account.worker.AccountWorkIdentity
 import zouitel.neighborhood.account.worker.AudiosDownloadsWorker
 import zouitel.neighborhood.account.worker.AudiosUploadWorker
@@ -41,6 +35,7 @@ import zouitel.neighborhood.account.worker.OthersUploadWorker
 import zouitel.neighborhood.account.worker.PicturesDownloadsWorker
 import zouitel.neighborhood.account.worker.PicturesUploadWorker
 import zouitel.neighborhood.account.worker.SyncDataWorker
+import zouitel.neighborhood.account.worker.initializeDriveService
 import zouitel.neighborhood.security.NativeSecurityManager
 import com.google.api.services.drive.model.File as DriveFile
 
@@ -167,7 +162,12 @@ class SyncScreenModel(
 
                     Log.d("SyncScreenModel", "=== Starting Auto-Sync (mutex locked) ===")
 
-                    val driveService = initializeDriveService()
+                    val driveService = initializeDriveService(
+                        context,
+                        AccountWorkIdentity.dataFor(auth.currentUser?.uid, context),
+                        "SyncScreenModel",
+                        Dispatchers.IO
+                    )
                     if (driveService != null) {
                         createDriveFolders(driveService)
                         foldersCreatedThisSession = true
@@ -187,32 +187,6 @@ class SyncScreenModel(
         }
     }
 
-    suspend fun initializeDriveService(): Drive? = withContext(Dispatchers.IO) {
-        try {
-            val credential = GoogleAccountCredential.usingOAuth2(
-                context,
-                listOf(DriveScopes.DRIVE_FILE)
-            )
-
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
-            if (lastAccount?.account == null) {
-                Log.e("SyncScreenModel", "No Google account found")
-                return@withContext null
-            }
-
-            credential.selectedAccount = lastAccount.account
-            val accountWorkData = AccountWorkIdentity.dataFor(auth.currentUser?.uid, context)
-
-            Drive.Builder(
-                NetHttpTransport(),
-                GsonFactory.getDefaultInstance(),
-                AccountBoundDriveRequestInitializer(credential, context, accountWorkData)
-            ).setApplicationName("Drive File Manager").build()
-        } catch (e: Exception) {
-            Log.e("SyncScreenModel", "Error initializing Drive service", e)
-            null
-        }
-    }
 
     /**
      * Cancel every account-scoped chain before a different Firebase identity can
