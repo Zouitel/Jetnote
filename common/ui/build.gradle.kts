@@ -41,4 +41,7 @@ dependencies {
 
     //Liquid Glass (Kyant Backdrop).
     api(libs.backdrop)
+
+    //Cloudy.
+    implementation(libs.compose.cloudy)
 }

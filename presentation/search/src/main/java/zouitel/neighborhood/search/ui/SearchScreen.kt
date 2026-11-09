@@ -48,15 +48,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
-import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import coil.compose.AsyncImage
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
+import com.kyant.backdrop.backdrops.layerBackdrop
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import org.koin.compose.koinInject
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
@@ -79,23 +78,6 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.MediaType
 import zouitel.neighborhood.workspace.model.Note
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
-
-class SearchScreen(val currentTag: SearchTypes.Tag? = null) : Screen {
-
-    @Composable
-    override fun Content() {
-        Search(
-            currentTag,
-            koinScreenModel(),
-            koinScreenModel(),
-            koinScreenModel(),
-            koinScreenModel(),
-            koinScreenModel(),
-            koinScreenModel(),
-            koinScreenModel()
-        )
-    }
-}
 
 @Composable
 fun BrowseContent(
@@ -126,9 +108,9 @@ fun BrowseContent(
             SectionTitle(stringResource(R.string.types))
             ContextualFlowRow(
                 itemCount = typesList.size,
-                modifier  = Modifier.padding(horizontal = 10.dp),
+                modifier = Modifier.padding(horizontal = 10.dp),
             ) { index ->
-                val type  = typesList[index]
+                val type = typesList[index]
                 val label = when (index) {
                     0 -> stringResource(R.string.links)
                     1 -> stringResource(R.string.reminders)
@@ -148,23 +130,23 @@ fun BrowseContent(
                     }
                 )
                 FilterChip(
-                    selected    = false,
-                    enabled     = available,
-                    onClick     = {
+                    selected = false,
+                    enabled = available,
+                    onClick = {
                         searchModel.updateSearchType(type.types)
                         searchModel.setFieldText(label)
                     },
-                    label       = {
+                    label = {
                         Text(text = label, style = MaterialTheme.typography.labelSmall)
                     },
                     leadingIcon = {
                         Icon(painterResource(type.icon), contentDescription = null)
                     },
-                    shape    = MaterialTheme.shapes.large,
+                    shape = MaterialTheme.shapes.large,
                     modifier = Modifier.padding(horizontal = 3.dp),
-                    colors   = FilterChipDefaults.filterChipColors(
+                    colors = FilterChipDefaults.filterChipColors(
                         labelColor = MaterialTheme.colorScheme.onSurface,
-                        iconColor  = MaterialTheme.colorScheme.onSurface,
+                        iconColor = MaterialTheme.colorScheme.onSurface,
                     ),
                 )
             }
@@ -178,7 +160,7 @@ fun BrowseContent(
                 SectionTitle(stringResource(R.string.tags))
                 ContextualFlowRow(
                     itemCount = tags.size,
-                    modifier  = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp),
                 ) { index ->
                     val tag = tags[index]
                     val isUsedInNotes = allNotes.fastAny { note ->
@@ -327,7 +309,8 @@ fun Search(
     audioModel: AudioScreenModel,
     linkModel: LinkScreenModel,
     dataModel: DataScreenModel,
-    noteAndTagModel: NoteAndTagScreenModel
+    noteAndTagModel: NoteAndTagScreenModel,
+    backdrop: LayerBackdrop
 ) {
     val bottomNav = LocalBottomSheetNavigator.current
 
@@ -412,23 +395,12 @@ fun Search(
         }.flowOn(kotlinx.coroutines.Dispatchers.Default)
     }.collectAsState(initial = emptyList())
 
-    // ── Root layout ────────────────────────────────────────────────────────────
-    //
-    // ⚠️  NO Scaffold here. NO nestedScroll here.
-    //
-    // This composable renders inside ExpandedFullScreenContainedSearchBar which
-    // is already inside MainScreen's Scaffold+nestedScroll.  Adding a second
-    // Scaffold with its own enterAlwaysScrollBehavior created two nested-scroll
-    // consumers competing for the same scroll events — the root cause of the
-    // scroll jitter / stutter reported.
-    //
-    // SelectionTopBar is placed inline at the top of a Column instead of in a
-    // Scaffold topBar slot, which is equivalent visually and avoids the conflict.
     Column(
         modifier = Modifier
             .fillMaxSize()
             .reportable(settings.isShakable)
-            .cloudy(enabled = bottomNav.isVisible),
+            .cloudy(enabled = bottomNav.isVisible)
+            .layerBackdrop(backdrop),
     ) {
 
         // Inline top bar — only visible in multi-select mode.

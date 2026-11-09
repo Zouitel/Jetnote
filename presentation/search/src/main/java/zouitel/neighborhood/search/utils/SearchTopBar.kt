@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.ui.SettingsScreenModel
@@ -31,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.sp
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
@@ -40,6 +42,7 @@ import zouitel.neighborhood.search.ui.Search
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonIcons
+import zouitel.neighborhood.ui.liquid_glass.commonBlur
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,20 +66,16 @@ fun SearchTopBar(
     val scope = rememberCoroutineScope()
     val uiState by remember(searchModel, searchModel::uiState).collectAsState()
 
-    // Callers that open this bar from an icon button or drawer item (rather than
-    // tapping the persistent inline field) drive this by changing expandRequestKey
-    // to a new, distinct value each time — e.g. Any() per click, or true on a
-    // composable that gets freshly mounted per open. A stable/unchanged key won't
-    // re-fire, since ArchiveScreen's SearchTopBar is only mounted while searching
-    // anyway; MainScreen's is mounted permanently so it needs a genuinely new key
-    // per request to expand again after the user has collapsed it.
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val backdrop = rememberLayerBackdrop {
+        drawRect(surfaceColor)
+        drawContent()
+    }
+
     LaunchedEffect(expandRequestKey) {
         if (expandRequestKey != null) searchbarState.animateToExpanded()
     }
 
-    // Report back once the bar returns to Collapsed (user tapped the back arrow,
-    // or the system back gesture) so the caller can swap its own top bar back in.
-    // The initial value is already Collapsed, so drop(1) skips that first emission.
     LaunchedEffect(searchbarState) {
         snapshotFlow { searchbarState.currentValue }
             .drop(1)
@@ -96,6 +95,7 @@ fun SearchTopBar(
     val inputField: @Composable () -> Unit = {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             SearchBarDefaults.InputField(
+                modifier = Modifier.commonBlur(backdrop, surfaceColor),
                 textFieldState = searchModel.fieldState,
                 searchBarState = searchbarState,
                 onSearch = { keyboardController?.hide() },
@@ -165,7 +165,8 @@ fun SearchTopBar(
             audioModel = audioModel,
             linkModel = linkModel,
             dataModel = dataModel,
-            noteAndTagModel = noteAndTagModel
+            noteAndTagModel = noteAndTagModel,
+            backdrop = backdrop
         )
     }
 }

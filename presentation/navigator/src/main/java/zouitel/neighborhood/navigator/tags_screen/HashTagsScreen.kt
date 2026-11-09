@@ -74,7 +74,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import zouitel.neighborhood.domain.utils.Action
@@ -91,7 +90,10 @@ import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.workspace.R
 import zouitel.neighborhood.workspace.ui.bottom_bar.ColorPicker
 import coil.compose.AsyncImage
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.skydoves.cloudy.cloudy
+import com.skydoves.cloudy.rememberSky
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
@@ -140,7 +142,11 @@ class HashTagsScreen: Screen {
         val tagResource = stringResource(zouitel.neighborhood.logic.R.string.tag_placeholder)
         val tagCannotBeEmptyResource = stringResource(zouitel.neighborhood.logic.R.string.tag_cannot_be_empty)
         var placeholderText by remember { mutableStateOf(tagResource) }
-
+        val surfaceColor = MaterialTheme.colorScheme.surface
+        val backdrop = rememberLayerBackdrop {
+            drawRect(surfaceColor)
+            drawContent()
+        }
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
@@ -182,7 +188,8 @@ class HashTagsScreen: Screen {
                             settingsModel = settingsModel,
                             drawerState = drawerState,
                             scrollBehavior = scrollBehavior,
-                            title = stringResource(zouitel.neighborhood.logic.R.string.screen_tags)
+                            title = stringResource(zouitel.neighborhood.logic.R.string.screen_tags),
+                            backdrop = backdrop
                         )
                     },
                     bottomBar = {
@@ -196,6 +203,7 @@ class HashTagsScreen: Screen {
                         contentPadding = paddingValues,
                         modifier = Modifier
                             .fillMaxSize()
+                            .layerBackdrop(backdrop)
                             .then(height)
                             .background(MaterialTheme.colorScheme.surface)
                     ) {

@@ -33,7 +33,7 @@ fun LiquidGlassSurface(
     Column(
         modifier = modifier.drawBackdrop(
             backdrop = backdrop,
-            shape = { RoundedCornerShape(28.dp) },
+            shape = { RoundedCornerShape(0.dp) },
             effects = {
                 if (enabled) {
                     blur(blurRadius.dp.toPx())

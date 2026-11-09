@@ -68,7 +68,7 @@ class SyncScreen: Screen {
         val webClientId by remember(syncModel, syncModel::googleClientId).collectAsState()
 
         val authenticationFailedResource = stringResource(R.string.firebase_authentication_failed)
-        val  signInFailedResource = stringResource(R.string.sign_in_failed)
+        val signInFailedResource = stringResource(R.string.sign_in_failed)
 
         val signInLauncher = rememberLauncherForActivityResult(
             contract = StartActivityForResult()

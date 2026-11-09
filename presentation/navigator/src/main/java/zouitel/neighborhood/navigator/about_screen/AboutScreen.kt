@@ -43,14 +43,15 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import coil.compose.AsyncImage
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.skydoves.cloudy.cloudy
+import com.skydoves.cloudy.rememberSky
 import zouitel.neighborhood.assistant.ui.conversation.ChatScreenModel
 import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.navigator.R
@@ -60,7 +61,6 @@ import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonColors
 import zouitel.neighborhood.ui.CommonTopAppBar
 import zouitel.neighborhood.ui.SettingsScreenModel
-import zouitel.neighborhood.ui.markdown.MarkdownBlock
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 
 class AboutScreen: Screen {
@@ -96,6 +96,11 @@ class AboutScreen: Screen {
 
         val updateModel = koinScreenModel<UpdateScreenModel>()
         val updateState by updateModel.state.collectAsState()
+        val surfaceColor = MaterialTheme.colorScheme.surface
+        val backdrop = rememberLayerBackdrop {
+            drawRect(surfaceColor)
+            drawContent()
+        }
 
         val updateLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartIntentSenderForResult()
@@ -144,7 +149,8 @@ class AboutScreen: Screen {
                             settingsModel = settingsModel,
                             drawerState = drawerState,
                             scrollBehavior = scrollBehavior,
-                            title = stringResource(zouitel.neighborhood.logic.R.string.screen_about)
+                            title = stringResource(zouitel.neighborhood.logic.R.string.screen_about),
+                            backdrop = backdrop
                         )
                     },
                     modifier = Modifier
@@ -157,6 +163,7 @@ class AboutScreen: Screen {
                         contentPadding = paddingValues,
                         modifier = Modifier
                             .fillMaxSize()
+                            .layerBackdrop(backdrop)
                             .then(height)
                     ) {
                         item {
