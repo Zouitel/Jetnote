@@ -7,34 +7,29 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import zouitel.neighborhood.domain.usecase.ConversationUseCase
+import zouitel.neighborhood.domain.usecase.DataUseCase
 import zouitel.neighborhood.domain.usecase.NoteAndTagUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 
-/**
- * Permanently removes items already placed in the bin.
- *
- * File-system orphan collection is deliberately not performed here: the current
- * inventory only observes notes and does not include every possible reference
- * (notably conversation message attachments). Deleting against an incomplete
- * inventory can destroy files that are still in use.
- */
 class BinWorker(
     context: Context,
     params: WorkerParameters,
     private val cleanupNotes: NoteUseCase.Cleanup,
     private val cleanupConversations: ConversationUseCase.Cleanup,
     private val deleteNoteAndTagDrafts: NoteAndTagUseCase.DeleteDrafts,
+    private val purgeExpiredNotes: DataUseCase.PurgeExpired,
     private val ioDispatcher: CoroutineDispatcher
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         try {
+            purgeExpiredNotes()
             cleanupNotes()
             cleanupConversations()
             deleteNoteAndTagDrafts()
             Result.success()
         } catch (exception: Exception) {
-            Log.e(TAG, "Bin cleanup failed; WorkManager may retry it.", exception)
+            Log.e(TAG, "Trash/bin cleanup failed; WorkManager may retry it.", exception)
             Result.retry()
         }
     }
