@@ -37,7 +37,7 @@ class TrashScreen : Screen {
         val model = koinScreenModel<TrashScreenModel>()
         val notes by model.notes.collectAsState()
         var showEmptyConfirmation by remember { mutableStateOf(false) }
-        var permanentlyDeleteUid by remember { mutableStateOf<String?>(null) }
+        var permanentlyDeleteNote by remember { mutableStateOf<zouitel.neighborhood.workspace.model.Note?>(null) }
 
         LaunchedEffect(Unit) { model.observe() }
 
@@ -81,10 +81,10 @@ class TrashScreen : Screen {
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Button(onClick = { model.restore(note.data.uid) }) {
+                                    Button(onClick = { model.restore(note) }) {
                                         Text("Restore")
                                     }
-                                    TextButton(onClick = { permanentlyDeleteUid = note.data.uid }) {
+                                    TextButton(onClick = { permanentlyDeleteNote = note }) {
                                         Text("Delete permanently")
                                     }
                                 }
@@ -112,14 +112,14 @@ class TrashScreen : Screen {
             )
         }
 
-        permanentlyDeleteUid?.let { uid ->
+        permanentlyDeleteNote?.let { note ->
             AlertDialog(
-                onDismissRequest = { permanentlyDeleteUid = null },
+                onDismissRequest = { permanentlyDeleteNote = null },
                 title = { Text("Delete permanently?") },
                 text = { Text("This note cannot be restored after deletion.") },
                 confirmButton = {
                     TextButton(onClick = {
-                        model.deletePermanently(uid)
+                        model.deletePermanently(note)
                         permanentlyDeleteUid = null
                     }) { Text("Delete") }
                 },
