@@ -32,7 +32,7 @@ interface DataDao {
     @Query("UPDATE $TABLE_NAME SET DELETED_AT = NULL, ARCHIVED = 0 WHERE UUID = :uid AND USER_UID = :userUid AND DELETED_AT IS NOT NULL")
     suspend fun restoreFromTrash(uid: String, userUid: String)
 
-    @Query("DELETE FROM $TABLE_NAME WHERE UUID = :uid AND USER_UID = :userUid")
+    @Query("DELETE FROM $TABLE_NAME WHERE UUID = :uid AND USER_UID = :userUid AND DELETED_AT IS NOT NULL")
     suspend fun permanentDelete(uid: String, userUid: String)
 
     @Query("DELETE FROM $TABLE_NAME WHERE DELETED_AT IS NOT NULL AND DELETED_AT <= :cutoff")
