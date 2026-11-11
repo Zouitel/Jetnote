@@ -4,6 +4,8 @@ import zouitel.neighborhood.repository.model.Data as RepoData
 import zouitel.neighborhood.domain.model.Data as DomainData
 
 class DataMapper {
+    fun fromDomain(data: List<DomainData>): List<RepoData> = data.map(::fromDomain)
+
     fun toDomain(data: RepoData) = DomainData(
         uid = data.uid,
         userUid = data.userUid,
