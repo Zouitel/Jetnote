@@ -63,4 +63,7 @@ dependencies {
 
     //ML Kit Document Scanner.
     implementation(libs.play.services.mlkit.document.scanner)
+
+    // PDF text extraction for note import.
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 }
