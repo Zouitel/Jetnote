@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.usecase.DataUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
@@ -20,9 +21,9 @@ import zouitel.neighborhood.workspace.model.Note
 @Stable
 class TrashScreenModel(
     private val observeTrash: NoteUseCase.ObserveTrash,
-    private val restore: DataUseCase.RestoreFromTrash,
-    private val permanentDelete: DataUseCase.PermanentDelete,
-    private val emptyTrash: DataUseCase.EmptyTrash,
+    private val restoreNote: DataUseCase.RestoreFromTrash,
+    private val deleteNotePermanently: DataUseCase.PermanentDelete,
+    private val emptyUserTrash: DataUseCase.EmptyTrash,
     private val mapper: NoteMapper,
     private val auth: FirebaseAuth
 ) : ScreenModel {
@@ -52,18 +53,18 @@ class TrashScreenModel(
 
     fun restore(note: Note) {
         screenModelScope.launch {
-            restore(note.data.uid, note.data.userUid)
+            restoreNote(note.data.uid, note.data.userUid)
         }
     }
 
     fun deletePermanently(note: Note) {
         screenModelScope.launch {
-            permanentDelete(note.data.uid, note.data.userUid)
+            deleteNotePermanently(note.data.uid, note.data.userUid)
         }
     }
 
     fun empty() {
         val userUid = auth.currentUser?.uid ?: return
-        screenModelScope.launch { emptyTrash(userUid) }
+        screenModelScope.launch { emptyUserTrash(userUid) }
     }
 }
