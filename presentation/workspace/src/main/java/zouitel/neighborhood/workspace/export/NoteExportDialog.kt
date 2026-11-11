@@ -1,5 +1,6 @@
 package zouitel.neighborhood.workspace.export
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Material3
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -49,8 +49,9 @@ fun NoteExportDialog(
     var error by remember { mutableStateOf<String?>(null) }
 
     val saveLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument("application/octet-stream")
-    ) { uri: Uri? ->
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val uri: Uri? = if (result.resultCode == android.app.Activity.RESULT_OK) result.data?.data else null
         val document = pending
         if (uri != null && document != null) {
             scope.launch {
@@ -76,7 +77,12 @@ fun NoteExportDialog(
 
     fun save(document: NoteExporter.ExportDocument) {
         pending = document
-        saveLauncher.launch(document.fileName)
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = document.mimeType
+            putExtra(Intent.EXTRA_TITLE, document.fileName)
+        }
+        saveLauncher.launch(intent)
     }
 
     AlertDialog(
@@ -127,7 +133,7 @@ fun NoteExportDialog(
                                                     NoteExporter.Format.PDF -> NoteExporter.pdf(note)
                                                     NoteExporter.Format.WORD -> NoteExporter.word(note)
                                                     NoteExporter.Format.SUBTITLES -> NoteExporter.subtitles(note)
-                                                    NoteExporter.Format.AUDIO -> error("Audio export unavailable.")
+                                                    NoteExporter.Format.AUDIO -> throw IllegalStateException("Audio export unavailable.")
                                                 }
                                             }.onSuccess(::save)
                                                 .onFailure { error = it.message ?: "Export failed." }
