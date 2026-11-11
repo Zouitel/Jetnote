@@ -17,10 +17,10 @@ class DataDataSourceImpl(
     override suspend fun archive(uid: String) = dao.archive(uid)
     override suspend fun rollback(uid: String) = dao.rollback(uid)
     override suspend fun delete(uid: String, deletedAt: Long) = dao.moveToTrash(uid, deletedAt)
-    override suspend fun restoreFromTrash(uid: String) = dao.restoreFromTrash(uid)
+    override suspend fun restoreFromTrash(uid: String, userUid: String) = dao.restoreFromTrash(uid, userUid)
 
-    override suspend fun permanentDelete(uid: String) {
-        dao.permanentDelete(uid)
+    override suspend fun permanentDelete(uid: String, userUid: String) {
+        dao.permanentDelete(uid, userUid)
         noteAndTagDao.deleteDrafts()
     }
 
@@ -29,8 +29,8 @@ class DataDataSourceImpl(
         noteAndTagDao.deleteDrafts()
     }
 
-    override suspend fun emptyTrash() {
-        dao.emptyTrash()
+    override suspend fun emptyTrash(userUid: String) {
+        dao.emptyTrash(userUid)
         noteAndTagDao.deleteDrafts()
     }
 
