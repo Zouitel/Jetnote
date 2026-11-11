@@ -181,11 +181,14 @@ object NoteExporter {
         require(text.isNotBlank()) { "There is no text to narrate." }
         val output = File(context.cacheDir, "note-export-${UUID.randomUUID()}.wav")
         val tts = suspendCancellableCoroutine<TextToSpeech> { continuation ->
-            val engine = TextToSpeech(context.applicationContext) { status ->
-                if (status == TextToSpeech.SUCCESS) continuation.resume(enginePlaceholder.get() ?: return@TextToSpeech)
-                else continuation.resumeWithException(IllegalStateException("Text-to-speech initialization failed ($status)."))
+            lateinit var engine: TextToSpeech
+            engine = TextToSpeech(context.applicationContext) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    if (continuation.isActive) continuation.resume(engine)
+                } else if (continuation.isActive) {
+                    continuation.resumeWithException(IllegalStateException("Text-to-speech initialization failed ($status)."))
+                }
             }
-            enginePlaceholder.set(engine)
             continuation.invokeOnCancellation { engine.shutdown() }
         }
         try {
@@ -204,6 +207,11 @@ object NoteExporter {
                         )
                     }
                     override fun onError(id: String?, errorCode: Int) = onError(id)
+                    override fun onStop(id: String?, interrupted: Boolean) {
+                        if (id == utteranceId && continuation.isActive) continuation.resumeWithException(
+                            IllegalStateException("Text-to-speech synthesis was interrupted.")
+                        )
+                    }
                 })
                 val result = tts.synthesizeToFile(text, Bundle(), output, utteranceId)
                 if (result == TextToSpeech.ERROR && continuation.isActive) {
@@ -298,5 +306,4 @@ object NoteExporter {
         return output.toByteArray()
     }
 
-    private object enginePlaceholder : ThreadLocal<TextToSpeech>()
 }
