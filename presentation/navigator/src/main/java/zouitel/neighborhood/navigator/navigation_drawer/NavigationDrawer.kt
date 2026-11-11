@@ -76,6 +76,7 @@ import zouitel.neighborhood.ui.CommonIcons.INBOX
 import zouitel.neighborhood.ui.CommonIcons.INTERROGATION
 import zouitel.neighborhood.ui.CommonIcons.SHARE
 import zouitel.neighborhood.ui.CommonIcons.TAGS
+import zouitel.neighborhood.ui.CommonIcons.TRASH
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.tag.model.Tag
 import zouitel.neighborhood.tag.ui.TagScreenModel
@@ -640,7 +641,7 @@ fun NavigationDrawer(
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
-                    icon = { Icon(painterResource(INBOX), null) },
+                    icon = { Icon(painterResource(TRASH), null) },
                     onClick = {
                         if (uiState.currentScreen != AppScreen.TRASH_SCREEN) {
                             scope.launch {
