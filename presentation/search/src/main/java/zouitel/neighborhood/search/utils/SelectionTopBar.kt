@@ -6,6 +6,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -27,6 +31,7 @@ import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.workspace.model.Data
+import zouitel.neighborhood.workspace.export.NoteExportDialog
 import zouitel.neighborhood.markdown.core.BlockContent
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import kotlin.uuid.Uuid
@@ -40,6 +45,7 @@ fun SelectionTopBar(
     onDelete: (List<Data>) -> Unit
 ) {
     val context = LocalContext.current
+    var showExportDialog by remember { mutableStateOf(false) }
     val uiState by remember(searchModel, searchModel::uiState).collectAsState()
     val newUid by lazy { Uuid.random().toString() }
     val observeNoteAndTags = remember(noteAndTagModel, noteAndTagModel::observeAll).collectAsState()
@@ -131,6 +137,16 @@ fun SelectionTopBar(
 
                 IconButton(
                     enabled = uiState.selectedNotes.count() == 1,
+                    onClick = { showExportDialog = true }
+                ) {
+                    Icon(
+                        painter = painterResource(CommonIcons.DOWNLOAD_CLOUD),
+                        contentDescription = "export note"
+                    )
+                }
+
+                IconButton(
+                    enabled = uiState.selectedNotes.count() == 1,
                     onClick = {
                     printNote(
                         context,
@@ -164,6 +180,13 @@ fun SelectionTopBar(
             SelectionsCount(searchModel)
         }
     )
+
+    if (showExportDialog && uiState.selectedNotes.size == 1) {
+        NoteExportDialog(
+            note = uiState.selectedNotes.single(),
+            onDismiss = { showExportDialog = false }
+        )
+    }
 }
 private fun Data.plainText(): String = blocks.mapNotNull { block ->
     (block.content as? BlockContent.Text)?.text
