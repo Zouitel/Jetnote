@@ -13,33 +13,21 @@ class NoteDataSourceImpl(
 ): NoteDataSource {
     override val observeAll: Flow<List<OutNote>>
         get() = dao.observeAll.map { mapper.toRepo(it) }
-
     override val getAll: List<OutNote>
         get() = dao.getAll.map { mapper.toRepo(it) }
-
-    override fun observeByDefault(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByDefault(userUid).map { mapper.toRepo(it) }
-    }
-
-    override fun observeByName(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByName(userUid).map { mapper.toRepo(it) }
-    }
-
-    override fun observeByOldest(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByOldest(userUid).map { mapper.toRepo(it) }
-    }
-
-    override fun observeByNewest(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByNewest(userUid).map { mapper.toRepo(it) }
-    }
-
-    override fun observeByPriority(userUid: String): Flow<List<OutNote>> {
-        return dao.observeByPriority(userUid).map { mapper.toRepo(it) }
-    }
-
-    override fun observeArchives(userUid: String): Flow<List<OutNote>> = dao.observeArchives(userUid).map { mapper.toRepo(it) }
-
-    override suspend fun cleanup() {
-        dao.cleanup()
-    }
+    override fun observeByDefault(userUid: String) =
+        dao.observeByDefault(userUid).map { mapper.toRepo(it) }
+    override fun observeByName(userUid: String) =
+        dao.observeByName(userUid).map { mapper.toRepo(it) }
+    override fun observeByOldest(userUid: String) =
+        dao.observeByOldest(userUid).map { mapper.toRepo(it) }
+    override fun observeByNewest(userUid: String) =
+        dao.observeByNewest(userUid).map { mapper.toRepo(it) }
+    override fun observeByPriority(userUid: String) =
+        dao.observeByPriority(userUid).map { mapper.toRepo(it) }
+    override fun observeArchives(userUid: String) =
+        dao.observeArchives(userUid).map { mapper.toRepo(it) }
+    override fun observeTrash(userUid: String) =
+        dao.observeTrash(userUid).map { mapper.toRepo(it) }
+    override suspend fun cleanup() = dao.cleanup()
 }
