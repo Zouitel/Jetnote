@@ -23,17 +23,17 @@ sealed class DataUseCase {
         suspend operator fun invoke(uid: String) = repo.delete(uid, System.currentTimeMillis())
     }
     data class RestoreFromTrash(private val repo: DataRepository): DataUseCase() {
-        suspend operator fun invoke(uid: String) = repo.restoreFromTrash(uid)
+        suspend operator fun invoke(uid: String, userUid: String) = repo.restoreFromTrash(uid, userUid)
     }
     data class PermanentDelete(private val repo: DataRepository): DataUseCase() {
-        suspend operator fun invoke(uid: String) = repo.permanentDelete(uid)
+        suspend operator fun invoke(uid: String, userUid: String) = repo.permanentDelete(uid, userUid)
     }
     data class PurgeExpired(private val repo: DataRepository): DataUseCase() {
         suspend operator fun invoke(now: Long = System.currentTimeMillis()) =
             repo.purgeExpired(now - TRASH_RETENTION_MILLIS)
     }
     data class EmptyTrash(private val repo: DataRepository): DataUseCase() {
-        suspend operator fun invoke() = repo.emptyTrash()
+        suspend operator fun invoke(userUid: String) = repo.emptyTrash(userUid)
     }
     data class Erase(private val repo: DataRepository): DataUseCase() {
         suspend operator fun invoke() = repo.erase()
