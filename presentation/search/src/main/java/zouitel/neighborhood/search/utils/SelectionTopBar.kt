@@ -37,6 +37,9 @@ fun SelectionTopBar(
     dataModel: DataScreenModel,
     noteAndTagModel: NoteAndTagScreenModel,
     tagModel: TagScreenModel,
+    onArchive: (List<Data>) -> Unit = { notes ->
+        notes.forEach { dataModel.sendAction(Action.Archive(it.uid)) }
+    },
     onDelete: (List<Data>) -> Unit
 ) {
     val context = LocalContext.current
@@ -62,9 +65,7 @@ fun SelectionTopBar(
                 }
             } else {
                 IconButton({
-                    uiState.selectedNotes.map {
-                        dataModel.sendAction(Action.Archive(it.uid))
-                    }
+                    onArchive(uiState.selectedNotes.toList())
                     searchModel.clearSelectionNotes()
                     searchModel.updateSelection(false)
                 }) {

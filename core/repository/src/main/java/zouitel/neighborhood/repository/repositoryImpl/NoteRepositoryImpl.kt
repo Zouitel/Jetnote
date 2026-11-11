@@ -13,35 +13,21 @@ class NoteRepositoryImpl(
 ): NoteRepository {
     override val observeAll: Flow<List<OutNote>>
         get() = dataSource.observeAll.map { mapper.toDomain(it) }
-
     override val getAll: List<OutNote>
         get() = dataSource.getAll.map { mapper.toDomain(it) }
-
-    override fun observeByDefault(userUid: String): Flow<List<OutNote>> {
-        return dataSource.observeByDefault(userUid).map { mapper.toDomain(it) }
-    }
-
-    override fun observeByName(userUid: String): Flow<List<OutNote>> {
-        return dataSource.observeByName(userUid).map { mapper.toDomain(it) }
-    }
-
-    override fun observeByOldest(userUid: String): Flow<List<OutNote>> {
-        return dataSource.observeByOldest(userUid).map { mapper.toDomain(it) }
-    }
-
-    override fun observeByNewest(userUid: String): Flow<List<OutNote>> {
-        return dataSource.observeByNewest(userUid).map { mapper.toDomain(it) }
-    }
-
-    override fun observeByPriority(userUid: String): Flow<List<OutNote>> {
-        return dataSource.observeByPriority(userUid).map { mapper.toDomain(it) }
-    }
-
-    override fun observeArchives(userUid: String): Flow<List<OutNote>> {
-        return dataSource.observeArchives(userUid).map { mapper.toDomain(it) }
-    }
-
-    override suspend fun cleanup() {
-        dataSource.cleanup()
-    }
+    override fun observeByDefault(userUid: String) =
+        dataSource.observeByDefault(userUid).map { mapper.toDomain(it) }
+    override fun observeByName(userUid: String) =
+        dataSource.observeByName(userUid).map { mapper.toDomain(it) }
+    override fun observeByOldest(userUid: String) =
+        dataSource.observeByOldest(userUid).map { mapper.toDomain(it) }
+    override fun observeByNewest(userUid: String) =
+        dataSource.observeByNewest(userUid).map { mapper.toDomain(it) }
+    override fun observeByPriority(userUid: String) =
+        dataSource.observeByPriority(userUid).map { mapper.toDomain(it) }
+    override fun observeArchives(userUid: String) =
+        dataSource.observeArchives(userUid).map { mapper.toDomain(it) }
+    override fun observeTrash(userUid: String) =
+        dataSource.observeTrash(userUid).map { mapper.toDomain(it) }
+    override suspend fun cleanup() = dataSource.cleanup()
 }

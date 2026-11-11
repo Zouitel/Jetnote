@@ -17,25 +17,37 @@ interface DataDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(data: List<Data>)
 
-    @Query("UPDATE $TABLE_NAME SET USER_UID  = :userUid WHERE USER_UID = 'null'")
+    @Query("UPDATE $TABLE_NAME SET USER_UID = :userUid WHERE USER_UID = 'null'")
     suspend fun combineUser(userUid: String?)
 
-    @Query("UPDATE $TABLE_NAME SET ARCHIVED = 1 WHERE UUID = :uid")
+    @Query("UPDATE $TABLE_NAME SET ARCHIVED = 1 WHERE UUID = :uid AND DELETED_AT IS NULL")
     suspend fun archive(uid: String)
 
-    @Query("UPDATE $TABLE_NAME SET ARCHIVED = 0 WHERE UUID = :uid")
+    @Query("UPDATE $TABLE_NAME SET ARCHIVED = 0 WHERE UUID = :uid AND DELETED_AT IS NULL")
     suspend fun rollback(uid: String)
 
-    @Query("DELETE FROM $TABLE_NAME WHERE UUID = :uid")
-    suspend fun delete(uid: String)
+    @Query("UPDATE $TABLE_NAME SET DELETED_AT = :deletedAt WHERE UUID = :uid AND DELETED_AT IS NULL")
+    suspend fun moveToTrash(uid: String, deletedAt: Long)
 
-    @Query("DELETE FROM $TABLE_NAME WHERE ARCHIVED = 1")
+    @Query("UPDATE $TABLE_NAME SET DELETED_AT = NULL WHERE UUID = :uid AND USER_UID = :userUid AND DELETED_AT IS NOT NULL")
+    suspend fun restoreFromTrash(uid: String, userUid: String)
+
+    @Query("DELETE FROM $TABLE_NAME WHERE UUID = :uid AND USER_UID = :userUid AND DELETED_AT IS NOT NULL")
+    suspend fun permanentDelete(uid: String, userUid: String)
+
+    @Query("DELETE FROM $TABLE_NAME WHERE DELETED_AT IS NOT NULL AND DELETED_AT <= :cutoff")
+    suspend fun purgeExpired(cutoff: Long)
+
+    @Query("DELETE FROM $TABLE_NAME WHERE DELETED_AT IS NOT NULL AND USER_UID = :userUid")
+    suspend fun emptyTrash(userUid: String)
+
+    @Query("DELETE FROM $TABLE_NAME WHERE ARCHIVED = 1 AND DELETED_AT IS NULL")
     suspend fun erase()
 
     @Query("DELETE FROM $TABLE_NAME WHERE UUID = ''")
     suspend fun sweepDrafts()
 
-    @Query("UPDATE $TABLE_NAME SET position = :position WHERE UUID = :uid")
+    @Query("UPDATE $TABLE_NAME SET position = :position WHERE UUID = :uid AND DELETED_AT IS NULL")
     suspend fun reorderNote(uid: String, position: Int)
 
     @Transaction

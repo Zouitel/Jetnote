@@ -1,12 +1,12 @@
 package zouitel.neighborhood.repository.mapper
 
-import zouitel.neighborhood.repository.model.Data
-import zouitel.neighborhood.domain.model.Data as OutData
+import zouitel.neighborhood.repository.model.Data as RepoData
+import zouitel.neighborhood.domain.model.Data as DomainData
 
 class DataMapper {
-    fun fromDomain(data: List<OutData>) = data.map { fromDomain(it) }
+    fun fromDomain(data: List<DomainData>): List<RepoData> = data.map(::fromDomain)
 
-    fun toDomain(data: Data) = OutData(
+    fun toDomain(data: RepoData) = DomainData(
         uid = data.uid,
         userUid = data.userUid,
         title = data.title,
@@ -20,10 +20,11 @@ class DataMapper {
         blocks = data.blocks,
         medias = data.medias,
         audios = data.audios,
-        reminders = data.reminders
+        reminders = data.reminders,
+        deletedAt = data.deletedAt
     )
 
-    fun fromDomain(data: OutData) = Data(
+    fun fromDomain(data: DomainData) = RepoData(
         uid = data.uid,
         userUid = data.userUid,
         title = data.title,
@@ -37,6 +38,7 @@ class DataMapper {
         blocks = data.blocks,
         medias = data.medias,
         audios = data.audios,
-        reminders = data.reminders
+        reminders = data.reminders,
+        deletedAt = data.deletedAt
     )
 }

@@ -18,6 +18,8 @@ import zouitel.neighborhood.navigator.archive_screen.ArchiveScreen
 import zouitel.neighborhood.navigator.archive_screen.ArchiveScreenModel
 import zouitel.neighborhood.navigator.main_screen.MainScreen
 import zouitel.neighborhood.navigator.main_screen.MainScreenModel
+import zouitel.neighborhood.navigator.trash_screen.TrashScreen
+import zouitel.neighborhood.navigator.trash_screen.TrashScreenModel
 import zouitel.neighborhood.navigator.mapper.NoteMapper
 import zouitel.neighborhood.search.di.searchModule
 import zouitel.neighborhood.tag.di.tagsModule
@@ -34,6 +36,8 @@ val screensModule = module {
     factoryOf(::NoteMapper)
     factoryOf(::ArchiveScreen)
     factoryOf(::ArchiveScreenModel)
+    factoryOf(::TrashScreen)
+    factoryOf(::TrashScreenModel)
     factory { UpdateScreenModel(androidContext()) }
 
     includes(

@@ -3,6 +3,8 @@ package zouitel.neighborhood.database.database
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import zouitel.neighborhood.database.dao.DataDao
 import zouitel.neighborhood.database.dao.LinkDao
 import zouitel.neighborhood.database.dao.NoteAndTagDao
@@ -22,7 +24,7 @@ import zouitel.neighborhood.database.dao.ModelDao
 import zouitel.neighborhood.database.dao.ProviderDao
 
 @Database(
-    version = 11,
+    version = 12,
     entities = [
         Data::class,
         Tag::class,
@@ -45,4 +47,13 @@ abstract class Database: RoomDatabase() {
     abstract fun conversationDao(): ConversationDao
     abstract fun modelDao(): ModelDao
     abstract fun providerDao(): ProviderDao
+
+    companion object {
+        val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE note_data_table ADD COLUMN deleted_at INTEGER")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_note_data_table_deleted_at ON note_data_table(deleted_at)")
+            }
+        }
+    }
 }
