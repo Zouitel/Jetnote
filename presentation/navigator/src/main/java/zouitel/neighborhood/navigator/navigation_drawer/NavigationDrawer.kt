@@ -61,6 +61,7 @@ import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.logic.sharApp
 import zouitel.neighborhood.navigator.about_screen.AboutScreen
 import zouitel.neighborhood.navigator.archive_screen.ArchiveScreen
+import zouitel.neighborhood.navigator.trash_screen.TrashScreen
 import zouitel.neighborhood.navigator.tags_screen.HashTagsScreen
 import zouitel.neighborhood.navigator.utils.sound
 import zouitel.neighborhood.search.ui.SearchScreenModel
@@ -135,6 +136,7 @@ fun NavigationDrawer(
                 "SettingsScreen" -> AppScreen.SETTINGS_SCREEN
 //                "WidgetScreen" -> AppScreen.WIDGETS_SCREEN
                 "ArchiveScreen" -> AppScreen.ARCHIVE_SCREEN
+                "TrashScreen" -> AppScreen.TRASH_SCREEN
                 "AboutScreen" -> AppScreen.ABOUT_SCREEN
                 "FeedbackScreen" -> AppScreen.FEEDBACK_AND_HELP
                 else -> uiState.currentScreen
@@ -622,6 +624,35 @@ fun NavigationDrawer(
                         }
                     },
                     selected = uiState.currentScreen == AppScreen.ARCHIVE_SCREEN,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.surface,
+                        selectedTextColor = MaterialTheme.colorScheme.surface,
+                        selectedContainerColor = CommonColors.prime,
+                    )
+                )
+            }
+
+            item {
+                NavigationDrawerItem(
+                    label = {
+                        Text(
+                            text = stringResource(AppScreen.TRASH_SCREEN.screen),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    icon = { Icon(painterResource(INBOX), null) },
+                    onClick = {
+                        if (uiState.currentScreen != AppScreen.TRASH_SCREEN) {
+                            scope.launch {
+                                searchModel.updateCurrentScreen(AppScreen.TRASH_SCREEN)
+                                navigator?.push(TrashScreen())
+                                drawerState.close()
+                            }
+                        } else {
+                            scope.launch { drawerState.close() }
+                        }
+                    },
+                    selected = uiState.currentScreen == AppScreen.TRASH_SCREEN,
                     colors = NavigationDrawerItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.surface,
                         selectedTextColor = MaterialTheme.colorScheme.surface,
