@@ -212,7 +212,31 @@ class MainScreen: Screen {
                                 searchModel = searchModel,
                                 dataModel = dataModel,
                                 noteAndTagModel = noteAndTagModel,
-                                tagModel = tagModel
+                                tagModel = tagModel,
+                                onArchive = { selected ->
+                                    val notesToArchive = selected.distinctBy(Data::uid)
+                                    notesToArchive.forEach { note ->
+                                        dataModel.sendAction(Action.Archive(note.uid))
+                                    }
+                                    scope.launch {
+                                        snackbarState.currentSnackbarData?.dismiss()
+                                        val message = if (notesToArchive.size == 1) {
+                                            "${notesToArchive.single().title} archived"
+                                        } else {
+                                            "${notesToArchive.size} notes archived"
+                                        }
+                                        val result = snackbarState.showSnackbar(
+                                            message = message,
+                                            actionLabel = "Undo",
+                                            duration = SnackbarDuration.Long
+                                        )
+                                        if (result == SnackbarResult.ActionPerformed) {
+                                            notesToArchive.forEach { note ->
+                                                dataModel.sendAction(Action.Rollback(note.uid))
+                                            }
+                                        }
+                                    }
+                                }
                             ) {
                                 val notesToDelete = it.distinctBy(Data::uid)
                                 notesToDelete.forEach { note ->
