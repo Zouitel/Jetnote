@@ -1,9 +1,6 @@
 package zouitel.neighborhood.repository.model
 
 import androidx.annotation.Keep
-import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_BOOLEAN
-import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_INT
-import zouitel.neighborhood.domain.utils.ModelConstants.DEFAULT_TXT
 
 @Keep
 data class Data(
@@ -20,5 +17,6 @@ data class Data(
     val blocks: String,
     val medias: String,
     val audios: String,
-    val reminders: String
+    val reminders: String,
+    val deletedAt: Long? = null
 )
