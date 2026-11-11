@@ -26,10 +26,10 @@ interface DataDao {
     @Query("UPDATE $TABLE_NAME SET ARCHIVED = 0 WHERE UUID = :uid AND DELETED_AT IS NULL")
     suspend fun rollback(uid: String)
 
-    @Query("UPDATE $TABLE_NAME SET DELETED_AT = :deletedAt, ARCHIVED = 0 WHERE UUID = :uid AND DELETED_AT IS NULL")
+    @Query("UPDATE $TABLE_NAME SET DELETED_AT = :deletedAt WHERE UUID = :uid AND DELETED_AT IS NULL")
     suspend fun moveToTrash(uid: String, deletedAt: Long)
 
-    @Query("UPDATE $TABLE_NAME SET DELETED_AT = NULL, ARCHIVED = 0 WHERE UUID = :uid AND USER_UID = :userUid AND DELETED_AT IS NOT NULL")
+    @Query("UPDATE $TABLE_NAME SET DELETED_AT = NULL WHERE UUID = :uid AND USER_UID = :userUid AND DELETED_AT IS NOT NULL")
     suspend fun restoreFromTrash(uid: String, userUid: String)
 
     @Query("DELETE FROM $TABLE_NAME WHERE UUID = :uid AND USER_UID = :userUid AND DELETED_AT IS NOT NULL")
