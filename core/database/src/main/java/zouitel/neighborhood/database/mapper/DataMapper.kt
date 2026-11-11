@@ -20,7 +20,8 @@ class DataMapper {
         blocks = data.blocks,
         medias = data.medias,
         audios = data.audios,
-        reminders = data.reminders
+        reminders = data.reminders,
+        deletedAt = data.deletedAt
     )
 
     fun fromRepo(data: OutData) = Data(
@@ -37,6 +38,7 @@ class DataMapper {
         blocks = data.blocks,
         medias = data.medias,
         audios = data.audios,
-        reminders = data.reminders
+        reminders = data.reminders,
+        deletedAt = data.deletedAt
     )
 }
