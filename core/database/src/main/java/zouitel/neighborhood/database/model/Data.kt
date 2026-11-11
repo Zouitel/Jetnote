@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import zouitel.neighborhood.database.model.Data.Companion.TABLE_NAME
 
-@Entity(TABLE_NAME, [Index("user_uid")])
+@Entity(TABLE_NAME, [Index("user_uid"), Index("deleted_at")])
 data class Data(
     @PrimaryKey(false)
     @ColumnInfo("uuid") val uid: String,
@@ -22,7 +22,8 @@ data class Data(
     @ColumnInfo("blocks", defaultValue = "[]") val blocks: String,
     @ColumnInfo("medias", defaultValue = "[]") val medias: String,
     @ColumnInfo("audios", defaultValue = "[]") val audios: String,
-    @ColumnInfo("reminders", defaultValue = "[]") val reminders: String
+    @ColumnInfo("reminders", defaultValue = "[]") val reminders: String,
+    @ColumnInfo("deleted_at") val deletedAt: Long? = null
 ) {
     companion object {
         const val TABLE_NAME = "note_data_table"
