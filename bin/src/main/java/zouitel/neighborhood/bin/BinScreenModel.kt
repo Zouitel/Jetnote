@@ -2,16 +2,16 @@ package zouitel.neighborhood.bin
 
 import android.app.Application
 import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy.KEEP
+import androidx.work.ExistingPeriodicWorkPolicy.KEEP
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import cafe.adriel.voyager.core.model.ScreenModel
 import zouitel.neighborhood.bin.worker.BinWorker
+import java.util.concurrent.TimeUnit
 
 class BinScreenModel(application: Application): ScreenModel {
-
-    private var workManager = WorkManager.getInstance(application)
+    private val workManager = WorkManager.getInstance(application)
 
     fun initBinWorker() {
         val constraints = Constraints.Builder()
@@ -19,11 +19,11 @@ class BinScreenModel(application: Application): ScreenModel {
             .setRequiresStorageNotLow(true)
             .build()
 
-        val request = OneTimeWorkRequestBuilder<BinWorker>()
+        val request = PeriodicWorkRequestBuilder<BinWorker>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
             .build()
 
-        workManager.enqueueUniqueWork(WORK_NAME, KEEP, request)
+        workManager.enqueueUniquePeriodicWork(WORK_NAME, KEEP, request)
     }
 
     companion object {
