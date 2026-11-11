@@ -16,6 +16,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -80,6 +81,7 @@ import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.Data
+import zouitel.neighborhood.workspace.importer.NoteImportScreen
 import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 
@@ -254,6 +256,12 @@ class MainScreen: Screen {
                                     OpenDrawer(settingsModel, drawerState)
                                 },
                                 actions = {
+                                    IconButton(onClick = { navigator.push(NoteImportScreen()) }) {
+                                        Icon(
+                                            painter = painterResource(CommonIcons.UPLOAD_CLOUD),
+                                            contentDescription = "Import notes"
+                                        )
+                                    }
                                     user?.let {
                                         Row {
                                             AsyncImage(
