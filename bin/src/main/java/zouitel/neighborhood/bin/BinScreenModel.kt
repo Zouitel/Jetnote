@@ -3,7 +3,9 @@ package zouitel.neighborhood.bin
 import android.app.Application
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy.KEEP
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import cafe.adriel.voyager.core.model.ScreenModel
@@ -19,14 +21,21 @@ class BinScreenModel(application: Application): ScreenModel {
             .setRequiresStorageNotLow(true)
             .build()
 
-        val request = PeriodicWorkRequestBuilder<BinWorker>(1, TimeUnit.DAYS)
+        // Run a cleanup when the app next goes to the background.
+        val immediate = OneTimeWorkRequestBuilder<BinWorker>()
             .setConstraints(constraints)
             .build()
+        workManager.enqueueUniqueWork(IMMEDIATE_WORK_NAME, ExistingWorkPolicy.KEEP, immediate)
 
-        workManager.enqueueUniquePeriodicWork(WORK_NAME, KEEP, request)
+        // Keep a daily sweep scheduled so expired notes are purged while the app is closed.
+        val periodic = PeriodicWorkRequestBuilder<BinWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .build()
+        workManager.enqueueUniquePeriodicWork(WORK_NAME, KEEP, periodic)
     }
 
     companion object {
         const val WORK_NAME = "unique_bin_work"
+        const val IMMEDIATE_WORK_NAME = "unique_bin_work_immediate"
     }
 }
