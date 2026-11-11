@@ -9,9 +9,9 @@ import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
 import org.xmlpull.v1.XmlPullParser
 import zouitel.neighborhood.markdown.core.Block
-import zouitel.neighborhood.workspace.model.Data
 import java.util.Locale
 import java.util.zip.ZipInputStream
+import java.io.ByteArrayInputStream
 
 /**
  * Extracts text from portable note formats without granting broad storage access.
@@ -80,7 +80,7 @@ object NoteImportParser {
     private fun readPdf(context: Context, uri: Uri): String {
         PDFBoxResourceLoader.init(context.applicationContext)
         return context.contentResolver.openInputStream(uri)?.use { input ->
-            val document = PDDocument.load(input)
+            val document = PDDocument.load(ByteArrayInputStream(readBounded(input)))
             document.use { PDFTextStripper().getText(it) }
         } ?: error("Unable to open the selected PDF.")
     }
@@ -246,11 +246,11 @@ object NoteImportParser {
                     !value.matches(Regex("\\d+")) &&
                     !value.contains("-->")
             }
-            lines.joinToString(" ").trim().takeIf(String::isNotBlank)?.let(Block::paragraph)
+            lines.joinToString(" ").trim().takeIf(String::isNotBlank)?.let { Block.paragraph(it) }
         }
 
     private fun paragraphBlocks(content: String): List<Block> = content
         .replace("\r\n", "\n")
         .split(Regex("\\n\\s*\\n"))
-        .mapNotNull { it.trim().takeIf(String::isNotBlank)?.let(Block::paragraph) }
+        .mapNotNull { it.trim().takeIf(String::isNotBlank)?.let { Block.paragraph(it) } }
 }
