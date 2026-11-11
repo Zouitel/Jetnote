@@ -120,7 +120,7 @@ class TrashScreen : Screen {
                 confirmButton = {
                     TextButton(onClick = {
                         model.deletePermanently(note)
-                        permanentlyDeleteUid = null
+                        permanentlyDeleteNote = null
                     }) { Text("Delete") }
                 },
                 dismissButton = {
