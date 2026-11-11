@@ -137,7 +137,7 @@ class NoteImportScreen : Screen {
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        items(imported, key = { it.fileName }) { note ->
+                        items(imported) { note ->
                             Card(modifier = Modifier.fillMaxWidth()) {
                                 Column(
                                     modifier = Modifier.padding(14.dp),
