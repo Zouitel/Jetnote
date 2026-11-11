@@ -73,8 +73,7 @@ object NoteImportParser {
 
     private fun readText(context: Context, uri: Uri): String =
         context.contentResolver.openInputStream(uri)?.use { input ->
-            val bytes = input.readNBytes(MAX_INPUT_BYTES + 1)
-            require(bytes.size <= MAX_INPUT_BYTES) { "File is larger than 25 MB." }
+            val bytes = readBounded(input)
             bytes.toString(Charsets.UTF_8).removePrefix("\uFEFF")
         } ?: error("Unable to open the selected file.")
 
@@ -180,14 +179,27 @@ object NoteImportParser {
         return values
     }
 
+    private fun readBounded(input: java.io.InputStream): ByteArray {
+        val output = java.io.ByteArrayOutputStream()
+        val buffer = ByteArray(8 * 1024)
+        var total = 0
+        while (true) {
+            val count = input.read(buffer)
+            if (count < 0) break
+            total += count
+            require(total <= MAX_INPUT_BYTES) { "File is larger than 25 MB." }
+            output.write(buffer, 0, count)
+        }
+        return output.toByteArray()
+    }
+
     private fun readZipEntry(context: Context, uri: Uri, entryName: String): String {
         context.contentResolver.openInputStream(uri)?.use { input ->
             ZipInputStream(input).use { zip ->
                 while (true) {
                     val entry = zip.nextEntry ?: break
                     if (entry.name == entryName) {
-                        val bytes = zip.readNBytes(MAX_INPUT_BYTES + 1)
-                        require(bytes.size <= MAX_INPUT_BYTES) { "Document content is larger than 25 MB." }
+                        val bytes = readBounded(zip)
                         return bytes.toString(Charsets.UTF_8)
                     }
                 }
