@@ -19,6 +19,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +31,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import java.text.DateFormat
 import java.util.Date
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +39,10 @@ class TrashScreen : Screen {
     override fun Content() {
         val model = koinScreenModel<TrashScreenModel>()
         val notes by model.notes.collectAsState()
+        val configuration = LocalConfiguration.current
+        val dateFormatter = remember(configuration) {
+            DateFormat.getDateInstance(DateFormat.MEDIUM, configuration.locales[0])
+        }
         var showEmptyConfirmation by remember { mutableStateOf(false) }
         var permanentlyDeleteNote by remember { mutableStateOf<zouitel.neighborhood.workspace.model.Note?>(null) }
 
@@ -79,7 +83,7 @@ class TrashScreen : Screen {
                             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(note.data.title.ifBlank { "Untitled note" }, style = MaterialTheme.typography.titleMedium)
                                 Text(
-                                    "Deleted on ${DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(Date(deletedAt))}",
+                                    "Deleted on ${dateFormatter.format(Date(deletedAt))}",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
