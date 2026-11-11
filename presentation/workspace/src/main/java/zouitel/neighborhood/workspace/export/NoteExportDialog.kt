@@ -59,7 +59,7 @@ fun NoteExportDialog(
                 runCatching {
                     withContext(Dispatchers.IO) {
                         context.contentResolver.openOutputStream(uri)?.use { it.write(document.bytes) }
-                            ?: error("Unable to open the selected destination.")
+                            ?: throw IllegalStateException("Unable to open the selected destination.")
                     }
                 }.onSuccess {
                     onExported(document.fileName)
