@@ -28,6 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import java.text.DateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,6 +78,11 @@ class TrashScreen : Screen {
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(note.data.title.ifBlank { "Untitled note" }, style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    "Deleted on ${DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(Date(deletedAt))}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
                                 Text(
                                     if (remaining == 0L) "Expires today" else "$remaining days left",
                                     style = MaterialTheme.typography.bodySmall,
