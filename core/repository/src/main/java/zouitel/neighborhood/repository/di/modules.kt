@@ -79,6 +79,10 @@ val localRepoLazyModule = lazyModule {
     factoryOf(DataUseCase::Archive)
     factoryOf(DataUseCase::Rollback)
     factoryOf(DataUseCase::Delete)
+    factoryOf(DataUseCase::RestoreFromTrash)
+    factoryOf(DataUseCase::PermanentDelete)
+    factoryOf(DataUseCase::PurgeExpired)
+    factoryOf(DataUseCase::EmptyTrash)
     factoryOf(DataUseCase::Erase)
     factoryOf(DataUseCase::SweepDrafts)
     factoryOf(DataUseCase::ReorderNote)
@@ -105,6 +109,7 @@ val localRepoLazyModule = lazyModule {
     factoryOf(NoteUseCase::ObserveByOldest)
     factoryOf(NoteUseCase::ObserveByNewest)
     factoryOf(NoteUseCase::ObserveArchives)
+    factoryOf(NoteUseCase::ObserveTrash)
     factoryOf(NoteUseCase::ObserveByPriority)
     factoryOf(NoteUseCase::Cleanup)
 
