@@ -28,9 +28,6 @@ class TrashScreenModel(
 
     fun observe() {
         screenModelScope.launch {
-            auth.addAuthStateListener { firebaseAuth ->
-                // The screen is also refreshed by initialize() when account changes.
-            }
             auth.currentUser?.uid?.let { uid ->
                 observeTrash(uid).collectLatest { values ->
                     _notes.value = mapper.fromDomain(values)
