@@ -124,7 +124,7 @@ class TrashScreen : Screen {
                     }) { Text("Delete") }
                 },
                 dismissButton = {
-                    TextButton(onClick = { permanentlyDeleteUid = null }) { Text("Cancel") }
+                    TextButton(onClick = { permanentlyDeleteNote = null }) { Text("Cancel") }
                 }
             )
         }
