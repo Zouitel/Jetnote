@@ -11,7 +11,6 @@ import zouitel.neighborhood.markdown.core.BlockType
 import zouitel.neighborhood.workspace.model.Data
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.util.Locale
 import java.util.UUID
 import java.util.zip.ZipEntry
@@ -76,8 +75,13 @@ object NoteExporter {
         }
     }.trimEnd()
 
-    fun textDocument(note: Data): ExportDocument =
-        document(note, Format.TEXT, plainText(note).toByteArray(Charsets.UTF_8))
+    fun textDocument(note: Data): ExportDocument {
+        val content = buildString {
+            if (note.title.isNotBlank()) appendLine(note.title).appendLine()
+            append(plainText(note))
+        }
+        return document(note, Format.TEXT, content.toByteArray(Charsets.UTF_8))
+    }
 
     fun markdownDocument(note: Data): ExportDocument =
         document(note, Format.MARKDOWN, markdown(note).toByteArray(Charsets.UTF_8))
@@ -230,6 +234,7 @@ object NoteExporter {
     fun subtitles(note: Data, wordsPerMinute: Int = 150): ExportDocument {
         require(wordsPerMinute in 80..240)
         val text = listOf(note.title, plainText(note)).filter(String::isNotBlank).joinToString(". ")
+        require(text.isNotBlank()) { "There is no text to subtitle." }
         val words = text.split(Regex("\\s+")).filter(String::isNotBlank)
         val chunks = words.chunked(10)
         var elapsedMs = 0L
