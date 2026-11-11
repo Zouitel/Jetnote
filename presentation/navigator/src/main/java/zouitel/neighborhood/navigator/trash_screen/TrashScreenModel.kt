@@ -4,10 +4,13 @@ import androidx.compose.runtime.Stable
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import zouitel.neighborhood.domain.usecase.DataUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
@@ -28,23 +31,39 @@ class TrashScreenModel(
 
     fun observe() {
         screenModelScope.launch {
-            auth.currentUser?.uid?.let { uid ->
-                observeTrash(uid).collectLatest { values ->
-                    _notes.value = mapper.fromDomain(values)
+            callbackFlow {
+                val listener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+                    trySend(firebaseAuth.currentUser?.uid)
                 }
-            } ?: run { _notes.value = emptyList() }
+                auth.addAuthStateListener(listener)
+                trySend(auth.currentUser?.uid)
+                awaitClose { auth.removeAuthStateListener(listener) }
+            }.distinctUntilChanged().collectLatest { userUid ->
+                if (userUid == null) {
+                    _notes.value = emptyList()
+                } else {
+                    observeTrash(userUid).collect { values ->
+                        _notes.value = mapper.fromDomain(values)
+                    }
+                }
+            }
         }
     }
 
-    fun restore(uid: String) {
-        screenModelScope.launch { restore.invoke(uid) }
+    fun restore(note: Note) {
+        screenModelScope.launch {
+            restore(note.data.uid, note.data.userUid)
+        }
     }
 
-    fun deletePermanently(uid: String) {
-        screenModelScope.launch { permanentDelete(uid) }
+    fun deletePermanently(note: Note) {
+        screenModelScope.launch {
+            permanentDelete(note.data.uid, note.data.userUid)
+        }
     }
 
     fun empty() {
-        screenModelScope.launch { emptyTrash() }
+        val userUid = auth.currentUser?.uid ?: return
+        screenModelScope.launch { emptyTrash(userUid) }
     }
 }
