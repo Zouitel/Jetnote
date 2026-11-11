@@ -9,7 +9,6 @@ import org.koin.dsl.module
 
 val binModule = module {
     factoryOf(::BinScreenModel)
-
     worker {
         BinWorker(
             androidContext(),
@@ -17,6 +16,7 @@ val binModule = module {
             get(),
             get(),
             deleteNoteAndTagDrafts = get(),
+            purgeExpiredNotes = get(),
             ioDispatcher = get()
         )
     }
