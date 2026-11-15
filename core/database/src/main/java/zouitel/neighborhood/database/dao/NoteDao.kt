@@ -9,24 +9,31 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @get: Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
+    @get:Transaction
+    @get:Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
     val observeAll: Flow<List<Note>>
 
-    @get: Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
+    @get:Transaction
+    @get:Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
     val getAll: List<Note>
 
+    @Transaction
     @Query("SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND ARCHIVED = 0 AND DELETED_AT IS NULL ORDER BY POSITION ASC")
     fun observeByDefault(userUid: String): Flow<List<Note>>
 
+    @Transaction
     @Query("SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND ARCHIVED = 0 AND DELETED_AT IS NULL ORDER BY DATE DESC")
     fun observeByNewest(userUid: String): Flow<List<Note>>
 
+    @Transaction
     @Query("SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND ARCHIVED = 0 AND DELETED_AT IS NULL ORDER BY DATE ASC")
     fun observeByOldest(userUid: String): Flow<List<Note>>
 
+    @Transaction
     @Query("SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND ARCHIVED = 0 AND DELETED_AT IS NULL ORDER BY TITLE ASC")
     fun observeByName(userUid: String): Flow<List<Note>>
 
+    @Transaction
     @Query("""
         SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND ARCHIVED = 0 AND DELETED_AT IS NULL ORDER BY CASE
             WHEN PRIORITY LIKE 4 THEN 1
@@ -38,9 +45,11 @@ interface NoteDao {
     """)
     fun observeByPriority(userUid: String): Flow<List<Note>>
 
+    @Transaction
     @Query("SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND ARCHIVED = 1 AND DELETED_AT IS NULL")
     fun observeArchives(userUid: String): Flow<List<Note>>
 
+    @Transaction
     @Query("SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND DELETED_AT IS NOT NULL ORDER BY DELETED_AT DESC")
     fun observeTrash(userUid: String): Flow<List<Note>>
 
