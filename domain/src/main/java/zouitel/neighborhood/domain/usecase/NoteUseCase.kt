@@ -9,6 +9,9 @@ sealed class NoteUseCase {
     data class GetAll(private val repo: NoteRepository) : NoteUseCase() {
         operator fun invoke() = repo.getAll
     }
+    class Search(private val repo: NoteRepository) : NoteUseCase() {
+        operator fun invoke(userUid: String, query: String) = repo.search(userUid, query)
+    }
     class ObserveByDefault(private val repo: NoteRepository) : NoteUseCase() {
         operator fun invoke(userUid: String) = repo.observeByDefault(userUid)
     }
