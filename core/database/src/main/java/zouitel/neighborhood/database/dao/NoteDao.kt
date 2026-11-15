@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @get:Transaction
-    @get:Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
-    val observeAll: Flow<List<Note>>
+    @Transaction
+    @Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
+    fun observeAll(): Flow<List<Note>>
 
-    @get:Transaction
-    @get:Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
-    val getAll: List<Note>
+    @Transaction
+    @Query("SELECT * FROM $TABLE_NAME WHERE DELETED_AT IS NULL")
+    fun getAll(): List<Note>
 
     @Transaction
     @Query("SELECT * FROM $TABLE_NAME WHERE USER_UID = :userUid AND ARCHIVED = 0 AND DELETED_AT IS NULL ORDER BY POSITION ASC")
