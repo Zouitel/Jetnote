@@ -7,12 +7,12 @@ import androidx.compose.runtime.mutableStateListOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -123,9 +123,8 @@ class SearchScreenModel(
      * Programmatically changes the text shown in the search field.
      *
      * Used when a chip is tapped to show a display label ("Links", "Audios" …).
-     * The Composable's [derivedStateOf] only uses [fieldState].text for filtering
-     * when [UiState.typeState] is [SearchTypes.Text], so setting it to a chip
-     * label does NOT affect type-based filtering.
+     * Text-mode queries are sent to the indexed search use case. Other search
+     * modes continue to use their existing typed filters.
      */
     /** Debounced, indexed full-text search. Results are scoped to the active account. */
     fun updateTextSearch(query: String) {
