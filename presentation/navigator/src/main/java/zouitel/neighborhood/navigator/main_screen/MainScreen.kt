@@ -360,6 +360,7 @@ class MainScreen: Screen {
                 ) { paddingValues ->
                     NavigableListDetailPaneScaffold(
                         navigator = adaptiveNavigator,
+                        modifier = Modifier.fillMaxSize().padding(paddingValues),
                         listPane = {
                             AnimatedPane {
                                 PullToRefreshBox(
