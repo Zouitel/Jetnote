@@ -15,6 +15,8 @@ class NoteRepositoryImpl(
         get() = dataSource.observeAll.map { mapper.toDomain(it) }
     override val getAll: List<OutNote>
         get() = dataSource.getAll.map { mapper.toDomain(it) }
+    override fun search(userUid: String, query: String) =
+        dataSource.search(userUid, query).map { mapper.toDomain(it) }
     override fun observeByDefault(userUid: String) =
         dataSource.observeByDefault(userUid).map { mapper.toDomain(it) }
     override fun observeByName(userUid: String) =
