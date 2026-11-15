@@ -15,6 +15,20 @@ class NoteDataSourceImpl(
         get() = dao.observeAll.map { mapper.toRepo(it) }
     override val getAll: List<OutNote>
         get() = dao.getAll.map { mapper.toRepo(it) }
+    override fun search(userUid: String, query: String): Flow<List<OutNote>> {
+        val tokens = Regex("[\\p{L}\\p{N}_]+")
+            .findAll(query)
+            .map { it.value }
+            .distinct()
+            .toList()
+        if (tokens.isEmpty()) return kotlinx.coroutines.flow.flowOf(emptyList())
+
+        val matchQuery = tokens.joinToString(" AND ") { "\"$it\"*" }
+        val titleQuery = tokens.joinToString(" AND ") { "title:\"$it\"*" }
+        return dao.observeSearch(userUid, matchQuery, titleQuery)
+            .map { mapper.toRepo(it) }
+    }
+
     override fun observeByDefault(userUid: String) =
         dao.observeByDefault(userUid).map { mapper.toRepo(it) }
     override fun observeByName(userUid: String) =
