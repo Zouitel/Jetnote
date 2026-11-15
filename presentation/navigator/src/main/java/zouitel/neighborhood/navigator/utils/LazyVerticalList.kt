@@ -37,7 +37,8 @@ fun LazyVerticalList(
     settingsModel: SettingsScreenModel,
     audioModel: AudioScreenModel,
     linkModel: LinkScreenModel,
-    searchModel: SearchScreenModel
+    searchModel: SearchScreenModel,
+    onNoteClick: ((Note) -> Unit)? = null
 ) {
     val haptic = LocalHapticFeedback.current
 
@@ -78,6 +79,7 @@ fun LazyVerticalList(
                     searchModel = searchModel,
                     note = item,
                     isDragging = isDragging,
+                    onNoteClick = onNoteClick,
                     dragModifier = Modifier
                         .draggableHandle()
                         .semantics {
