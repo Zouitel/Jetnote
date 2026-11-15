@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -26,12 +27,19 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.LoadingIndicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +58,7 @@ import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.AsyncImage
@@ -81,6 +90,7 @@ import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.provider.SharedScreen
+import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -105,7 +115,7 @@ class MainScreen: Screen {
     }
 
     @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3AdaptiveApi::class)
     @Composable
     private fun Main(
         mainModel: MainScreenModel,
@@ -133,6 +143,7 @@ class MainScreen: Screen {
         val snackbarState = remember { SnackbarHostState() }
         var searchExpandRequest by remember { mutableStateOf<Any?>(null) }
         val scope = rememberCoroutineScope()
+        val adaptiveNavigator = rememberListDetailPaneScaffoldNavigator<String>()
 
         LaunchedEffect(isDownloading, syncState) {
             // When downloading stops
@@ -148,7 +159,7 @@ class MainScreen: Screen {
 
         // to observer notes while changing immediately.
         BackHandler(
-            enabled = !uiState.isSelection
+            enabled = !uiState.isSelection && adaptiveNavigator.currentDestination?.contentKey == null
         ) {
             scope.launch {
                 if (drawerState.isOpen) drawerState.close()
@@ -263,6 +274,27 @@ class MainScreen: Screen {
                                     }
                                 }
                             }
+                        } else if (adaptiveNavigator.currentDestination?.contentKey != null) {
+                            val selectedTitle = notes.firstOrNull {
+                                it.data.uid == adaptiveNavigator.currentDestination?.contentKey
+                            }?.data?.title.orEmpty()
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            ) {
+                                TextButton(
+                                    onClick = {
+                                        scope.launch { adaptiveNavigator.navigateBack() }
+                                    }
+                                ) {
+                                    Text("Back")
+                                }
+                                Text(
+                                    text = selectedTitle,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    maxLines = 1
+                                )
+                            }
                         } else {
                             SearchTopBar(
                                 scrollBehavior = searchBarBehavior,
@@ -302,7 +334,7 @@ class MainScreen: Screen {
                         }
                     },
                     floatingActionButton = {
-                        ExtendedFloatingActionButton(
+                        if (adaptiveNavigator.currentDestination?.contentKey == null) ExtendedFloatingActionButton(
                             text = {
                                 Text(
                                     text = "Compose",
@@ -326,46 +358,84 @@ class MainScreen: Screen {
                         )
                     }
                 ) { paddingValues ->
-                    PullToRefreshBox(
-                        isRefreshing = syncState,
-                        onRefresh = {
-                            syncModel.enqueueSyncProcessing()
-                            syncModel.enqueueDownloadsProcessing()
+                    NavigableListDetailPaneScaffold(
+                        navigator = adaptiveNavigator,
+                        modifier = Modifier.fillMaxSize().padding(paddingValues),
+                        listPane = {
+                            AnimatedPane {
+                                PullToRefreshBox(
+                                    isRefreshing = syncState,
+                                    onRefresh = {
+                                        syncModel.enqueueSyncProcessing()
+                                        syncModel.enqueueDownloadsProcessing()
+                                    },
+                                    contentAlignment = Alignment.TopCenter,
+                                    modifier = Modifier.fillMaxSize(),
+                                    state = refreshState,
+                                    indicator = {
+                                        LoadingIndicator(
+                                            refreshState,
+                                            syncState,
+                                            containerColor = CommonColors.prime,
+                                            color = MaterialTheme.colorScheme.surface
+                                        )
+                                    }
+                                ) {
+                                    val onNoteClick: (zouitel.neighborhood.workspace.model.Note) -> Unit = { note ->
+                                        scope.launch {
+                                            adaptiveNavigator.navigateTo(
+                                                ListDetailPaneScaffoldRole.Detail,
+                                                note.data.uid
+                                            )
+                                        }
+                                    }
+                                    if (settings.layout == CommonConstants.LIST) {
+                                        LazyVerticalList(
+                                            mainModel,
+                                            notes,
+                                            settingsModel,
+                                            audioModel,
+                                            linkModel,
+                                            searchModel,
+                                            onNoteClick
+                                        )
+                                    } else {
+                                        LazyVerticalGrid(
+                                            mainModel,
+                                            notes,
+                                            settingsModel,
+                                            audioModel,
+                                            linkModel,
+                                            searchModel,
+                                            onNoteClick
+                                        )
+                                    }
+                                }
+                            }
                         },
-                        contentAlignment = Alignment.TopCenter,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
-                        state = refreshState,
-                        indicator = {
-                            LoadingIndicator(
-                                refreshState,
-                                syncState,
-                                containerColor = CommonColors.prime,
-                                color = MaterialTheme.colorScheme.surface
-                            )
+                        detailPane = {
+                            AnimatedPane {
+                                val selectedNote = notes.firstOrNull {
+                                    it.data.uid == adaptiveNavigator.currentDestination?.contentKey
+                                }
+                                if (selectedNote != null) {
+                                    key(selectedNote.data.uid) {
+                                        Navigator(WorkplaceScreen(selectedNote.data, false))
+                                    }
+                                } else {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = "Select a note to preview it",
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
                         }
-                    ) {
-                        if (settings.layout == CommonConstants.LIST) {
-                            LazyVerticalList(
-                                mainModel,
-                                notes,
-                                settingsModel,
-                                audioModel,
-                                linkModel,
-                                searchModel
-                            )
-                        } else {
-                            LazyVerticalGrid(
-                                mainModel,
-                                notes,
-                                settingsModel,
-                                audioModel,
-                                linkModel,
-                                searchModel
-                            )
-                        }
-                    }
+                    )
                 }
             }
         }
