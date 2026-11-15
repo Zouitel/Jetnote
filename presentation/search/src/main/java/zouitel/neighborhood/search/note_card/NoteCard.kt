@@ -82,7 +82,8 @@ fun NoteCard(
     searchModel: SearchScreenModel,
     note: Note,
     isDragging: Boolean = false,
-    dragModifier: Modifier = Modifier
+    dragModifier: Modifier = Modifier,
+    onNoteClick: ((Note) -> Unit)? = null
 ) {
     Card(
         settingsModel = settingsModel,
@@ -91,7 +92,8 @@ fun NoteCard(
         noteEntity = note,
         searchModel = searchModel,
         isDragging = isDragging,
-        dragModifier = dragModifier
+        dragModifier = dragModifier,
+        onNoteClick = onNoteClick
     )
 }
 
@@ -104,7 +106,8 @@ private fun Card(
     noteEntity: Note,
     searchModel: SearchScreenModel,
     isDragging: Boolean = false,
-    dragModifier: Modifier = Modifier
+    dragModifier: Modifier = Modifier,
+    onNoteClick: ((Note) -> Unit)? = null
 ) {
     val note = noteEntity.data
     val labels = noteEntity.tags
@@ -140,7 +143,8 @@ private fun Card(
                     }
                 ) {
                     if (uiState.isSelection.not()) {
-                        navigator?.push(WorkplaceScreen(note, false))
+                        if (onNoteClick != null) onNoteClick(noteEntity)
+                        else navigator?.push(WorkplaceScreen(note, false))
                     } else {
                         when {
                             uiState.selectedNotes.contains(note).not() ->
@@ -205,7 +209,10 @@ private fun Card(
                                 MediaType.VIDEO -> SmallVideoPlayer(media.uri.toUri())
                                 MediaType.DOCUMENT -> DocumentThumbnail(
                                     filePath = media.uri,
-                                    onClick = { navigator?.push(WorkplaceScreen(note, false)) },
+                                    onClick = {
+                                        if (onNoteClick != null) onNoteClick(noteEntity)
+                                        else navigator?.push(WorkplaceScreen(note, false))
+                                    },
                                     onLongClick = {}
                                 )
 
