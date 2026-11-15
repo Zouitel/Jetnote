@@ -12,9 +12,9 @@ class NoteDataSourceImpl(
     private val mapper: NoteMapper
 ): NoteDataSource {
     override val observeAll: Flow<List<OutNote>>
-        get() = dao.observeAll.map { mapper.toRepo(it) }
+        get() = dao.observeAll().map { mapper.toRepo(it) }
     override val getAll: List<OutNote>
-        get() = dao.getAll.map { mapper.toRepo(it) }
+        get() = dao.getAll().map { mapper.toRepo(it) }
     override fun search(userUid: String, query: String): Flow<List<OutNote>> {
         val tokens = Regex("[\\p{L}\\p{N}_]+")
             .findAll(query)
