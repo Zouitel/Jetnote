@@ -32,6 +32,7 @@ recyclerview = "1.4.0"
 #Compose.
 compose-bom = "2026.06.01"
 material3 = "1.5.0-alpha25"
+material3Adaptive = "1.3.0"
 compose-constraintlayout = "1.1.1"
 
 #Plugins.
@@ -158,6 +159,9 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "material3Adaptive" }
+material3-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout", version.ref = "material3Adaptive" }
+material3-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "material3Adaptive" }
 compose-material = { group = "androidx.compose.material", name = "material" }
 compose-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "compose-constraintlayout" }
 lifecycle-compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
