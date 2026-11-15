@@ -96,6 +96,7 @@ class SearchScreenModel(
                     _allNotes.value = emptyList()
                     _notesByPriority.value = emptyList()
                 } else {
+                    updateTextSearch(fieldState.text.toString())
                     // collectLatest cancels both previous-user observers before
                     // subscribing to the newly authenticated user's data.
                     coroutineScope {
@@ -161,6 +162,12 @@ class SearchScreenModel(
 
     fun updateSearchType(type: SearchTypes) = screenModelScope.launch {
         _uiState.value = _uiState.value.copy(typeState = type)
+        if (type is SearchTypes.Text) {
+            updateTextSearch(fieldState.text.toString())
+        } else {
+            textSearchJob?.cancel()
+            _textSearchResults.value = emptyList()
+        }
     }
 
     fun updateSearchTag(tag: Tag?) = screenModelScope.launch {
