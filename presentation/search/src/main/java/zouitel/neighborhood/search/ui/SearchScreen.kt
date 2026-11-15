@@ -55,6 +55,7 @@ import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.feedback.reportable
@@ -327,6 +328,7 @@ fun Search(
     val uiState by remember(searchModel, searchModel::uiState).collectAsState()
     val allNotes by remember(searchModel, searchModel::allNotes).collectAsState()
     val notesByPriority by remember(searchModel, searchModel::notesByPriority).collectAsState()
+    val textSearchResults by remember(searchModel, searchModel::textSearchResults).collectAsState()
 
     val audioNotes = remember(allNotes) { allNotes.filter { it.data.audios.isNotEmpty() } }
     val reminderNotes = remember(allNotes) { allNotes.filter { it.data.reminders.isNotEmpty() } }
@@ -344,6 +346,10 @@ fun Search(
         snapshotFlow { searchModel.fieldState.text.toString().trim() }
     }
 
+    LaunchedEffect(queryFlow) {
+        queryFlow.collect(searchModel::updateTextSearch)
+    }
+
     val isActiveSearch by remember(searchModel) {
         combine(searchModel.uiState, queryFlow) { state, query ->
             when (state.typeState) {
@@ -354,11 +360,11 @@ fun Search(
     }.collectAsState(initial = false)
 
     val filteredNotes by remember(searchModel, allNotes, notesByPriority, links) {
-        combine(searchModel.uiState, queryFlow) { state, query ->
+        combine(searchModel.uiState, queryFlow, searchModel.textSearchResults) { state, query, indexedResults ->
             when (val type = state.typeState) {
                 is SearchTypes.Text -> {
                     if (query.isBlank()) emptyList()
-                    else allNotes.filter { it.matchesQuery(query) }
+                    else indexedResults
                 }
 
                 is SearchTypes.Tag -> allNotes.filter { note ->
