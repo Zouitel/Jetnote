@@ -1,6 +1,7 @@
 package zouitel.neighborhood.database.model
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.Fts4
 
 /**
@@ -10,6 +11,7 @@ import androidx.room.Fts4
  * The table is maintained by the 12→13 migration triggers in [Database].
  */
 @Fts4(notIndexed = ["uid"])
+@Entity(tableName = "NoteFts")
 data class NoteFts(
     @ColumnInfo(name = "uid") val uid: String,
     @ColumnInfo(name = "title") val title: String,
