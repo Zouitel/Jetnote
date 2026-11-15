@@ -105,6 +105,7 @@ val localRepoLazyModule = lazyModule {
     factoryOf(NoteUseCase::ObserveAll)
     factoryOf(NoteUseCase::GetAll)
     factoryOf(NoteUseCase::ObserveByDefault)
+    factoryOf(NoteUseCase::Search)
     factoryOf(NoteUseCase::ObserveByName)
     factoryOf(NoteUseCase::ObserveByOldest)
     factoryOf(NoteUseCase::ObserveByNewest)
