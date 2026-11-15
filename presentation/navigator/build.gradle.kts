@@ -33,6 +33,9 @@ dependencies {
 
     //Material.
     implementation(libs.compose.material)
+    implementation(libs.material3.adaptive)
+    implementation(libs.material3.adaptive.layout)
+    implementation(libs.material3.adaptive.navigation)
 
     //LiveData.
     implementation(libs.lifecycle.livedata)
