@@ -62,7 +62,6 @@ import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.domain.utils.Action
-import zouitel.neighborhood.markdown.core.BlockContent
 import zouitel.neighborhood.search.note_card.NoteCard
 import zouitel.neighborhood.search.utils.SearchTypes
 import zouitel.neighborhood.search.utils.SelectionTopBar
