@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -22,6 +23,10 @@ android {
         versionName = "10.7.36"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
 
     buildTypes {
