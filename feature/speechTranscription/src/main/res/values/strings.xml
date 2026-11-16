@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="speech_transcription_title">Speech &amp; Transcription</string>
+    <string name="speech_transcription_title" translatable="false">Speech &amp; Transcription</string>
 </resources>
