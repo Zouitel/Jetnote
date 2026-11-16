@@ -153,7 +153,7 @@ class BackupArchiveManager(
                     val target = File(context.filesDir, name)
                     val replacement = File(context.filesDir, "$name.restore")
                     replacement.deleteRecursively()
-                    check(archivedRoot.copyRecursively(replacement, overwrite = true))
+                    archivedRoot.copyRecursively(replacement, overwrite = true)
                     target.deleteRecursively()
                     check(replacement.renameTo(target)) { "Unable to restore $name." }
                 }
