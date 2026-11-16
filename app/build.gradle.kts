@@ -38,6 +38,10 @@ android {
 
         debug {
             isDebuggable = false
+            // The Baseline Profile plugin publishes the benchmark profile against
+            // the release build type. Allow the debug profile merge configuration
+            // to consume that release baseline-profile variant.
+            matchingFallbacks += listOf("release")
         }
     }
 
@@ -91,7 +95,7 @@ dependencies {
     implementation(libs.firebase.config)
 
     //RevenueCat.
-//    implementation(libs.revenuecat)
-//    implementation(libs.revenuecat.ui)
-//    implementation("com.android.billingclient:billing:8.3.0")
+    //    implementation(libs.revenuecat)
+    //    implementation(libs.revenuecat.ui)
+    //    implementation("com.android.billingclient:billing:8.3.0")
 }
