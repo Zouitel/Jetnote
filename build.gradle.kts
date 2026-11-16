@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.baselineprofile) apply false
+    alias(libs.plugins.roborazzi) apply false
 }
 
 buildscript {
