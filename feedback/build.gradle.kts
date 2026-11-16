@@ -4,12 +4,27 @@ plugins {
     alias(libs.plugins.zouitel.composeVoyager)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.roborazzi)
 }
 android {
     namespace = "zouitel.neighborhood.feedback"
 }
 
+android {
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
 dependencies {
+    testImplementation(platform(libs.compose.bom))
+    testImplementation(libs.ui.test.junit4)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.junit)
+    testImplementation("io.mockk:mockk:1.14.5")
+
     implementation(libs.androidx.foundation.layout)
     //Models.
     implementation(projects.domain)
