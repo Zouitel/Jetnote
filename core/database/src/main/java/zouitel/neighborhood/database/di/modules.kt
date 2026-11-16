@@ -39,7 +39,8 @@ import zouitel.neighborhood.repository.datasource.ProviderDatasource
 import zouitel.neighborhood.repository.datasource.TagDataSource
 import zouitel.neighborhood.security.encrition.FileEncryption
 
-val databaseLazyModule = lazyModule {\n    single { BackupArchiveManager(androidContext(), get()) }
+val databaseLazyModule = lazyModule {
+    single { BackupArchiveManager(androidContext(), get()) }
     //DataSource.
     singleOf(::DataDataSourceImpl) bind DataDataSource::class
     singleOf(::NoteDataSourceImpl) bind NoteDataSource::class
