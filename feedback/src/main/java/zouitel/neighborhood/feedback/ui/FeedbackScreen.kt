@@ -99,7 +99,7 @@ class FeedbackScreen : Screen {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
-    private fun ReportIssue(feedbackModel: FeedbackScreenModel) {
+    internal fun ReportIssue(feedbackModel: FeedbackScreenModel) {
         val keyboardManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
         val bottomNav = LocalBottomSheetNavigator.current
