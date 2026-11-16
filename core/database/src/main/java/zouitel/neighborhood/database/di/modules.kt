@@ -8,6 +8,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.lazyModule
 import zouitel.neighborhood.database.database.Database
+import zouitel.neighborhood.database.backup.BackupArchiveManager
 import zouitel.neighborhood.database.database.TagsCallback
 import zouitel.neighborhood.database.datasourceImpl.AssistantDatasourceImpl
 import zouitel.neighborhood.database.datasourceImpl.ConversationDatasourceImpl
@@ -39,6 +40,7 @@ import zouitel.neighborhood.repository.datasource.TagDataSource
 import zouitel.neighborhood.security.encrition.FileEncryption
 
 val databaseLazyModule = lazyModule {
+    single { BackupArchiveManager(androidContext(), get()) }
     //DataSource.
     singleOf(::DataDataSourceImpl) bind DataDataSource::class
     singleOf(::NoteDataSourceImpl) bind NoteDataSource::class
