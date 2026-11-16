@@ -7,6 +7,8 @@ import androidx.benchmark.macro.MacrobenchmarkRule
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import androidx.test.filters.LargeTest
 import org.junit.Rule
 import org.junit.Test
@@ -64,6 +66,7 @@ class StartupBenchmarks {
         setupBlock = { pressHome() }
     ) {
         startActivityAndWait()
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         repeat(5) {
             device.swipe(
                 device.displayWidth / 2,
