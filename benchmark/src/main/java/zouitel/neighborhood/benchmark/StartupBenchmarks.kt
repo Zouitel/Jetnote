@@ -1,5 +1,6 @@
 package zouitel.neighborhood.benchmark
 
+import androidx.benchmark.macro.BaselineProfileMode
 import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.FrameTimingMetric
 import androidx.benchmark.macro.MacrobenchmarkRule
@@ -22,6 +23,18 @@ class StartupBenchmarks {
         packageName = TARGET_PACKAGE,
         metrics = listOf(StartupTimingMetric()),
         compilationMode = CompilationMode.None(),
+        iterations = 10,
+        startupMode = StartupMode.COLD,
+        setupBlock = { pressHome() }
+    ) {
+        startActivityAndWait()
+    }
+
+    @Test
+    fun coldStartupWithBaselineProfile() = benchmarkRule.measureRepeated(
+        packageName = TARGET_PACKAGE,
+        metrics = listOf(StartupTimingMetric()),
+        compilationMode = CompilationMode.Partial(BaselineProfileMode.Require),
         iterations = 10,
         startupMode = StartupMode.COLD,
         setupBlock = { pressHome() }
