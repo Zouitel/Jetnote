@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("io.github.takahirom.roborazzi:roborazzi-gradle-plugin:1.46.0")
+        classpath("io.github.takahirom.roborazzi:roborazzi-gradle-plugin:1.46.1")
     }
 }
 
