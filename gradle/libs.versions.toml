@@ -274,4 +274,3 @@ zouitel-composeVoyager = { id = "zouitel.compose.voyager", version = "unspecifie
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServices" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
 android-test = { id = "com.android.test", version.ref = "agp" }
-androidDynamicFeature = { id = "com.android.dynamic-feature", version.ref = "agp" }
