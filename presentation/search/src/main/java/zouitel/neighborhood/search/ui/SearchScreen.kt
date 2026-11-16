@@ -505,9 +505,3 @@ private fun SectionTitle(text: String) {
     )
 }
 
-private fun Note.matchesQuery(query: String): Boolean {
-    if (data.title.contains(query, ignoreCase = true)) return true
-    return data.blocks.any { block ->
-        (block.content as? BlockContent.Text)?.text?.contains(query, ignoreCase = true) == true
-    }
-}
