@@ -41,14 +41,14 @@ android {
         }
     }
 
-    baselineProfile {
-        automaticGenerationDuringBuild = false
-        saveInSrc = true
-    }
-
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions.optIn.add("org.koin.core.annotation.KoinExperimentalAPI")
     }
+}
+
+baselineProfile {
+    automaticGenerationDuringBuild = false
+    saveInSrc = true
 }
 
 dependencies {
