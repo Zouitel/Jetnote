@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.plugin)
     //Modules.
     implementation(projects.core.datastore)
     implementation(projects.core.database)
@@ -30,6 +31,7 @@ dependencies {
     api(projects.feedback)
     api(projects.presentation.account)
     implementation(projects.security)
+    implementation(libs.koin.compose)
 
     //Material.
     implementation(libs.compose.material)

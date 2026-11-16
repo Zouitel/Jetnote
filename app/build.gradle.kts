@@ -11,6 +11,8 @@ plugins {
 }
 
 android {
+    dynamicFeatures += setOf(":feature:speechTranscription")
+
     namespace = "zouitel.neighborhood.jetnote"
     compileSdk = 37
 
@@ -36,13 +38,7 @@ android {
             isDebuggable = false
         }
 
-        debug {
-            isDebuggable = false
-            // The Baseline Profile plugin publishes the benchmark profile against
-            // the release build type. Allow the debug profile merge configuration
-            // to consume that release baseline-profile variant.
-            matchingFallbacks += listOf("release")
-        }
+
     }
 
     tasks.withType<KotlinCompile>().configureEach {
@@ -56,9 +52,7 @@ baselineProfile {
 }
 
 dependencies {
-    baselineProfile(project(":benchmark"))
-    implementation(libs.androidx.profileinstaller)
-
+    implementation(projects.core.plugin)
     //Modules.
     implementation(projects.core.database)
     implementation(projects.core.datastore)

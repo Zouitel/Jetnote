@@ -63,3 +63,6 @@ include(":services:shortcut")
 include(":services:tile")
 include(":security")
 include(":common:markdown")
+
+include(":core:plugin")
+include(":feature:speechTranscription")

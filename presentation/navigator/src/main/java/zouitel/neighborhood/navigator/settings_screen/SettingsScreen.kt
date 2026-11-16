@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -68,6 +69,7 @@ import zouitel.neighborhood.ui.CommonTopAppBar
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import zouitel.neighborhood.logic.R as LR
+import kotlinx.coroutines.launch
 
 class SettingsScreen: Screen {
 
@@ -111,6 +113,7 @@ class SettingsScreen: Screen {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val topAppBarState = rememberTopAppBarState()
         val snackbarState = remember { SnackbarHostState() }
+        val scope = rememberCoroutineScope()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
         val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
@@ -184,6 +187,12 @@ class SettingsScreen: Screen {
                                     }
                                 ) {
                                     bottomNav.show(SyncScreen())
+                                }
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                BackupRestorePreference { message ->
+                                    scope.launch { snackbarState.showSnackbar(message) }
                                 }
                             }
                             item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
