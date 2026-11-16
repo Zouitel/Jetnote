@@ -2,7 +2,6 @@ package zouitel.neighborhood.database.backup
 
 import android.content.Context
 import android.net.Uri
-import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -17,7 +16,6 @@ import java.util.UUID
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
-import kotlin.math.min
 
 /**
  * Creates and restores portable Jetnote archives through caller-provided SAF Uris.
@@ -132,10 +130,10 @@ class BackupArchiveManager(
             // Keep a rollback copy until the replacement has been moved into place.
             val rollback = File(liveDb.parentFile, "jetnote_database.restore-rollback")
             database.openHelper.writableDatabase.query("PRAGMA wal_checkpoint(FULL)").use { }
+            liveDb.copyTo(rollback, overwrite = true)
             database.close()
             File(liveDb.path + "-wal").delete()
             File(liveDb.path + "-shm").delete()
-            liveDb.copyTo(rollback, overwrite = true)
             try {
                 check(liveDb.delete()) { "Unable to replace the existing database." }
                 check(stagedDb.renameTo(liveDb)) { "Unable to install the restored database." }
