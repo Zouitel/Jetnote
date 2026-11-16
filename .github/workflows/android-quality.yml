@@ -7,14 +7,16 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: android-quality-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  screenshot-tests:
-    name: Compose screenshot regression tests
+  record-screenshot-baselines:
+    name: Record feedback screenshot baselines
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,11 +25,53 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
-      - name: Verify Compose screenshot baselines
-        run: ./gradlew :app:testDebugUnitTest :app:verifyRoborazziDebug
+      - name: Record screenshots
+        run: ./gradlew :feedback:recordRoborazziDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: feedback-screenshots
+          path: feedback/build/outputs/roborazzi
+          if-no-files-found: error
+          retention-days: 30
+
+  screenshot-tests:
+    name: Compose screenshot regression tests
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Download latest master screenshot baselines
+        uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
+        with:
+          workflow: android-quality.yml
+          branch: master
+          name: feedback-screenshots
+          path: feedback/build/outputs/roborazzi
+          if_no_artifact_found: warn
+      - name: Bootstrap baselines on the first run
+        run: |
+          if [ -z "$(find feedback/build/outputs/roborazzi -type f -name '*.png' -print -quit 2>/dev/null)" ]; then
+            ./gradlew :feedback:recordRoborazziDebug
+          fi
+      - name: Verify screenshot baselines
+        run: ./gradlew :feedback:verifyRoborazziDebug
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: feedback-screenshot-diffs
+          path: feedback/build/outputs/roborazzi
+          if-no-files-found: ignore
+          retention-days: 14
 
   macrobenchmarks:
     name: Startup and scroll benchmarks
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
