@@ -53,6 +53,7 @@ jobs:
           branch: master
           name: feedback-screenshots
           path: feedback/build/outputs/roborazzi
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           if_no_artifact_found: warn
       - name: Bootstrap baselines on the first run
         run: |
@@ -86,4 +87,4 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_2
-          script: ./gradlew :benchmark:connectedCheck
+          script: ./gradlew :app:generateBaselineProfile :benchmark:connectedCheck
