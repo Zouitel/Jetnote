@@ -1,5 +1,6 @@
 package zouitel.neighborhood.feedback.ui
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import com.google.firebase.FirebaseApp
@@ -46,8 +47,10 @@ class FeedbackScreenScreenshotTest {
     @Test
     fun feedbackScreenDefaultState() {
         composeRule.setContent {
-            BottomSheetNavigator {
-                FeedbackScreen().ReportIssue(feedbackModel)
+            MaterialTheme {
+                BottomSheetNavigator {
+                    FeedbackScreen().ReportIssue(feedbackModel)
+                }
             }
         }
 
