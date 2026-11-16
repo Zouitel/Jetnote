@@ -99,7 +99,10 @@ class FeedbackScreen : Screen {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
-    internal fun ReportIssue(feedbackModel: FeedbackScreenModel) {
+    internal fun ReportIssue(
+        feedbackModel: FeedbackScreenModel,
+        isAuthenticatedOverride: Boolean? = null
+    ) {
         val keyboardManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
         val bottomNav = LocalBottomSheetNavigator.current
@@ -114,8 +117,10 @@ class FeedbackScreen : Screen {
         var isSubmitting by remember { mutableStateOf(false) }
         var submissionStage by remember { mutableStateOf("") }
 
-        val currentUser = remember { FirebaseAuth.getInstance().currentUser }
-        val isAuthenticated = currentUser != null
+        val currentUser = remember(isAuthenticatedOverride) {
+            if (isAuthenticatedOverride == null) FirebaseAuth.getInstance().currentUser else null
+        }
+        val isAuthenticated = isAuthenticatedOverride ?: (currentUser != null)
 
         val uploadStatus by feedbackModel.uploadStatus.collectAsState()
         val submissionStatus by feedbackModel.submissionStatus.collectAsState()
