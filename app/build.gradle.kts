@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -40,12 +41,12 @@ android {
         }
     }
 
-    tasks.withType<KotlinCompile>().configureEach {
+    baselineProfile {\n        automaticGenerationDuringBuild = false\n    }\n\n    tasks.withType<KotlinCompile>().configureEach {
         compilerOptions.optIn.add("org.koin.core.annotation.KoinExperimentalAPI")
     }
 }
 
-dependencies {
+dependencies {\n    baselineProfile(project(":benchmark"))\n    implementation(libs.androidx.profileinstaller)\n\n    // Local JVM Compose screenshot regression tests.\n    testImplementation(platform(libs.compose.bom))\n    testImplementation(libs.ui)\n    testImplementation(libs.compose.foundation)\n    testImplementation(libs.material3)\n    testImplementation(libs.ui.test.junit4)\n    testImplementation(libs.roborazzi)\n    testImplementation(libs.roborazzi.compose)\n    testImplementation(libs.robolectric)\n    testImplementation(libs.androidx.junit)\n    testImplementation(libs.androidx.espresso.core)\n
     //Modules.
     implementation(projects.core.database)
     implementation(projects.core.datastore)
