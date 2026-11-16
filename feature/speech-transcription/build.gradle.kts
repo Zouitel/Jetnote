@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.dynamic-feature")
+    alias(libs.plugins.androidDynamicFeature)
     alias(libs.plugins.kotlinAndroid)
 }
 
@@ -13,6 +13,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.okhttp)
+    implementation(libs.workmanager)
     implementation(project(":app"))
     implementation(projects.core.plugin)
 }
