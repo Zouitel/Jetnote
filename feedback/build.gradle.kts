@@ -1,14 +1,24 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.github.takahirom.roborazzi:roborazzi-gradle-plugin:1.46.0")
+    }
+}
+
 plugins {
     alias(libs.plugins.zouitel.androidLibrary)
     alias(libs.plugins.zouitel.androidCompose)
     alias(libs.plugins.zouitel.composeVoyager)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.roborazzi)
 }
 android {
     namespace = "zouitel.neighborhood.feedback"
 }
+
+apply(plugin = "io.github.takahirom.roborazzi")
 
 android {
     testOptions {
