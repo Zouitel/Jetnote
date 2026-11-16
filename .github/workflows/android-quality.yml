@@ -28,7 +28,7 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
       - name: Record screenshots
-        run: ./gradlew :feedback:recordRoborazziDebug
+        run: ./gradlew :feedback:testDebugUnitTest -Proborazzi.test.record=true
       - uses: actions/upload-artifact@v4
         with:
           name: feedback-screenshots
@@ -62,10 +62,10 @@ jobs:
       - name: Bootstrap baselines on the first run
         run: |
           if [ -z "$(find feedback/build/outputs/roborazzi -type f -name '*.png' -print -quit 2>/dev/null)" ]; then
-            ./gradlew :feedback:recordRoborazziDebug
+            ./gradlew :feedback:testDebugUnitTest -Proborazzi.test.record=true
           fi
       - name: Verify screenshot baselines
-        run: ./gradlew :feedback:verifyRoborazziDebug
+        run: ./gradlew :feedback:testDebugUnitTest -Proborazzi.test.verify=true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
