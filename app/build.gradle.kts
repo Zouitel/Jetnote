@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -43,6 +44,11 @@ android {
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions.optIn.add("org.koin.core.annotation.KoinExperimentalAPI")
     }
+}
+
+baselineProfile {
+    automaticGenerationDuringBuild = false
+    saveInSrc = true
 }
 
 dependencies {
@@ -83,7 +89,7 @@ dependencies {
     implementation(libs.firebase.config)
 
     //RevenueCat.
-//    implementation(libs.revenuecat)
-//    implementation(libs.revenuecat.ui)
-//    implementation("com.android.billingclient:billing:8.3.0")
+    //    implementation(libs.revenuecat)
+    //    implementation(libs.revenuecat.ui)
+    //    implementation("com.android.billingclient:billing:8.3.0")
 }

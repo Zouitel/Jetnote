@@ -2,14 +2,40 @@ plugins {
     alias(libs.plugins.zouitel.androidLibrary)
     alias(libs.plugins.zouitel.androidCompose)
     alias(libs.plugins.zouitel.composeVoyager)
-    alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.kotlin.serialization)
 }
+
 android {
     namespace = "zouitel.neighborhood.feedback"
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+// Configure the JVM test tasks directly. Android's UnitTestOptions.all
+// does not expose Test.systemProperty in this Kotlin DSL configuration.
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    systemProperty(
+        "roborazzi.test.record",
+        providers.gradleProperty("roborazzi.test.record").orNull ?: "false"
+    )
+    systemProperty(
+        "roborazzi.test.verify",
+        providers.gradleProperty("roborazzi.test.verify").orNull ?: "false"
+    )
 }
 
 dependencies {
+    testImplementation(platform(libs.compose.bom))
+    testImplementation(libs.ui.test.junit4)
+    testImplementation(libs.ui.test.manifest)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.junit)
+    testImplementation("io.mockk:mockk:1.14.5")
+
     implementation(libs.androidx.foundation.layout)
     //Models.
     implementation(projects.domain)

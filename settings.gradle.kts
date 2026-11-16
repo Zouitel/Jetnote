@@ -29,6 +29,7 @@ dependencyResolutionManagement {
 rootProject.name = "Jetnote"
 
 include(":app")
+include(":benchmark")
 include(":ai")
 include(":bin")
 include(":domain")
