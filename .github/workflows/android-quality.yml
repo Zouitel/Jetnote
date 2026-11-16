@@ -87,4 +87,4 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_2
-          script: ./gradlew :app:generateBaselineProfile :benchmark:connectedCheck
+          script: ./gradlew :app:generateBaselineProfile -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile :benchmark:connectedCheck
