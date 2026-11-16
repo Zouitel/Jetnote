@@ -22,7 +22,10 @@ class FeedbackScreenScreenshotTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val feedbackModel = mockk<FeedbackScreenModel>(relaxed = true)
+    private val feedbackModel = mockk<FeedbackScreenModel>(relaxed = true).also { model ->
+        every { model.uploadStatus } returns MutableStateFlow(FeedbackScreenModel.UploadStatus.Idle)
+        every { model.submissionStatus } returns MutableStateFlow(FeedbackScreenModel.SubmissionStatus.Idle)
+    }
 
     @Test
     fun feedbackScreenDefaultState() {
