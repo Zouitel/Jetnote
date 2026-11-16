@@ -19,6 +19,7 @@ android {
 dependencies {
     testImplementation(platform(libs.compose.bom))
     testImplementation(libs.ui.test.junit4)
+    testImplementation(libs.ui.test.manifest)
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.robolectric)
