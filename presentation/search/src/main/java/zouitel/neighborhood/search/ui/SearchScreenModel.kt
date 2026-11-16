@@ -7,13 +7,15 @@ import androidx.compose.runtime.mutableStateListOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 import zouitel.neighborhood.logic.withFlow
@@ -28,6 +30,7 @@ import zouitel.neighborhood.workspace.model.Note
 class SearchScreenModel(
     private val observeDefaultNotes: NoteUseCase.ObserveByDefault,
     private val priorities: NoteUseCase.ObserveByPriority,
+    private val searchNotes: NoteUseCase.Search,
     private val noteMapper: NoteMapper,
     private val firebaseAuth: FirebaseAuth
 ) : ScreenModel {
@@ -58,6 +61,12 @@ class SearchScreenModel(
     /** Notes that have any priority set (priority > 0). */
     val notesByPriority = _notesByPriority.asStateFlow()
 
+    private val _textSearchResults = MutableStateFlow<List<Note>>(emptyList())
+    val textSearchResults = _textSearchResults.asStateFlow()
+
+    private var currentUid: String = ""
+    private var textSearchJob: Job? = null
+
     // ── UI state ──────────────────────────────────────────────────────────────
 
     private val _uiState = MutableStateFlow(UiState())
@@ -80,10 +89,14 @@ class SearchScreenModel(
                 awaitClose { firebaseAuth.removeAuthStateListener(listener) }
             }.collectLatest { uid ->
                 Log.d(TAG, "Auth → uid=$uid")
+                currentUid = uid.orEmpty()
+                textSearchJob?.cancel()
+                _textSearchResults.value = emptyList()
                 if (uid.isNullOrBlank()) {
                     _allNotes.value = emptyList()
                     _notesByPriority.value = emptyList()
                 } else {
+                    updateTextSearch(fieldState.text.toString())
                     // collectLatest cancels both previous-user observers before
                     // subscribing to the newly authenticated user's data.
                     coroutineScope {
@@ -110,10 +123,25 @@ class SearchScreenModel(
      * Programmatically changes the text shown in the search field.
      *
      * Used when a chip is tapped to show a display label ("Links", "Audios" …).
-     * The Composable's [derivedStateOf] only uses [fieldState].text for filtering
-     * when [UiState.typeState] is [SearchTypes.Text], so setting it to a chip
-     * label does NOT affect type-based filtering.
+     * Text-mode queries are sent to the indexed search use case. Other search
+     * modes continue to use their existing typed filters.
      */
+    /** Debounced, indexed full-text search. Results are scoped to the active account. */
+    fun updateTextSearch(query: String) {
+        textSearchJob?.cancel()
+        if (query.isBlank() || _uiState.value.typeState !is SearchTypes.Text || currentUid.isBlank()) {
+            _textSearchResults.value = emptyList()
+            return
+        }
+        val uid = currentUid
+        textSearchJob = screenModelScope.launch {
+            delay(250)
+            searchNotes(uid, query).collect { domain ->
+                if (currentUid == uid) _textSearchResults.value = noteMapper.fromDomain(domain)
+            }
+        }
+    }
+
     fun setFieldText(text: String) {
         fieldState.edit { replace(0, length, text) }
     }
@@ -133,6 +161,12 @@ class SearchScreenModel(
 
     fun updateSearchType(type: SearchTypes) = screenModelScope.launch {
         _uiState.value = _uiState.value.copy(typeState = type)
+        if (type is SearchTypes.Text) {
+            updateTextSearch(fieldState.text.toString())
+        } else {
+            textSearchJob?.cancel()
+            _textSearchResults.value = emptyList()
+        }
     }
 
     fun updateSearchTag(tag: Tag?) = screenModelScope.launch {
@@ -167,6 +201,7 @@ class SearchScreenModel(
 
     override fun onDispose() {
         super.onDispose()
+        textSearchJob?.cancel()
         Log.d(TAG, "Disposed — ${_allNotes.value.size} notes cached")
     }
 
