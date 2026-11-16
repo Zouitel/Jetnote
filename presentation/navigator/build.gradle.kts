@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.plugin)
     //Modules.
     implementation(projects.core.datastore)
     implementation(projects.core.database)

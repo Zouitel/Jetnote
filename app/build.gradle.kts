@@ -10,6 +10,8 @@ plugins {
 }
 
 android {
+    dynamicFeatures += setOf(":feature:speech-transcription")
+
     namespace = "zouitel.neighborhood.jetnote"
     compileSdk = 37
 
@@ -46,6 +48,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.plugin)
     //Modules.
     implementation(projects.core.database)
     implementation(projects.core.datastore)

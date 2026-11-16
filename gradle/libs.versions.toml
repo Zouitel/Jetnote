@@ -42,6 +42,7 @@ chaquo-python = "17.0.0"
 
 #KotlinX.
 coroutines = "1.11.0"
+play-feature-delivery = "2.1.0"
 serialization-json = "1.11.0"
 markdown = "0.7.8"
 kotlinx-datetime = "0.8.0"
@@ -142,6 +143,8 @@ play-services-mlkit-document-scanner = { module = "com.google.android.gms:play-s
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
 workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
+play-feature-delivery = { module = "com.google.android.play:feature-delivery-ktx", version.ref = "play-feature-delivery" }
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric-ktx", version.ref = "biometric" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -271,3 +274,4 @@ zouitel-composeVoyager = { id = "zouitel.compose.voyager", version = "unspecifie
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServices" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
 android-test = { id = "com.android.test", version.ref = "agp" }
+androidDynamicFeature = { id = "com.android.dynamic-feature", version.ref = "agp" }
