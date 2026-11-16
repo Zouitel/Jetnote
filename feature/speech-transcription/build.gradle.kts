@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.androidDynamicFeature)
-    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
