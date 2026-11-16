@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    dynamicFeatures += setOf(":feature:speech-transcription")
+    dynamicFeatures += setOf(":feature:speechTranscription")
 
     namespace = "zouitel.neighborhood.jetnote"
     compileSdk = 37
@@ -37,9 +37,7 @@ android {
             isDebuggable = false
         }
 
-        debug {
-            isDebuggable = false
-        }
+
     }
 
     tasks.withType<KotlinCompile>().configureEach {

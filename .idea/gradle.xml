@@ -35,9 +35,12 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/datastore" />
+            <option value="$PROJECT_DIR$/core/plugin" />
             <option value="$PROJECT_DIR$/core/repository" />
             <option value="$PROJECT_DIR$/document" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/speechTranscription" />
             <option value="$PROJECT_DIR$/feedback" />
             <option value="$PROJECT_DIR$/presentation" />
             <option value="$PROJECT_DIR$/presentation/account" />

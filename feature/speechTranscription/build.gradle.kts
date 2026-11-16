@@ -1,6 +1,5 @@
 plugins {
     id("com.android.dynamic-feature")
-    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
@@ -10,6 +9,8 @@ android {
     defaultConfig {
         minSdk = 28
     }
+
+
 }
 
 dependencies {
