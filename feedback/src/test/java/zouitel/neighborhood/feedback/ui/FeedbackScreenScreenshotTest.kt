@@ -12,10 +12,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w411dp-h891dp")
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
 class FeedbackScreenScreenshotTest {
     @get:Rule
     val composeRule = createComposeRule()
