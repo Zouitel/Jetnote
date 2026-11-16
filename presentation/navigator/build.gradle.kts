@@ -30,6 +30,7 @@ dependencies {
     api(projects.feedback)
     api(projects.presentation.account)
     implementation(projects.security)
+    implementation(libs.koin.compose)
 
     //Material.
     implementation(libs.compose.material)
