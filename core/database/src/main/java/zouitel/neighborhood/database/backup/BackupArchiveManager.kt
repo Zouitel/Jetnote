@@ -176,7 +176,7 @@ class BackupArchiveManager(
                 entryCount++
                 require(entryCount <= MAX_ENTRIES) { "Backup contains too many files." }
                 val path = entry.name
-                require(!path.startsWith("/") && !path.contains("\\\\") &&
+                require(!path.startsWith("/") && !path.contains("\\") &&
                     path.split('/').none { it == ".." || it == "." }) {
                     "Backup contains an unsafe file path."
                 }
