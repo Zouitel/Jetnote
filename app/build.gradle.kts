@@ -43,6 +43,7 @@ android {
 
     baselineProfile {
         automaticGenerationDuringBuild = false
+        saveInSrc = true
     }
 
     tasks.withType<KotlinCompile>().configureEach {
