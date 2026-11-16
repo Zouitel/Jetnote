@@ -195,6 +195,7 @@ class SettingsScreen: Screen {
                                     scope.launch { snackbarState.showSnackbar(message) }
                                 }
                             }
+                            item { SpeechTranscriptionPluginPreference() }
                             item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                             item {
                                 NavigateItem(
