@@ -10,7 +10,7 @@ Generate the profile on a physical device or API 35 emulator:
 ./gradlew :app:generateBaselineProfile
 ```
 
-The profile journey launches Jetnote and exercises the home screen. The app's release build consumes the generated profile, and ProfileInstaller installs it on supported devices. Keep the journey representative of the most common startup and navigation paths.
+The profile journey launches Jetnote and exercises the home screen. The generated profile is saved under `app/src/release/generated/baselineProfiles`; commit that generated file so release builds package it. ProfileInstaller installs it on supported devices. Keep the journey representative of the most common startup and navigation paths.
 
 ## Macrobenchmarks
 
