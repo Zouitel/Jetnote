@@ -25,6 +25,8 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
       - name: Record screenshots
         run: ./gradlew :feedback:recordRoborazziDebug
       - uses: actions/upload-artifact@v4
@@ -45,6 +47,8 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
       - name: Download latest master screenshot baselines
         uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
@@ -81,6 +85,8 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
       - name: Run Macrobenchmark and Baseline Profile instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
