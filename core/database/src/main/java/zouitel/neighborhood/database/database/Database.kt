@@ -60,6 +60,32 @@ abstract class Database: RoomDatabase() {
                 db.execSQL("CREATE TABLE IF NOT EXISTS note_embedding_table (user_uid TEXT NOT NULL, note_uid TEXT NOT NULL, model_id TEXT NOT NULL, dimensions INTEGER NOT NULL, content_hash TEXT NOT NULL, vector BLOB NOT NULL, updated_at INTEGER NOT NULL, PRIMARY KEY(user_uid, note_uid, model_id))")
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_note_embedding_table_user_uid_model_id ON note_embedding_table(user_uid, model_id)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_note_embedding_table_note_uid ON note_embedding_table(note_uid)")
+                db.execSQL("""
+                    CREATE TRIGGER IF NOT EXISTS note_embedding_delete_inactive
+                    AFTER UPDATE OF archived, deleted_at ON note_data_table
+                    WHEN new.archived = 1 OR new.deleted_at IS NOT NULL
+                    BEGIN
+                        DELETE FROM note_embedding_table
+                        WHERE note_uid = new.uuid AND user_uid = new.user_uid;
+                    END
+                """.trimIndent())
+                db.execSQL("""
+                    CREATE TRIGGER IF NOT EXISTS note_embedding_delete_removed
+                    AFTER DELETE ON note_data_table
+                    BEGIN
+                        DELETE FROM note_embedding_table
+                        WHERE note_uid = old.uuid AND user_uid = old.user_uid;
+                    END
+                """.trimIndent())
+                db.execSQL("""
+                    CREATE TRIGGER IF NOT EXISTS note_embedding_delete_reassigned
+                    AFTER UPDATE OF user_uid ON note_data_table
+                    WHEN new.user_uid != old.user_uid
+                    BEGIN
+                        DELETE FROM note_embedding_table
+                        WHERE note_uid = old.uuid AND user_uid = old.user_uid;
+                    END
+                """.trimIndent())
             }
         }
         val MIGRATION_12_13 = object : Migration(12, 13) {
