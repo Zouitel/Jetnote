@@ -90,6 +90,6 @@ class EmbeddingGemmaModelInstaller(
         const val MODEL_FILE_NAME = "embeddinggemma-2-text-270m.litertlm"
         const val MODEL_URL =
             "https://huggingface.co/litert-community/embeddinggemma-2-text-270m-litert-lm/resolve/main/embeddinggemma-2-text-270m.litertlm"
-        private const val MIN_MODEL_BYTES = 100L * 1024L * 1024L
+        private const val MIN_MODEL_BYTES = 150L * 1024L * 1024L
     }
 }
