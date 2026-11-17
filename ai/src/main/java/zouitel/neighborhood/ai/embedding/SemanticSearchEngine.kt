@@ -42,8 +42,14 @@ class SemanticSearchEngine(
             } else {
                 0.0
             }
-            val score = semantic * semanticWeight +
-                lexical * (1.0 - semanticWeight)
+            // When no candidate has lexical evidence, do not reserve part
+            // of the score for a signal that does not exist. In semantic-only
+            // mode an exact embedding match must retain a score of 1.0.
+            val score = if (maxLexicalScore > 0.0) {
+                semantic * semanticWeight + lexical * (1.0 - semanticWeight)
+            } else {
+                semantic
+            }
             SemanticSearchResult(
                 noteId = candidate.noteId,
                 score = score,
