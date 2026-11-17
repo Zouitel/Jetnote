@@ -30,6 +30,9 @@ dependencies {
     implementation(libs.okhttp.sse)
     implementation(libs.okhttp.logging)
 
+    // On-device text embedding runtime (LiteRT-LM via MediaPipe).
+    implementation("com.google.mediapipe:tasks-retrieval:1.1.1")
+
     // Unit tests
     testImplementation(libs.junit)
 }
