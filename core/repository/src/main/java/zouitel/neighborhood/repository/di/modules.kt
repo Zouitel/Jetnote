@@ -19,6 +19,7 @@ import zouitel.neighborhood.domain.usecase.NoteAndTagUseCase
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 import zouitel.neighborhood.domain.usecase.ProviderUseCase
 import zouitel.neighborhood.domain.usecase.SettingsUseCase
+import zouitel.neighborhood.domain.usecase.SemanticSearchUseCase
 import zouitel.neighborhood.domain.usecase.TagUseCase
 import zouitel.neighborhood.repository.repositoryImpl.AssistantRepositoryImpl
 import zouitel.neighborhood.repository.repositoryImpl.ConversationRepositoryImpl
@@ -113,6 +114,7 @@ val localRepoLazyModule = lazyModule {
     factoryOf(NoteUseCase::ObserveTrash)
     factoryOf(NoteUseCase::ObserveByPriority)
     factoryOf(NoteUseCase::Cleanup)
+    factoryOf(::SemanticSearchUseCase)
 
     factoryOf(TagUseCase::ObserveAll)
     factoryOf(TagUseCase::GetAll)
