@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -328,6 +330,10 @@ fun Search(
     val allNotes by remember(searchModel, searchModel::allNotes).collectAsState()
     val notesByPriority by remember(searchModel, searchModel::notesByPriority).collectAsState()
     val textSearchResults by remember(searchModel, searchModel::textSearchResults).collectAsState()
+    val semanticSearchResults by remember(searchModel, searchModel::semanticSearchResults).collectAsState()
+    val semanticModelInstalled by remember(searchModel, searchModel::semanticModelInstalled).collectAsState()
+    val semanticModelInstalling by remember(searchModel, searchModel::semanticModelInstalling).collectAsState()
+    val semanticSearchError by remember(searchModel, searchModel::semanticSearchError).collectAsState()
 
     val audioNotes = remember(allNotes) { allNotes.filter { it.data.audios.isNotEmpty() } }
     val reminderNotes = remember(allNotes) { allNotes.filter { it.data.reminders.isNotEmpty() } }
@@ -359,11 +365,19 @@ fun Search(
     }.collectAsState(initial = false)
 
     val filteredNotes by remember(searchModel, allNotes, notesByPriority, links) {
-        combine(searchModel.uiState, queryFlow, searchModel.textSearchResults) { state, query, indexedResults ->
+        combine(
+            searchModel.uiState,
+            queryFlow,
+            searchModel.textSearchResults,
+            searchModel.semanticSearchResults
+        ) { state, query, indexedResults, semanticIds ->
             when (val type = state.typeState) {
                 is SearchTypes.Text -> {
                     if (query.isBlank()) emptyList()
-                    else indexedResults
+                    else if (state.semanticMode) {
+                        val notesById = allNotes.associateBy { it.data.uid }
+                        semanticIds.mapNotNull(notesById::get)
+                    } else indexedResults
                 }
 
                 is SearchTypes.Tag -> allNotes.filter { note ->
@@ -419,6 +433,43 @@ fun Search(
                     onDelete = { notes ->
                         notes.forEach { dataModel.sendAction(Action.DeleteByUid(it.uid)) }
                     }
+                )
+            }
+        }
+
+        if (uiState.typeState is SearchTypes.Text) {
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                FilterChip(
+                    selected = uiState.semanticMode,
+                    onClick = { searchModel.setSemanticMode(!uiState.semanticMode) },
+                    label = { Text("Semantic search") },
+                )
+                if (uiState.semanticMode && !semanticModelInstalled) {
+                    Button(
+                        onClick = searchModel::installSemanticModel,
+                        enabled = !semanticModelInstalling,
+                    ) {
+                        if (semanticModelInstalling) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 2.dp,
+                            )
+                        } else {
+                            Text("Download model (~165 MB)")
+                        }
+                    }
+                }
+            }
+            semanticSearchError?.let { error ->
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
                 )
             }
         }
