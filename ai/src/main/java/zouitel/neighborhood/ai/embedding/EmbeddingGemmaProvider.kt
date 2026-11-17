@@ -1,30 +1,29 @@
 package zouitel.neighborhood.ai.embedding
 
 import android.content.Context
-import com.google.mediapipe.tasks.core.BaseOptions
-import com.google.mediapipe.tasks.core.Delegate
-import com.google.mediapipe.tasks.retrieval.universalembedder.UniversalEmbedder
-import com.google.mediapipe.tasks.retrieval.universalembedder.UniversalEmbedderOptions
+import com.google.ai.edge.litertlm.Backend
+import com.google.ai.edge.litertlm.EmbeddingEngine
+import com.google.ai.edge.litertlm.EmbeddingEngineConfig
+import com.google.ai.edge.litertlm.InputData
 import java.io.File
 import java.security.MessageDigest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Local EmbeddingGemma 2 text provider backed by MediaPipe UniversalEmbedder.
+ * Local EmbeddingGemma 2 text provider backed directly by LiteRT-LM.
  *
  * The model must first be installed by [EmbeddingGemmaModelInstaller]. Inference
- * is CPU-backed by default for broad device compatibility and never makes a
- * network request.
+ * runs on the CPU for broad Android compatibility and never makes a network
+ * request. The engine is initialized lazily and reused across searches.
  */
 class EmbeddingGemmaProvider(
-    private val context: Context,
     private val modelFile: File,
 ) : TextEmbeddingProvider, AutoCloseable {
     private val lock = Any()
 
     @Volatile
-    private var embedder: UniversalEmbedder? = null
+    private var engine: EmbeddingEngine? = null
 
     private val modelDigest: String by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         require(modelFile.isFile) { "EmbeddingGemma model has not been installed." }
@@ -37,7 +36,9 @@ class EmbeddingGemmaProvider(
                 digest.update(buffer, 0, count)
             }
         }
-        digest.digest().joinToString("") { byte -> "%02x".format(byte) }
+        digest.digest().joinToString("") { byte ->
+            (byte.toInt() and 0xff).toString(16).padStart(2, '0')
+        }
     }
 
     override val model: EmbeddingModel
@@ -63,9 +64,10 @@ class EmbeddingGemmaProvider(
         require(text.isNotBlank()) { "Cannot embed blank text." }
         return withContext(Dispatchers.IO) {
             synchronized(lock) {
-                val result = getEmbedder().embedText("$instruction${text.trim()}")
-                val values = result.embeddings().firstOrNull()?.floatEmbedding()
-                    ?: error("EmbeddingGemma returned no text embedding.")
+                val result = getEngine().computeEmbedding(
+                    listOf(InputData.Text("$instruction${text.trim()}"))
+                )
+                val values = result.embedding.toFloatArray()
                 check(values.size == EMBEDDING_DIMENSIONS) {
                     "EmbeddingGemma returned an unexpected vector dimension."
                 }
@@ -74,30 +76,25 @@ class EmbeddingGemmaProvider(
         }
     }
 
-    private fun getEmbedder(): UniversalEmbedder {
-        embedder?.let { return it }
+    private fun getEngine(): EmbeddingEngine {
+        engine?.let { return it }
         check(modelFile.isFile) { "EmbeddingGemma model has not been installed." }
 
-        val options = UniversalEmbedderOptions.builder()
-            .setBaseOptions(
-                BaseOptions.builder()
-                    .setModelAssetPath(modelFile.absolutePath)
-                    .setDelegate(Delegate.CPU)
-                    .build()
+        val instance = EmbeddingEngine(
+            EmbeddingEngineConfig(
+                modelPath = modelFile.absolutePath,
+                backend = Backend.CPU(),
             )
-            .setTextDelegate(Delegate.CPU)
-            .setL2Normalize(true)
-            .setCacheDir(context.cacheDir.absolutePath)
-            .build()
-
-        return UniversalEmbedder.createFromOptions(context, options)
-            .also { embedder = it }
+        )
+        instance.initialize()
+        engine = instance
+        return instance
     }
 
     override fun close() {
         synchronized(lock) {
-            embedder?.close()
-            embedder = null
+            engine?.close()
+            engine = null
         }
     }
 
