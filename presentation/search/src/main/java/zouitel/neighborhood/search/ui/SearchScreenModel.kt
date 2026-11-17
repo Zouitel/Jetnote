@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
 import zouitel.neighborhood.domain.usecase.NoteUseCase
+import zouitel.neighborhood.domain.usecase.SemanticSearchUseCase
 import zouitel.neighborhood.logic.withFlow
 import zouitel.neighborhood.search.mapper.NoteMapper
 import zouitel.neighborhood.search.state.UiState
@@ -32,7 +34,8 @@ class SearchScreenModel(
     private val priorities: NoteUseCase.ObserveByPriority,
     private val searchNotes: NoteUseCase.Search,
     private val noteMapper: NoteMapper,
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val semanticSearch: SemanticSearchUseCase
 ) : ScreenModel {
 
     // ── Search field ──────────────────────────────────────────────────────────
@@ -66,6 +69,19 @@ class SearchScreenModel(
 
     private var currentUid: String = ""
     private var textSearchJob: Job? = null
+    private var semanticSearchJob: Job? = null
+
+    private val _semanticSearchResults = MutableStateFlow<List<String>>(emptyList())
+    val semanticSearchResults = _semanticSearchResults.asStateFlow()
+
+    private val _semanticModelInstalled = MutableStateFlow(false)
+    val semanticModelInstalled = _semanticModelInstalled.asStateFlow()
+
+    private val _semanticModelInstalling = MutableStateFlow(false)
+    val semanticModelInstalling = _semanticModelInstalling.asStateFlow()
+
+    private val _semanticSearchError = MutableStateFlow<String?>(null)
+    val semanticSearchError = _semanticSearchError.asStateFlow()
 
     // ── UI state ──────────────────────────────────────────────────────────────
 
@@ -75,7 +91,18 @@ class SearchScreenModel(
     // ── Auth / data loading ───────────────────────────────────────────────────
 
     init {
+        refreshSemanticModelState()
         setupAuthStateListener()
+    }
+
+    private fun refreshSemanticModelState() {
+        screenModelScope.launch {
+            runCatching { semanticSearch.isModelInstalled() }
+                .onSuccess { _semanticModelInstalled.value = it }
+                .onFailure { error ->
+                    Log.w(TAG, "Unable to inspect local embedding model", error)
+                }
+        }
     }
 
     private fun setupAuthStateListener() {
@@ -91,7 +118,9 @@ class SearchScreenModel(
                 Log.d(TAG, "Auth → uid=$uid")
                 currentUid = uid.orEmpty()
                 textSearchJob?.cancel()
+                semanticSearchJob?.cancel()
                 _textSearchResults.value = emptyList()
+                _semanticSearchResults.value = emptyList()
                 if (uid.isNullOrBlank()) {
                     _allNotes.value = emptyList()
                     _notesByPriority.value = emptyList()
@@ -129,15 +158,69 @@ class SearchScreenModel(
     /** Debounced, indexed full-text search. Results are scoped to the active account. */
     fun updateTextSearch(query: String) {
         textSearchJob?.cancel()
+        semanticSearchJob?.cancel()
         if (query.isBlank() || _uiState.value.typeState !is SearchTypes.Text || currentUid.isBlank()) {
             _textSearchResults.value = emptyList()
+            _semanticSearchResults.value = emptyList()
             return
         }
+
         val uid = currentUid
-        textSearchJob = screenModelScope.launch {
-            delay(250)
-            searchNotes(uid, query).collect { domain ->
-                if (currentUid == uid) _textSearchResults.value = noteMapper.fromDomain(domain)
+        if (_uiState.value.semanticMode) {
+            _textSearchResults.value = emptyList()
+            _semanticSearchResults.value = emptyList()
+            if (!_semanticModelInstalled.value) return
+            semanticSearchJob = screenModelScope.launch {
+                delay(300)
+                try {
+                    semanticSearch.indexNotes(uid)
+                    val results = semanticSearch.search(uid, query)
+                    if (currentUid == uid && _uiState.value.semanticMode) {
+                        _semanticSearchResults.value = results.map { it.noteId }
+                    }
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (error: Exception) {
+                    Log.e(TAG, "Local semantic search failed", error)
+                    _semanticSearchError.value = error.message ?: "Semantic search failed."
+                }
+            }
+        } else {
+            _semanticSearchResults.value = emptyList()
+            textSearchJob = screenModelScope.launch {
+                delay(250)
+                searchNotes(uid, query).collect { domain ->
+                    if (currentUid == uid) _textSearchResults.value = noteMapper.fromDomain(domain)
+                }
+            }
+        }
+    }
+
+    fun setSemanticMode(enabled: Boolean) {
+        _semanticSearchError.value = null
+        _uiState.value = _uiState.value.copy(semanticMode = enabled)
+        updateTextSearch(fieldState.text.toString())
+    }
+
+    fun installSemanticModel() {
+        if (_semanticModelInstalling.value || _semanticModelInstalled.value) return
+        screenModelScope.launch {
+            _semanticModelInstalling.value = true
+            _semanticSearchError.value = null
+            try {
+                semanticSearch.installModel()
+                _semanticModelInstalled.value = semanticSearch.isModelInstalled()
+                if (_semanticModelInstalled.value && currentUid.isNotBlank()) {
+                    semanticSearch.indexNotes(currentUid)
+                    updateTextSearch(fieldState.text.toString())
+                }
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                Log.e(TAG, "Unable to install local embedding model", error)
+                _semanticSearchError.value = error.message ?: "Unable to download the embedding model."
+            } finally {
+                _semanticModelInstalling.value = false
             }
         }
     }
@@ -202,6 +285,7 @@ class SearchScreenModel(
     override fun onDispose() {
         super.onDispose()
         textSearchJob?.cancel()
+        semanticSearchJob?.cancel()
         Log.d(TAG, "Disposed — ${_allNotes.value.size} notes cached")
     }
 
