@@ -1,5 +1,6 @@
 package zouitel.neighborhood.ai.embedding
 
+import android.content.Context
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.core.Delegate
 import com.google.mediapipe.tasks.retrieval.universalembedder.UniversalEmbedder
@@ -17,6 +18,7 @@ import kotlinx.coroutines.withContext
  * network request.
  */
 class EmbeddingGemmaProvider(
+    private val context: Context,
     private val modelFile: File,
 ) : TextEmbeddingProvider, AutoCloseable {
     private val lock = Any()
@@ -26,11 +28,16 @@ class EmbeddingGemmaProvider(
 
     private val modelDigest: String by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         require(modelFile.isFile) { "EmbeddingGemma model has not been installed." }
-        MessageDigest.getInstance("SHA-256").digest(modelFile.inputStream().use { input ->
-            val digestInput = java.security.DigestInputStream(input, MessageDigest.getInstance("SHA-256"))
-            digestInput.copyTo(java.io.OutputStream.nullOutputStream())
-            digestInput.messageDigest.digest()
-        }).joinToString("") { byte -> "%02x".format(byte) }
+        val digest = MessageDigest.getInstance("SHA-256")
+        modelFile.inputStream().buffered().use { input ->
+            val buffer = ByteArray(16 * 1024)
+            while (true) {
+                val count = input.read(buffer)
+                if (count < 0) break
+                digest.update(buffer, 0, count)
+            }
+        }
+        digest.digest().joinToString("") { byte -> "%02x".format(byte) }
     }
 
     override val model: EmbeddingModel
@@ -81,7 +88,7 @@ class EmbeddingGemmaProvider(
             .setL2Normalize(true)
             .build()
 
-        return UniversalEmbedder.createFromOptions(modelFile.contextForTask(), options)
+        return UniversalEmbedder.createFromOptions(context, options)
             .also { embedder = it }
     }
 
@@ -91,9 +98,6 @@ class EmbeddingGemmaProvider(
             embedder = null
         }
     }
-
-    private fun File.contextForTask(): android.content.Context =
-        throw UnsupportedOperationException("Use the Context-based provider constructor.")
 
     companion object {
         const val MODEL_ID = "embeddinggemma-2-text-270m"
