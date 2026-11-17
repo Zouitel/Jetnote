@@ -93,7 +93,7 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_2
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -wipe-data
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           emulator-boot-timeout: 900
           disable-animations: true
           script: |
