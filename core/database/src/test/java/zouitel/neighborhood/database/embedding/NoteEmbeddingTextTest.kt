@@ -21,6 +21,19 @@ class NoteEmbeddingTextTest {
     }
 
     @Test
+    fun chunksLongTextWithOverlapWithoutDroppingWords() {
+        val words = (1..650).map(Int::toString)
+        val chunks = NoteEmbeddingText.chunks(words.joinToString(" "), maxWords = 300, overlapWords = 40)
+
+        assertEquals(3, chunks.size)
+        assertEquals(300, chunks.first().split(" ").size)
+        assertEquals(300, chunks[1].split(" ").size)
+        assertEquals(130, chunks.last().split(" ").size)
+        assertEquals("261", chunks[0].split(" ").last())
+        assertEquals("261", chunks[1].split(" ").first())
+    }
+
+    @Test
     fun fallsBackToRawTextForLegacyNonJsonBlocks() {
         assertEquals(
             "Title\nlegacy note body",
