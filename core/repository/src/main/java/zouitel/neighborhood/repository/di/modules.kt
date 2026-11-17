@@ -4,7 +4,6 @@ import zouitel.neighborhood.domain.repository.AssistantRepo
 import zouitel.neighborhood.domain.repository.ConversationRepo
 import zouitel.neighborhood.domain.repository.DataRepository
 import zouitel.neighborhood.domain.repository.LinkRepository
-import zouitel.neighborhood.domain.repository.NoteTemplateRepository
 import zouitel.neighborhood.domain.repository.ModelRepo
 import zouitel.neighborhood.domain.repository.NoteAndTagRepository
 import zouitel.neighborhood.domain.repository.NoteRepository
