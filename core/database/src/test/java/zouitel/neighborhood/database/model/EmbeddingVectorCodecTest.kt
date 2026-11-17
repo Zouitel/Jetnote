@@ -1,7 +1,6 @@
 package zouitel.neighborhood.database.model
 
 import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class EmbeddingVectorCodecTest {
