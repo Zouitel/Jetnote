@@ -10,6 +10,7 @@ import zouitel.neighborhood.workspace.model.Data
 
 data class UiState(
     val tag: String = "",
+    val semanticMode: Boolean = false,
     val isSelection: Boolean = false,
     val expandedSortMenu: Boolean = false,
     val isProcessing: Boolean = false,
