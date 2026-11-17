@@ -25,6 +25,26 @@ internal object NoteEmbeddingText {
         return textParts.joinToString(separator = "\n")
     }
 
+    fun chunks(text: String, maxWords: Int = 300, overlapWords: Int = 40): List<String> {
+        require(maxWords > 0) { "Maximum words per chunk must be positive." }
+        require(overlapWords in 0 until maxWords) {
+            "Chunk overlap must be non-negative and smaller than the chunk size."
+        }
+        val words = text.trim().split(Regex("\\s+")).filter(String::isNotBlank)
+        if (words.isEmpty()) return emptyList()
+        if (words.size <= maxWords) return listOf(words.joinToString(" "))
+
+        val chunks = mutableListOf<String>()
+        var start = 0
+        while (start < words.size) {
+            val end = minOf(start + maxWords, words.size)
+            chunks += words.subList(start, end).joinToString(" ")
+            if (end == words.size) break
+            start = end - overlapWords
+        }
+        return chunks
+    }
+
     private fun collectText(element: JsonElement, output: MutableList<String>) {
         when (element) {
             is JsonArray -> element.forEach { collectText(it, output) }
