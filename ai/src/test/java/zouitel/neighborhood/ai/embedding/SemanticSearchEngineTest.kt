@@ -39,7 +39,7 @@ class SemanticSearchEngineTest {
                     lexicalScore = 10.0,
                 ),
             ),
-            semanticWeight = 0.5,
+            semanticWeight = 0.8,
         )
 
         assertEquals("semantic", results.first().noteId)
