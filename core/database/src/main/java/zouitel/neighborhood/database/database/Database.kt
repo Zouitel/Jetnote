@@ -26,9 +26,10 @@ import zouitel.neighborhood.database.dao.ConversationDao
 import zouitel.neighborhood.database.dao.ModelDao
 import zouitel.neighborhood.database.dao.ProviderDao
 import zouitel.neighborhood.database.dao.NoteEmbeddingDao
+import zouitel.neighborhood.database.dao.NoteTemplateDao
 
 @Database(
-    version = 14,
+    version = 15,
     entities = [
         Data::class,
         NoteFts::class,
@@ -55,7 +56,7 @@ abstract class Database: RoomDatabase() {
     abstract fun modelDao(): ModelDao
     abstract fun providerDao(): ProviderDao
     abstract fun noteEmbeddingDao(): NoteEmbeddingDao
-    abstract fun noteTemplateDao(): zouitel.neighborhood.database.dao.NoteTemplateDao
+    abstract fun noteTemplateDao(): NoteTemplateDao
 
     companion object {
         val MIGRATION_14_15 = object : Migration(14, 15) {
