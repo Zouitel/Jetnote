@@ -11,6 +11,7 @@ import zouitel.neighborhood.database.database.Database
 import zouitel.neighborhood.database.backup.BackupArchiveManager
 import zouitel.neighborhood.database.database.TagsCallback
 import zouitel.neighborhood.database.embedding.LocalNoteEmbeddingIndexer
+import zouitel.neighborhood.database.embedding.LocalSemanticSearch
 import zouitel.neighborhood.database.datasourceImpl.AssistantDatasourceImpl
 import zouitel.neighborhood.database.datasourceImpl.ConversationDatasourceImpl
 import zouitel.neighborhood.database.datasourceImpl.DataDataSourceImpl
@@ -43,6 +44,7 @@ import zouitel.neighborhood.security.encrition.FileEncryption
 val databaseLazyModule = lazyModule {
     single { BackupArchiveManager(androidContext(), get()) }
     factoryOf(::LocalNoteEmbeddingIndexer)
+    factoryOf(::LocalSemanticSearch)
     //DataSource.
     singleOf(::DataDataSourceImpl) bind DataDataSource::class
     singleOf(::NoteDataSourceImpl) bind NoteDataSource::class
