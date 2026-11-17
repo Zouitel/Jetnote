@@ -12,6 +12,8 @@ import zouitel.neighborhood.database.backup.BackupArchiveManager
 import zouitel.neighborhood.database.database.TagsCallback
 import zouitel.neighborhood.database.embedding.LocalNoteEmbeddingIndexer
 import zouitel.neighborhood.database.embedding.LocalSemanticSearch
+import zouitel.neighborhood.database.embedding.LocalSemanticSearchRepository
+import zouitel.neighborhood.domain.repository.SemanticSearchRepository
 import zouitel.neighborhood.ai.embedding.EmbeddingGemmaModelInstaller
 import zouitel.neighborhood.ai.embedding.EmbeddingGemmaProvider
 import zouitel.neighborhood.ai.embedding.TextEmbeddingProvider
@@ -52,6 +54,7 @@ val databaseLazyModule = lazyModule {
     }
     factoryOf(::LocalNoteEmbeddingIndexer)
     factory { LocalSemanticSearch(get(), get()) }
+    singleOf(::LocalSemanticSearchRepository) bind SemanticSearchRepository::class
     //DataSource.
     singleOf(::DataDataSourceImpl) bind DataDataSource::class
     singleOf(::NoteDataSourceImpl) bind NoteDataSource::class
