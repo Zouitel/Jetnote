@@ -6,6 +6,7 @@ import com.google.ai.edge.litertlm.EmbeddingEngineConfig
 import com.google.ai.edge.litertlm.InputData
 import java.io.File
 import java.security.MessageDigest
+import kotlin.math.sqrt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -69,6 +70,12 @@ class EmbeddingGemmaProvider(
                 val values = result.embedding.toFloatArray()
                 check(values.size == EMBEDDING_DIMENSIONS) {
                     "EmbeddingGemma returned an unexpected vector dimension."
+                }
+                val magnitude = sqrt(values.sumOf { it.toDouble() * it.toDouble() })
+                if (magnitude > 0.0) {
+                    values.indices.forEach { index ->
+                        values[index] = (values[index] / magnitude).toFloat()
+                    }
                 }
                 EmbeddingVector(modelId = model.id, values = values)
             }
