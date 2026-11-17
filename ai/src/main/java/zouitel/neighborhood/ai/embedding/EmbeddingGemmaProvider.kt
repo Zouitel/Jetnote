@@ -82,10 +82,12 @@ class EmbeddingGemmaProvider(
             .setBaseOptions(
                 BaseOptions.builder()
                     .setModelAssetPath(modelFile.absolutePath)
+                    .setDelegate(Delegate.CPU)
                     .build()
             )
             .setTextDelegate(Delegate.CPU)
             .setL2Normalize(true)
+            .setCacheDir(context.cacheDir.absolutePath)
             .build()
 
         return UniversalEmbedder.createFromOptions(context, options)
