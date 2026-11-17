@@ -28,7 +28,7 @@ class LocalSemanticSearch(
         require(query.isNotBlank()) { "Search query must not be blank." }
 
         val model = provider.model
-        val queryVector = provider.embed(query)
+        val queryVector = provider.embedQuery(query)
         check(queryVector.modelId == model.id) {
             "Embedding provider returned a query vector for an unexpected model."
         }
