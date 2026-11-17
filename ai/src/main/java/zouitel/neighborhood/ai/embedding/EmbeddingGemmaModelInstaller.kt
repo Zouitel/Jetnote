@@ -52,7 +52,7 @@ class EmbeddingGemmaModelInstaller(
                 }
                 val body = response.body
                     ?: throw IOException("Embedding model download returned an empty body.")
-                if (body.contentLength() in 1 until MIN_MODEL_BYTES) {
+                if (body.contentLength() in 1L until MIN_MODEL_BYTES) {
                     throw IOException("Embedding model download is smaller than expected.")
                 }
 
