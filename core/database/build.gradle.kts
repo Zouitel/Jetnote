@@ -22,6 +22,8 @@ dependencies {
     api(libs.room.runtime)
     ksp(libs.room.compiler)
 
+    testImplementation(libs.junit)
+
     //
     implementation("net.zetetic:sqlcipher-android:4.13.0")
     implementation("androidx.sqlite:sqlite-ktx:2.6.2")
