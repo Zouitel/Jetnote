@@ -44,7 +44,15 @@ class TemplateLibraryScreenModel(
         }
     }
 
-    fun setFavorite(\n        templateId: String,\n        title: String,\n        description: String,\n        category: String,\n        blocks: List<Block>,\n        isCustom: Boolean,\n        favorite: Boolean\n    ) {
+    fun setFavorite(
+        templateId: String,
+        title: String,
+        description: String,
+        category: String,
+        blocks: List<Block>,
+        isCustom: Boolean,
+        favorite: Boolean
+    ) {
         val uid = firebaseAuth.currentUser?.uid ?: return
         screenModelScope.launch {
             val existing = _savedTemplates.value.firstOrNull { it.templateId == templateId }
