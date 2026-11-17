@@ -18,6 +18,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import zouitel.neighborhood.domain.usecase.NoteUseCase
 import zouitel.neighborhood.domain.usecase.SemanticSearchUseCase
 import zouitel.neighborhood.logic.withFlow
@@ -70,6 +72,8 @@ class SearchScreenModel(
     private var currentUid: String = ""
     private var textSearchJob: Job? = null
     private var semanticSearchJob: Job? = null
+    private var semanticIndexJob: Job? = null
+    private val semanticIndexMutex = Mutex()
     // Incremented whenever the active user's note snapshot changes. Semantic
     // indexing is only refreshed when this revision differs from the indexed one.
     private var semanticIndexRevision = 0L
@@ -104,6 +108,9 @@ class SearchScreenModel(
             runCatching { semanticSearch.isModelInstalled() }
                 .onSuccess { installed ->
                     _semanticModelInstalled.value = installed
+                    if (installed && currentUid.isNotBlank()) {
+                        scheduleSemanticIndex(currentUid)
+                    }
                     if (installed && _uiState.value.semanticMode) {
                         updateTextSearch(fieldState.text.toString())
                     }
@@ -130,6 +137,7 @@ class SearchScreenModel(
                 indexedSemanticRevision = -1L
                 textSearchJob?.cancel()
                 semanticSearchJob?.cancel()
+                semanticIndexJob?.cancel()
                 _textSearchResults.value = emptyList()
                 _semanticSearchResults.value = emptyList()
                 if (uid.isNullOrBlank()) {
@@ -144,6 +152,7 @@ class SearchScreenModel(
                             observeDefaultNotes(uid).collect { domain ->
                                 _allNotes.value = noteMapper.fromDomain(domain)
                                 semanticIndexRevision++
+                                scheduleSemanticIndex(uid)
                                 if (_uiState.value.semanticMode && fieldState.text.isNotBlank()) {
                                     updateTextSearch(fieldState.text.toString())
                                 }
@@ -191,14 +200,7 @@ class SearchScreenModel(
                     // Avoid re-reading, re-hashing and re-indexing every note for
                     // each keystroke. A new index pass is needed only after the
                     // active user's note snapshot changes or the model is installed.
-                    while (indexedSemanticRevision != semanticIndexRevision) {
-                        val revision = semanticIndexRevision
-                        semanticSearch.indexNotes(uid)
-                        if (currentUid != uid) return@launch
-                        if (revision == semanticIndexRevision) {
-                            indexedSemanticRevision = revision
-                        }
-                    }
+                    ensureSemanticIndex(uid)
                     val results = semanticSearch.search(uid, query)
                     if (currentUid == uid && _uiState.value.semanticMode) {
                         _semanticSearchResults.value = results.map { it.noteId }
@@ -221,6 +223,40 @@ class SearchScreenModel(
         }
     }
 
+    /** Debounces note-change indexing so rapid edits produce one local refresh. */
+    private fun scheduleSemanticIndex(uid: String) {
+        if (uid.isBlank() || uid != currentUid || !_semanticModelInstalled.value) return
+        semanticIndexJob?.cancel()
+        semanticIndexJob = screenModelScope.launch {
+            delay(600)
+            try {
+                ensureSemanticIndex(uid)
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                Log.e(TAG, "Background semantic indexing failed", error)
+                if (currentUid == uid) {
+                    _semanticSearchError.value = error.message ?: "Background indexing failed."
+                }
+            }
+        }
+    }
+
+    /** Serializes foreground searches and background refreshes for the active account. */
+    private suspend fun ensureSemanticIndex(uid: String) {
+        semanticIndexMutex.withLock {
+            if (uid != currentUid) return@withLock
+            while (indexedSemanticRevision != semanticIndexRevision) {
+                val revision = semanticIndexRevision
+                semanticSearch.indexNotes(uid)
+                if (currentUid != uid) return@withLock
+                if (revision == semanticIndexRevision) {
+                    indexedSemanticRevision = revision
+                }
+            }
+        }
+    }
+
     fun setSemanticMode(enabled: Boolean) {
         _semanticSearchError.value = null
         _uiState.value = _uiState.value.copy(semanticMode = enabled)
@@ -237,8 +273,7 @@ class SearchScreenModel(
                 _semanticModelInstalled.value = semanticSearch.isModelInstalled()
                 indexedSemanticRevision = -1L
                 if (_semanticModelInstalled.value && currentUid.isNotBlank()) {
-                    // updateTextSearch performs the first index pass and records
-                    // the indexed revision before running the query.
+                    scheduleSemanticIndex(currentUid)
                     updateTextSearch(fieldState.text.toString())
                 }
             } catch (error: CancellationException) {
@@ -315,6 +350,7 @@ class SearchScreenModel(
         super.onDispose()
         textSearchJob?.cancel()
         semanticSearchJob?.cancel()
+        semanticIndexJob?.cancel()
         Log.d(TAG, "Disposed — ${_allNotes.value.size} notes cached")
     }
 
