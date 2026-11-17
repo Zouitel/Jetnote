@@ -96,8 +96,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           emulator-boot-timeout: 900
           disable-animations: true
-          script: |
-            set -euo pipefail
+          script: bash .github/scripts/wait-for-emulator.sh && ./gradlew :app:generateBaselineProfile -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile :benchmark:connectedCheck
 
             # The runner normally waits for boot, but ADB can briefly leave a
             # cold-booted emulator in the offline state. Reconnect and verify
