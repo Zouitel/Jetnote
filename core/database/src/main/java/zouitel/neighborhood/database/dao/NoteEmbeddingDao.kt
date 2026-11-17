@@ -62,4 +62,21 @@ interface NoteEmbeddingDao {
 
     @Query("DELETE FROM note_embedding_table WHERE user_uid = :userUid")
     suspend fun deleteForUser(userUid: String)
+
+    /**
+     * Removes vectors whose notes were archived, trashed, or permanently
+     * deleted. This is scoped to one account and is safe to run after sync.
+     */
+    @Query("""
+        DELETE FROM note_embedding_table
+        WHERE user_uid = :userUid
+            AND NOT EXISTS (
+                SELECT 1 FROM note_data_table AS notes
+                WHERE notes.uuid = note_embedding_table.note_uid
+                    AND notes.user_uid = note_embedding_table.user_uid
+                    AND notes.archived = 0
+                    AND notes.deleted_at IS NULL
+            )
+    """)
+    suspend fun pruneInactiveForUser(userUid: String)
 }
