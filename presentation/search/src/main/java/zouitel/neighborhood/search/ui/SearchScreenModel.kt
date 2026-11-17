@@ -70,6 +70,10 @@ class SearchScreenModel(
     private var currentUid: String = ""
     private var textSearchJob: Job? = null
     private var semanticSearchJob: Job? = null
+    // Incremented whenever the active user's note snapshot changes. Semantic
+    // indexing is only refreshed when this revision differs from the indexed one.
+    private var semanticIndexRevision = 0L
+    private var indexedSemanticRevision = -1L
 
     private val _semanticSearchResults = MutableStateFlow<List<String>>(emptyList())
     val semanticSearchResults = _semanticSearchResults.asStateFlow()
@@ -98,7 +102,12 @@ class SearchScreenModel(
     private fun refreshSemanticModelState() {
         screenModelScope.launch {
             runCatching { semanticSearch.isModelInstalled() }
-                .onSuccess { _semanticModelInstalled.value = it }
+                .onSuccess { installed ->
+                    _semanticModelInstalled.value = installed
+                    if (installed && _uiState.value.semanticMode) {
+                        updateTextSearch(fieldState.text.toString())
+                    }
+                }
                 .onFailure { error ->
                     Log.w(TAG, "Unable to inspect local embedding model", error)
                 }
@@ -117,6 +126,8 @@ class SearchScreenModel(
             }.collectLatest { uid ->
                 Log.d(TAG, "Auth → uid=$uid")
                 currentUid = uid.orEmpty()
+                semanticIndexRevision++
+                indexedSemanticRevision = -1L
                 textSearchJob?.cancel()
                 semanticSearchJob?.cancel()
                 _textSearchResults.value = emptyList()
@@ -132,6 +143,10 @@ class SearchScreenModel(
                         launch {
                             observeDefaultNotes(uid).collect { domain ->
                                 _allNotes.value = noteMapper.fromDomain(domain)
+                                semanticIndexRevision++
+                                if (_uiState.value.semanticMode && fieldState.text.isNotBlank()) {
+                                    updateTextSearch(fieldState.text.toString())
+                                }
                                 Log.d(TAG, "Loaded ${_allNotes.value.size} notes for user: $uid")
                             }
                         }
@@ -173,7 +188,17 @@ class SearchScreenModel(
             semanticSearchJob = screenModelScope.launch {
                 delay(300)
                 try {
-                    semanticSearch.indexNotes(uid)
+                    // Avoid re-reading, re-hashing and re-indexing every note for
+                    // each keystroke. A new index pass is needed only after the
+                    // active user's note snapshot changes or the model is installed.
+                    while (indexedSemanticRevision != semanticIndexRevision) {
+                        val revision = semanticIndexRevision
+                        semanticSearch.indexNotes(uid)
+                        if (currentUid != uid) return@launch
+                        if (revision == semanticIndexRevision) {
+                            indexedSemanticRevision = revision
+                        }
+                    }
                     val results = semanticSearch.search(uid, query)
                     if (currentUid == uid && _uiState.value.semanticMode) {
                         _semanticSearchResults.value = results.map { it.noteId }
@@ -210,6 +235,7 @@ class SearchScreenModel(
             try {
                 semanticSearch.installModel()
                 _semanticModelInstalled.value = semanticSearch.isModelInstalled()
+                indexedSemanticRevision = -1L
                 if (_semanticModelInstalled.value && currentUid.isNotBlank()) {
                     semanticSearch.indexNotes(currentUid)
                     updateTextSearch(fieldState.text.toString())
