@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.domain)
     implementation(projects.common.ui)
     implementation(projects.common.logic)
+    implementation(projects.common.markdown)
     api(projects.presentation.assistant)
     api(projects.presentation.tag)
     api(projects.presentation.recorder)
