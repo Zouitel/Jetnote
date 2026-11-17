@@ -248,7 +248,9 @@ class SearchScreenModel(
             updateTextSearch(fieldState.text.toString())
         } else {
             textSearchJob?.cancel()
+            semanticSearchJob?.cancel()
             _textSearchResults.value = emptyList()
+            _semanticSearchResults.value = emptyList()
         }
     }
 
