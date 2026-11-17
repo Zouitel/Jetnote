@@ -14,6 +14,7 @@ ksp {
 dependencies {
     //Modules.
     implementation(projects.core.repository)
+    implementation(projects.ai)
     implementation(projects.security)
 
     //Room.
