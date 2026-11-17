@@ -26,5 +26,6 @@ data class Data (
     val medias: List<Media> = emptyList(),
     val audios: List<Audio> = emptyList(),
     val reminders: List<Reminder> = emptyList(),
-    val deletedAt: Long? = null
+    val deletedAt: Long? = null,
+    val isFavorite: Boolean = false
 )
