@@ -12,7 +12,6 @@ import zouitel.neighborhood.domain.usecase.NoteTemplateUseCase
 import zouitel.neighborhood.markdown.core.Block
 import zouitel.neighborhood.workspace.mapper.BlocksJson
 import zouitel.neighborhood.workspace.model.Data
-import zouitel.neighborhood.navigator.templates.NoteTemplate
 import java.util.UUID
 
 class TemplateLibraryScreenModel(
@@ -45,25 +44,25 @@ class TemplateLibraryScreenModel(
         }
     }
 
-    fun setFavorite(template: NoteTemplate, favorite: Boolean) {
+    fun setFavorite(\n        templateId: String,\n        title: String,\n        description: String,\n        category: String,\n        blocks: List<Block>,\n        isCustom: Boolean,\n        favorite: Boolean\n    ) {
         val uid = firebaseAuth.currentUser?.uid ?: return
         screenModelScope.launch {
-            val existing = _savedTemplates.value.firstOrNull { it.templateId == template.id }
+            val existing = _savedTemplates.value.firstOrNull { it.templateId == templateId }
             if (!favorite && existing?.isCustom != true) {
-                templateUseCase.delete(uid, template.id)
+                templateUseCase.delete(uid, templateId)
                 return@launch
             }
             val now = System.currentTimeMillis()
             templateUseCase.save(
                 SavedNoteTemplate(
-                    templateId = template.id,
+                    templateId = templateId,
                     ownerUid = uid,
-                    title = template.title,
-                    description = template.description,
-                    category = template.category,
-                    blocksJson = BlocksJson.encodeToString<List<Block>>(template.blocks()),
+                    title = title,
+                    description = description,
+                    category = category,
+                    blocksJson = BlocksJson.encodeToString<List<Block>>(blocks),
                     isFavorite = favorite,
-                    isCustom = template.isCustom,
+                    isCustom = isCustom,
                     createdAt = existing?.createdAt ?: now,
                     updatedAt = now
                 )
