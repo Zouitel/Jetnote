@@ -44,7 +44,7 @@ import zouitel.neighborhood.security.encrition.FileEncryption
 val databaseLazyModule = lazyModule {
     single { BackupArchiveManager(androidContext(), get()) }
     factoryOf(::LocalNoteEmbeddingIndexer)
-    factoryOf(::LocalSemanticSearch)
+    factory { LocalSemanticSearch(get(), get()) }
     //DataSource.
     singleOf(::DataDataSourceImpl) bind DataDataSource::class
     singleOf(::NoteDataSourceImpl) bind NoteDataSource::class
