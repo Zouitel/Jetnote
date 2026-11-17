@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -98,7 +100,8 @@ data class WorkplaceScreen(
             linkModel = koinScreenModel(),
             alarmModel = koinScreenModel(),
             workplaceModel = koinScreenModel(),
-            settingsModel = koinScreenModel()
+            settingsModel = koinScreenModel(),
+            templateModel = koinScreenModel()
         )
     }
 
@@ -112,7 +115,8 @@ data class WorkplaceScreen(
         linkModel: LinkScreenModel,
         alarmModel: AlarmManagerScreenModel,
         workplaceModel: WorkplaceScreenModel,
-        settingsModel: SettingsScreenModel
+        settingsModel: SettingsScreenModel,
+        templateModel: TemplateLibraryScreenModel
     ) {
         val uid = Uuid.random().toString()
         val keyboardManager = LocalFocusManager.current
@@ -162,6 +166,10 @@ data class WorkplaceScreen(
         }
         val snackbarState = remember { SnackbarHostState() }
         var showExportDialog by remember { mutableStateOf(false) }
+        var showTemplateDialog by remember { mutableStateOf(false) }
+        var templateTitle by remember(data.title) { mutableStateOf(data.title) }
+        var templateDescription by remember { mutableStateOf("") }
+        var templateCategory by remember { mutableStateOf("Personal") }
         val toolTipState = rememberTooltipState(isPersistent = true)
         val scope = rememberCoroutineScope()
         val deletedReminders = remember { mutableStateListOf<Pair<Reminder, Int>>() }
@@ -232,8 +240,13 @@ data class WorkplaceScreen(
                 Column(modifier = Modifier.statusBarsPadding()) {
                     MediaTop(currentData)
 
-                    TextButton(onClick = { showExportDialog = true }) {
-                        Text("Export note")
+                    Row {
+                        TextButton(onClick = { showExportDialog = true }) {
+                            Text("Export note")
+                        }
+                        TextButton(onClick = { showTemplateDialog = true }) {
+                            Text("Save as template")
+                        }
                     }
 
                     CommonTextField(
@@ -323,6 +336,58 @@ data class WorkplaceScreen(
                     }
                 }
             }
+        }
+
+        if (showTemplateDialog) {
+            AlertDialog(
+                onDismissRequest = { showTemplateDialog = false },
+                title = { Text("Save note as template") },
+                text = {
+                    Column {
+                        OutlinedTextField(
+                            value = templateTitle,
+                            onValueChange = { templateTitle = it },
+                            label = { Text("Template name") },
+                            singleLine = true
+                        )
+                        OutlinedTextField(
+                            value = templateDescription,
+                            onValueChange = { templateDescription = it },
+                            label = { Text("Description") }
+                        )
+                        OutlinedTextField(
+                            value = templateCategory,
+                            onValueChange = { templateCategory = it },
+                            label = { Text("Category") },
+                            singleLine = true
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        enabled = templateTitle.isNotBlank(),
+                        onClick = {
+                            templateModel.saveCustomTemplate(
+                                note = currentData.value.copy(
+                                    title = templateTitle,
+                                    blocks = editorState.state.blocks
+                                ),
+                                title = templateTitle,
+                                description = templateDescription,
+                                category = templateCategory
+                            )
+                            showTemplateDialog = false
+                        }
+                    ) {
+                        Text("Save")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showTemplateDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
         }
 
         if (showExportDialog) {
