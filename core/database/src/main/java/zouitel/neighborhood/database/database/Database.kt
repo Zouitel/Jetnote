@@ -57,7 +57,7 @@ abstract class Database: RoomDatabase() {
     companion object {
         val MIGRATION_13_14 = object : Migration(13, 14) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("CREATE TABLE IF NOT EXISTS note_embedding_table (user_uid TEXT NOT NULL, note_uid TEXT NOT NULL, model_id TEXT NOT NULL, dimensions INTEGER NOT NULL, vector BLOB NOT NULL, updated_at INTEGER NOT NULL, PRIMARY KEY(user_uid, note_uid, model_id))")
+                db.execSQL("CREATE TABLE IF NOT EXISTS note_embedding_table (user_uid TEXT NOT NULL, note_uid TEXT NOT NULL, model_id TEXT NOT NULL, dimensions INTEGER NOT NULL, content_hash TEXT NOT NULL, vector BLOB NOT NULL, updated_at INTEGER NOT NULL, PRIMARY KEY(user_uid, note_uid, model_id))")
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_note_embedding_table_user_uid_model_id ON note_embedding_table(user_uid, model_id)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_note_embedding_table_note_uid ON note_embedding_table(note_uid)")
             }
