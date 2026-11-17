@@ -83,6 +83,9 @@ dependencies {
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.session)
 
+    // Baseline Profile installation for Macrobenchmark/profile collection.
+    implementation(libs.androidx.profileinstaller)
+
     //Firebase.
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)

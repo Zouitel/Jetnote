@@ -10,6 +10,13 @@ import org.koin.dsl.lazyModule
 import zouitel.neighborhood.database.database.Database
 import zouitel.neighborhood.database.backup.BackupArchiveManager
 import zouitel.neighborhood.database.database.TagsCallback
+import zouitel.neighborhood.database.embedding.LocalNoteEmbeddingIndexer
+import zouitel.neighborhood.database.embedding.LocalSemanticSearch
+import zouitel.neighborhood.database.embedding.LocalSemanticSearchRepository
+import zouitel.neighborhood.domain.repository.SemanticSearchRepository
+import zouitel.neighborhood.ai.embedding.EmbeddingGemmaModelInstaller
+import zouitel.neighborhood.ai.embedding.EmbeddingGemmaProvider
+import zouitel.neighborhood.ai.embedding.TextEmbeddingProvider
 import zouitel.neighborhood.database.datasourceImpl.AssistantDatasourceImpl
 import zouitel.neighborhood.database.datasourceImpl.ConversationDatasourceImpl
 import zouitel.neighborhood.database.datasourceImpl.DataDataSourceImpl
@@ -41,6 +48,13 @@ import zouitel.neighborhood.security.encrition.FileEncryption
 
 val databaseLazyModule = lazyModule {
     single { BackupArchiveManager(androidContext(), get()) }
+    single { EmbeddingGemmaModelInstaller(androidContext()) }
+    single<TextEmbeddingProvider> {
+        EmbeddingGemmaProvider(get<EmbeddingGemmaModelInstaller>().modelFile)
+    }
+    factoryOf(::LocalNoteEmbeddingIndexer)
+    factory { LocalSemanticSearch(get(), get()) }
+    singleOf(::LocalSemanticSearchRepository) bind SemanticSearchRepository::class
     //DataSource.
     singleOf(::DataDataSourceImpl) bind DataDataSource::class
     singleOf(::NoteDataSourceImpl) bind NoteDataSource::class
@@ -62,6 +76,7 @@ val databaseLazyModule = lazyModule {
     single { get<Database>().conversationDao() }
     single { get<Database>().modelDao() }
     single { get<Database>().providerDao() }
+    single { get<Database>().noteEmbeddingDao() }
 
     //Mappers
     factoryOf(::DataMapper)
@@ -85,7 +100,7 @@ val databaseLazyModule = lazyModule {
             "jetnote_database"
         )
             .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
-            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13)
+            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13, Database.MIGRATION_13_14)
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
             .addCallback(TagsCallback { db })

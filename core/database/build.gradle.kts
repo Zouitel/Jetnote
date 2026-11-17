@@ -14,12 +14,17 @@ ksp {
 dependencies {
     //Modules.
     implementation(projects.core.repository)
+    implementation(projects.domain)
+    implementation(projects.ai)
     implementation(projects.security)
 
     //Room.
     implementation(libs.roomkts)
     api(libs.room.runtime)
     ksp(libs.room.compiler)
+
+    testImplementation(libs.junit)
+    implementation(libs.kotlinx.serialization.json)
 
     //
     implementation("net.zetetic:sqlcipher-android:4.13.0")

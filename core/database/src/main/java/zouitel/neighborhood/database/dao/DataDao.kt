@@ -14,6 +14,19 @@ interface DataDao {
     @Upsert
     suspend fun upsert(data: Data)
 
+    /**
+     * Notes eligible for local embedding generation. The caller must use the
+     * returned user-scoped records only and must not upload their contents.
+     */
+    @Query("""
+        SELECT * FROM $TABLE_NAME
+        WHERE USER_UID = :userUid
+            AND ARCHIVED = 0
+            AND DELETED_AT IS NULL
+        ORDER BY LAST_EDIT DESC
+    """)
+    suspend fun getIndexableNotes(userUid: String): List<Data>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(data: List<Data>)
 

@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -30,4 +29,10 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)
     implementation(libs.okhttp.logging)
+
+    // On-device text embedding runtime (LiteRT-LM via MediaPipe).
+    implementation("com.google.ai.edge.litertlm:litertlm-android:0.19.1")
+
+    // Unit tests
+    testImplementation(libs.junit)
 }
