@@ -237,7 +237,8 @@ class SearchScreenModel(
                 _semanticModelInstalled.value = semanticSearch.isModelInstalled()
                 indexedSemanticRevision = -1L
                 if (_semanticModelInstalled.value && currentUid.isNotBlank()) {
-                    semanticSearch.indexNotes(currentUid)
+                    // updateTextSearch performs the first index pass and records
+                    // the indexed revision before running the query.
                     updateTextSearch(fieldState.text.toString())
                 }
             } catch (error: CancellationException) {
