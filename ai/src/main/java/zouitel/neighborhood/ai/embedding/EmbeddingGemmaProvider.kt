@@ -1,6 +1,5 @@
 package zouitel.neighborhood.ai.embedding
 
-import android.content.Context
 import com.google.ai.edge.litertlm.Backend
 import com.google.ai.edge.litertlm.EmbeddingEngine
 import com.google.ai.edge.litertlm.EmbeddingEngineConfig
