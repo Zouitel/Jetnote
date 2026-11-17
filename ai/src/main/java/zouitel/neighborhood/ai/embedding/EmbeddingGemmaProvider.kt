@@ -67,14 +67,19 @@ class EmbeddingGemmaProvider(
                 val result = getEngine().computeEmbedding(
                     listOf(InputData.Text("$instruction${text.trim()}"))
                 )
-                val values = result.embedding.toFloatArray()
+                val values = result.embedding.copyOf()
                 check(values.size == EMBEDDING_DIMENSIONS) {
                     "EmbeddingGemma returned an unexpected vector dimension."
                 }
-                val magnitude = sqrt(values.sumOf { it.toDouble() * it.toDouble() })
+                var magnitudeSquared = 0.0
+                for (value in values) {
+                    val doubleValue = value.toDouble()
+                    magnitudeSquared += doubleValue * doubleValue
+                }
+                val magnitude = sqrt(magnitudeSquared)
                 if (magnitude > 0.0) {
-                    values.indices.forEach { index ->
-                        values[index] = (values[index] / magnitude).toFloat()
+                    for (index in values.indices) {
+                        values[index] = (values[index].toDouble() / magnitude).toFloat()
                     }
                 }
                 EmbeddingVector(modelId = model.id, values = values)
