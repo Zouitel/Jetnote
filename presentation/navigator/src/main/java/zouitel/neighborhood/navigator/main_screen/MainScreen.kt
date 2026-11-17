@@ -54,7 +54,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -89,8 +88,7 @@ import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.OpenDrawer
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.Data
-import zouitel.neighborhood.workspace.provider.SharedScreen
-import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
+import zouitel.neighborhood.navigator.templates.TemplateGalleryScreen
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -179,10 +177,6 @@ class MainScreen: Screen {
 
         val refreshState = rememberPullToRefreshState()
         val user by remember(syncModel, syncModel::userState).collectAsState()
-
-        val workplaceScreen = rememberScreen(
-            SharedScreen.Workplace(Data(),true)
-        )
 
         Scaffold(
             snackbarHost = {
@@ -350,7 +344,7 @@ class MainScreen: Screen {
                                     CommonConstants.KEY_STANDARD,
                                     settings.isSound
                                 )
-                                navigator.push(workplaceScreen)
+                                navigator.push(TemplateGalleryScreen())
                             },
                             expanded = searchBarBehavior.scrollOffset == 0f,
                             containerColor = CommonColors.prime,
