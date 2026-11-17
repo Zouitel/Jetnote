@@ -62,6 +62,7 @@ val databaseLazyModule = lazyModule {
     single { get<Database>().conversationDao() }
     single { get<Database>().modelDao() }
     single { get<Database>().providerDao() }
+    single { get<Database>().noteEmbeddingDao() }
 
     //Mappers
     factoryOf(::DataMapper)
@@ -85,7 +86,7 @@ val databaseLazyModule = lazyModule {
             "jetnote_database"
         )
             .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
-            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13)
+            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13, Database.MIGRATION_13_14)
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
             .addCallback(TagsCallback { db })
