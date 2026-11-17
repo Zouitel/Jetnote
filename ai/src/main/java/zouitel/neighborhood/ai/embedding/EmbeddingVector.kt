@@ -18,7 +18,7 @@ class EmbeddingVector(
     init {
         require(modelId.isNotBlank()) { "Embedding model ID cannot be blank." }
         require(components.isNotEmpty()) { "An embedding vector cannot be empty." }
-        require(components.all(Float::isFinite)) { "Embedding values must be finite." }
+        require(components.all { it.isFinite() }) { "Embedding values must be finite." }
     }
 
     operator fun get(index: Int): Float = components[index]
