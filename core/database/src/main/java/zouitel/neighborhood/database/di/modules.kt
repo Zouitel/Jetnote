@@ -12,6 +12,9 @@ import zouitel.neighborhood.database.backup.BackupArchiveManager
 import zouitel.neighborhood.database.database.TagsCallback
 import zouitel.neighborhood.database.embedding.LocalNoteEmbeddingIndexer
 import zouitel.neighborhood.database.embedding.LocalSemanticSearch
+import zouitel.neighborhood.ai.embedding.EmbeddingGemmaModelInstaller
+import zouitel.neighborhood.ai.embedding.EmbeddingGemmaProvider
+import zouitel.neighborhood.ai.embedding.TextEmbeddingProvider
 import zouitel.neighborhood.database.datasourceImpl.AssistantDatasourceImpl
 import zouitel.neighborhood.database.datasourceImpl.ConversationDatasourceImpl
 import zouitel.neighborhood.database.datasourceImpl.DataDataSourceImpl
@@ -43,6 +46,10 @@ import zouitel.neighborhood.security.encrition.FileEncryption
 
 val databaseLazyModule = lazyModule {
     single { BackupArchiveManager(androidContext(), get()) }
+    single { EmbeddingGemmaModelInstaller(androidContext()) }
+    single<TextEmbeddingProvider> {
+        EmbeddingGemmaProvider(androidContext(), get<EmbeddingGemmaModelInstaller>().modelFile)
+    }
     factoryOf(::LocalNoteEmbeddingIndexer)
     factory { LocalSemanticSearch(get(), get()) }
     //DataSource.
