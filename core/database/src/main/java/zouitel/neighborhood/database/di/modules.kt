@@ -13,7 +13,9 @@ import zouitel.neighborhood.database.database.TagsCallback
 import zouitel.neighborhood.database.embedding.LocalNoteEmbeddingIndexer
 import zouitel.neighborhood.database.embedding.LocalSemanticSearch
 import zouitel.neighborhood.database.embedding.LocalSemanticSearchRepository
+import zouitel.neighborhood.database.embedding.LocalNoteTemplateRepository
 import zouitel.neighborhood.domain.repository.SemanticSearchRepository
+import zouitel.neighborhood.domain.repository.NoteTemplateRepository
 import zouitel.neighborhood.ai.embedding.EmbeddingGemmaModelInstaller
 import zouitel.neighborhood.ai.embedding.EmbeddingGemmaProvider
 import zouitel.neighborhood.ai.embedding.TextEmbeddingProvider
@@ -55,6 +57,7 @@ val databaseLazyModule = lazyModule {
     factoryOf(::LocalNoteEmbeddingIndexer)
     factory { LocalSemanticSearch(get(), get()) }
     singleOf(::LocalSemanticSearchRepository) bind SemanticSearchRepository::class
+    singleOf(::LocalNoteTemplateRepository) bind NoteTemplateRepository::class
     //DataSource.
     singleOf(::DataDataSourceImpl) bind DataDataSource::class
     singleOf(::NoteDataSourceImpl) bind NoteDataSource::class
@@ -77,6 +80,7 @@ val databaseLazyModule = lazyModule {
     single { get<Database>().modelDao() }
     single { get<Database>().providerDao() }
     single { get<Database>().noteEmbeddingDao() }
+    single { get<Database>().noteTemplateDao() }
 
     //Mappers
     factoryOf(::DataMapper)
@@ -100,7 +104,7 @@ val databaseLazyModule = lazyModule {
             "jetnote_database"
         )
             .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
-            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13, Database.MIGRATION_13_14)
+            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13, Database.MIGRATION_13_14, Database.MIGRATION_14_15)
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
             .addCallback(TagsCallback { db })
