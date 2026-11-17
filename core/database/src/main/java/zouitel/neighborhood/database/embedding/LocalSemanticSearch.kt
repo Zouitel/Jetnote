@@ -1,6 +1,5 @@
 package zouitel.neighborhood.database.embedding
 
-import zouitel.neighborhood.ai.embedding.EmbeddingSimilarity
 import zouitel.neighborhood.ai.embedding.EmbeddingVector
 import zouitel.neighborhood.ai.embedding.SemanticSearchCandidate
 import zouitel.neighborhood.ai.embedding.SemanticSearchEngine
