@@ -1,6 +1,8 @@
 package zouitel.neighborhood.database.embedding
 
 import java.security.MessageDigest
+import kotlin.math.sqrt
+import zouitel.neighborhood.ai.embedding.EmbeddingVector
 import zouitel.neighborhood.ai.embedding.TextEmbeddingProvider
 import zouitel.neighborhood.database.dao.DataDao
 import zouitel.neighborhood.database.dao.NoteEmbeddingDao
@@ -41,19 +43,29 @@ class LocalNoteEmbeddingIndexer(
         }
 
         if (pending.isEmpty()) return 0
-        val vectors = provider.embedAll(pending.map { it.second })
-        check(vectors.size == pending.size) {
+        val pendingChunks = pending.map { item ->
+            item to NoteEmbeddingText.chunks(item.second)
+        }
+        val allChunks = pendingChunks.flatMap { it.second }
+        val vectors = provider.embedAll(allChunks)
+        check(vectors.size == allChunks.size) {
             "Embedding provider returned a different number of vectors than inputs."
         }
 
-        val records = pending.zip(vectors).map { (item, vector) ->
+        var vectorOffset = 0
+        val records = pendingChunks.map { (item, chunks) ->
             val (note, _, hash) = item
-            check(vector.modelId == model.id) {
-                "Embedding provider returned a vector for an unexpected model."
+            val chunkVectors = vectors.subList(vectorOffset, vectorOffset + chunks.size)
+            vectorOffset += chunks.size
+            chunkVectors.forEach { vector ->
+                check(vector.modelId == model.id) {
+                    "Embedding provider returned a vector for an unexpected model."
+                }
+                check(vector.dimensions == model.dimensions) {
+                    "Embedding provider returned an unexpected vector dimension."
+                }
             }
-            check(vector.dimensions == model.dimensions) {
-                "Embedding provider returned an unexpected vector dimension."
-            }
+            val vector = averageVectors(model.id, chunkVectors)
             NoteEmbedding(
                 userUid = userUid,
                 noteUid = note.uid,
@@ -66,6 +78,26 @@ class LocalNoteEmbeddingIndexer(
         }
         embeddings.upsertAll(records)
         return records.size
+    }
+
+    private fun averageVectors(
+        modelId: String,
+        vectors: List<EmbeddingVector>,
+    ): EmbeddingVector {
+        require(vectors.isNotEmpty()) { "At least one chunk vector is required." }
+        val average = FloatArray(vectors.first().dimensions)
+        vectors.forEach { vector ->
+            vector.toFloatArray().forEachIndexed { index, value ->
+                average[index] += value / vectors.size
+            }
+        }
+        val magnitude = sqrt(average.sumOf { it.toDouble() * it.toDouble() })
+        if (magnitude > 0.0) {
+            average.indices.forEach { index ->
+                average[index] = (average[index] / magnitude).toFloat()
+            }
+        }
+        return EmbeddingVector(modelId, average)
     }
 
     private fun fingerprint(text: String): String =
