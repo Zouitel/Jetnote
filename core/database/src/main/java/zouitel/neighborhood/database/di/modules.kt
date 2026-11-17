@@ -13,7 +13,7 @@ import zouitel.neighborhood.database.database.TagsCallback
 import zouitel.neighborhood.database.embedding.LocalNoteEmbeddingIndexer
 import zouitel.neighborhood.database.embedding.LocalSemanticSearch
 import zouitel.neighborhood.database.embedding.LocalSemanticSearchRepository
-import zouitel.neighborhood.database.embedding.LocalNoteTemplateRepository
+import zouitel.neighborhood.database.repository.LocalNoteTemplateRepository
 import zouitel.neighborhood.domain.repository.SemanticSearchRepository
 import zouitel.neighborhood.domain.repository.NoteTemplateRepository
 import zouitel.neighborhood.ai.embedding.EmbeddingGemmaModelInstaller
