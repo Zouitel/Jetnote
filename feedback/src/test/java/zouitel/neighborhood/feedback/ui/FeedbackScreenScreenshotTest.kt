@@ -3,7 +3,6 @@ package zouitel.neighborhood.feedback.ui
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
-import io.github.takahirom.roborazzi.captureRoboImage
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +13,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
+import com.github.takahirom.roborazzi.captureRoboImage
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35], qualifiers = "w411dp-h891dp")
