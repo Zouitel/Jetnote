@@ -29,11 +29,15 @@ class LocalNoteEmbeddingIndexer(
 
         val existing = embeddings.getActiveForUser(userUid, model.id)
             .associateBy { it.noteUid }
-        val pending = activeNotes.map { note ->
+        val prepared = activeNotes.map { note ->
             val text = NoteEmbeddingText.from(note.title, note.blocks)
             Triple(note, text, fingerprint(text))
-        }.filter { (note, _, hash) ->
-            existing[note.uid]?.contentHash != hash
+        }
+        prepared.filter { (_, text, _) -> text.isBlank() }
+            .forEach { (note, _, _) -> embeddings.deleteForNote(userUid, note.uid) }
+
+        val pending = prepared.filter { (note, text, hash) ->
+            text.isNotBlank() && existing[note.uid]?.contentHash != hash
         }
 
         if (pending.isEmpty()) return 0
