@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -24,6 +23,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,9 +32,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.markdown.core.BlockId
+import zouitel.neighborhood.workspace.mapper.BlocksJson
 import zouitel.neighborhood.workspace.model.Data
+import zouitel.neighborhood.workspace.ui.workplace.TemplateLibraryScreenModel
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
 
 class TemplateGalleryScreen : Screen {
@@ -41,16 +47,57 @@ class TemplateGalleryScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val libraryModel = koinScreenModel<TemplateLibraryScreenModel>()
+        val savedTemplates by libraryModel.savedTemplates.collectAsState()
         var query by remember { mutableStateOf("") }
         var category by remember { mutableStateOf("All") }
 
-        val visibleTemplates = remember(query, category) {
-            NoteTemplateCatalog.templates.filter { template ->
-                (category == "All" || template.category == category) &&
-                    (query.isBlank() ||
+        LaunchedEffect(libraryModel) {
+            libraryModel.observe()
+        }
+
+        val savedById = savedTemplates.associateBy { it.templateId }
+        val builtInTemplates = NoteTemplateCatalog.templates.map { template ->
+            template.copy(isFavorite = savedById[template.id]?.isFavorite == true)
+        }
+        val personalTemplates = savedTemplates.filter { it.isCustom }.map { saved ->
+            NoteTemplate(
+                id = saved.templateId,
+                title = saved.title,
+                description = saved.description,
+                category = saved.category,
+                preview = "Personal template",
+                blocks = {
+                    runCatching {
+                        BlocksJson.decodeFromString<List<Block>>(saved.blocksJson)
+                            .map { it.copy(id = BlockId.generate()) }
+                    }.getOrElse { listOf(Block.paragraph()) }
+                },
+                isFavorite = saved.isFavorite,
+                isCustom = true
+            )
+        }
+        val allTemplates = builtInTemplates + personalTemplates
+        val categories = (
+            listOf("All", "Favorites", "My templates") +
+                NoteTemplateCatalog.categories.drop(1) +
+                personalTemplates.map { it.category }
+            ).distinct()
+
+        val visibleTemplates = remember(query, category, savedTemplates) {
+            allTemplates.filter { template ->
+                val categoryMatches = when (category) {
+                    "All" -> true
+                    "Favorites" -> template.isFavorite
+                    "My templates" -> template.isCustom
+                    else -> template.category == category
+                }
+                categoryMatches && (
+                    query.isBlank() ||
                         template.title.contains(query, ignoreCase = true) ||
                         template.description.contains(query, ignoreCase = true) ||
-                        template.category.contains(query, ignoreCase = true))
+                        template.category.contains(query, ignoreCase = true)
+                    )
             }
         }
 
@@ -97,7 +144,7 @@ class TemplateGalleryScreen : Screen {
                         .horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    NoteTemplateCatalog.categories.forEach { item ->
+                    categories.forEach { item ->
                         FilterChip(
                             selected = category == item,
                             onClick = { category = item },
@@ -136,7 +183,7 @@ class TemplateGalleryScreen : Screen {
                                             style = MaterialTheme.typography.titleMedium
                                         )
                                         Text(
-                                            template.category,
+                                            if (template.isCustom) "Yours" else template.category,
                                             style = MaterialTheme.typography.labelMedium,
                                             color = MaterialTheme.colorScheme.primary
                                         )
@@ -153,11 +200,37 @@ class TemplateGalleryScreen : Screen {
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Spacer(Modifier.height(8.dp))
-                                    Text(
-                                        "Use template",
-                                        style = MaterialTheme.typography.labelLarge,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
+                                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        TextButton(
+                                            onClick = {
+                                                libraryModel.setFavorite(
+                                                    templateId = template.id,
+                                                    title = template.title,
+                                                    description = template.description,
+                                                    category = template.category,
+                                                    blocks = template.blocks(),
+                                                    isCustom = template.isCustom,
+                                                    favorite = !template.isFavorite
+                                                )
+                                            }
+                                        ) {
+                                            Text(if (template.isFavorite) "Unfavorite" else "Favorite")
+                                        }
+                                        if (template.isCustom) {
+                                            TextButton(
+                                                onClick = { libraryModel.deleteTemplate(template.id) }
+                                            ) {
+                                                Text("Delete")
+                                            }
+                                        }
+                                        TextButton(
+                                            onClick = {
+                                                navigator.push(WorkplaceScreen(template.toNoteData(), true))
+                                            }
+                                        ) {
+                                            Text("Use template")
+                                        }
+                                    }
                                 }
                             }
                         }
