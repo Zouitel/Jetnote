@@ -9,6 +9,7 @@ import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreenModel
+import zouitel.neighborhood.workspace.ui.workplace.TemplateLibraryScreenModel
 import zouitel.neighborhood.workspace.worker.CopyMediaWorker
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -21,6 +22,7 @@ import zouitel.neighborhood.workspace.ui.features.OCRScreenModel
 
 val workplaceModule = module {
     factoryOf(::DataMapper)
+    factoryOf(::TemplateLibraryScreenModel)
     factoryOf(::AlarmManagerScreenModel)
     factory {
         WorkplaceScreenModel(androidApplication())

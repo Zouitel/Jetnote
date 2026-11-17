@@ -20,14 +20,16 @@ import zouitel.neighborhood.database.model.NoteFts
 import zouitel.neighborhood.database.model.Provider
 import zouitel.neighborhood.database.model.Tag
 import zouitel.neighborhood.database.model.NoteEmbedding
+import zouitel.neighborhood.database.model.NoteTemplateEntity
 import zouitel.neighborhood.database.dao.AssistantDao
 import zouitel.neighborhood.database.dao.ConversationDao
 import zouitel.neighborhood.database.dao.ModelDao
 import zouitel.neighborhood.database.dao.ProviderDao
 import zouitel.neighborhood.database.dao.NoteEmbeddingDao
+import zouitel.neighborhood.database.dao.NoteTemplateDao
 
 @Database(
-    version = 14,
+    version = 15,
     entities = [
         Data::class,
         NoteFts::class,
@@ -38,7 +40,8 @@ import zouitel.neighborhood.database.dao.NoteEmbeddingDao
         Conversation::class,
         Model::class,
         Provider::class,
-        NoteEmbedding::class
+        NoteEmbedding::class,
+        NoteTemplateEntity::class
     ],
     exportSchema = true
 )
@@ -53,8 +56,31 @@ abstract class Database: RoomDatabase() {
     abstract fun modelDao(): ModelDao
     abstract fun providerDao(): ProviderDao
     abstract fun noteEmbeddingDao(): NoteEmbeddingDao
+    abstract fun noteTemplateDao(): NoteTemplateDao
 
     companion object {
+        val MIGRATION_14_15 = object : Migration(14, 15) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS note_template_table (
+                        template_id TEXT NOT NULL,
+                        owner_uid TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        description TEXT NOT NULL,
+                        category TEXT NOT NULL,
+                        blocks_json TEXT NOT NULL,
+                        is_favorite INTEGER NOT NULL,
+                        is_custom INTEGER NOT NULL,
+                        created_at INTEGER NOT NULL,
+                        updated_at INTEGER NOT NULL,
+                        PRIMARY KEY(owner_uid, template_id)
+                    )
+                """.trimIndent())
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_note_template_table_owner_uid ON note_template_table(owner_uid)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_note_template_table_updated_at ON note_template_table(updated_at)")
+            }
+        }
+
         val MIGRATION_13_14 = object : Migration(13, 14) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("CREATE TABLE IF NOT EXISTS note_embedding_table (user_uid TEXT NOT NULL, note_uid TEXT NOT NULL, model_id TEXT NOT NULL, dimensions INTEGER NOT NULL, content_hash TEXT NOT NULL, vector BLOB NOT NULL, updated_at INTEGER NOT NULL, PRIMARY KEY(user_uid, note_uid, model_id))")

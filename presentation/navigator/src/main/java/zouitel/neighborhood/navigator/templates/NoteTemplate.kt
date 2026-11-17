@@ -1,6 +1,7 @@
 package zouitel.neighborhood.navigator.templates
 
 import zouitel.neighborhood.markdown.core.Block
+import zouitel.neighborhood.markdown.core.BlockId
 import zouitel.neighborhood.workspace.model.Data
 
 /**
@@ -13,11 +14,13 @@ data class NoteTemplate(
     val description: String,
     val category: String,
     val preview: String,
-    val blocks: () -> List<Block>
+    val blocks: () -> List<Block>,
+    val isFavorite: Boolean = false,
+    val isCustom: Boolean = false
 ) {
     fun toNoteData() = Data(
         title = title,
-        blocks = blocks(),
+        blocks = blocks().map { it.copy(id = BlockId.generate()) },
         position = 2
     )
 }
