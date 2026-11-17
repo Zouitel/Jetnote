@@ -50,7 +50,7 @@ val databaseLazyModule = lazyModule {
     single { BackupArchiveManager(androidContext(), get()) }
     single { EmbeddingGemmaModelInstaller(androidContext()) }
     single<TextEmbeddingProvider> {
-        EmbeddingGemmaProvider(androidContext(), get<EmbeddingGemmaModelInstaller>().modelFile)
+        EmbeddingGemmaProvider(get<EmbeddingGemmaModelInstaller>().modelFile)
     }
     factoryOf(::LocalNoteEmbeddingIndexer)
     factory { LocalSemanticSearch(get(), get()) }
