@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -30,4 +29,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)
     implementation(libs.okhttp.logging)
+
+    // Unit tests
+    testImplementation(libs.junit)
 }
