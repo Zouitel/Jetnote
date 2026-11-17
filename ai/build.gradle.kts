@@ -31,10 +31,7 @@ dependencies {
     implementation(libs.okhttp.logging)
 
     // On-device text embedding runtime (LiteRT-LM via MediaPipe).
-    implementation("com.google.mediapipe:tasks-retrieval:1.2.2") {
-        exclude(group = "com.google.ai.edge.litertlm", module = "litertlm-android")
-    }
-    runtimeOnly("com.google.ai.edge.litertlm:litertlm-android:0.19.1")
+    implementation("com.google.ai.edge.litertlm:litertlm-android:0.19.1")
 
     // Unit tests
     testImplementation(libs.junit)
