@@ -21,6 +21,7 @@ data class NoteEmbedding(
     @ColumnInfo(name = "note_uid") val noteUid: String,
     @ColumnInfo(name = "model_id") val modelId: String,
     @ColumnInfo(name = "dimensions") val dimensions: Int,
+    @ColumnInfo(name = "content_hash") val contentHash: String,
     @ColumnInfo(name = "vector", typeAffinity = ColumnInfo.BLOB) val vector: ByteArray,
     @ColumnInfo(name = "updated_at") val updatedAt: Long
 ) {
@@ -29,6 +30,7 @@ data class NoteEmbedding(
         require(noteUid.isNotBlank()) { "Note UID must not be blank." }
         require(modelId.isNotBlank()) { "Embedding model ID must not be blank." }
         require(dimensions > 0) { "Embedding dimensions must be positive." }
+        require(contentHash.isNotBlank()) { "Content hash must not be blank." }
         require(vector.size == dimensions * Float.SIZE_BYTES) {
             "Vector byte count must match its dimensions."
         }
