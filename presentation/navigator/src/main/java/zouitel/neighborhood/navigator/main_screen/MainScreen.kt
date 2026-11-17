@@ -90,6 +90,7 @@ import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.navigator.templates.TemplateGalleryScreen
 import zouitel.neighborhood.workspace.ui.workplace.DataScreenModel
+import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreen
 
 @RequiresApi(Build.VERSION_CODES.S)
 class MainScreen: Screen {
