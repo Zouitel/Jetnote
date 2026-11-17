@@ -23,6 +23,7 @@ dependencies {
     ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
+    implementation(libs.kotlinx.serialization.json)
 
     //
     implementation("net.zetetic:sqlcipher-android:4.13.0")
