@@ -29,7 +29,7 @@ class NoteEmbeddingTextTest {
         assertEquals(300, chunks.first().split(" ").size)
         assertEquals(300, chunks[1].split(" ").size)
         assertEquals(130, chunks.last().split(" ").size)
-        assertEquals("261", chunks[0].split(" ").last())
+        assertEquals("300", chunks[0].split(" ").last())
         assertEquals("261", chunks[1].split(" ").first())
     }
 
