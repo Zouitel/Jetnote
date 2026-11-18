@@ -74,6 +74,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
+import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.EditorStateHolder
 import zouitel.neighborhood.workspace.R
 import kotlin.math.abs
@@ -84,6 +85,7 @@ internal fun BottomBar(
     data: MutableState<Data>,
     titleState: TextFieldState?,
     editorState: EditorStateHolder,
+    textStates: BlockTextStates,
     isSound: Boolean?,
     dataModel: DataScreenModel,
     linkModel: LinkScreenModel,
@@ -132,7 +134,9 @@ internal fun BottomBar(
                                         OptionsScreen(
                                             data = data,
                                             titleState = titleState,
-                                            titleState
+                                            descriptionState = titleState,
+                                            textStates = textStates,
+                                            editorState = editorState
                                         )
                                     )
                                 }) {
