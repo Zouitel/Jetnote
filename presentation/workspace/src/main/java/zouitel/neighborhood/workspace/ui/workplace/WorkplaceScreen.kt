@@ -222,7 +222,8 @@ data class WorkplaceScreen(
                     dataModel = dataModel,
                     linkModel = linkModel,
                     backgroundState = backgroundState,
-                    textColorState = textColorState
+                    textColorState = textColorState,
+                    textStates = textStates
                 )
             },
             snackbarHost = {
