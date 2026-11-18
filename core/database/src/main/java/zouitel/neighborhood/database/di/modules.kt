@@ -100,7 +100,7 @@ val databaseLazyModule = lazyModule {
             "jetnote_database"
         )
             .openHelperFactory(SupportOpenHelperFactory(FileEncryption(androidContext()).getCrypticPass()))
-            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13, Database.MIGRATION_13_14)
+            .addMigrations(Database.MIGRATION_11_12, Database.MIGRATION_12_13, Database.MIGRATION_13_14, Database.MIGRATION_14_15)
             .fallbackToDestructiveMigration(false)
             .fallbackToDestructiveMigrationOnDowngrade(false)
             .addCallback(TagsCallback { db })

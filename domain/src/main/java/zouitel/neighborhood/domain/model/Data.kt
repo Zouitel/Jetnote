@@ -18,5 +18,6 @@ data class Data(
     val medias: String,
     val audios: String,
     val reminders: String,
-    val deletedAt: Long? = null
+    val deletedAt: Long? = null,
+    val isFavorite: Boolean = false
 )

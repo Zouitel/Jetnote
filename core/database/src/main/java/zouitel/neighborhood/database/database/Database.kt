@@ -27,7 +27,7 @@ import zouitel.neighborhood.database.dao.ProviderDao
 import zouitel.neighborhood.database.dao.NoteEmbeddingDao
 
 @Database(
-    version = 14,
+    version = 15,
     entities = [
         Data::class,
         NoteFts::class,
@@ -55,6 +55,12 @@ abstract class Database: RoomDatabase() {
     abstract fun noteEmbeddingDao(): NoteEmbeddingDao
 
     companion object {
+        val MIGRATION_14_15 = object : Migration(14, 15) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE note_data_table ADD COLUMN is_favorite INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
         val MIGRATION_13_14 = object : Migration(13, 14) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("CREATE TABLE IF NOT EXISTS note_embedding_table (user_uid TEXT NOT NULL, note_uid TEXT NOT NULL, model_id TEXT NOT NULL, dimensions INTEGER NOT NULL, content_hash TEXT NOT NULL, vector BLOB NOT NULL, updated_at INTEGER NOT NULL, PRIMARY KEY(user_uid, note_uid, model_id))")

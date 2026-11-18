@@ -21,7 +21,8 @@ class DataMapper {
         medias = data.medias,
         audios = data.audios,
         reminders = data.reminders,
-        deletedAt = data.deletedAt
+        deletedAt = data.deletedAt,
+        isFavorite = data.isFavorite
     )
 
     fun fromRepo(data: OutData) = Data(

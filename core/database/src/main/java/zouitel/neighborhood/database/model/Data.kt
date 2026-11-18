@@ -23,7 +23,8 @@ data class Data(
     @ColumnInfo("medias", defaultValue = "[]") val medias: String,
     @ColumnInfo("audios", defaultValue = "[]") val audios: String,
     @ColumnInfo("reminders", defaultValue = "[]") val reminders: String,
-    @ColumnInfo("deleted_at") val deletedAt: Long? = null
+    @ColumnInfo("deleted_at") val deletedAt: Long? = null,
+    @ColumnInfo("is_favorite", defaultValue = "0") val isFavorite: Boolean = false
 ) {
     companion object {
         const val TABLE_NAME = "note_data_table"
