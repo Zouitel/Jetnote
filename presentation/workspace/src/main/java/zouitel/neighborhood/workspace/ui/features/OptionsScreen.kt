@@ -513,12 +513,6 @@ data class OptionsScreen(
                         }
                     )
                 NoteDates(data.value)
-                    Text(
-                        text = "${noteStatistics.wordCount} words · ${noteStatistics.readingTimeMinutes} min read",
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                     SnackbarHost(snackBarHostState) {
                         Snackbar(
                             snackbarData = it,
@@ -529,6 +523,12 @@ data class OptionsScreen(
                             actionColor = MaterialTheme.colorScheme.surface
                         )
                     }
+                    Text(
+                        text = "${noteStatistics.wordCount} words · ${noteStatistics.readingTimeMinutes} min read",
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
 
             if (showRecorderSheet.value) {
                 ModalBottomSheet(
