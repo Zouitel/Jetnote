@@ -60,6 +60,7 @@ import zouitel.neighborhood.feedback.reportable
 import zouitel.neighborhood.link.ui.LinkScreen
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.logic.R
+import zouitel.neighborhood.markdown.core.BlockContent
 import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.rememberEditorState
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
@@ -78,6 +79,7 @@ import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
 import zouitel.neighborhood.workspace.ui.bottom_bar.BottomBar
 import zouitel.neighborhood.workspace.ui.features.AudioScreen
 import zouitel.neighborhood.workspace.ui.features.MediaTop
+import zouitel.neighborhood.workspace.ui.utils.calculateNoteStatistics
 import zouitel.neighborhood.workspace.ui.utils.remindersContext
 import zouitel.neighborhood.workspace.ui.utils.tagsContext
 import kotlin.time.Duration.Companion.milliseconds
@@ -168,6 +170,17 @@ data class WorkplaceScreen(
         val deletedTagId = remember { mutableStateListOf<Pair<Long, Int>>() }
         val jobCounter = remember { mutableIntStateOf(0) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
+        val textStates = remember { BlockTextStates() }
+        val noteStatistics by remember(editorState, textStates) {
+            derivedStateOf {
+                calculateNoteStatistics(
+                    editorState.state.blocks.joinToString(" ") { block ->
+                        textStates.getVisibleText(block.id)
+                            ?: (block.content as? BlockContent.Text)?.text.orEmpty()
+                    }
+                )
+            }
+        }
 //        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
         val cascadeTheme = remember(backgroundState.value, textColorState.value) {
@@ -223,7 +236,6 @@ data class WorkplaceScreen(
                 }
             }
         ) {
-            val textStates = remember { BlockTextStates() }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -252,6 +264,13 @@ data class WorkplaceScreen(
                     ) {
                         workplaceModel.handleContentReceiver(currentData, it)
                     }
+
+                    Text(
+                        text = "${noteStatistics.wordCount} words · ${noteStatistics.readingTimeMinutes} min read",
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color(textColorState.value).copy(alpha = 0.65f)
+                    )
                 }
 
                 LazyColumn(
