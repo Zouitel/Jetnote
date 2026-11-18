@@ -5,7 +5,7 @@ data class NoteStatistics(
     val readingTimeMinutes: Int
 )
 
-private val noteWordPattern = Regex("""[\\p{L}\\p{N}]+(?:['’][\\p{L}\\p{N}]+)*""")
+private val noteWordPattern = Regex("""[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*""")
 
 fun calculateNoteStatistics(text: String): NoteStatistics {
     val wordCount = noteWordPattern.findAll(text).count()
