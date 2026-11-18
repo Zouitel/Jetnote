@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,6 +68,9 @@ import zouitel.neighborhood.ui.CommonIcons
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.SoundEffect
 import zouitel.neighborhood.ui.getAverageColorFromImage
+import zouitel.neighborhood.markdown.core.BlockContent
+import zouitel.neighborhood.markdown.state.BlockTextStates
+import zouitel.neighborhood.markdown.state.EditorStateHolder
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.model.Media
 import zouitel.neighborhood.workspace.model.MediaType
@@ -74,6 +78,7 @@ import zouitel.neighborhood.workspace.model.Priorities
 import zouitel.neighborhood.workspace.provider.SharedScreen
 import zouitel.neighborhood.workspace.ui.utils.FeatureItem
 import zouitel.neighborhood.workspace.ui.utils.NoteDates
+import zouitel.neighborhood.workspace.ui.utils.calculateNoteStatistics
 import zouitel.neighborhood.workspace.ui.utils.PrioritySlider
 import zouitel.neighborhood.workspace.ui.utils.getImageDisplayName
 import zouitel.neighborhood.workspace.ui.workplace.WorkplaceScreenModel
@@ -83,7 +88,9 @@ import kotlin.random.Random
 data class OptionsScreen(
     val data: MutableState<Data>,
     val titleState: TextFieldState?,
-    val descriptionState: TextFieldState?
+    val descriptionState: TextFieldState?,
+    val textStates: BlockTextStates,
+    val editorState: EditorStateHolder
 ) : Screen {
 
     @Composable
@@ -106,6 +113,16 @@ data class OptionsScreen(
         val bottomNav = LocalBottomSheetNavigator.current
 
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
+        val noteStatistics by remember(data, textStates, editorState) {
+            derivedStateOf {
+                calculateNoteStatistics(
+                    editorState.state.blocks.joinToString(" ") { block ->
+                        textStates.getVisibleText(block.id)
+                            ?: (block.content as? BlockContent.Text)?.text.orEmpty()
+                    }
+                )
+            }
+        }
         val tagsScreen = rememberScreen(SharedScreen.Tags(data.value.uid, data.value.background))
         val scope = rememberCoroutineScope()
         val pictureUri = rememberSaveable { mutableStateOf<Uri?>(null) }
@@ -496,6 +513,12 @@ data class OptionsScreen(
                         }
                     )
                 NoteDates(data.value)
+                    Text(
+                        text = "${noteStatistics.wordCount} words · ${noteStatistics.readingTimeMinutes} min read",
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                     SnackbarHost(snackBarHostState) {
                         Snackbar(
                             snackbarData = it,
