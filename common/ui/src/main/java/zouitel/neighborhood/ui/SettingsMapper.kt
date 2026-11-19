@@ -6,7 +6,7 @@ class SettingsMapper {
     fun fromDomain(settings: OutSettings) = Settings(
         layout = settings.layout,
         ordination = settings.ordination,
-        darkTheme = settings.darkTheme,
+        themeMode = settings.themeMode,
         isSound = settings.isSound,
         isLocked = settings.isLocked,
         isScreenshot = settings.isScreenshot,
@@ -21,7 +21,7 @@ class SettingsMapper {
     fun toDomain(settings: Settings) = OutSettings(
         layout = settings.layout,
         ordination = settings.ordination,
-        darkTheme = settings.darkTheme,
+        themeMode = settings.themeMode,
         isSound = settings.isSound,
         isLocked = settings.isLocked,
         isScreenshot = settings.isScreenshot,
@@ -32,4 +32,4 @@ class SettingsMapper {
         liquidGlassRefraction = settings.liquidGlassRefraction,
         liquidGlassTint = settings.liquidGlassTint
     )
-}
+)
