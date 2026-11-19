@@ -29,11 +29,15 @@ class SettingsDataSourceImpl(
                 }
             }
             .map { preferences ->
+                val themeMode = preferences[Keys.THEME_MODE]
+                    ?: preferences[Keys.DARK_THEME]?.let { if (it) "dark" else "light" }
+                    ?: Constants.DEFAULT_THEME_MODE
+
                 mapper.toRepo(
                     zouitel.neighborhood.datastore.model.Settings(
                         layout = preferences[Keys.LAYOUT] ?: Constants.DEFAULT_LAYOUT,
                         ordination = preferences[Keys.ORDINATION] ?: Constants.DEFAULT_ORDER,
-                        darkTheme = preferences[Keys.DARK_THEME] ?: true,
+                        themeMode = themeMode,
                         isSound = preferences[Keys.IS_MUTED] ?: false,
                         isLocked = preferences[Keys.IS_LOCK_MODE] ?: false,
                         isScreenshot = preferences[Keys.IS_SCREENSHOT_BLOCKED] ?: false,
@@ -52,7 +56,8 @@ class SettingsDataSourceImpl(
 
         datastore.edit { preferences ->
             preferences[Keys.LAYOUT] = dataStoreSettings.layout
-            preferences[Keys.DARK_THEME] = dataStoreSettings.darkTheme
+            preferences[Keys.THEME_MODE] = dataStoreSettings.themeMode
+            preferences.remove(Keys.DARK_THEME)
             preferences[Keys.ORDINATION] = dataStoreSettings.ordination
             preferences[Keys.IS_MUTED] = dataStoreSettings.isSound
             preferences[Keys.IS_LOCK_MODE] = dataStoreSettings.isLocked

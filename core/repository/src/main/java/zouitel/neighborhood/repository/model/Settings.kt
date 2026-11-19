@@ -3,7 +3,7 @@ package zouitel.neighborhood.repository.model
 data class Settings(
     val layout: String,
     val ordination: String,
-    val darlTheme: Boolean,
+    val themeMode: String,
     val isSound: Boolean,
     val isLocked: Boolean,
     val isScreenshot: Boolean,

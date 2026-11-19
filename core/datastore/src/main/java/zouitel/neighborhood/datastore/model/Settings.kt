@@ -5,7 +5,7 @@ import zouitel.neighborhood.datastore.Constants
 data class Settings(
     val layout: String = Constants.DEFAULT_LAYOUT,
     val ordination: String = Constants.DEFAULT_ORDER,
-    val darkTheme: Boolean = true,
+    val themeMode: String = Constants.DEFAULT_THEME_MODE,
     val isSound: Boolean = false,
     val isLocked: Boolean = false,
     val isScreenshot: Boolean = false,

@@ -212,25 +212,28 @@ class SettingsScreen: Screen {
                             }
                             item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                             item {
-                                CommonActivationItem(
+                                SortesItem(
                                     title = stringResource(zouitel.neighborhood.logic.R.string.dark_mode),
-                                    description = stringResource(zouitel.neighborhood.logic.R.string.dark_mode_description).trimIndent(),
-                                    checked = settings.darkTheme,
-                                    icon = {
-                                        AsyncImage(
-                                            R.drawable.dark_mode,
-                                            null
-                                        )
-                                    },
-                                    onChecked = {
-                                        sound.performSoundEffect(
-                                            context,
-                                            KEY_CLICK,
-                                            settings.isSound
-                                        )
-                                        settingsModel.update(settings.copy(darkTheme = it))
+                                    description = "Choose Dark, Light, or follow your device appearance.",
+                                    items = listOf("Dark", "Light", "System"),
+                                    currentItem = when (settings.themeMode) {
+                                        "dark" -> "Dark"
+                                        "light" -> "Light"
+                                        else -> "System"
                                     }
-                                )
+                                ) { selectedMode ->
+                                    val mode = when (selectedMode) {
+                                        "Dark" -> "dark"
+                                        "Light" -> "light"
+                                        else -> "system"
+                                    }
+                                    sound.performSoundEffect(
+                                        context,
+                                        KEY_CLICK,
+                                        settings.isSound
+                                    )
+                                    settingsModel.update(settings.copy(themeMode = mode))
+                                }
                             }
                             item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                             item {

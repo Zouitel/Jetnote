@@ -16,11 +16,12 @@ fun MainTheme(
 ) {
     val settings by remember(settingsModel, settingsModel::observe).collectAsState()
 
-    val theme = when {
-        isSystemInDarkTheme() -> darkColorScheme()
-        settings.darkTheme -> darkColorScheme()
-        else -> lightColorScheme()
+    val isDarkTheme = when (settings.themeMode) {
+        "dark" -> true
+        "light" -> false
+        else -> isSystemInDarkTheme()
     }
+    val theme = if (isDarkTheme) darkColorScheme() else lightColorScheme()
 
     MaterialTheme(colorScheme = theme, content = content)
 }

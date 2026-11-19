@@ -1,5 +1,6 @@
 package zouitel.neighborhood.datastore
 
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -8,12 +9,15 @@ import zouitel.neighborhood.datastore.Constants.MUTE
 import zouitel.neighborhood.datastore.Constants.SCREENSHOT_BLOCK
 import zouitel.neighborhood.datastore.Constants.SHAKE_TO_REPORT
 import zouitel.neighborhood.datastore.Constants.THEME
+import zouitel.neighborhood.datastore.Constants.THEME_MODE as THEME_MODE_KEY
 import zouitel.neighborhood.datastore.Constants.ZEN_MODE
 
 object Keys {
     val LAYOUT = stringPreferencesKey(Constants.LAYOUT)
     val ORDINATION = stringPreferencesKey(Constants.ORDINATION)
+    // Kept to migrate existing boolean preferences to the new three-state setting.
     val DARK_THEME = booleanPreferencesKey(THEME)
+    val THEME_MODE: Preferences.Key<String> = stringPreferencesKey(THEME_MODE_KEY)
     val IS_MUTED = booleanPreferencesKey(MUTE)
     val IS_LOCK_MODE = booleanPreferencesKey(LOCK_MODE)
     val IS_SCREENSHOT_BLOCKED = booleanPreferencesKey(SCREENSHOT_BLOCK)

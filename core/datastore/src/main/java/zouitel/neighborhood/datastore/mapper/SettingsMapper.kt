@@ -6,7 +6,7 @@ class SettingsMapper {
     fun toRepo(settings: Settings) = zouitel.neighborhood.repository.model.Settings(
         layout = settings.layout,
         ordination = settings.ordination,
-        darlTheme = settings.darkTheme,
+        themeMode = settings.themeMode,
         isSound = settings.isSound,
         isLocked = settings.isLocked,
         isScreenshot = settings.isScreenshot,
@@ -21,7 +21,7 @@ class SettingsMapper {
     fun fromRepo(settings: zouitel.neighborhood.repository.model.Settings) = Settings(
         layout = settings.layout,
         ordination = settings.ordination,
-        darkTheme = settings.darlTheme,
+        themeMode = settings.themeMode,
         isSound = settings.isSound,
         isLocked = settings.isLocked,
         isScreenshot = settings.isScreenshot,
