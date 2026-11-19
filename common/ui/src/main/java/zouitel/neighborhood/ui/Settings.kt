@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Settings(
     val layout: String = "grid_layout",
     val ordination: String = "Default",
-    val darkTheme: Boolean = true,
+    val themeMode: String = "system",
     val isSound: Boolean = false,
     val isLocked: Boolean = false,
     val isScreenshot: Boolean = false,
