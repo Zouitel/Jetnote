@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import zouitel.neighborhood.markdown.action.ConvertBlockType
 import zouitel.neighborhood.markdown.action.FocusBlock
 import zouitel.neighborhood.markdown.action.InsertBlockAfter
+import zouitel.neighborhood.markdown.action.InsertBlock
+import zouitel.neighborhood.markdown.core.BlockContent
 import zouitel.neighborhood.markdown.core.Block
 import zouitel.neighborhood.markdown.core.BlockType
 import zouitel.neighborhood.markdown.state.EditorStateHolder
@@ -84,6 +86,12 @@ internal fun BlockActionToolbar(
             active = focusedBlock?.type == BlockType.Quote) {
             convertFocused(stateHolder, BlockType.Quote)
         }
+        BlockToolbarButton("♫", "Insert audio block", true, theme.colors.toolbarIcon) {
+            insertObjectBlock(stateHolder, BlockType.Audio)
+        }
+        BlockToolbarButton("🎙", "Insert recorder block", true, theme.colors.toolbarIcon) {
+            insertObjectBlock(stateHolder, BlockType.Recorder)
+        }
         BlockToolbarButton("―", "Insert divider", enabled, theme.colors.toolbarIcon) {
             val anchorId = stateHolder.state.focusedBlockId ?: return@BlockToolbarButton
             stateHolder.runStructuralHistoryTransaction {
@@ -140,5 +148,21 @@ private fun convertFocused(
     val blockId = stateHolder.state.focusedBlockId ?: return
     stateHolder.runStructuralHistoryTransaction {
         stateHolder.dispatch(ConvertBlockType(blockId, type))
+    }
+}
+
+
+private fun insertObjectBlock(stateHolder: EditorStateHolder, type: BlockType) {
+    val state = stateHolder.state
+    val anchorId = state.focusedBlockId
+    val block = Block(
+        id = zouitel.neighborhood.markdown.core.BlockId.generate(),
+        type = type,
+        content = BlockContent.Empty,
+    )
+    stateHolder.runStructuralHistoryTransaction {
+        if (anchorId == null) stateHolder.dispatch(InsertBlock(block))
+        else stateHolder.dispatch(InsertBlockAfter(block, anchorId))
+        stateHolder.dispatch(FocusBlock(block.id))
     }
 }
