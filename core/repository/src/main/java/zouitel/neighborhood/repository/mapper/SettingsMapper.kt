@@ -33,4 +33,4 @@ class SettingsMapper {
         liquidGlassRefraction = settings.liquidGlassRefraction,
         liquidGlassTint = settings.liquidGlassTint
     )
-)
+}
