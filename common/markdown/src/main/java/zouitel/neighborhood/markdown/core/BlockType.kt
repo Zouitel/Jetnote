@@ -108,6 +108,20 @@ import kotlinx.serialization.Serializable
         override val supportsText: Boolean = true
     }
 
+    /** Embedded audio player block. */
+    @Serializable
+    data object Audio : BlockType {
+        override val typeId: String = "audio"
+        override val displayName: String = "Audio"
+    }
+
+    /** Inline audio recorder block. */
+    @Serializable
+    data object Recorder : BlockType {
+        override val typeId: String = "recorder"
+        override val displayName: String = "Recorder"
+    }
+
     /**
      * Horizontal divider/separator.
      */
