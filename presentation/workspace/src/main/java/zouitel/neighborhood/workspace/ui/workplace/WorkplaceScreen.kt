@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -23,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -42,16 +39,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
@@ -61,23 +54,24 @@ import zouitel.neighborhood.link.ui.LinkScreen
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.markdown.core.BlockContent
+import zouitel.neighborhood.markdown.core.BlockType
+import zouitel.neighborhood.markdown.registry.blockRenderer
 import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.rememberEditorState
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
 import zouitel.neighborhood.markdown.theme.CascadeEditorTheme
 import zouitel.neighborhood.markdown.ui.CascadeEditor
+import zouitel.neighborhood.markdown.ui.createEditorRegistry
 import zouitel.neighborhood.tag.model.NoteAndTag
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.CommonTextField
 import zouitel.neighborhood.ui.SettingsScreenModel
-import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
 import zouitel.neighborhood.workspace.model.Data
 import zouitel.neighborhood.workspace.export.NoteExportDialog
 import zouitel.neighborhood.workspace.model.Reminder
 import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
 import zouitel.neighborhood.workspace.ui.bottom_bar.BottomBar
-import zouitel.neighborhood.workspace.ui.features.AudioScreen
 import zouitel.neighborhood.workspace.ui.features.MediaTop
 import zouitel.neighborhood.workspace.ui.utils.calculateNoteStatistics
 import zouitel.neighborhood.workspace.ui.utils.remindersContext
@@ -89,7 +83,7 @@ import kotlin.uuid.Uuid
 data class WorkplaceScreen(
     val data: Data,
     val isNew: Boolean = true
-): Screen {
+) : Screen {
 
     @Composable
     override fun Content() {
@@ -127,7 +121,7 @@ data class WorkplaceScreen(
         val defaultTextColor = MaterialTheme.colorScheme.onSurface.toArgb()
 
         val backgroundState = remember { mutableStateOf(data.background ?: defaultBackground) }
-        val textColorState  = remember { mutableStateOf(data.textColor  ?: defaultTextColor) }
+        val textColorState = remember { mutableStateOf(data.textColor ?: defaultTextColor) }
 
         val currentData = remember(data) {
             mutableStateOf(
@@ -171,6 +165,22 @@ data class WorkplaceScreen(
         val jobCounter = remember { mutableIntStateOf(0) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val textStates = remember { BlockTextStates() }
+        val blockRegistry = remember(linkModel, snackbarState, currentData) {
+            createEditorRegistry().apply {
+                registerRenderer(
+                    "link",
+                    blockRenderer<BlockType.Link> { _, _, _, modifier, _ ->
+                        Box(modifier.fillMaxWidth()) {
+                            LinkScreen(
+                                uid = currentData.value.uid,
+                                snackbarHostState = snackbarState,
+                                screenModel = linkModel
+                            ).Content()
+                        }
+                    }
+                )
+            }
+        }
         val noteStatistics by remember(editorState, textStates) {
             derivedStateOf {
                 calculateNoteStatistics(
@@ -181,13 +191,11 @@ data class WorkplaceScreen(
                 )
             }
         }
-//        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
         val cascadeTheme = remember(backgroundState.value, textColorState.value) {
             val bg = Color(backgroundState.value)
             val noteText = Color(textColorState.value)
-            val isDark = bg.luminance() < 0.5f
-            if (isDark) {
+            if (bg.luminance() < 0.5f) {
                 CascadeEditorTheme.dark().copy(
                     colors = CascadeEditorColors.dark().copy(text = noteText)
                 )
@@ -198,7 +206,6 @@ data class WorkplaceScreen(
             }
         }
 
-        // Replace your existing LaunchedEffect(screen.value) for focus with this:
         LaunchedEffect(Unit) {
             if (isNew) {
                 delay(200.milliseconds)
@@ -298,20 +305,8 @@ data class WorkplaceScreen(
                         deletedTagId = deletedTagId,
                         jobCounter = jobCounter
                     )
-
-                    item {
-                        Navigator(AudioScreen(currentData, snackbarState))
-                    }
-
-                    item {
-                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Navigator(LinkScreen(currentData.value.uid, snackbarState))
-                        }
-                    }
                 }
 
-                // --- 3. CASCADE EDITOR SECTION (Takes remaining space) ---
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -320,11 +315,11 @@ data class WorkplaceScreen(
                     CascadeEditor(
                         stateHolder = editorState,
                         textStates = textStates,
+                        registry = blockRegistry,
                         modifier = Modifier.fillMaxSize(),
                         theme = cascadeTheme
                     )
 
-                    // Smart Note Placeholder Logic
                     val showPlaceholder by remember {
                         derivedStateOf {
                             val blocks = editorState.state.blocks
