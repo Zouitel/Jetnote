@@ -605,30 +605,7 @@ fun CascadeEditor(
                 ),
             ) {
                 when (resolvedToolbar) {
-                    is ToolbarSlot.Default -> RichTextToolbar(
-                        formattingState = formattingState,
-                        actions = formattingActions,
-                        indentationState = indentationState,
-                        indentationActions = indentationActions,
-//                        linkState = linkState,
-                        config = resolvedToolbar.config,
-                        onSlashInsert = {
-                            val blockId =
-                                formattingState.value.focusedBlockId ?: return@RichTextToolbar
-                            val tfs = textStates.get(blockId) ?: return@RichTextToolbar
-                            val sel = tfs.visibleSelection()
-                            tfs.edit {
-                                replace(sel.min + 1, sel.max + 1, "/")
-                                selection = TextRange(sel.min + 2)
-                            }
-                        },
-//                        onLinkClick = linkPopupController::open,
-//                        onHideKeyboard = if (isIos) {
-//                            { stateHolder.dispatch(ClearFocus) }
-//                        } else {
-//                            null
-//                        },
-                    )
+                    is ToolbarSlot.Default -> BlockActionToolbar(stateHolder)
                     is ToolbarSlot.Custom -> resolvedToolbar.content(formattingState, formattingActions)
                     ToolbarSlot.None -> { /* no toolbar */ }
                 }
