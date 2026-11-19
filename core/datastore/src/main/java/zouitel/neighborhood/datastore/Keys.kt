@@ -8,12 +8,15 @@ import zouitel.neighborhood.datastore.Constants.MUTE
 import zouitel.neighborhood.datastore.Constants.SCREENSHOT_BLOCK
 import zouitel.neighborhood.datastore.Constants.SHAKE_TO_REPORT
 import zouitel.neighborhood.datastore.Constants.THEME
+import zouitel.neighborhood.datastore.Constants.THEME_MODE
 import zouitel.neighborhood.datastore.Constants.ZEN_MODE
 
 object Keys {
     val LAYOUT = stringPreferencesKey(Constants.LAYOUT)
     val ORDINATION = stringPreferencesKey(Constants.ORDINATION)
+    // Kept to migrate existing boolean preferences to the new three-state setting.
     val DARK_THEME = booleanPreferencesKey(THEME)
+    val THEME_MODE = stringPreferencesKey(THEME_MODE)
     val IS_MUTED = booleanPreferencesKey(MUTE)
     val IS_LOCK_MODE = booleanPreferencesKey(LOCK_MODE)
     val IS_SCREENSHOT_BLOCKED = booleanPreferencesKey(SCREENSHOT_BLOCK)
@@ -29,4 +32,4 @@ object Keys {
 
     @Deprecated("Use IS_SCREENSHOT_BLOCKED; the stored preference represents screenshot blocking.")
     val IS_SCREENSHOT = IS_SCREENSHOT_BLOCKED
-}
+)
