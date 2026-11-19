@@ -59,11 +59,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-data class LinkScreen(val uid: String, val snackbarHostState: SnackbarHostState) : Screen {
+data class LinkScreen(
+    val uid: String,
+    val snackbarHostState: SnackbarHostState,
+    val screenModel: LinkScreenModel? = null
+) : Screen {
     @Composable
     override fun Content() {
         val scope = rememberCoroutineScope()
-        val linkModel = getScreenModel<LinkScreenModel>()
+        val linkModel = screenModel ?: getScreenModel<LinkScreenModel>()
         val links = remember(linkModel, linkModel::observeByUid).collectAsState()
         var columnHeight by remember { mutableStateOf(300.dp) }
         val deletedLink = remember { mutableStateListOf<Pair<Link, Int>>() }

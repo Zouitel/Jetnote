@@ -240,6 +240,9 @@ object DocumentSchema {
         is BlockType.Divider -> buildJsonObject {
             put("customId", JsonPrimitive("divider"))
         }
+        BlockType.Link -> buildJsonObject {
+            put("customId", JsonPrimitive("link"))
+        }
 
         is CustomBlockType -> null // handled by codec / UnknownBlockType / fallback paths
     }
@@ -545,6 +548,7 @@ object DocumentSchema {
             }
             "quote" -> BlockType.Quote
             "divider" -> BlockType.Divider
+            "link" -> BlockType.Link
             else -> null
         }
     }

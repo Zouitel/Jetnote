@@ -224,6 +224,19 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
         )
     )
 
+    // Links — embeds links collected for the current note.
+    registerDescriptor(
+        BlockDescriptor(
+            typeId = "link",
+            displayName = "Links",
+            description = "Links collected in this note",
+            keywords = listOf("link", "links", "url", "website", "bookmark"),
+            factory = { id ->
+                Block(id, BlockType.Link, BlockContent.Empty)
+            }
+        )
+    )
+
     // Divider — non-text, AlwaysInsert
     registerDescriptor(
         BlockDescriptor(

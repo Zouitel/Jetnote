@@ -109,6 +109,15 @@ import kotlinx.serialization.Serializable
     }
 
     /**
+     * Embedded links collection block.
+     */
+    @Serializable
+    data object Link : BlockType {
+        override val typeId: String = "link"
+        override val displayName: String = "Links"
+    }
+
+    /**
      * Horizontal divider/separator.
      */
     @Serializable

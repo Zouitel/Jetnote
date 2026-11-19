@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -23,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -42,11 +39,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -61,11 +56,14 @@ import zouitel.neighborhood.link.ui.LinkScreen
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.markdown.core.BlockContent
+import zouitel.neighborhood.markdown.core.BlockType
+import zouitel.neighborhood.markdown.registry.blockRenderer
 import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.rememberEditorState
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
 import zouitel.neighborhood.markdown.theme.CascadeEditorTheme
 import zouitel.neighborhood.markdown.ui.CascadeEditor
+import zouitel.neighborhood.markdown.ui.createEditorRegistry
 import zouitel.neighborhood.tag.model.NoteAndTag
 import zouitel.neighborhood.tag.ui.NoteAndTagScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
@@ -171,6 +169,22 @@ data class WorkplaceScreen(
         val jobCounter = remember { mutableIntStateOf(0) }
         val settings by remember(settingsModel, settingsModel::observe).collectAsState()
         val textStates = remember { BlockTextStates() }
+        val blockRegistry = remember(linkModel, snackbarState, currentData) {
+            createEditorRegistry().apply {
+                registerRenderer(
+                    "link",
+                    blockRenderer<BlockType.Link> { _, _, _, modifier, _ ->
+                        Box(modifier.fillMaxWidth()) {
+                            LinkScreen(
+                                uid = currentData.value.uid,
+                                snackbarHostState = snackbarState,
+                                screenModel = linkModel
+                            ).Content()
+                        }
+                    }
+                )
+            }
+        }
         val noteStatistics by remember(editorState, textStates) {
             derivedStateOf {
                 calculateNoteStatistics(
@@ -302,13 +316,6 @@ data class WorkplaceScreen(
                     item {
                         Navigator(AudioScreen(currentData, snackbarState))
                     }
-
-                    item {
-                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Navigator(LinkScreen(currentData.value.uid, snackbarState))
-                        }
-                    }
                 }
 
                 // --- 3. CASCADE EDITOR SECTION (Takes remaining space) ---
@@ -320,6 +327,7 @@ data class WorkplaceScreen(
                     CascadeEditor(
                         stateHolder = editorState,
                         textStates = textStates,
+                        registry = blockRegistry,
                         modifier = Modifier.fillMaxSize(),
                         theme = cascadeTheme
                     )
