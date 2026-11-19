@@ -55,7 +55,7 @@ jobs:
           echo "Installing Android NDK $ANDROID_NDK_VERSION (attempt $attempt/3)"
           # Remove any partial installation left by a failed or interrupted download.
           rm -rf "$ndk_dir"
-          if yes | "$sdkmanager_bin" --install "ndk;$ANDROID_NDK_VERSION" "cmake;$ANDROID_CMAKE_VERSION" &&
+          if "$sdkmanager_bin" --install "ndk;$ANDROID_NDK_VERSION" "cmake;$ANDROID_CMAKE_VERSION" &&
              [ -s "$ndk_dir/source.properties" ] &&
              grep -q "Pkg.Revision = $ANDROID_NDK_VERSION" "$ndk_dir/source.properties"; then
             installed=true
