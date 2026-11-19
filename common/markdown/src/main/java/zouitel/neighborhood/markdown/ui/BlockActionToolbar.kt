@@ -45,7 +45,7 @@ internal fun BlockActionToolbar(
         modifier = modifier
             .fillMaxWidth()
             .focusProperties { canFocus = false }
-            .background(theme.colors.toolbarBackground)
+            .background(theme.colors.popupBackground)
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 8.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
