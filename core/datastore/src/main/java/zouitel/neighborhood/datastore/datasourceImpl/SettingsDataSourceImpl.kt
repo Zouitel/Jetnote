@@ -70,4 +70,4 @@ class SettingsDataSourceImpl(
             preferences[Keys.LIQUID_GLASS_TINT] = dataStoreSettings.liquidGlassTint
         }
     }
-)
+}
