@@ -16,81 +16,115 @@ import zouitel.neighborhood.markdown.slash.BuiltInSlashCommandSpec
  *
  * Use [createDefault] to get a registry pre-populated with built-in types.
  */
-class BlockRegistry {
+ class BlockRegistry {
     private val descriptors = mutableMapOf<String, BlockDescriptor>()
     private val renderers = mutableMapOf<String, BlockRenderer<*>>()
     private var unknownBlockFallback: BlockRenderer<*>? = null
 
-    /** Registers a block descriptor. */
-    fun registerDescriptor(descriptor: BlockDescriptor) {
+    /**
+     * Registers a block descriptor.
+     */
+     fun registerDescriptor(descriptor: BlockDescriptor) {
         descriptors[descriptor.typeId] = descriptor
     }
 
-    /** Registers a block renderer. */
-    fun <T : BlockType> registerRenderer(typeId: String, renderer: BlockRenderer<T>) {
+    /**
+     * Registers a block renderer.
+     */
+     fun <T : BlockType> registerRenderer(typeId: String, renderer: BlockRenderer<T>) {
         renderers[typeId] = renderer
     }
 
-    /** Registers both a descriptor and renderer for a block type. */
-    fun <T : BlockType> register(descriptor: BlockDescriptor, renderer: BlockRenderer<T>) {
+    /**
+     * Registers both a descriptor and renderer for a block type.
+     */
+     fun <T : BlockType> register(descriptor: BlockDescriptor, renderer: BlockRenderer<T>) {
         registerDescriptor(descriptor)
         registerRenderer(descriptor.typeId, renderer)
     }
 
-    /** Gets a descriptor by type ID. */
-    fun getDescriptor(typeId: String): BlockDescriptor? = descriptors[typeId]
+    /**
+     * Gets a descriptor by type ID.
+     */
+     fun getDescriptor(typeId: String): BlockDescriptor? = descriptors[typeId]
 
-    /** Gets a renderer by type ID. */
-    fun getRenderer(typeId: String): BlockRenderer<*>? = renderers[typeId]
+    /**
+     * Gets a renderer by type ID.
+     */
+     fun getRenderer(typeId: String): BlockRenderer<*>? = renderers[typeId]
 
     /**
      * Gets a renderer for a [BlockType].
      *
      * Looks up the renderer by [BlockType.typeId]. If no renderer is registered
      * and the type is [UnknownBlockType], returns the fallback set via
-     * [setUnknownBlockRenderer]. Returns `null` for any other unregistered type.
+     * [setUnknownBlockRenderer]. Returns `null` for any other unregistered type
+     * (signals a missing registration, not an unknown deserialized type).
      */
-    fun getRenderer(blockType: BlockType): BlockRenderer<*>? {
+     fun getRenderer(blockType: BlockType): BlockRenderer<*>? {
         renderers[blockType.typeId]?.let { return it }
         if (blockType is UnknownBlockType) return unknownBlockFallback
         return null
     }
 
-    /** Sets the fallback renderer used for [UnknownBlockType] blocks. */
-    fun setUnknownBlockRenderer(renderer: BlockRenderer<*>) {
+    /**
+     * Sets the fallback renderer used for [UnknownBlockType] blocks.
+     */
+     fun setUnknownBlockRenderer(renderer: BlockRenderer<*>) {
         unknownBlockFallback = renderer
     }
 
-    /** Gets all registered descriptors. */
-    fun getAllDescriptors(): List<BlockDescriptor> = descriptors.values.toList()
+    /**
+     * Gets all registered descriptors.
+     */
+     fun getAllDescriptors(): List<BlockDescriptor> = descriptors.values.toList()
 
-    /** Searches for descriptors matching a query. */
-    fun search(query: String): List<BlockDescriptor> {
+    /**
+     * Searches for descriptors matching a query.
+     * Results are sorted by relevance.
+     *
+     * Note: slash command search is handled by [SlashCommandRegistry][zouitel.neighborhood.markdown.slash.SlashCommandRegistry].
+     * This method is for general-purpose descriptor lookup.
+     */
+     fun search(query: String): List<BlockDescriptor> {
         return descriptors.values
             .filter { it.matches(query) }
             .sortedByDescending { it.relevanceScore(query) }
     }
 
-    /** Creates a block by type ID using the registered factory. */
-    fun createBlock(typeId: String): Block? {
+
+    /**
+     * Creates a block by type ID using the registered factory.
+     * Returns null if the type is not registered.
+     */
+     fun createBlock(typeId: String): Block? {
         return getDescriptor(typeId)?.createBlock()
     }
 
-    /** Checks if a type ID is registered. */
-    fun isRegistered(typeId: String): Boolean = typeId in descriptors
+    /**
+     * Checks if a type ID is registered.
+     */
+     fun isRegistered(typeId: String): Boolean = typeId in descriptors
 
-    companion object {
-        /** Creates a registry with all built-in types pre-registered. */
-        fun createDefault(): BlockRegistry = BlockRegistry().apply {
+     companion object {
+        /**
+         * Creates a registry with all built-in block types pre-registered.
+         * Renderers are NOT included - use this with your own renderers.
+         */
+         fun createDefault(): BlockRegistry = BlockRegistry().apply {
             registerBuiltInDescriptors()
         }
 
-        /** Creates an empty registry. */
-        fun create(): BlockRegistry = BlockRegistry()
+        /**
+         * Creates an empty registry.
+         */
+         fun create(): BlockRegistry = BlockRegistry()
     }
 }
 
-/** Registers all built-in block type descriptors. */
+/**
+ * Registers all built-in block type descriptors.
+ */
 private fun BlockRegistry.registerBuiltInDescriptors() {
     // Paragraph — text-capable convertible, ConvertInPlace
     registerDescriptor(
@@ -102,7 +136,9 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
             slash = BuiltInSlashCommandSpec(
                 behavior = BuiltInBlockSlashBehavior.ConvertInPlace,
             ),
-            factory = { id -> Block(id, BlockType.Paragraph, BlockContent.Text("")) }
+            factory = { id ->
+                Block(id, BlockType.Paragraph, BlockContent.Text(""))
+            }
         )
     )
 
@@ -117,7 +153,9 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
                 slash = BuiltInSlashCommandSpec(
                     behavior = BuiltInBlockSlashBehavior.ConvertInPlace,
                 ),
-                factory = { id -> Block(id, BlockType.Heading(level), BlockContent.Text("")) }
+                factory = { id ->
+                    Block(id, BlockType.Heading(level), BlockContent.Text(""))
+                }
             )
         )
     }
@@ -132,7 +170,9 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
             slash = BuiltInSlashCommandSpec(
                 behavior = BuiltInBlockSlashBehavior.ConvertInPlace,
             ),
-            factory = { id -> Block(id, BlockType.Todo(checked = false), BlockContent.Text("")) }
+            factory = { id ->
+                Block(id, BlockType.Todo(checked = false), BlockContent.Text(""))
+            }
         )
     )
 
@@ -146,7 +186,9 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
             slash = BuiltInSlashCommandSpec(
                 behavior = BuiltInBlockSlashBehavior.ConvertInPlace,
             ),
-            factory = { id -> Block(id, BlockType.BulletList, BlockContent.Text("")) }
+            factory = { id ->
+                Block(id, BlockType.BulletList, BlockContent.Text(""))
+            }
         )
     )
 
@@ -160,7 +202,9 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
             slash = BuiltInSlashCommandSpec(
                 behavior = BuiltInBlockSlashBehavior.ConvertInPlace,
             ),
-            factory = { id -> Block(id, BlockType.NumberedList(number = 1), BlockContent.Text("")) }
+            factory = { id ->
+                Block(id, BlockType.NumberedList(number = 1), BlockContent.Text(""))
+            }
         )
     )
 
@@ -174,18 +218,22 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
             slash = BuiltInSlashCommandSpec(
                 behavior = BuiltInBlockSlashBehavior.ConvertInPlace,
             ),
-            factory = { id -> Block(id, BlockType.Quote, BlockContent.Text("")) }
+            factory = { id ->
+                Block(id, BlockType.Quote, BlockContent.Text(""))
+            }
         )
     )
 
-    // Links — embeds links saved for the current note.
+    // Links — embeds links collected for the current note.
     registerDescriptor(
         BlockDescriptor(
             typeId = "link",
             displayName = "Links",
             description = "Links collected in this note",
             keywords = listOf("link", "links", "url", "website", "bookmark"),
-            factory = { id -> Block(id, BlockType.Link, BlockContent.Empty) }
+            factory = { id ->
+                Block(id, BlockType.Link, BlockContent.Empty)
+            }
         )
     )
 
@@ -199,7 +247,9 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
             slash = BuiltInSlashCommandSpec(
                 behavior = BuiltInBlockSlashBehavior.AlwaysInsert,
             ),
-            factory = { id -> Block(id, BlockType.Divider, BlockContent.Empty) }
+            factory = { id ->
+                Block(id, BlockType.Divider, BlockContent.Empty)
+            }
         )
     )
 }
