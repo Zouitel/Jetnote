@@ -25,4 +25,4 @@ internal object Constants {
     const val DEFAULT_THEME_MODE = "system"
 
     const val DS_NAME = "jetnoteDS.preferences_pb"
-)
+}
