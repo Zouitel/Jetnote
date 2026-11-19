@@ -61,6 +61,9 @@ import zouitel.neighborhood.link.ui.LinkScreen
 import zouitel.neighborhood.link.ui.LinkScreenModel
 import zouitel.neighborhood.logic.R
 import zouitel.neighborhood.markdown.core.BlockContent
+import zouitel.neighborhood.markdown.core.BlockType
+import zouitel.neighborhood.markdown.registry.blockRenderer
+import zouitel.neighborhood.markdown.ui.createEditorRegistry
 import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.rememberEditorState
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
@@ -77,7 +80,6 @@ import zouitel.neighborhood.workspace.export.NoteExportDialog
 import zouitel.neighborhood.workspace.model.Reminder
 import zouitel.neighborhood.workspace.notifications.AlarmManagerScreenModel
 import zouitel.neighborhood.workspace.ui.bottom_bar.BottomBar
-import zouitel.neighborhood.workspace.ui.features.AudioScreen
 import zouitel.neighborhood.workspace.ui.features.MediaTop
 import zouitel.neighborhood.workspace.ui.utils.calculateNoteStatistics
 import zouitel.neighborhood.workspace.ui.utils.remindersContext
@@ -182,6 +184,17 @@ data class WorkplaceScreen(
             }
         }
 //        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
+
+        val blockRegistry = remember {
+            createEditorRegistry().apply {
+                registerRenderer("audio", blockRenderer<BlockType.Audio> { _, _, _, modifier, _ ->
+                    AudioObjectBlock(currentData, snackbarState, modifier)
+                })
+                registerRenderer("recorder", blockRenderer<BlockType.Recorder> { _, _, _, modifier, _ ->
+                    RecorderObjectBlock(currentData, modifier)
+                })
+            }
+        }
 
         val cascadeTheme = remember(backgroundState.value, textColorState.value) {
             val bg = Color(backgroundState.value)
@@ -300,10 +313,6 @@ data class WorkplaceScreen(
                     )
 
                     item {
-                        Navigator(AudioScreen(currentData, snackbarState))
-                    }
-
-                    item {
                         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                             Spacer(modifier = Modifier.height(10.dp))
                             Navigator(LinkScreen(currentData.value.uid, snackbarState))
@@ -320,6 +329,7 @@ data class WorkplaceScreen(
                     CascadeEditor(
                         stateHolder = editorState,
                         textStates = textStates,
+                        registry = blockRegistry,
                         modifier = Modifier.fillMaxSize(),
                         theme = cascadeTheme
                     )
