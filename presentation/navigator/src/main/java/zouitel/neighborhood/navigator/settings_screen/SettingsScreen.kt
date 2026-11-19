@@ -215,9 +215,18 @@ class SettingsScreen: Screen {
                                 SortesItem(
                                     title = stringResource(zouitel.neighborhood.logic.R.string.dark_mode),
                                     description = "Choose Dark, Light, or follow your device appearance.",
-                                    items = listOf("dark", "light", "system"),
-                                    currentItem = settings.themeMode
-                                ) { mode ->
+                                    items = listOf("Dark", "Light", "System"),
+                                    currentItem = when (settings.themeMode) {
+                                        "dark" -> "Dark"
+                                        "light" -> "Light"
+                                        else -> "System"
+                                    }
+                                ) { selectedMode ->
+                                    val mode = when (selectedMode) {
+                                        "Dark" -> "dark"
+                                        "Light" -> "light"
+                                        else -> "system"
+                                    }
                                     sound.performSoundEffect(
                                         context,
                                         KEY_CLICK,
