@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -17,7 +15,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import zouitel.neighborhood.audio.model.Audio
 import zouitel.neighborhood.audio.ui.audio.AudioScreenModel
 import zouitel.neighborhood.audio.utils.LargeAudioPlayer
 import zouitel.neighborhood.audio.utils.MediumAudioPlayer
@@ -37,7 +34,6 @@ internal fun AudioObjectBlock(
 ) {
     val playerModel = koinInject<AudioScreenModel>()
     val scope = rememberCoroutineScope()
-    val uiState by remember(playerModel, playerModel::uiState).collectAsState()
 
     LaunchedEffect(playerModel) {
         playerModel.initController()
