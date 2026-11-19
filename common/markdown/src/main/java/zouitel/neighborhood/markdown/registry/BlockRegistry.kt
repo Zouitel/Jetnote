@@ -224,6 +224,28 @@ private fun BlockRegistry.registerBuiltInDescriptors() {
         )
     )
 
+    // Audio — embeds the note audio player.
+    registerDescriptor(
+        BlockDescriptor(
+            typeId = "audio",
+            displayName = "Audio",
+            description = "Audio player",
+            keywords = listOf("audio", "music", "recording", "player"),
+            factory = { id -> Block(id, BlockType.Audio, BlockContent.Empty) }
+        )
+    )
+
+    // Recorder — embeds the inline voice recorder.
+    registerDescriptor(
+        BlockDescriptor(
+            typeId = "recorder",
+            displayName = "Recorder",
+            description = "Record audio into this note",
+            keywords = listOf("record", "voice", "microphone"),
+            factory = { id -> Block(id, BlockType.Recorder, BlockContent.Empty) }
+        )
+    )
+
     // Divider — non-text, AlwaysInsert
     registerDescriptor(
         BlockDescriptor(
