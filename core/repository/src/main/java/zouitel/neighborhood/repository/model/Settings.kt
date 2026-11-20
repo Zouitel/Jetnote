@@ -4,6 +4,7 @@ data class Settings(
     val layout: String,
     val ordination: String,
     val themeMode: String,
+    val fontFamily: String = "default",
     val isSound: Boolean,
     val isLocked: Boolean,
     val isScreenshot: Boolean,
