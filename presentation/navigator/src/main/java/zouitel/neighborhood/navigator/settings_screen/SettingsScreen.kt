@@ -272,6 +272,19 @@ class SettingsScreen: Screen {
                             }
                             item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                             item {
+                                SortesItem(
+                                    title = "Corners",
+                                    description = "Choose rounded or square corners throughout the app.",
+                                    items = listOf("Rounded", "Square"),
+                                    currentItem = if (settings.cornerStyle == "square") "Square" else "Rounded"
+                                ) { selectedStyle ->
+                                    settingsModel.update(
+                                        settings.copy(cornerStyle = if (selectedStyle == "Square") "square" else "rounded")
+                                    )
+                                }
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
                                 CommonActivationItem(
                                     stringResource(zouitel.neighborhood.logic.R.string.sound_effect),
                                     stringResource(zouitel.neighborhood.logic.R.string.sound_effect_description).trimIndent(),

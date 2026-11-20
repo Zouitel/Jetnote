@@ -8,6 +8,7 @@ data class Settings(
     val themeMode: String = Constants.DEFAULT_THEME_MODE,
     val fontFamily: String = Constants.DEFAULT_FONT_FAMILY,
     val fontSize: String = Constants.DEFAULT_FONT_SIZE,
+    val cornerStyle: String = "rounded",
     val isSound: Boolean = false,
     val isLocked: Boolean = false,
     val isScreenshot: Boolean = false,

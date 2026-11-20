@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import zouitel.neighborhood.datastore.Constants.FONT_FAMILY as FONT_FAMILY_KEY
 import zouitel.neighborhood.datastore.Constants.FONT_SIZE as FONT_SIZE_KEY
+import zouitel.neighborhood.datastore.Constants.CORNER_STYLE as CORNER_STYLE_KEY
 import zouitel.neighborhood.datastore.Constants.LOCK_MODE
 import zouitel.neighborhood.datastore.Constants.MUTE
 import zouitel.neighborhood.datastore.Constants.SCREENSHOT_BLOCK
@@ -22,6 +23,7 @@ object Keys {
     val THEME_MODE: Preferences.Key<String> = stringPreferencesKey(THEME_MODE_KEY)
     val FONT_FAMILY: Preferences.Key<String> = stringPreferencesKey(FONT_FAMILY_KEY)
     val FONT_SIZE: Preferences.Key<String> = stringPreferencesKey(FONT_SIZE_KEY)
+    val CORNER_STYLE: Preferences.Key<String> = stringPreferencesKey(CORNER_STYLE_KEY)
     val IS_MUTED = booleanPreferencesKey(MUTE)
     val IS_LOCK_MODE = booleanPreferencesKey(LOCK_MODE)
     val IS_SCREENSHOT_BLOCKED = booleanPreferencesKey(SCREENSHOT_BLOCK)

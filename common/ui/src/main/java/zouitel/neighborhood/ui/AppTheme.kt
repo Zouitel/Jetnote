@@ -1,7 +1,11 @@
 package zouitel.neighborhood.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -9,16 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalView
-import android.view.SoundEffectConstants
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
+import android.view.SoundEffectConstants
 
 @Composable
 fun MainTheme(
@@ -46,11 +49,24 @@ fun MainTheme(
         else -> 1f
     }
     val typography = MaterialTheme.typography.withFontFamily(fontFamily).scaled(fontScale)
+    val squareCorners = RoundedCornerShape(0.dp)
+    val shapes = if (settings.cornerStyle == "square") {
+        Shapes(
+            extraSmall = squareCorners,
+            small = squareCorners,
+            medium = squareCorners,
+            large = squareCorners,
+            extraLarge = squareCorners
+        )
+    } else {
+        Shapes()
+    }
     val view = LocalView.current
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = typography
+        typography = typography,
+        shapes = shapes
     ) {
         Box(
             modifier = androidx.compose.ui.Modifier
