@@ -227,12 +227,54 @@ class SettingsScreen: Screen {
                                         "Light" -> "light"
                                         else -> "system"
                                     }
-                                    sound.performSoundEffect(
-                                        context,
-                                        KEY_CLICK,
-                                        settings.isSound
-                                    )
+                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                     settingsModel.update(settings.copy(themeMode = mode))
+                                }
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                SortesItem(
+                                    title = "Font family",
+                                    description = "Choose the typeface used throughout the app.",
+                                    items = listOf("Default", "Sans Serif", "Serif", "Monospace", "Cursive"),
+                                    currentItem = when (settings.fontFamily) {
+                                        "sans_serif" -> "Sans Serif"
+                                        "serif" -> "Serif"
+                                        "monospace" -> "Monospace"
+                                        "cursive" -> "Cursive"
+                                        else -> "Default"
+                                    }
+                                ) { selectedFont ->
+                                    val fontFamily = when (selectedFont) {
+                                        "Sans Serif" -> "sans_serif"
+                                        "Serif" -> "serif"
+                                        "Monospace" -> "monospace"
+                                        "Cursive" -> "cursive"
+                                        else -> "default"
+                                    }
+                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                    settingsModel.update(settings.copy(fontFamily = fontFamily))
+                                }
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
+                                SortesItem(
+                                    title = "Font size",
+                                    description = "Adjust text size across the app.",
+                                    items = listOf("Small", "Default", "Large"),
+                                    currentItem = when (settings.fontSize) {
+                                        "small" -> "Small"
+                                        "large" -> "Large"
+                                        else -> "Default"
+                                    }
+                                ) { selectedSize ->
+                                    val fontSize = when (selectedSize) {
+                                        "Small" -> "small"
+                                        "Large" -> "large"
+                                        else -> "default"
+                                    }
+                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                    settingsModel.update(settings.copy(fontSize = fontSize))
                                 }
                             }
                             item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
@@ -243,11 +285,7 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isSound,
                                     {
-                                        sound.performSoundEffect(
-                                            context,
-                                            KEY_CLICK,
-                                            settings.isSound
-                                        )
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isSound = it))
                                     }
                                 )
@@ -287,11 +325,7 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isZenMode,
                                     {
-                                        sound.performSoundEffect(
-                                            context,
-                                            KEY_CLICK,
-                                            settings.isSound
-                                        )
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isZenMode = it))
                                     }
                                 )
@@ -304,11 +338,7 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isShakable,
                                     {
-                                        sound.performSoundEffect(
-                                            context,
-                                            KEY_CLICK,
-                                            settings.isSound
-                                        )
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isShakable = it))
                                     }
                                 )
@@ -321,11 +351,7 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isScreenshot,
                                     {
-                                        sound.performSoundEffect(
-                                            context,
-                                            KEY_CLICK,
-                                            settings.isSound
-                                        )
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isScreenshot = it))
                                     }
                                 )
@@ -343,11 +369,7 @@ class SettingsScreen: Screen {
                                     },
                                     checked = settings.isLocked,
                                     onChecked = {
-                                        sound.performSoundEffect(
-                                            context,
-                                            KEY_CLICK,
-                                            settings.isSound
-                                        )
+                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isLocked = it))
                                     }
                                 )
@@ -383,16 +405,7 @@ class SettingsScreen: Screen {
                                                 }
                                                 .padding(vertical = 12.dp)
                                         ) {
-//                                        RadioButton(
-//                                            selected = lang == currentLang,
-//                                            onClick = {
-//                                                LanguageManager.setLanguage(lang)
-//                                                showLanguagesSheet = false
-//                                            }
-//                                        )
-
                                             Spacer(Modifier.width(8.dp))
-
                                             AnimatedCircleCheckbox(
                                                 lang == currentLang,
                                                 MaterialTheme.colorScheme.onSurface,
@@ -401,7 +414,6 @@ class SettingsScreen: Screen {
                                                 LanguageManager.setLanguage(lang)
                                                 showLanguagesSheet = false
                                             }
-
                                             Spacer(Modifier.width(8.dp))
                                             Text(lang.displayName)
                                         }

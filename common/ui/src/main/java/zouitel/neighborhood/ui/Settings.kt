@@ -7,6 +7,8 @@ data class Settings(
     val layout: String = "grid_layout",
     val ordination: String = "Default",
     val themeMode: String = "system",
+    val fontFamily: String = "default",
+    val fontSize: String = "default",
     val isSound: Boolean = false,
     val isLocked: Boolean = false,
     val isScreenshot: Boolean = false,

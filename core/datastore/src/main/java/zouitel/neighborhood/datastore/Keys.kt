@@ -4,6 +4,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import zouitel.neighborhood.datastore.Constants.FONT_FAMILY as FONT_FAMILY_KEY
+import zouitel.neighborhood.datastore.Constants.FONT_SIZE as FONT_SIZE_KEY
 import zouitel.neighborhood.datastore.Constants.LOCK_MODE
 import zouitel.neighborhood.datastore.Constants.MUTE
 import zouitel.neighborhood.datastore.Constants.SCREENSHOT_BLOCK
@@ -18,6 +20,8 @@ object Keys {
     // Kept to migrate existing boolean preferences to the new three-state setting.
     val DARK_THEME = booleanPreferencesKey(THEME)
     val THEME_MODE: Preferences.Key<String> = stringPreferencesKey(THEME_MODE_KEY)
+    val FONT_FAMILY: Preferences.Key<String> = stringPreferencesKey(FONT_FAMILY_KEY)
+    val FONT_SIZE: Preferences.Key<String> = stringPreferencesKey(FONT_SIZE_KEY)
     val IS_MUTED = booleanPreferencesKey(MUTE)
     val IS_LOCK_MODE = booleanPreferencesKey(LOCK_MODE)
     val IS_SCREENSHOT_BLOCKED = booleanPreferencesKey(SCREENSHOT_BLOCK)
