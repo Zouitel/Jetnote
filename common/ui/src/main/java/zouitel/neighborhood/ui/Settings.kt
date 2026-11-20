@@ -9,6 +9,7 @@ data class Settings(
     val themeMode: String = "system",
     val fontFamily: String = "default",
     val fontSize: String = "default",
+    val cornerStyle: String = "rounded",
     val isSound: Boolean = false,
     val isLocked: Boolean = false,
     val isScreenshot: Boolean = false,
