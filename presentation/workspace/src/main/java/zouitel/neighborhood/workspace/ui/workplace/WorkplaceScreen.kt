@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -62,6 +63,7 @@ import zouitel.neighborhood.markdown.state.BlockTextStates
 import zouitel.neighborhood.markdown.state.rememberEditorState
 import zouitel.neighborhood.markdown.theme.CascadeEditorColors
 import zouitel.neighborhood.markdown.theme.CascadeEditorTheme
+import zouitel.neighborhood.markdown.theme.CascadeEditorTypography
 import zouitel.neighborhood.markdown.ui.CascadeEditor
 import zouitel.neighborhood.markdown.ui.createEditorRegistry
 import zouitel.neighborhood.tag.model.NoteAndTag
@@ -197,17 +199,27 @@ data class WorkplaceScreen(
         }
 //        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
-        val cascadeTheme = remember(backgroundState.value, textColorState.value) {
+        val cascadeTheme = remember(backgroundState.value, textColorState.value, settings.fontFamily) {
             val bg = Color(backgroundState.value)
             val noteText = Color(textColorState.value)
             val isDark = bg.luminance() < 0.5f
+            val fontFamily = when (settings.fontFamily) {
+                "sans_serif" -> FontFamily.SansSerif
+                "serif" -> FontFamily.Serif
+                "monospace" -> FontFamily.Monospace
+                "cursive" -> FontFamily.Cursive
+                else -> FontFamily.Default
+            }
+            val typography = CascadeEditorTypography.default().withFontFamily(fontFamily)
             if (isDark) {
                 CascadeEditorTheme.dark().copy(
-                    colors = CascadeEditorColors.dark().copy(text = noteText)
+                    colors = CascadeEditorColors.dark().copy(text = noteText),
+                    typography = typography
                 )
             } else {
                 CascadeEditorTheme.light().copy(
-                    colors = CascadeEditorColors.light().copy(text = noteText)
+                    colors = CascadeEditorColors.light().copy(text = noteText),
+                    typography = typography
                 )
             }
         }
@@ -364,3 +376,16 @@ data class WorkplaceScreen(
         }
     }
 }
+
+private fun CascadeEditorTypography.withFontFamily(fontFamily: FontFamily) = copy(
+    body = body.copy(fontFamily = fontFamily),
+    heading1 = heading1.copy(fontFamily = fontFamily),
+    heading2 = heading2.copy(fontFamily = fontFamily),
+    heading3 = heading3.copy(fontFamily = fontFamily),
+    heading4 = heading4.copy(fontFamily = fontFamily),
+    heading5 = heading5.copy(fontFamily = fontFamily),
+    heading6 = heading6.copy(fontFamily = fontFamily),
+    slashItemTitle = slashItemTitle.copy(fontFamily = fontFamily),
+    slashBackButton = slashBackButton.copy(fontFamily = fontFamily),
+    toolbarButton = toolbarButton.copy(fontFamily = fontFamily)
+)
