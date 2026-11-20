@@ -2,6 +2,8 @@ package zouitel.neighborhood.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.foundation.shape.RectangleShape
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -46,11 +48,23 @@ fun MainTheme(
         else -> 1f
     }
     val typography = MaterialTheme.typography.withFontFamily(fontFamily).scaled(fontScale)
+    val shapes = if (settings.cornerStyle == "square") {
+        Shapes(
+            extraSmall = RectangleShape,
+            small = RectangleShape,
+            medium = RectangleShape,
+            large = RectangleShape,
+            extraLarge = RectangleShape
+        )
+    } else {
+        Shapes()
+    }
     val view = LocalView.current
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = typography
+        typography = typography,
+        shapes = shapes
     ) {
         Box(
             modifier = androidx.compose.ui.Modifier
