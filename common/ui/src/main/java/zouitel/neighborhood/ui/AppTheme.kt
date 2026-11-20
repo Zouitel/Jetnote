@@ -9,6 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.awaitEachGesture
+import androidx.compose.ui.input.pointer.awaitFirstDown
+import androidx.compose.ui.input.pointer.awaitPointerEvent
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.geometry.getDistance
+import androidx.compose.ui.platform.LocalView
+import android.view.SoundEffectConstants
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.TextStyle
 
@@ -38,12 +48,45 @@ fun MainTheme(
         else -> 1f
     }
     val typography = MaterialTheme.typography.withFontFamily(fontFamily).scaled(fontScale)
+    val view = LocalView.current
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = typography,
-        content = content
-    )
+        typography = typography
+    ) {
+        Box(
+            modifier = androidx.compose.ui.Modifier
+                .fillMaxSize()
+                .pointerInput(settings.isSound) {
+                    if (settings.isSound) {
+                        awaitEachGesture {
+                            val down = awaitFirstDown(
+                                requireUnconsumed = false,
+                                pass = PointerEventPass.Initial
+                            )
+                            var moved = false
+                            do {
+                                val event = awaitPointerEvent(PointerEventPass.Final)
+                                val change = event.changes.firstOrNull { it.id == down.id }
+                                if (change != null) {
+                                    if ((change.position - down.position).getDistance() > viewConfiguration.touchSlop) {
+                                        moved = true
+                                    }
+                                    if (!change.pressed) {
+                                        if (!moved && change.isConsumed) {
+                                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                                        }
+                                        break
+                                    }
+                                }
+                            } while (event.changes.any { it.pressed })
+                        }
+                    }
+                }
+        ) {
+            content()
+        }
+    }
 }
 
 private fun Typography.withFontFamily(fontFamily: FontFamily) = copy(
