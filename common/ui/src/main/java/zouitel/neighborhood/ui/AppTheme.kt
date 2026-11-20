@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.ui.input.pointer.awaitPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.geometry.getDistance
 import androidx.compose.ui.platform.LocalView
 import android.view.SoundEffectConstants
 import androidx.compose.ui.text.font.FontFamily
