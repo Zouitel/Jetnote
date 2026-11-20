@@ -39,6 +39,7 @@ class SettingsDataSourceImpl(
                         ordination = preferences[Keys.ORDINATION] ?: Constants.DEFAULT_ORDER,
                         themeMode = themeMode,
                         fontFamily = preferences[Keys.FONT_FAMILY] ?: Constants.DEFAULT_FONT_FAMILY,
+                        fontSize = preferences[Keys.FONT_SIZE] ?: Constants.DEFAULT_FONT_SIZE,
                         isSound = preferences[Keys.IS_MUTED] ?: false,
                         isLocked = preferences[Keys.IS_LOCK_MODE] ?: false,
                         isScreenshot = preferences[Keys.IS_SCREENSHOT_BLOCKED] ?: false,
@@ -60,6 +61,7 @@ class SettingsDataSourceImpl(
             preferences[Keys.THEME_MODE] = dataStoreSettings.themeMode
             preferences.remove(Keys.DARK_THEME)
             preferences[Keys.FONT_FAMILY] = dataStoreSettings.fontFamily
+            preferences[Keys.FONT_SIZE] = dataStoreSettings.fontSize
             preferences[Keys.ORDINATION] = dataStoreSettings.ordination
             preferences[Keys.IS_MUTED] = dataStoreSettings.isSound
             preferences[Keys.IS_LOCK_MODE] = dataStoreSettings.isLocked
