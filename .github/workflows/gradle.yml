@@ -100,5 +100,18 @@ jobs:
         echo "Gradle distribution could not be downloaded after 3 attempts."
         exit 1
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+    - name: Build with Gradle Wrapper (retry transient Maven failures)
+      shell: bash
+      run: |
+        set -o pipefail
+        for attempt in 1 2 3; do
+          if ./gradlew build --stacktrace; then
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Gradle build failed (attempt $attempt/3); retrying in case of a transient repository download failure..."
+            sleep $((attempt * 20))
+          fi
+        done
+        echo "Gradle build failed after 3 attempts."
+        exit 1
