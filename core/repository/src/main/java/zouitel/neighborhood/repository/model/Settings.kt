@@ -4,7 +4,6 @@ data class Settings(
     val layout: String,
     val ordination: String,
     val themeMode: String,
-    val fontFamily: String = "default",
     val isSound: Boolean,
     val isLocked: Boolean,
     val isScreenshot: Boolean,
@@ -13,5 +12,6 @@ data class Settings(
     val liquidGlassEnabled: Boolean = true,
     val liquidGlassBlurRadius: Float = 18f,
     val liquidGlassRefraction: Float = 12f,
-    val liquidGlassTint: Float = 0.12f
+    val liquidGlassTint: Float = 0.12f,
+    val fontFamily: String = "default"
 )
