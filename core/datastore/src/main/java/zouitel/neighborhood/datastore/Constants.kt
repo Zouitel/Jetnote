@@ -16,6 +16,7 @@ internal object Constants {
     const val THEME_MODE = "APP_THEME_MODE_PREFERENCES_KEY"
     const val FONT_FAMILY = "APP_FONT_FAMILY_PREFERENCES_KEY"
     const val FONT_SIZE = "APP_FONT_SIZE_PREFERENCES_KEY"
+    const val CORNER_STYLE = "APP_CORNER_STYLE_PREFERENCES_KEY"
     const val LOCK_MODE = "LOCK_MODE_PREFERENCES_KEY"
     const val SCREENSHOT_BLOCK = "SCREENSHOT_BLOCK_PREFERENCES_KEY"
     const val GEMINI_API = "gemini_api_key_preferences"
@@ -27,6 +28,7 @@ internal object Constants {
     const val DEFAULT_THEME_MODE = "system"
     const val DEFAULT_FONT_FAMILY = "default"
     const val DEFAULT_FONT_SIZE = "default"
+    const val DEFAULT_CORNER_STYLE = "rounded"
 
     const val DS_NAME = "jetnoteDS.preferences_pb"
 }
