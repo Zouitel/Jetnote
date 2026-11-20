@@ -258,6 +258,27 @@ class SettingsScreen: Screen {
                             }
                             item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
                             item {
+                                SortesItem(
+                                    title = "Font size",
+                                    description = "Adjust text size across the app.",
+                                    items = listOf("Small", "Default", "Large"),
+                                    currentItem = when (settings.fontSize) {
+                                        "small" -> "Small"
+                                        "large" -> "Large"
+                                        else -> "Default"
+                                    }
+                                ) { selectedSize ->
+                                    val fontSize = when (selectedSize) {
+                                        "Small" -> "small"
+                                        "Large" -> "large"
+                                        else -> "default"
+                                    }
+                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
+                                    settingsModel.update(settings.copy(fontSize = fontSize))
+                                }
+                            }
+                            item { HorizontalDivider(Modifier.padding(10.dp, 20.dp)) }
+                            item {
                                 CommonActivationItem(
                                     stringResource(zouitel.neighborhood.logic.R.string.sound_effect),
                                     stringResource(zouitel.neighborhood.logic.R.string.sound_effect_description).trimIndent(),
