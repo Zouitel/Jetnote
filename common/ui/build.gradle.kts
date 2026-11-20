@@ -13,6 +13,9 @@ dependencies {
     implementation(projects.common.logic)
     implementation(projects.domain)
 
+    //Compose Foundation shapes and gestures.
+    implementation(libs.compose.foundation)
+
     //Serialization.
     implementation(libs.kotlinx.serialization.json)
 
