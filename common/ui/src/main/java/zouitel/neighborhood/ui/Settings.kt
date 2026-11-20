@@ -8,6 +8,7 @@ data class Settings(
     val ordination: String = "Default",
     val themeMode: String = "system",
     val fontFamily: String = "default",
+    val fontSize: String = "default",
     val isSound: Boolean = false,
     val isLocked: Boolean = false,
     val isScreenshot: Boolean = false,
