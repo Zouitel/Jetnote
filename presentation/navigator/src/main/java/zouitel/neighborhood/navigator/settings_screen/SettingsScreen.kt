@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -58,13 +57,11 @@ import zouitel.neighborhood.logic.LanguageManager
 import zouitel.neighborhood.navigator.R
 import zouitel.neighborhood.navigator.navigation_drawer.NavigationDrawer
 import zouitel.neighborhood.navigator.utils.SystemBarsBehavior
-import zouitel.neighborhood.navigator.utils.sound
 import zouitel.neighborhood.search.ui.SearchScreenModel
 import zouitel.neighborhood.tag.ui.TagScreenModel
 import zouitel.neighborhood.ui.AnimatedCircleCheckbox
 import zouitel.neighborhood.ui.CommonActivationItem
 import zouitel.neighborhood.ui.CommonColors
-import zouitel.neighborhood.ui.CommonConstants.KEY_CLICK
 import zouitel.neighborhood.ui.CommonTopAppBar
 import zouitel.neighborhood.ui.SettingsScreenModel
 import zouitel.neighborhood.ui.rememberAutoHeightCacheLazyList
@@ -101,7 +98,6 @@ class SettingsScreen: Screen {
         assistantModel: AssistantScreenModel,
         chatModel: ChatScreenModel
     ) {
-        val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
         val bottomNav = LocalBottomSheetNavigator.current
 
@@ -227,7 +223,6 @@ class SettingsScreen: Screen {
                                         "Light" -> "light"
                                         else -> "system"
                                     }
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                     settingsModel.update(settings.copy(themeMode = mode))
                                 }
                             }
@@ -252,7 +247,6 @@ class SettingsScreen: Screen {
                                         "Cursive" -> "cursive"
                                         else -> "default"
                                     }
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                     settingsModel.update(settings.copy(fontFamily = fontFamily))
                                 }
                             }
@@ -273,7 +267,6 @@ class SettingsScreen: Screen {
                                         "Large" -> "large"
                                         else -> "default"
                                     }
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                     settingsModel.update(settings.copy(fontSize = fontSize))
                                 }
                             }
@@ -285,7 +278,6 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isSound,
                                     {
-                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isSound = it))
                                     }
                                 )
@@ -313,7 +305,6 @@ class SettingsScreen: Screen {
                                     ),
                                     settings.ordination
                                 ) { order ->
-                                    sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                     settingsModel.update(settings.copy(ordination = order))
                                 }
                             }
@@ -325,7 +316,6 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isZenMode,
                                     {
-                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isZenMode = it))
                                     }
                                 )
@@ -338,7 +328,6 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isShakable,
                                     {
-                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isShakable = it))
                                     }
                                 )
@@ -351,7 +340,6 @@ class SettingsScreen: Screen {
                                     null,
                                     settings.isScreenshot,
                                     {
-                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isScreenshot = it))
                                     }
                                 )
@@ -369,7 +357,6 @@ class SettingsScreen: Screen {
                                     },
                                     checked = settings.isLocked,
                                     onChecked = {
-                                        sound.performSoundEffect(context, KEY_CLICK, settings.isSound)
                                         settingsModel.update(settings.copy(isLocked = it))
                                     }
                                 )
