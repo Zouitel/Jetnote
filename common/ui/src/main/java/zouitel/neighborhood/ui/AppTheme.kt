@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.TextStyle
 
 @Composable
 fun MainTheme(
@@ -31,7 +32,12 @@ fun MainTheme(
         "cursive" -> FontFamily.Cursive
         else -> FontFamily.Default
     }
-    val typography = MaterialTheme.typography.withFontFamily(fontFamily)
+    val fontScale = when (settings.fontSize) {
+        "small" -> 0.9f
+        "large" -> 1.1f
+        else -> 1f
+    }
+    val typography = MaterialTheme.typography.withFontFamily(fontFamily).scaled(fontScale)
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -56,4 +62,27 @@ private fun Typography.withFontFamily(fontFamily: FontFamily) = copy(
     labelLarge = labelLarge.copy(fontFamily = fontFamily),
     labelMedium = labelMedium.copy(fontFamily = fontFamily),
     labelSmall = labelSmall.copy(fontFamily = fontFamily)
+)
+
+private fun Typography.scaled(scale: Float) = copy(
+    displayLarge = displayLarge.scaleText(scale),
+    displayMedium = displayMedium.scaleText(scale),
+    displaySmall = displaySmall.scaleText(scale),
+    headlineLarge = headlineLarge.scaleText(scale),
+    headlineMedium = headlineMedium.scaleText(scale),
+    headlineSmall = headlineSmall.scaleText(scale),
+    titleLarge = titleLarge.scaleText(scale),
+    titleMedium = titleMedium.scaleText(scale),
+    titleSmall = titleSmall.scaleText(scale),
+    bodyLarge = bodyLarge.scaleText(scale),
+    bodyMedium = bodyMedium.scaleText(scale),
+    bodySmall = bodySmall.scaleText(scale),
+    labelLarge = labelLarge.scaleText(scale),
+    labelMedium = labelMedium.scaleText(scale),
+    labelSmall = labelSmall.scaleText(scale)
+)
+
+private fun TextStyle.scaleText(scale: Float) = copy(
+    fontSize = fontSize * scale,
+    lineHeight = lineHeight * scale
 )
