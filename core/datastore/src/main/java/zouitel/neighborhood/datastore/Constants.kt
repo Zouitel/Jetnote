@@ -14,6 +14,7 @@ internal object Constants {
     const val MUTE = "MUTE_PREFERENCES_KEY"
     const val THEME = "APP_THEME_PREFERENCES_KEY"
     const val THEME_MODE = "APP_THEME_MODE_PREFERENCES_KEY"
+    const val FONT_FAMILY = "APP_FONT_FAMILY_PREFERENCES_KEY"
     const val LOCK_MODE = "LOCK_MODE_PREFERENCES_KEY"
     const val SCREENSHOT_BLOCK = "SCREENSHOT_BLOCK_PREFERENCES_KEY"
     const val GEMINI_API = "gemini_api_key_preferences"
@@ -23,6 +24,7 @@ internal object Constants {
     const val DEFAULT_LAYOUT = "grid_layout"
     const val DEFAULT_ORDER = "Default"
     const val DEFAULT_THEME_MODE = "system"
+    const val DEFAULT_FONT_FAMILY = "default"
 
     const val DS_NAME = "jetnoteDS.preferences_pb"
 }
