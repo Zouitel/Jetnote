@@ -14,6 +14,6 @@ data class Settings(
     val liquidGlassRefraction: Float = 12f,
     val liquidGlassTint: Float = 0.12f,
     val fontFamily: String = "default",
-    val fontSize: String = "default"
+    val fontSize: String = "default",
     val cornerStyle: String = "rounded",
 )
