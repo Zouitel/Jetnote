@@ -199,7 +199,7 @@ data class WorkplaceScreen(
         }
 //        val (lazyListState, height) = rememberAutoHeightCacheLazyList()
 
-        val cascadeTheme = remember(backgroundState.value, textColorState.value, settings.fontFamily) {
+        val cascadeTheme = remember(backgroundState.value, textColorState.value, settings.fontFamily, settings.fontSize) {
             val bg = Color(backgroundState.value)
             val noteText = Color(textColorState.value)
             val isDark = bg.luminance() < 0.5f
@@ -210,7 +210,12 @@ data class WorkplaceScreen(
                 "cursive" -> FontFamily.Cursive
                 else -> FontFamily.Default
             }
-            val typography = CascadeEditorTypography.default().withFontFamily(fontFamily)
+            val fontScale = when (settings.fontSize) {
+                "small" -> 0.9f
+                "large" -> 1.1f
+                else -> 1f
+            }
+            val typography = CascadeEditorTypography.default().withFontFamily(fontFamily).scaled(fontScale)
             if (isDark) {
                 CascadeEditorTheme.dark().copy(
                     colors = CascadeEditorColors.dark().copy(text = noteText),
@@ -388,4 +393,22 @@ private fun CascadeEditorTypography.withFontFamily(fontFamily: FontFamily) = cop
     slashItemTitle = slashItemTitle.copy(fontFamily = fontFamily),
     slashBackButton = slashBackButton.copy(fontFamily = fontFamily),
     toolbarButton = toolbarButton.copy(fontFamily = fontFamily)
+)
+
+private fun CascadeEditorTypography.scaled(scale: Float) = copy(
+    body = body.scaleText(scale),
+    heading1 = heading1.scaleText(scale),
+    heading2 = heading2.scaleText(scale),
+    heading3 = heading3.scaleText(scale),
+    heading4 = heading4.scaleText(scale),
+    heading5 = heading5.scaleText(scale),
+    heading6 = heading6.scaleText(scale),
+    slashItemTitle = slashItemTitle.scaleText(scale),
+    slashBackButton = slashBackButton.scaleText(scale),
+    toolbarButton = toolbarButton.scaleText(scale)
+)
+
+private fun TextStyle.scaleText(scale: Float) = copy(
+    fontSize = fontSize * scale,
+    lineHeight = lineHeight * scale
 )
