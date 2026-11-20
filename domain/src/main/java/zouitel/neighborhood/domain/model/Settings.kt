@@ -15,4 +15,5 @@ data class Settings(
     val liquidGlassTint: Float = 0.12f,
     val fontFamily: String = "default",
     val fontSize: String = "default"
+    val cornerStyle: String = "rounded",
 )
